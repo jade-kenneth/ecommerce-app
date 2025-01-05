@@ -1,4 +1,4 @@
-import './global.css';
+import { Provider } from '@portal/theme';
 
 export const metadata = {
   title: 'Welcome to ecommerce-app',
@@ -11,8 +11,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }

@@ -5,17 +5,32 @@
   "projectType": "application",
   "tags": [],
   "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "webpack-cli build",
+        "args": ["node-env=production"]
+      },
+      "configurations": {
+        "development": {
+          "args": ["node-env=development"]
+        }
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "ecommerce-server:build",
-        "runBuildTargetDependencies": false
+        "runBuildTargetDependencies": false,
+        "port": 3001
       },
+
       "configurations": {
         "development": {
-          "buildTarget": "ecommerce-server:build:development"
+          "buildTarget": "ecommerce-server:build:development",
+          "port": 3001
         },
         "production": {
           "buildTarget": "ecommerce-server:build:production"

@@ -1,4 +1,3 @@
-const baseConfig = require('../../eslint.base.config.cjs');
 const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 const { fixupConfigRules } = require('@eslint/compat');

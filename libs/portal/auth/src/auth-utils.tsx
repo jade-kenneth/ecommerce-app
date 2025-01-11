@@ -8,16 +8,26 @@ import {
   useState,
 } from 'react';
 
+import { getMaintenance } from './portal/maintenance';
 import { createSession } from './session-utils';
-import { Session } from './type';
+import { Maintenance, Session } from './type';
 
 interface CreateAuthProviderConfig {
   getSessionFn: ReturnType<typeof createSession>;
+  getMaintenanceFn: ReturnType<typeof getMaintenance>;
 }
+
+interface AuthState {
+  session: Session;
+  maintenance: Maintenance;
+}
+
 export const createAuthProvider = ({
   getSessionFn,
+  getMaintenanceFn,
 }: CreateAuthProviderConfig) => {
-  const AuthContext = createContext({});
+  const AuthContext = createContext<AuthState>({} as any);
+
   const useSession = () => {
     const context = useContext(AuthContext);
 
@@ -26,18 +36,26 @@ export const createAuthProvider = ({
 
   const AuthProvider = ({ children }: PropsWithChildren) => {
     const [session, setSession] = useState<Session>({
-      status: 'authenticated',
+      status: 'loading',
+    });
+    const [maintenance, setMaintenance] = useState<Maintenance>({
+      onMaintenance: false,
     });
 
     useEffect(() => {
-      (async function invokeCreateSession() {
-        const data = await getSessionFn();
-        setSession(data);
+      (async function invokeActions() {
+        const maintenance = await getMaintenanceFn();
+        setMaintenance(maintenance);
+
+        if (!maintenance.onMaintenance) {
+          const session = await getSessionFn();
+          setSession(session);
+        }
       })();
     }, []);
 
     return (
-      <AuthContext.Provider value={{ session }}>
+      <AuthContext.Provider value={{ session, maintenance }}>
         {children}
       </AuthContext.Provider>
     );

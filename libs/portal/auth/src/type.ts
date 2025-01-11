@@ -1,3 +1,6 @@
 export interface Session {
-  status: string;
+  status: 'loading' | 'authenticated' | 'unauthenticated';
+}
+export interface Maintenance {
+  onMaintenance: boolean;
 }

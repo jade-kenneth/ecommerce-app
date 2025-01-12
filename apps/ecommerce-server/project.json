@@ -23,8 +23,7 @@
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "ecommerce-server:build",
-        "runBuildTargetDependencies": false,
-        "port": 3001
+        "runBuildTargetDependencies": false
       },
 
       "configurations": {

@@ -9,6 +9,7 @@
     "@emotion/react": "^11.14.0",
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",
+    "@nestjs/mongoose": "^10.1.0",
     "@nestjs/platform-express": "^10.0.2",
     "@nx/nest": "^20.3.1",
     "@vitejs/plugin-react": "^4.3.4",

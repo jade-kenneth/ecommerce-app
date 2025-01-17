@@ -1,0 +1,43 @@
+enum StatusType {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+enum ReservationType {
+  AVAILABLE
+  UNAVAILABLE
+}
+enum CategoryType {
+  FRUIT
+  DAIRY
+  VEGETABLES
+  FISH
+  SWEETS
+}
+
+interface Voucher {
+  date: DateTime
+  name: String
+  description: String
+  code: String
+  value: Int
+}
+
+type Product implements Node {
+  id: ObjectId!
+  thumbnail: String!
+  name: String!
+  price: Int!
+  status: StatusType
+  discount: Int!
+  points: Int
+  category: CategoryType
+  pieces: Int
+  type: CategoryType
+  description: String!
+  reservation: ReservationType
+  flashSale: Boolean
+  variations: [KeyValuePair!]!
+  sold: Int
+  vouchers: [Voucher!]
+  dateAdded: DateTime
+}

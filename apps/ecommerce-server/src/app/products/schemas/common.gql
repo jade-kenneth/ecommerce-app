@@ -1,0 +1,12 @@
+scalar JSON
+scalar ObjectId
+scalar DateTime
+
+interface Node {
+  id: ObjectId!
+}
+
+type KeyValuePair {
+  key: String!
+  value: String!
+}

@@ -40,6 +40,14 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+    "generate-graphql-types": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/src/app/__generated/graphql-types.ts"],
+      "options": {
+        "command": "ts-node --project ./tsconfig.app.json ./scripts/generate-graphql-types.ts",
+        "cwd": "apps/ecommerce-server"
+      }
     }
   }
 }

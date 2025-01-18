@@ -5,16 +5,17 @@ import path from 'path';
 const definitionsFactory = new GraphQLDefinitionsFactory();
 
 definitionsFactory.generate({
-  typePaths: [path.resolve(__dirname, '.src/app/**/*.gql')],
+  typePaths: [path.resolve(__dirname, '../src/app/schemas/*.gql')],
   path: path.resolve(__dirname, '../src/app/__generated/graphql-types.ts'),
   outputAs: 'interface',
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     DateTime: 'Date',
+    ObjectId: 'Types.ObjectId',
     EmailAddress: 'string',
     JSON: 'Record<string, any>',
     URL: 'string',
   },
-  //   additionalHeader: "import { ObjectId as _ObjectId } from '@mazal/object-id'",
+  additionalHeader: "import { Types } from 'mongoose'",
   typeDefs: [constraintDirectiveTypeDefs],
 });

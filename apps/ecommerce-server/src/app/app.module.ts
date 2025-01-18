@@ -14,7 +14,14 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_MONGODB_URI),
+    MongooseModule.forRootAsync({
+      useFactory: async () => ({
+        uri: process.env.DATABASE_MONGODB_URI,
+        socketTimeoutMS: 60000,
+        heartbeatFrequencyMS: 2000,
+        serverSelectionTimeoutMS: 30000,
+      }),
+    }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: async () => {

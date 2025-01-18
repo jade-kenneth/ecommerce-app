@@ -23,20 +23,20 @@ interface Voucher {
 }
 
 type Product implements Node {
-  id: ObjectId!
-  thumbnail: String!
-  name: String!
-  price: Int!
+  _id: ObjectId!
+  thumbnail: String
+  name: String
+  price: Int
   status: StatusType
-  discount: Int!
+  discount: Int
   points: Int
   category: CategoryType
   pieces: Int
   type: CategoryType
-  description: String!
+  description: String
   reservation: ReservationType
   flashSale: Boolean
-  variations: [KeyValuePair!]!
+  variations: [KeyValuePair!]
   sold: Int
   vouchers: [Voucher!]
   dateAdded: DateTime
@@ -44,4 +44,37 @@ type Product implements Node {
 
 type Query {
   products: [Product!]
+}
+input KeyValuePairInput {
+  key: String!
+  value: String!
+}
+input VoucherInput {
+  date: DateTime
+  name: String
+  description: String
+  code: String
+  value: Int
+}
+
+input CreateProductInput {
+  thumbnail: String
+  name: String
+  price: Int
+  status: StatusType
+  discount: Int
+  points: Int
+  category: CategoryType
+  pieces: Int
+  type: CategoryType
+  description: String
+  reservation: ReservationType
+  flashSale: Boolean
+  variations: [KeyValuePairInput!]
+  sold: Int
+  vouchers: [VoucherInput!]
+  dateAdded: DateTime
+}
+type Mutation {
+  createProduct(input: CreateProductInput!): Product
 }

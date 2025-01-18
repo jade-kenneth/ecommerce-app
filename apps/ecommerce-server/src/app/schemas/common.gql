@@ -3,7 +3,7 @@ scalar ObjectId
 scalar DateTime
 
 interface Node {
-  id: ObjectId!
+  _id: ObjectId!
 }
 
 type KeyValuePair {

@@ -41,3 +41,7 @@ type Product implements Node {
   vouchers: [Voucher!]
   dateAdded: DateTime
 }
+
+type Query {
+  products: [Product!]
+}

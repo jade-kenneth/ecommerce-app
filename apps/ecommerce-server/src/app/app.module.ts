@@ -5,13 +5,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { constraintDirectiveTypeDefs } from 'graphql-constraint-directive/apollo4';
 import {
-  DateResolver,
   DateTimeResolver,
-  EmailAddressResolver,
-  GraphQLDeweyDecimalResolver,
   JSONResolver,
   ObjectIDResolver,
-  URLResolver,
 } from 'graphql-scalars';
 import path from 'path';
 import { AppService } from './app.service';
@@ -28,12 +24,9 @@ import { ProductsModule } from './products/products.module';
           typePaths: [path.resolve(__dirname, './src/app/schemas/*.gql')],
           resolvers: {
             JSON: JSONResolver,
-            Date: DateResolver,
+
             DateTime: DateTimeResolver,
             ObjectId: ObjectIDResolver,
-            Decimal: GraphQLDeweyDecimalResolver,
-            EmailAddress: EmailAddressResolver,
-            URL: URLResolver,
           },
           typeDefs: [constraintDirectiveTypeDefs],
         };

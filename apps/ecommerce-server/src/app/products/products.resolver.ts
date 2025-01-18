@@ -6,7 +6,7 @@ export class ProductResolver {
   constructor(private readonly productService: ProductsService) {}
 
   @Query('products')
-  async products() {
+  public async products() {
     return this.productService.listOfProducts();
   }
 }

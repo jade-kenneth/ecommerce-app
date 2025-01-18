@@ -21,9 +21,11 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: join(__dirname, './src/app/schemas/*.gql'),
-          to: join(__dirname, '../../dist/apps/ecommerce-server'),
-          globOptions: { ignore: ['**/node_modules/**'] },
+          from: './src/app/schemas/*.gql',
+          to: '.',
+          globOptions: {
+            ignore: ['**/node_modules/**'],
+          },
         },
       ],
     }),

@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
-  "include": ["src/**/*.gql"],
+  "include": [],
   "references": [
     {
       "path": "./tsconfig.app.json"

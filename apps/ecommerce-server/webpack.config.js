@@ -1,4 +1,5 @@
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { join } = require('path');
 
 module.exports = {
@@ -12,9 +13,28 @@ module.exports = {
       main: './src/main.ts',
       tsConfig: './tsconfig.app.json',
       assets: ['./src/assets'],
+
       optimization: false,
       outputHashing: 'none',
       generatePackageJson: true,
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: join(__dirname, './src/app/schemas/*.gql'),
+          to: join(__dirname, '../../dist/apps/ecommerce-server'),
+          globOptions: { ignore: ['**/node_modules/**'] },
+        },
+      ],
+    }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        use: ['graphql-tag/loader'],
+      },
+    ],
+  },
 };

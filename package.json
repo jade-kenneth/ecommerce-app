@@ -2,11 +2,15 @@
   "name": "@ecommerce-app/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "server": "nx run ecommerce-server:serve:development"
+  },
   "private": true,
   "dependencies": {
+    "@apollo/server": "^4.11.3",
     "@chakra-ui/react": "^3.2.5",
     "@emotion/react": "^11.14.0",
+    "@nestjs/apollo": "^13.0.1",
     "@nestjs/class-transformer": "^0.4.0",
     "@nestjs/class-validator": "^0.13.4",
     "@nestjs/common": "^10.0.2",
@@ -18,9 +22,12 @@
     "@vitejs/plugin-react": "^4.3.4",
     "axios": "^1.6.0",
     "class-validator": "^0.14.1",
+    "copy-webpack-plugin": "^12.0.2",
     "decimal.js": "^10.4.3",
     "graphql": "^16.10.0",
     "graphql-constraint-directive": "^6.0.0",
+    "graphql-scalars": "^1.24.0",
+    "graphql-tag": "^2.12.6",
     "mongodb": "^6.12.0",
     "mongoose": "^8.9.4",
     "next": "14.2.16",
@@ -30,6 +37,7 @@
     "react-icons": "^5.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
+    "ts-loader": "^9.5.2",
     "ts-morph": "^25.0.0"
   },
   "devDependencies": {

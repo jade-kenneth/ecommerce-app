@@ -2,4 +2,3 @@
 
 export * from './color-mode';
 export * from './provider';
-export { default as TestComponent } from './TestComponent';

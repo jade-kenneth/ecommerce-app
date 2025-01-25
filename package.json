@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "server": "nx run ecommerce-server:serve:development"
+    "server": "nx run ecommerce-server:serve:development",
+    "app": "nx run ecommerce-app:dev",
+    "typegen:watch": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts --watch"
   },
   "private": true,
   "dependencies": {

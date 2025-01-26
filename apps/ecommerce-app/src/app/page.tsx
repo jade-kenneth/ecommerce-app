@@ -8,8 +8,8 @@ export default function Index() {
     <Layout>
       HELLO apps
       <ColorModeButton />
-      <Text sizes={'heading-3'}>Hello 123 </Text>
-      <Button colorTheme="success" btnSize={'md'} visual={'solid'}>
+      <Text>Hello 123</Text>
+      <Button colorTheme="primary" btnSize={'md'} visual={'solid'}>
         Hello 1
       </Button>
     </Layout>

@@ -61,27 +61,27 @@ export const buttonRecipe = (colorTheme?: string, boxShadow?: string) =>
             },
           },
 
-          ...(colorTheme === 'primary' && {
-            _dark: {
-              bg: 'yellow.700',
-              color: 'neutrals.900',
-              _hover: {
-                bg: 'yellow.800',
-              },
-              _focus: {
-                boxShadow: 'none',
-              },
-              _expanded: {
-                boxShadow: 'none',
-              },
-              _disabled: {
-                bg: 'neutrals.800',
-                color: 'neutrals.700',
-                border: '1px solid',
-                borderColor: 'neutrals.700',
-              },
-            },
-          }),
+          //   ...(colorTheme === 'primary' && {
+          //     _dark: {
+          //       bg: 'yellow.700',
+          //       color: 'neutrals.900',
+          //       _hover: {
+          //         bg: 'yellow.800',
+          //       },
+          //       _focus: {
+          //         boxShadow: 'none',
+          //       },
+          //       _expanded: {
+          //         boxShadow: 'none',
+          //       },
+          //       _disabled: {
+          //         bg: 'neutrals.800',
+          //         color: 'neutrals.700',
+          //         border: '1px solid',
+          //         borderColor: 'neutrals.700',
+          //       },
+          //     },
+          //   }),
         },
         outline: {
           bg: 'white',
@@ -151,6 +151,6 @@ export const buttonRecipe = (colorTheme?: string, boxShadow?: string) =>
 
     defaultVariants: {
       visual: 'solid',
-      btnSize: '2xl',
+      btnSize: 'lg',
     },
   });

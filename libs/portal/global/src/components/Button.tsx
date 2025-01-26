@@ -14,7 +14,15 @@ export const Button = ({
   colorTheme = 'primary',
   ...props
 }: PropsWithChildren<IButtonProps>) => {
-  const rgba = hexToRgba(colors.colors[colorTheme][100].value, 0.5);
+  const theme = colorTheme.split('.')[0];
+  const rgba = hexToRgba(
+    (
+      colors.colors[theme as keyof typeof colors.colors] as {
+        [key: number]: { value: string };
+      }
+    )[100].value,
+    0.5
+  );
   const boxShadow = `0px 0px 0px 4px ${rgba}, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)`;
 
   return (

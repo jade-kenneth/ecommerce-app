@@ -40,7 +40,7 @@ export const textRecipe = defineRecipe({
         lineHeight: '1.75rem',
       },
       'paragraph-md': {
-        fontSize: '1.1rem',
+        fontSize: '1rem',
         lineHeight: '1.5rem',
       },
       'paragraph-sm': {
@@ -52,5 +52,8 @@ export const textRecipe = defineRecipe({
         lineHeight: '1.125rem',
       },
     },
+  },
+  defaultVariants: {
+    sizes: 'paragraph-md',
   },
 });

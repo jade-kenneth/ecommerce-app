@@ -36,7 +36,6 @@ export const customConfig = defineConfig({
     // },
   },
   conditions: {
-    variant: '&is:([variant=solid])',
     off: '&:is([data-state=off])',
     on: '&:is([data-state=on])',
   },

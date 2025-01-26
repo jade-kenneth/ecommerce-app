@@ -1,5 +1,6 @@
 'use client';
-import { Button, Text } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
+import { Button } from '@portal/global';
 import { Layout } from '@portal/layout';
 import { ColorModeButton } from '@portal/theme';
 export default function Index() {
@@ -8,7 +9,9 @@ export default function Index() {
       HELLO apps
       <ColorModeButton />
       <Text sizes={'heading-3'}>Hello 123 </Text>
-      <Button customButton>Hello </Button>
+      <Button colorTheme="success" btnSize={'md'} visual={'solid'}>
+        Hello 1
+      </Button>
     </Layout>
   );
 }

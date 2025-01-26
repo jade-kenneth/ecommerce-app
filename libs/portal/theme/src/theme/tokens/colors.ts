@@ -14,23 +14,15 @@ export const colors = defineTokens({
       '800': { value: '#276749' },
       '900': { value: '#22543d' },
     },
-    yellow: {
-      50: { value: '#FBBD2C3' },
-      100: { value: '#be8e28' },
-      200: { value: '#FBBD2C3' },
-      600: { value: '#9f6f14' },
-      700: { value: '#FBBD2C' },
-      800: { value: '#DBBC1B' },
-      900: { value: '#DEBDAB' },
-    },
-    // twitter: null,
-    // linkedin: null,
-    // facebook: null,
-    // whatsapp: null,
-    // telegram: null,
-    // messenger: null,
-
-    buttonPrimary: {},
+    // yellow: {
+    //   50: { value: '#FBBD2C3' },
+    //   100: { value: '#be8e28' },
+    //   200: { value: '#FBBD2C3' },
+    //   600: { value: '#9f6f14' },
+    //   700: { value: '#FBBD2C' },
+    //   800: { value: '#DBBC1B' },
+    //   900: { value: '#DEBDAB' },
+    // },
 
     gray: {
       50: { value: '#F9FAFB' },
@@ -123,24 +115,24 @@ export const colors = defineTokens({
       900: { value: '#194185' },
     },
 
-    dark: {
-      100: { value: '#202A44' },
-      200: { value: '#212E52' },
-      300: { value: '#0A2C38' },
-      400: { value: '#122831' },
-      500: { value: '#0A1117' },
-    },
+    // dark: {
+    //   100: { value: '#202A44' },
+    //   200: { value: '#212E52' },
+    //   300: { value: '#0A2C38' },
+    //   400: { value: '#122831' },
+    //   500: { value: '#0A1117' },
+    // },
 
-    neutrals: {
-      200: { value: '#F0F0F0' },
-      300: { value: '#D6D6D6' },
-      400: { value: '#C2C2C2' },
-      500: { value: '#A3A3A3' },
-      600: { value: '#7A7A7A' },
-      700: { value: '#525252' },
-      800: { value: '#2E2E2E' },
-      900: { value: '#0A1117' },
-    },
+    // neutrals: {
+    //   200: { value: '#F0F0F0' },
+    //   300: { value: '#D6D6D6' },
+    //   400: { value: '#C2C2C2' },
+    //   500: { value: '#A3A3A3' },
+    //   600: { value: '#7A7A7A' },
+    //   700: { value: '#525252' },
+    //   800: { value: '#2E2E2E' },
+    //   900: { value: '#0A1117' },
+    // },
 
     'gray-blue': {
       900: { value: '#101323' },

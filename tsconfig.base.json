@@ -16,6 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@portal/auth": ["libs/portal/auth/src/index.ts"],
+      "@portal/global": ["libs/portal/global/src/index.ts"],
+      "@portal/global/server": ["libs/portal/global/src/server.ts"],
       "@portal/layout": ["libs/portal/layout/src/index.ts"],
       "@portal/theme": ["libs/portal/theme/src/index.ts"]
     }

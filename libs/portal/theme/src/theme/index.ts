@@ -9,8 +9,10 @@ export * from './tokens';
 export const customConfig = defineConfig({
   globalCss: {
     '.max-w-screen': {
-      maxWidth: '1280px',
+      maxWidth: '1440px',
       mx: 'auto',
+      w: 'full',
+      px: '5rem',
     },
   },
   theme: {

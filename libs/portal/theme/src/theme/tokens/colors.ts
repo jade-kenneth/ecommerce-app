@@ -26,6 +26,7 @@ export const colors = defineTokens({
       700: { value: '#009C9C' },
       800: { value: '#53389E ' },
       900: { value: '#006E6E' },
+      950: { value: '#004E4E' },
     },
 
     yellow: {

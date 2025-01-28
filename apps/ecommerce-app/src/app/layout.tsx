@@ -1,5 +1,4 @@
 import { AuthProvider } from '@portal/auth';
-import { Highlights } from '@portal/layout';
 import { Provider } from '@portal/theme';
 import { Roboto } from 'next/font/google';
 export const metadata = {
@@ -19,10 +18,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={roboto.className}>
       <body>
         <AuthProvider>
-          <Provider>
-            <Highlights />
-            {children}
-          </Provider>
+          <Provider>{children}</Provider>
         </AuthProvider>
       </body>
     </html>

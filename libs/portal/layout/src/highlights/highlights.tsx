@@ -1,5 +1,6 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 import { MedalIcon, PhoneIcon, TruckIcon } from '@portal/global';
+import { ColorModeButton } from '@portal/theme';
 import { FunctionComponent } from 'react';
 
 interface HighlightsProps {
@@ -18,6 +19,7 @@ export const Highlights: FunctionComponent<HighlightsProps> = ({
       w="full"
       bg="colors.primary.700"
       position={'fixed'}
+      alignItems={'center'}
       color="colors.primary.950"
       top={0}
     >
@@ -52,6 +54,7 @@ export const Highlights: FunctionComponent<HighlightsProps> = ({
           </HStack>
         </Flex>
       </Flex>
+      {false && <ColorModeButton />}
     </Flex>
   );
 };

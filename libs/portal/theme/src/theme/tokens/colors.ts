@@ -13,9 +13,11 @@ export const colors = defineTokens({
       700: { value: '#B8B8B8 ' },
       800: { value: '#D2D2D2 ' },
       900: { value: '#EAEAEA' },
+      950: { value: '#F2F2F2' },
     },
     //cyan
     primary: {
+      25: { value: '#F2F9F9' },
       50: { value: '#E9F6F6' },
       100: { value: '#D0ECEC' },
       200: { value: '#B4E1E1 ' },

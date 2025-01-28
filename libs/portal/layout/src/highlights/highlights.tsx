@@ -1,6 +1,11 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react';
-import { MedalIcon, PhoneIcon, TruckIcon } from '@portal/global';
-import { ColorModeButton } from '@portal/theme';
+import {
+  ColorModeButton,
+  MedalIcon,
+  PhoneIcon,
+  TruckIcon,
+} from '@portal/global';
+
 import { FunctionComponent } from 'react';
 
 interface HighlightsProps {
@@ -22,6 +27,7 @@ export const Highlights: FunctionComponent<HighlightsProps> = ({
       alignItems={'center'}
       color="colors.primary.950"
       top={0}
+      zIndex={'docked'}
     >
       <Flex className="max-w-screen" justify={'space-between'}>
         <Box>

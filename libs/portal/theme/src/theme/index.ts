@@ -14,6 +14,20 @@ export const customConfig = defineConfig({
       w: 'full',
       px: '5rem',
     },
+    '.custom-swiper .swiper-pagination-bullet': {
+      width: '12px!important',
+      height: '12px!important',
+      opacity: '0.7',
+      transition: 'transform 0.3s ease!important',
+    },
+
+    /* Customize active bullet styles */
+    '.custom-swiper .swiper-pagination-bullet-active': {
+      bgColor: 'white!important',
+      width: '36px!important',
+      height: '12px!important',
+      borderRadius: '10.5px!important',
+    },
   },
   theme: {
     recipes,

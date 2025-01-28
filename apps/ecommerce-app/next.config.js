@@ -14,6 +14,9 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['@chakra-ui/react'],
   },
+  images: {
+    domains: ['plus.unsplash.com', 'media.istockphoto.com'],
+  },
 };
 
 const plugins = [

@@ -9,9 +9,11 @@ import {
 } from '@portal/global';
 import Image from 'next/image';
 import { FunctionComponent } from 'react';
-interface NavbarProps {}
+interface NavbarProps {
+  logoSrc?: string;
+}
 
-export const Navbar: FunctionComponent<NavbarProps> = () => {
+export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
   return (
     <Flex
       className="max-w-screen"
@@ -21,7 +23,7 @@ export const Navbar: FunctionComponent<NavbarProps> = () => {
       alignItems={'center'}
     >
       <Image
-        src={logo}
+        src={logoSrc}
         alt="brand"
         style={{ height: '32px', width: '133px' }}
       />

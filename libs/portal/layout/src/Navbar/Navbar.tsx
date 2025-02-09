@@ -20,6 +20,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
       py="36px"
       mt="42px"
       justify={'space-between'}
+      flexWrap={'wrap'}
       alignItems={'center'}
     >
       <Image

@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { useSession } from '@portal/auth';
 import { ColorModeProvider } from '@portal/global';
 import { PropsWithChildren } from 'react';
@@ -10,8 +11,8 @@ export const Layout = (props: PropsWithChildren) => {
   if (session.status === 'loading') return <h2>loading</h2>;
 
   return (
-    <div>
+    <Box minWidth={'1280px'}>
       <ColorModeProvider>{props.children}</ColorModeProvider>
-    </div>
+    </Box>
   );
 };

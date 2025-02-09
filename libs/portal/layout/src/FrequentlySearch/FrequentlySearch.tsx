@@ -8,7 +8,12 @@ export const FrequentlySearched: FunctionComponent<
 > = () => {
   return (
     <Flex py="16px" borderY={'1px solid #EAEAEA'}>
-      <Flex className="max-w-screen" align={'center'} gap="16px">
+      <Flex
+        className="max-w-screen"
+        align={'center'}
+        flexWrap={'wrap'}
+        gap="16px"
+      >
         <Text sizes={'paragraph-sm'} color="colors.carbon.500">
           Frequently searched:{' '}
         </Text>

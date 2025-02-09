@@ -3,10 +3,7 @@
   "builds": [
     {
       "src": "apps/ecommerce-app",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "./apps/ecommerce-app/.next"
-      }
+      "use": "@vercel/next"
     }
   ]
 }

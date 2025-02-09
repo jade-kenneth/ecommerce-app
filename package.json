@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "postinstall": "npx nx run-many --target=install --legacy-peer-deps",
     "build:app": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts && npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
-    "server": "nx run ecommerce-server:serve:development",
+    "server": "nx run ecommerce-server:serve:dev",
     "app": "nx run ecommerce-app:dev",
     "typegen:watch": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts --watch",
     "dev": "nx run-many --parallel server app"

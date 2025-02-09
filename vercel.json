@@ -1,9 +1,6 @@
 {
   "version": 2,
-  "build": {
-    "installCommand": "npm install --legacy-peer-deps",
-    "buildCommand": "npm run build:server"
-  },
+
   "builds": [
     {
       "src": "apps/ecommerce-server/src/main.ts",

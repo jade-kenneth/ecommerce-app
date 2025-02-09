@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "npm install --legacy-peer-deps",
     "build:app": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts && npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
     "server": "nx run ecommerce-server:serve:dev",

@@ -3,12 +3,12 @@ import { MedalIcon, PhoneIcon, TruckIcon } from '@portal/global';
 
 import { FunctionComponent } from 'react';
 
-interface HighlightsProps {
+interface HighlightProps {
   storeName?: string;
   contact?: string;
 }
 
-export const Highlights: FunctionComponent<HighlightsProps> = ({
+export const Highlight: FunctionComponent<HighlightProps> = ({
   contact = '09123453476',
   storeName = 'Welcome to AmyStore',
 }) => {

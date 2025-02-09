@@ -26,18 +26,9 @@
         "serveStaticTargetName": "serve-static"
       }
     },
-    {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e"
-      }
-    },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
+    { "plugin": "@nx/playwright/plugin", "options": { "targetName": "e2e" } },
+    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
+
     {
       "plugin": "@nx/webpack/plugin",
       "options": {
@@ -47,32 +38,16 @@
       }
     }
   ],
-  "targetDefaults": {
-    "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
-    }
-  },
+  "targetDefaults": { "e2e-ci--**/*": { "dependsOn": ["^build"] } },
   "generators": {
-    "@nx/next": {
-      "application": {
-        "style": "css",
-        "linter": "eslint"
-      }
-    },
-    "@nx/react": {
-      "library": {
-        "unitTestRunner": "none"
-      }
-    }
+    "@nx/next": { "application": { "style": "css", "linter": "eslint" } },
+    "@nx/react": { "library": { "unitTestRunner": "none" } }
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@vercel/remote-nx",
-      "options": {
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
-        "token": "token",
-        "teamId": "teamId"
-      }
+      "runner": "nx/tasks-runners/default",
+      "options": { "cacheDirectory": "/tmp/nx-cache" }
     }
-  }
+  },
+  "nxCloudAccessToken": "NDY2MDFhZWEtMWJjNy00YjkyLWJhOGYtYTk5YTBmMGQwYzk1fHJlYWQtd3JpdGU="
 }

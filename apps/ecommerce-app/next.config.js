@@ -15,7 +15,10 @@ const nextConfig = {
     optimizePackageImports: ['@chakra-ui/react'],
   },
   images: {
-    domains: ['plus.unsplash.com', 'media.istockphoto.com'],
+    remotePatterns: [
+      { hostname: 'plus.unsplash.com' },
+      { hostname: 'media.istockphoto.com' },
+    ],
   },
 };
 

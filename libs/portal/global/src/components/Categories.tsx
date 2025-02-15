@@ -25,7 +25,7 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
     { name: 'Canned Goods', src: canned, size: 100 },
     { name: 'Instant Food', src: instant, size: 140 },
     { name: 'Rice', src: rice, size: 100 },
-    { name: 'Cooking </br> Essentials', src: cooking },
+    { name: 'Cooking </br> Essentials', src: cooking, size: 100 },
     { name: 'Fresh </br> Produce', src: fresh, size: 150 },
     { name: 'Personal </br> Care', src: personal, size: 150 },
     { name: 'Household </br> Items ', src: household, size: 150 },

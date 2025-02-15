@@ -1,5 +1,5 @@
 'use client';
-import { Carousel } from '@portal/global';
+import { Carousel, Categories } from '@portal/global';
 import { FrequentlySearched, Highlight, Layout, Navbar } from '@portal/layout';
 export default function Index() {
   return (
@@ -8,6 +8,7 @@ export default function Index() {
       <Navbar />
       <FrequentlySearched />
       <Carousel />
+      <Categories />
     </Layout>
   );
 }

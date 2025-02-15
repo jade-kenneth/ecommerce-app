@@ -7,6 +7,7 @@ import health from './health.png';
 import household from './household.png';
 import instant from './instant.png';
 import logo from './Logo.png';
+import medal from './medal.svg';
 import personal from './personal.png';
 import rice from './rice.png';
 import snacks from './snacks.png';
@@ -22,6 +23,7 @@ export {
   household,
   instant,
   logo,
+  medal,
   personal,
   rice,
   snacks,

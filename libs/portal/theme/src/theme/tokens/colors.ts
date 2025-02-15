@@ -4,6 +4,7 @@ export const colors = defineTokens({
   colors: {
     carbon: {
       50: { value: '#1D1D1D' },
+      25: { value: '#151515' },
       100: { value: '#242424' },
       200: { value: '#2A2A2A ' },
       300: { value: '#2F2F2F ' },
@@ -51,7 +52,7 @@ export const colors = defineTokens({
       400: { value: '#FFAE72 ' },
       500: { value: '#FF9933' },
       600: { value: '#E98C2F' },
-      700: { value: '#D07D2A' },
+      700: { value: '#2AA62A' },
       800: { value: '#B46C24 ' },
       900: { value: '#93581D ' },
     },

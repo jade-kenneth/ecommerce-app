@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FunctionComponent } from 'react';
 import {
@@ -35,25 +35,23 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
   ];
 
   return (
-    <Box className="max-w-screen" mt="40px">
-      <Container>
-        <Grid
-          gridRowGap={'58px'}
-          gridColumnGap={'18px'}
-          flexWrap={'wrap'}
-          templateColumns="repeat(auto-fit,  minmax(181px, 1fr))"
-          autoRows={'220px'}
-        >
-          {items.map(({ name, src, size }) => {
-            return (
-              <GridItem display={'flex'} alignItems={'center'}>
-                <Card name={name} imgSrc={src} size={size} />
-              </GridItem>
-            );
-          })}
-        </Grid>
-      </Container>
-    </Box>
+    <Container>
+      <Grid
+        gridRowGap={'58px'}
+        gridColumnGap={'18px'}
+        flexWrap={'wrap'}
+        templateColumns="repeat(auto-fit,  minmax(181px, 1fr))"
+        autoRows={'220px'}
+      >
+        {items.map(({ name, src, size }) => {
+          return (
+            <GridItem display={'flex'} alignItems={'center'}>
+              <Card name={name} imgSrc={src} size={size} />
+            </GridItem>
+          );
+        })}
+      </Grid>
+    </Container>
   );
 };
 

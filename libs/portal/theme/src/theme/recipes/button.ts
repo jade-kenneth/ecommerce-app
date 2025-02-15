@@ -83,6 +83,30 @@ export const buttonRecipe = (colorTheme?: string, boxShadow?: string) =>
           //     },
           //   }),
         },
+        ghost: {
+          bg: `transparent`,
+          color: 'colors.primary.700',
+
+          _hover: {
+            bg: `transparent`,
+            cursor: 'pointer',
+            _disabled: {
+              bg: `transparent`,
+              opacity: 1,
+            },
+          },
+
+          _disabled: {
+            bg: `transparent`,
+            opacity: 1,
+          },
+
+          _loading: {
+            _hover: {
+              bg: `transparent`,
+            },
+          },
+        },
         outline: {
           bg: 'white',
           color: `colors.${colorTheme}.700`,

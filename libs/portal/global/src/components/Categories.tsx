@@ -20,11 +20,11 @@ interface CategoriesProps {}
 
 export const Categories: FunctionComponent<CategoriesProps> = () => {
   const items = [
-    { name: 'Snacks', src: snacks },
-    { name: 'Beverages', src: beverages },
-    { name: 'Canned Goods', src: canned },
+    { name: 'Snacks', src: snacks, size: 100 },
+    { name: 'Beverages', src: beverages, size: 100 },
+    { name: 'Canned Goods', src: canned, size: 100 },
     { name: 'Instant Food', src: instant, size: 140 },
-    { name: 'Rice', src: rice },
+    { name: 'Rice', src: rice, size: 100 },
     { name: 'Cooking </br> Essentials', src: cooking },
     { name: 'Fresh </br> Produce', src: fresh, size: 150 },
     { name: 'Personal </br> Care', src: personal, size: 150 },
@@ -90,8 +90,8 @@ export const Card = ({ imgSrc, name, size }: CardProps) => {
           }
           objectFit="contain"
           alt="carousel-image"
-          width={size ?? '100'}
-          height={size ?? '100'}
+          width={size}
+          height={size}
         />
       </Flex>
 

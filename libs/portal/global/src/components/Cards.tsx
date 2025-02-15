@@ -26,7 +26,7 @@ export const Cards = (props: CardProps) => {
         position={'relative'}
       >
         <Image
-          src={props.imgSrc}
+          src={props.imgSrc as string}
           alt="item"
           objectFit="cover"
           width={100}

@@ -85,7 +85,7 @@ export const Card = ({ imgSrc, name, size }: CardProps) => {
     >
       <Flex zIndex={2} flex={0.8} w="full" align={'center'} justify={'center'}>
         <Image
-          src={imgSrc ?? ''}
+          src={imgSrc as string}
           objectFit="contain"
           alt="carousel-image"
           width={size ?? '100'}

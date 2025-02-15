@@ -1,3 +1,5 @@
+import { StaticImageData } from 'next/image';
+
 export interface CardProps {
   name: string;
   isTop: boolean;
@@ -7,6 +9,6 @@ export interface CardProps {
   price: number;
   sold: number;
   rating: number;
-  imgSrc: string;
+  imgSrc: string | StaticImageData;
 }
 [];

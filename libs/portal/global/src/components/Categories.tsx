@@ -85,9 +85,7 @@ export const Card = ({ imgSrc, name, size }: CardProps) => {
     >
       <Flex zIndex={2} flex={0.8} w="full" align={'center'} justify={'center'}>
         <Image
-          src={
-            'https://media.istockphoto.com/id/2178465490/photo/buldak-is-korean-fire-chicken-with-cheese.jpg?s=2048x2048&w=is&k=20&c=eOwCJRoRGQziKTPsdLDCe5eKNlkxkBDM2hoiOatOOrM='
-          }
+          src={imgSrc as string}
           objectFit="contain"
           alt="carousel-image"
           width={size}

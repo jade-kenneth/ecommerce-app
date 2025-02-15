@@ -26,7 +26,9 @@ export const Cards = (props: CardProps) => {
         position={'relative'}
       >
         <Image
-          src={props.imgSrc as string}
+          src={
+            'https://media.istockphoto.com/id/2178465490/photo/buldak-is-korean-fire-chicken-with-cheese.jpg?s=2048x2048&w=is&k=20&c=eOwCJRoRGQziKTPsdLDCe5eKNlkxkBDM2hoiOatOOrM='
+          }
           alt="item"
           objectFit="cover"
           width={100}

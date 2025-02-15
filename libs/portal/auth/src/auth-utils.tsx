@@ -36,7 +36,7 @@ export const createAuthProvider = ({
 
   const AuthProvider = ({ children }: PropsWithChildren) => {
     const [session, setSession] = useState<Session>({
-      status: 'loading',
+      status: 'unauthenticated',
     });
     const [maintenance, setMaintenance] = useState<Maintenance>({
       onMaintenance: false,

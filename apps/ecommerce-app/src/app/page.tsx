@@ -1,5 +1,5 @@
 'use client';
-import { Carousel, Categories, TopSelling } from '@portal/global';
+import { Carousel, Categories, Footer, TopSelling } from '@portal/global';
 import { FrequentlySearched, Highlight, Layout, Navbar } from '@portal/layout';
 import HighPoint from 'libs/portal/global/src/components/HighPoint';
 import JustForYou from 'libs/portal/global/src/components/JustForYou';
@@ -14,6 +14,7 @@ export default function Index() {
       <TopSelling />
       <HighPoint />
       <JustForYou />
+      <Footer />
     </Layout>
   );
 }

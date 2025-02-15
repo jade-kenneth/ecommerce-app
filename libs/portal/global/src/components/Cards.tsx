@@ -52,7 +52,7 @@ export const Cards = (props: CardProps) => {
               color="white"
               gap="4px"
             >
-              <FaHeart size={'12'} />
+              <FaHeart size={12} />
               <Text sizes={'paragraph-xs'}>TOP</Text>
             </Flex>
           )}

@@ -8,7 +8,7 @@ export const Layout = (props: PropsWithChildren) => {
 
   if (maintenance.onMaintenance) return <h2>maintenance mode</h2>;
   if (session.status === 'unauthenticated') return null;
-  if (session.status === 'loading') return <h2>loading</h2>;
+  // if (session.status === 'loading') return <h2>loading</h2>;
 
   return (
     <Box minWidth={'1280px'}>

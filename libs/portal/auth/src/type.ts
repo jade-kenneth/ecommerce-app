@@ -1,5 +1,5 @@
 export interface Session {
-  status: 'loading' | 'authenticated' | 'unauthenticated';
+  status: 'authenticated' | 'unauthenticated';
 }
 export interface Maintenance {
   onMaintenance: boolean;

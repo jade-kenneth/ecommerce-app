@@ -1,5 +1,5 @@
 import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { FunctionComponent } from 'react';
 import {
   beverages,
@@ -57,7 +57,7 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
 
 interface CardProps {
   name: string;
-  imgSrc?: string;
+  imgSrc?: string | StaticImageData;
   size?: number;
 }
 export const Card = ({ imgSrc, name, size }: CardProps) => {

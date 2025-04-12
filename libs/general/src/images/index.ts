@@ -8,6 +8,7 @@ import household from './household.png';
 import instant from './instant.png';
 import logo from './Logo.png';
 import logoBlack from './LogoBlack.png';
+import logoWhite from './LogoWhite.png';
 import medal from './medal.svg';
 import personal from './personal.png';
 import rice from './rice.png';
@@ -24,6 +25,7 @@ export {
   instant,
   logo,
   logoBlack,
+  logoWhite,
   medal,
   personal,
   rice,

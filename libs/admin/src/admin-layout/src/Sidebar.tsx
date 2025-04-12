@@ -1,5 +1,5 @@
 import { chakra, Flex, HStack, Icon, Text } from '@chakra-ui/react';
-import { logo } from '@global';
+import { logoWhite } from '@global';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { IconType } from 'react-icons';
@@ -15,10 +15,15 @@ export default function Sidebar() {
       h="100vh"
       as="nav"
       role="menu"
+      gap={'4px'}
       px="1rem"
       pt="32px"
     >
-      <Image src={logo} alt="logo" style={{ marginBottom: '24px' }} />
+      <Image
+        src={logoWhite}
+        alt="logo"
+        style={{ marginBottom: '24px', width: '133.35px', height: '32px' }}
+      />
 
       <NavItem icon={FaHome} path="dashboard" label="Dashboard" />
       <NavItem
@@ -57,6 +62,7 @@ export function NavItem({
       as={'a'}
       role="menuitem"
       color="white"
+      h={'40px'}
       onClick={() => {
         onClick?.();
         router.push(`/admin/${path}`);

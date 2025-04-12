@@ -7,7 +7,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <Flex>
       <Sidebar />
-      <Flex direction={'column'}>
+      <Flex direction={'column'} w="full">
         <Header />
         {children}
       </Flex>

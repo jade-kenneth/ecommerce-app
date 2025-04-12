@@ -1,7 +1,11 @@
-import { Box, Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import { chakra, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { logo } from '@global';
 import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
 import { IconType } from 'react-icons';
+import { CiSettings } from 'react-icons/ci';
+import { FaHome } from 'react-icons/fa';
+import { IoStorefrontOutline } from 'react-icons/io5';
 export default function Sidebar() {
   return (
     <Flex
@@ -9,10 +13,21 @@ export default function Sidebar() {
       bg="colors.primary.700"
       w="280px"
       h="100vh"
+      as="nav"
+      role="menu"
       px="1rem"
       pt="32px"
     >
       <Image src={logo} alt="logo" style={{ marginBottom: '24px' }} />
+
+      <NavItem icon={FaHome} path="dashboard" label="Dashboard" />
+      <NavItem
+        icon={IoStorefrontOutline}
+        path="manage-products"
+        isActive
+        label="Manage Producs"
+      />
+      <NavItem icon={CiSettings} path="settings" label="Settings" />
     </Flex>
   );
 }
@@ -22,24 +37,31 @@ interface NavItemProps {
   icon: IconType;
   isActive?: boolean;
   onClick?: () => void;
-  href?: string;
+  path?: string;
 }
 
 export function NavItem({
   label,
   icon,
-  isActive = false,
+  isActive,
   onClick,
-  href = '#',
+  path = '#',
 }: NavItemProps) {
+  const router = useRouter();
+  const params = useParams();
+
+  const active = params?.slug ? params.slug === path : isActive;
+
   return (
-    <Box
+    <chakra.div
       as={'a'}
       role="menuitem"
-      onClick={onClick}
-      aria-current={isActive ? 'page' : undefined}
-      _hover={{ bg: useColorModeValue('gray.100', 'gray.700') }}
-      bg={isActive ? useColorModeValue('gray.200', 'gray.600') : 'transparent'}
+      color="white"
+      onClick={() => {
+        onClick?.();
+        router.push(`/admin/${path}`);
+      }}
+      data-selected={active}
       borderRadius="md"
       px={4}
       py={2}
@@ -50,6 +72,6 @@ export function NavItem({
         <Icon as={icon} fontSize="lg" />
         <Text>{label}</Text>
       </HStack>
-    </Box>
+    </chakra.div>
   );
 }

@@ -2,7 +2,6 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 import { recipes } from './recipes';
 import { tokens } from './tokens';
-
 export * from './recipes';
 export * from './tokens';
 
@@ -27,6 +26,12 @@ export const customConfig = defineConfig({
       width: '36px!important',
       height: '12px!important',
       borderRadius: '10.5px!important',
+    },
+    '&[data-selected="true"]': {
+      bg: 'colors.primary.900',
+      color: 'colors.primary.100',
+
+      boxShadow: '0 0 0 4px rgba(147, 215, 215, 1)',
     },
   },
   theme: {

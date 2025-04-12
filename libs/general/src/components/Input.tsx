@@ -1,3 +1,4 @@
+'use client';
 import {
   Input as ChakraInput,
   InputProps as ChakraInputProps,
@@ -47,7 +48,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
     const [internalValue, setInternalValue] = useState(value);
 
     return (
-      <InputGroup {...inputGroupProps}>
+      <InputGroup w="full" {...inputGroupProps}>
         <ChakraInput
           value={internalValue}
           ref={ref}

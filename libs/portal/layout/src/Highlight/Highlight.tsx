@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react';
-import { MedalIcon, PhoneIcon, TruckIcon } from '@portal/global';
+import { MedalIcon, PhoneIcon, TruckIcon } from '@global';
 
 import { FunctionComponent } from 'react';
 

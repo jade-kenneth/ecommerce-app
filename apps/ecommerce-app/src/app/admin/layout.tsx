@@ -1,5 +1,4 @@
-import { AuthProvider } from '@portal/auth';
-import { Provider } from '@portal/theme';
+import { AdminLayout } from '@backoffice/layout';
 import { Roboto } from 'next/font/google';
 export const metadata = {
   title: 'Welcome to ecommerce-app',
@@ -18,9 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={roboto.className}>
       <body>
-        <AuthProvider>
-          <Provider>{children}</Provider>
-        </AuthProvider>
+        <AdminLayout>{children}</AdminLayout>
       </body>
     </html>
   );

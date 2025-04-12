@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
+import { ColorModeProvider } from '@global';
 import { useSession } from '@portal/auth';
-import { ColorModeProvider } from '@portal/global';
 import { PropsWithChildren } from 'react';
 
 export const Layout = (props: PropsWithChildren) => {

@@ -7,7 +7,7 @@ import { CardProps } from './types';
 
 interface HighPointProps {}
 
-const HighPoint: FunctionComponent<HighPointProps> = () => {
+export const HighPoint: FunctionComponent<HighPointProps> = () => {
   const items: CardProps[] = [
     {
       name: 'Nova Cheddar Chips 78g',
@@ -111,5 +111,3 @@ const HighPoint: FunctionComponent<HighPointProps> = () => {
     </Container>
   );
 };
-
-export default HighPoint;

@@ -1,14 +1,8 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
-import {
-  Button,
-  CartIcon,
-  Input,
-  logo,
-  SearchIcon,
-  UserIcon,
-} from '@portal/global';
+import { Button, CartIcon, Input, logo, SearchIcon, UserIcon } from '@global';
 import Image from 'next/image';
 import { FunctionComponent } from 'react';
+import { Login } from './Login';
 interface NavbarProps {
   logoSrc?: string;
 }
@@ -41,6 +35,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
         pl="24px"
         bg="colors.primary.25"
         inputGroupProps={{
+          w: 'fit-content',
           endElementProps: {
             p: 'unset',
           },
@@ -72,7 +67,16 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
       >
         <HStack as="button" cursor={'pointer'} role="button" px="20px">
           <UserIcon />
-          <Text sizes={'paragraph-sm'}>Register / Log In</Text>
+
+          <Login>
+            {({ onOpen }) => {
+              return (
+                <Text sizes={'paragraph-sm'} onClick={onOpen}>
+                  Register / Log In
+                </Text>
+              );
+            }}
+          </Login>
         </HStack>
         <HStack as="button" cursor={'pointer'} role="button" px="20px">
           <CartIcon />

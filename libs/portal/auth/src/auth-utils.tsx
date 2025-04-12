@@ -30,7 +30,6 @@ export const createAuthProvider = ({
 
   const useSession = () => {
     const context = useContext(AuthContext);
-
     return context;
   };
 

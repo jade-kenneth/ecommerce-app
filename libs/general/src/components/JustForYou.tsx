@@ -9,7 +9,7 @@ import { CardProps } from './types';
 
 interface JustForYouProps {}
 
-const JustForYou: FunctionComponent<JustForYouProps> = () => {
+export const JustForYou: FunctionComponent<JustForYouProps> = () => {
   const items: CardProps[] = [
     {
       name: 'Nova Cheddar Chips 78g',
@@ -134,5 +134,3 @@ const JustForYou: FunctionComponent<JustForYouProps> = () => {
     </Container>
   );
 };
-
-export default JustForYou;

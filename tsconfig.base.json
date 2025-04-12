@@ -15,9 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@backoffice/admin": ["libs/admin/src/index.ts"],
+      "@backoffice/layout": ["libs/admin/src/admin-layout/src/index.ts"],
+      "@ecommerce-app/globally": ["libs/globally/src/index.ts"],
+      "@ecommerce-app/globally/server": ["libs/globally/src/server.ts"],
+      "@global": ["libs/general/src/index.ts"],
+      "@global/server": ["libs/general/src/server.ts"],
       "@portal/auth": ["libs/portal/auth/src/index.ts"],
-      "@portal/global": ["libs/portal/global/src/index.ts"],
-      "@portal/global/server": ["libs/portal/global/src/server.ts"],
       "@portal/layout": ["libs/portal/layout/src/index.ts"],
       "@portal/theme": ["libs/portal/theme/src/index.ts"]
     }

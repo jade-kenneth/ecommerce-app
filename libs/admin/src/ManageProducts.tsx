@@ -1,5 +1,3 @@
-'use client';
-
 import { DataTable } from '@global';
 import { useState } from 'react';
 
@@ -13,16 +11,19 @@ export default function ManageProducts() {
           id: '1212',
           name: 'Product 1',
           description: 'Product 1 description',
+          category: 'Category 1',
         },
         {
           id: '1212',
           name: 'Product 2',
-          description: 'Product 1 description',
+          description: 'Product 2 description',
+          category: 'Category 2',
         },
         {
           id: '1212',
           name: 'Product 3',
-          description: 'Product 1 description',
+          description: 'Product 3 description',
+          category: 'Category 3',
         },
       ]}
       columns={[
@@ -41,7 +42,7 @@ export default function ManageProducts() {
         {
           heading: 'Category',
           filterable: true,
-          render: (item) => <p>{item.id}</p>,
+          render: (item) => <p>{item.category}</p>,
           sortable: true,
         },
         {

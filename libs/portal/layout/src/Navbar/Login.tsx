@@ -13,7 +13,7 @@ import { Input, logoBlack } from '@global';
 import Image from 'next/image';
 import { FaRegEyeSlash } from 'react-icons/fa';
 interface LoginProps {
-  children?: (value: UseDisclosureProps) => void;
+  children?: (value: UseDisclosureProps) => React.ReactNode;
 }
 export function Login({ children }: LoginProps) {
   const disclosure = useDisclosure();

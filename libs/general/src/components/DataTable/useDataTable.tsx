@@ -1,8 +1,8 @@
 import React from 'react';
 
 export interface Column<T> {
-  label: string;
-  render?: (item: T) => React.ReactNode;
+  heading: string;
+  render: (item: T) => React.ReactNode;
   sortable?: boolean;
   filterable?: boolean;
 }
@@ -11,6 +11,7 @@ export interface PaginationProps {
   page: number;
   pageSize: number;
   totalItems: number;
+  onPageChange?: (page: number) => void;
 }
 
 export interface SortingProps {
@@ -105,8 +106,6 @@ export function useTable<T>({
   pagination,
   sorting,
 }: TableProps<T>) {
-  const [page, setPage] = React.useState(0);
-  const [pageSize, setPageSize] = React.useState(10);
   const [sortBy, setSortBy] = React.useState<string | null>(null);
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = React.useState<Record<string, any>>({});
@@ -121,11 +120,11 @@ export function useTable<T>({
     loading,
     pagination,
     sorting,
-    page,
-    pageSize,
+
     sortBy,
     sortOrder,
     filters,
+
     handleRowSelect,
   };
 }

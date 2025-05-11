@@ -1,5 +1,13 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
-import { Button, CartIcon, Input, logo, SearchIcon, UserIcon } from '@global';
+import {
+  Button,
+  CartIcon,
+  ColorModeButton,
+  Input,
+  logo,
+  SearchIcon,
+  UserIcon,
+} from '@global';
 import Image from 'next/image';
 import { FunctionComponent } from 'react';
 import { Login } from './Login';
@@ -82,6 +90,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
           <CartIcon />
           <Text sizes={'paragraph-sm'}>Cart</Text>
         </HStack>
+        <ColorModeButton />
       </Flex>
     </Flex>
   );

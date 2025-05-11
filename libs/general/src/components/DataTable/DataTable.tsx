@@ -1,4 +1,7 @@
 'use client';
+import { DataTableProvider } from './DataTableContext';
+import TablePagination from './Pagination/Pagination';
+import { TableContent } from './TableContent';
 import { FilterEntries, useDataTable, UseDataTableProps } from './useDataTable';
 
 type DatTableProps<T, F extends FilterEntries> = UseDataTableProps<T, F> & {
@@ -23,5 +26,10 @@ export function DataTable<T, F extends FilterEntries>({
     sorting,
   });
 
-  return <p>Table</p>;
+  return (
+    <DataTableProvider value={datatable}>
+      <TableContent />
+      <TablePagination />
+    </DataTableProvider>
+  );
 }

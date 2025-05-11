@@ -1,6 +1,9 @@
+'use client';
 import { DataTable } from '@global';
+import { useState } from 'react';
 
 export default function Page() {
+  const [page, setPage] = useState(1);
   return (
     <DataTable
       id="products"
@@ -10,15 +13,88 @@ export default function Page() {
           name: 'Product 1',
           description: 'Product 1 description',
         },
+        {
+          id: '1212',
+          name: 'Product 2',
+          description: 'Product 1 description',
+        },
+        {
+          id: '1212',
+          name: 'Product 3',
+          description: 'Product 1 description',
+        },
       ]}
       columns={[
         {
-          label: 'Product',
+          heading: 'Image',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Product Name',
+          filterable: true,
+          render: (item) => <p>{item.name}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Category',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Price (₱)',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Discount (%)',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Discount (%)',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Final Price (₱)',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Points',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Stock ',
+          filterable: true,
+          render: (item) => <p>{item.id}</p>,
+          sortable: true,
+        },
+        {
+          heading: 'Status',
           filterable: true,
           render: (item) => <p>{item.id}</p>,
           sortable: true,
         },
       ]}
+      pagination={{
+        page,
+        pageSize: 10,
+        totalItems: 100,
+        onPageChange: (page) => {
+          console.log(page, 'page');
+          setPage(page);
+        },
+      }}
     />
   );
 }

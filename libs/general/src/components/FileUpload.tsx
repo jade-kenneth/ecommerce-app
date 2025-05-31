@@ -1,8 +1,9 @@
 'use client';
 import { FileUpload } from '@ark-ui/react';
 import { FileChangeDetails } from '@ark-ui/react/dist/components/file-upload/file-upload';
-import { useControllableState } from '@chakra-ui/react';
+
 import { LuUpload } from 'react-icons/lu';
+import { useControllableState } from '../utils';
 
 interface UploadFileProps {
   value?: File[];
@@ -23,7 +24,7 @@ export function UploadFile(props: UploadFileProps) {
       }
     >
       <FileUpload.Dropzone
-        hidden={value.length > 0}
+        hidden={(value?.length || 0) > 0}
         className="w-full h-[126px] bg-[green] border-[1px_solid_#F2F2F2] rounded-[8px] flex items-center justify-center"
       >
         Drag your file(s) here

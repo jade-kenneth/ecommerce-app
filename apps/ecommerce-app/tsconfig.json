@@ -32,7 +32,8 @@
     "../../apps/ecommerce-app/.next/types/**/*.ts",
     "../../dist/apps/ecommerce-app/.next/types/**/*.ts",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "tailwind.config.js"
   ],
   "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

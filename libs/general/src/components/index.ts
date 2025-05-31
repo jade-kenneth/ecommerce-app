@@ -3,6 +3,7 @@ export * from './Carousel';
 export * from './Categories';
 export * from './chakra__prebuilts';
 export * from './DataTable';
+export * from './FileUpload';
 export * from './Footer';
 export * from './HighPoint';
 export * from './Input';

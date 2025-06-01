@@ -1,6 +1,5 @@
 'use client';
 import { FileUpload } from '@ark-ui/react';
-import { FileChangeDetails } from '@ark-ui/react/dist/components/file-upload/file-upload';
 
 import { LuUpload } from 'react-icons/lu';
 import { useControllableState } from '../utils';
@@ -19,9 +18,7 @@ export function UploadFile(props: UploadFileProps) {
     <FileUpload.Root
       maxFiles={1}
       className="h-full w-full bg-[blue] border-[1px_solid_#F2F2F2] rounded-[8px]"
-      onFileChange={(details: FileChangeDetails) =>
-        setValue(details.acceptedFiles)
-      }
+      onFileChange={(details) => setValue(details.acceptedFiles)}
     >
       <FileUpload.Dropzone
         hidden={(value?.length || 0) > 0}

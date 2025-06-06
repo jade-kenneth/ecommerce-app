@@ -1,9 +1,9 @@
 'use client';
 import { FileUpload } from '@ark-ui/react';
 
+import { IoCloudUploadOutline } from 'react-icons/io5';
 import { LuUpload } from 'react-icons/lu';
 import { useControllableState } from '../utils';
-
 interface UploadFileProps {
   value?: File[];
   onChange?: (files: File[]) => void;
@@ -17,16 +17,24 @@ export function UploadFile(props: UploadFileProps) {
   return (
     <FileUpload.Root
       maxFiles={1}
-      className="h-full w-full bg-[blue] border-[1px_solid_#F2F2F2] rounded-[8px]"
+      className="w-full h-[126px] border-[1px] border-[#F2F2F2]   rounded-[8px] flex items-center justify-center"
       onFileChange={(details) => setValue(details.acceptedFiles)}
     >
       <FileUpload.Dropzone
+        className="flex flex-col gap-3 items-center justify-center w-[inherit] h-[inherit] cursor-pointer"
         hidden={(value?.length || 0) > 0}
-        className="w-full h-[126px] bg-[green] border-[1px_solid_#F2F2F2] rounded-[8px] flex items-center justify-center"
       >
-        Drag your file(s) here
+        <IoCloudUploadOutline />
+        <FileUpload.Trigger>
+          <p className="text-primary-700-value font-medium text-sm">
+            Click to upload image
+          </p>
+        </FileUpload.Trigger>
+        <p className="text-carbon-500 text-xs">
+          PNG, JPG, GIF up to 10MB. Recommended size: 800x600px
+        </p>
       </FileUpload.Dropzone>
-      <FileUpload.Trigger>Choose file(s)</FileUpload.Trigger>
+
       <FileUpload.ItemGroup>
         <FileUpload.Context>
           {({ acceptedFiles }) =>

@@ -23,7 +23,8 @@
       "@global/server": ["libs/general/src/server.ts"],
       "@portal/auth": ["libs/portal/auth/src/index.ts"],
       "@portal/layout": ["libs/portal/layout/src/index.ts"],
-      "@portal/theme": ["libs/portal/theme/src/index.ts"]
+      "@portal/theme": ["libs/portal/theme/src/index.ts"],
+      "@utils": ["libs/general/src/utils/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

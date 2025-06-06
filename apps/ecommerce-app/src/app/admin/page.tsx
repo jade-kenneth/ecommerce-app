@@ -10,7 +10,13 @@ import {
   useDisclosure,
   useFileUpload,
 } from '@chakra-ui/react';
-import { Button, DataTable, Input, UploadFile } from '@global';
+import {
+  Button,
+  DataTable,
+  Input,
+  MultiComboboxField,
+  UploadFile,
+} from '@global';
 import { useState } from 'react';
 import { FaPlusCircle } from 'react-icons/fa';
 
@@ -118,6 +124,7 @@ export default function ManageProducts() {
 const AddProductButton = () => {
   const disclosure = useDisclosure();
   const value = useFileUpload();
+  const [value1, setValue1] = useState<string[]>(['Rice']);
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -162,14 +169,30 @@ const AddProductButton = () => {
                 Add Product
               </Text>
             </Dialog.Header>
-            <Dialog.Body>
+            <Dialog.Body className="flex flex-col gap-4">
               <Field.Root>
                 <Field.Label>Product Name</Field.Label>
                 <Input rounded={'32px'} placeholder="Enter product name" />
-
+              </Field.Root>
+              <Field.Root>
                 <Field.Label>Image</Field.Label>
-
                 <UploadFile />
+              </Field.Root>
+              <Field.Root>
+                <MultiComboboxField
+                  options={[
+                    { label: 'Dairy', value: 'Dairy' },
+                    { label: 'Snacks', value: 'Snacks' },
+                    { label: 'Seasonings', value: 'Seasonings' },
+                    { label: 'Rice', value: 'Rice' },
+                  ]}
+                  defaultValue={['Rice']}
+                  value={value1}
+                  onChange={(value) => {
+                    setValue1(value);
+                  }}
+                  label="Category"
+                />
               </Field.Root>
             </Dialog.Body>
           </Dialog.Content>

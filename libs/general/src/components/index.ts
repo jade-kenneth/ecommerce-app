@@ -2,6 +2,7 @@ export * from './Button';
 export * from './Carousel';
 export * from './Categories';
 export * from './chakra__prebuilts';
+export * from './ComoboxField';
 export * from './DataTable';
 export * from './FileUpload';
 export * from './Footer';

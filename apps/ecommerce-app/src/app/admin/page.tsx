@@ -16,6 +16,7 @@ import {
   DataTable,
   FieldInput,
   MultiComboboxField,
+  NumberInputField,
   UploadFile,
 } from '@global';
 import { useState } from 'react';
@@ -126,9 +127,9 @@ const AddProductButton = () => {
   const disclosure = useDisclosure();
   const value = useFileUpload();
   const [value1, setValue1] = useState<string[]>(['Rice']);
-  const [v1, setV1] = useState<string>('default');
+  const [v1, setV1] = useState<string>('');
   const [status, setStatus] = useState<string>('ACTIVE');
-  console.log(v1, 'v1');
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -201,25 +202,25 @@ const AddProductButton = () => {
                 label="Category"
               />
 
-              <FieldInput
+              <NumberInputField
                 value={v1}
                 onChange={(e) => setV1(e)}
                 label="Price"
                 placeholder="₱ 0.00"
               />
 
-              <FieldInput
+              <NumberInputField
                 value={v1}
                 onChange={(e) => setV1(e)}
                 label="Points"
                 placeholder="0"
               />
 
-              <FieldInput
+              <NumberInputField
                 value={v1}
                 onChange={(e) => setV1(e)}
                 label="Stock"
-                placeholder="Enter product description"
+                placeholder="0"
               />
 
               <ComboboxField
@@ -235,6 +236,22 @@ const AddProductButton = () => {
                 placeholder="Choose or select status"
               />
             </Dialog.Body>
+            <Dialog.Footer>
+              <div className="flex gap-2 items-center">
+                <button
+                  className="border-[1px] border-[#D2D2D2] p-3 rounded-[32px] text-carbon-500 text-sm font-medium"
+                  onClick={() => disclosure.onClose()}
+                >
+                  Save as Draft
+                </button>
+                <button
+                  className="bg-primary-700-value p-3 text-white rounded-[32px] text-carbon-500 text-sm font-medium"
+                  onClick={() => disclosure.onClose()}
+                >
+                  Add Product
+                </button>
+              </div>
+            </Dialog.Footer>
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>

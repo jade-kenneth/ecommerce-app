@@ -2,7 +2,6 @@
 import { FileUpload } from '@ark-ui/react';
 
 import { IoCloudUploadOutline } from 'react-icons/io5';
-import { LuUpload } from 'react-icons/lu';
 import { useControllableState } from '../utils';
 interface UploadFileProps {
   value?: File[];
@@ -17,7 +16,7 @@ export function UploadFile(props: UploadFileProps) {
   return (
     <FileUpload.Root
       maxFiles={1}
-      className="w-full h-[126px] border-[1px] border-[#F2F2F2]   rounded-[8px] flex items-center justify-center"
+      className="w-full min-h-[126px] h-auto border-[1px] border-[#F2F2F2]   rounded-[8px] flex items-center justify-center"
       onFileChange={(details) => setValue(details.acceptedFiles)}
     >
       <FileUpload.Dropzone
@@ -35,25 +34,25 @@ export function UploadFile(props: UploadFileProps) {
         </p>
       </FileUpload.Dropzone>
 
-      <FileUpload.ItemGroup>
-        <FileUpload.Context>
-          {({ acceptedFiles }) =>
-            acceptedFiles.map((file) => (
-              <FileUpload.Item key={file.name} file={file}>
-                <FileUpload.ItemPreview type="image/*">
-                  <FileUpload.ItemPreviewImage />
-                </FileUpload.ItemPreview>
-                <FileUpload.ItemPreview type=".*">
-                  <LuUpload />
-                </FileUpload.ItemPreview>
-                <FileUpload.ItemName />
-                <FileUpload.ItemSizeText />
-                <FileUpload.ItemDeleteTrigger>X</FileUpload.ItemDeleteTrigger>
-              </FileUpload.Item>
-            ))
-          }
-        </FileUpload.Context>
-      </FileUpload.ItemGroup>
+      <FileUpload.Context>
+        {({ acceptedFiles }) =>
+          acceptedFiles.map((file) => (
+            <FileUpload.Item
+              key={file.name}
+              file={file}
+              className="w-[inherit] h-[inherit] flex items-center justify-center relative"
+            >
+              <FileUpload.ItemPreview type="image/*">
+                <FileUpload.ItemPreviewImage />
+              </FileUpload.ItemPreview>
+              <FileUpload.ItemDeleteTrigger className="absolute right-1 top-0">
+                X
+              </FileUpload.ItemDeleteTrigger>
+            </FileUpload.Item>
+          ))
+        }
+      </FileUpload.Context>
+
       <FileUpload.HiddenInput />
     </FileUpload.Root>
   );

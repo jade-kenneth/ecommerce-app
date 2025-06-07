@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useDebounceCallback } from 'usehooks-ts';
 import { Field } from '../ui/FieldInput';
-interface FieldInputProps extends UseFieldProps {
+interface InputProps extends UseFieldProps {
   placeholder?: string;
   label?: string;
   value?: string;
@@ -18,7 +18,7 @@ export const FieldInput = ({
   label,
   className,
   ...props
-}: FieldInputProps) => {
+}: InputProps) => {
   const [value, setValue] = useControllableState({
     onChange: onChange,
     value: inputValue,
@@ -36,6 +36,7 @@ export const FieldInput = ({
       ref.current.value = value;
     }
   }, []);
+
   return (
     <Field.RootProvider
       value={field}

@@ -143,7 +143,7 @@ function SelectedValue({
     loadSelectedOptions();
   }, [loadSelectedOptions]);
   return (
-    <div className="flex flex-wrap gap-2 mt-2">
+    <div className="flex flex-wrap gap-2 mt-1">
       {selected?.map((select) => (
         <span
           key={select.label}

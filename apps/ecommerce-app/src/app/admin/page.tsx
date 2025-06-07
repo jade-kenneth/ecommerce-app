@@ -20,8 +20,9 @@ import {
   UploadFile,
 } from '@global';
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { FaPlusCircle } from 'react-icons/fa';
-
+import z from 'zod';
 export default function ManageProducts() {
   const [page, setPage] = useState(1);
   return (
@@ -122,14 +123,71 @@ export default function ManageProducts() {
     </Flex>
   );
 }
-
+enum Status {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+const schema = z.object({
+  name: z.string().trim().min(1, 'Name is required'),
+  image: z.string().trim().min(1, 'Image is required'),
+  category: z.array(z.string()).min(1, 'At least one category is required'),
+  price: z
+    .string()
+    .trim()
+    .min(1, 'Price is required')
+    .superRefine((val, ctx) => {
+      if (!/^\d+(\.\d{1,2})?$/.test(val)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Price must be a valid number with up to two decimal places',
+        });
+      }
+    }),
+  points: z
+    .string()
+    .trim()
+    .min(1, 'Points is required')
+    .superRefine((val, ctx) => {
+      if (!/^\d+$/.test(val)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Points must be a valid integer',
+        });
+      }
+    }),
+  stock: z
+    .string()
+    .trim()
+    .min(1, 'Stock is required')
+    .superRefine((val, ctx) => {
+      if (!/^\d+$/.test(val)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Stock must be a valid integer',
+        });
+      }
+    }),
+  status: z.nativeEnum(Status).or(z.literal('')),
+});
 const AddProductButton = () => {
   const disclosure = useDisclosure();
   const value = useFileUpload();
   const [value1, setValue1] = useState<string[]>(['Rice']);
   const [v1, setV1] = useState<string>('');
   const [status, setStatus] = useState<string>('ACTIVE');
-
+  const form = useForm<z.infer<typeof schema>>({
+    mode: 'all',
+    defaultValues: {
+      name: '',
+      image: '',
+      category: [],
+      price: '',
+      points: '',
+      stock: '',
+      status: '',
+    },
+  });
+  console.log(form.watch(), 'form watch');
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -175,68 +233,107 @@ const AddProductButton = () => {
               </Text>
             </Dialog.Header>
             <Dialog.Body className="flex flex-col gap-4">
-              <FieldInput
-                value={v1}
-                onChange={(e) => setV1(e)}
-                label="Product Name"
-                placeholder="Enter product name"
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <FieldInput
+                    {...field}
+                    placeholder="Product Name"
+                    label="Name"
+                    className="w-full"
+                  />
+                )}
               />
               <Field.Root>
                 <Field.Label>Image</Field.Label>
                 <UploadFile />
               </Field.Root>
 
-              <MultiComboboxField
-                options={[
-                  { label: 'Dairy', value: 'Dairy' },
-                  { label: 'Snacks', value: 'Snacks' },
-                  { label: 'Seasonings', value: 'Seasonings' },
-                  { label: 'Rice', value: 'Rice' },
-                ]}
-                defaultValue={['Rice']}
-                value={value1}
-                onChange={(value) => {
-                  setValue1(value);
+              <Controller
+                control={form.control}
+                name="category"
+                render={({ field }) => {
+                  return (
+                    <MultiComboboxField
+                      options={[
+                        { label: 'Dairy', value: 'Dairy' },
+                        { label: 'Snacks', value: 'Snacks' },
+                        { label: 'Seasonings', value: 'Seasonings' },
+                        { label: 'Rice', value: 'Rice' },
+                      ]}
+                      defaultValue={['Rice']}
+                      value={field.value}
+                      onChange={(value) => {
+                        field.onChange(value);
+                      }}
+                      placeholder="Choose or select category"
+                      label="Category"
+                    />
+                  );
                 }}
-                placeholder="Choose or select category"
-                label="Category"
               />
-
-              <NumberInputField
-                value={v1}
-                onChange={(e) => setV1(e)}
-                label="Price"
-                placeholder="₱ 0.00"
-              />
-
-              <NumberInputField
-                value={v1}
-                onChange={(e) => setV1(e)}
-                label="Points"
-                placeholder="0"
-              />
-
-              <NumberInputField
-                value={v1}
-                onChange={(e) => setV1(e)}
-                label="Stock"
-                placeholder="0"
-              />
-
-              <ComboboxField
-                options={[
-                  { label: 'Active', value: 'ACTIVE' },
-                  { label: 'Inactive', value: 'INACTIVE' },
-                ]}
-                value={status}
-                onChange={(value) => {
-                  setStatus(value);
+              <Controller
+                control={form.control}
+                name="price"
+                render={({ field }) => {
+                  return (
+                    <NumberInputField
+                      {...field}
+                      label="Price"
+                      placeholder="₱ 0.00"
+                    />
+                  );
                 }}
-                label="Status"
-                placeholder="Choose or select status"
+              />
+              <Controller
+                control={form.control}
+                name="points"
+                render={({ field }) => {
+                  return (
+                    <NumberInputField
+                      {...field}
+                      label="Points"
+                      placeholder="0"
+                    />
+                  );
+                }}
+              />
+              <Controller
+                control={form.control}
+                name="stock"
+                render={({ field }) => {
+                  return (
+                    <NumberInputField
+                      {...field}
+                      label="Stock"
+                      placeholder="0"
+                    />
+                  );
+                }}
+              />
+
+              <Controller
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <ComboboxField
+                    value={field.value}
+                    onChange={(value) => {
+                      field.onChange(value);
+                    }}
+                    options={[
+                      { label: 'Active', value: 'ACTIVE' },
+                      { label: 'Inactive', value: 'INACTIVE' },
+                    ]}
+                    placeholder="Select Status"
+                    label="Status"
+                  />
+                )}
               />
             </Dialog.Body>
-            <Dialog.Footer>
+            <Dialog.Footer className="flex justify-between">
+              <button onClick={() => form.reset()}>Clear</button>
               <div className="flex gap-2 items-center">
                 <button
                   className="border-[1px] border-[#D2D2D2] p-3 rounded-[32px] text-carbon-500 text-sm font-medium"

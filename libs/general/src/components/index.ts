@@ -11,4 +11,5 @@ export * from './HighPoint';
 export * from './Input';
 export * from './JustForYou';
 export * from './NumberInputField';
+export * from './TextareaField';
 export * from './TopSelling';

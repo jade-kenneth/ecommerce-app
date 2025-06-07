@@ -8,5 +8,5 @@ const { withContext, withProvider, withRootProvider } =
 export const Root = withProvider(Field.Root, 'root');
 export const RootProvider = withRootProvider(Field.RootProvider);
 export const Label = withContext(Field.Label, 'label');
-
+export const Textarea = withContext(Field.Textarea, 'textarea');
 export const Input = withContext(Field.Input, 'input');

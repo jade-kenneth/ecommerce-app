@@ -51,7 +51,9 @@ export const ComboboxField = ({ options, ...props }: ComboboxFieldProps) => {
 
   const loadDefaultValue = async () => {
     const defaultValue = await getOptions(value);
-    setInputValue(defaultValue.at(0)?.label ?? '');
+    setInputValue(
+      defaultValue.filter((item) => item.value === value).at(0)?.label ?? ''
+    );
   };
 
   const combobox = useCombobox({
@@ -64,7 +66,7 @@ export const ComboboxField = ({ options, ...props }: ComboboxFieldProps) => {
       setValue(details.value.at(0) ?? '');
     },
     value: value ? [value] : [],
-    inputValue: inputValue,
+    inputValue: inputValue ?? '',
   });
 
   useEffect(() => {

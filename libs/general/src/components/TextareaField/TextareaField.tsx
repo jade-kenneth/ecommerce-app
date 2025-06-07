@@ -11,7 +11,7 @@ interface InputProps extends UseFieldProps {
   onChange?: (value: string) => void;
   className?: string;
 }
-export const FieldInput = ({
+export const TextareaField = ({
   onChange,
   placeholder,
   value: inputValue,
@@ -24,7 +24,7 @@ export const FieldInput = ({
     value: inputValue,
   });
 
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLTextAreaElement>(null);
 
   const setDebouncedValue = useDebounceCallback((newValue: string) => {
     setValue(newValue);
@@ -35,7 +35,7 @@ export const FieldInput = ({
     if (ref.current) {
       ref.current.value = value;
     }
-  }, [value]);
+  }, []);
 
   return (
     <Field.RootProvider
@@ -43,7 +43,7 @@ export const FieldInput = ({
       className={twMerge('flex flex-col gap-1', className)}
     >
       <Field.Label>{label}</Field.Label>
-      <Field.Input
+      <Field.Textarea
         ref={ref}
         placeholder={placeholder}
         onChange={(e) => {

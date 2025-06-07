@@ -50,6 +50,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "swiper": "^11.2.1",
+    "tailwind-merge": "^3.3.0",
     "tailwind-variants": "^1.0.0",
     "tailwindcss-plugin-zag": "^0.1.0",
     "tiny-invariant": "^1.3.3",

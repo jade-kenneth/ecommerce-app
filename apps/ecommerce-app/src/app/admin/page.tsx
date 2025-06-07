@@ -12,8 +12,9 @@ import {
 } from '@chakra-ui/react';
 import {
   Button,
+  ComboboxField,
   DataTable,
-  Input,
+  FieldInput,
   MultiComboboxField,
   UploadFile,
 } from '@global';
@@ -125,6 +126,9 @@ const AddProductButton = () => {
   const disclosure = useDisclosure();
   const value = useFileUpload();
   const [value1, setValue1] = useState<string[]>(['Rice']);
+  const [v1, setV1] = useState<string>('default');
+  const [status, setStatus] = useState<string>('ACTIVE');
+  console.log(v1, 'v1');
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -170,30 +174,66 @@ const AddProductButton = () => {
               </Text>
             </Dialog.Header>
             <Dialog.Body className="flex flex-col gap-4">
-              <Field.Root>
-                <Field.Label>Product Name</Field.Label>
-                <Input rounded={'32px'} placeholder="Enter product name" />
-              </Field.Root>
+              <FieldInput
+                value={v1}
+                onChange={(e) => setV1(e)}
+                label="Product Name"
+                placeholder="Enter product name"
+              />
               <Field.Root>
                 <Field.Label>Image</Field.Label>
                 <UploadFile />
               </Field.Root>
-              <Field.Root>
-                <MultiComboboxField
-                  options={[
-                    { label: 'Dairy', value: 'Dairy' },
-                    { label: 'Snacks', value: 'Snacks' },
-                    { label: 'Seasonings', value: 'Seasonings' },
-                    { label: 'Rice', value: 'Rice' },
-                  ]}
-                  defaultValue={['Rice']}
-                  value={value1}
-                  onChange={(value) => {
-                    setValue1(value);
-                  }}
-                  label="Category"
-                />
-              </Field.Root>
+
+              <MultiComboboxField
+                options={[
+                  { label: 'Dairy', value: 'Dairy' },
+                  { label: 'Snacks', value: 'Snacks' },
+                  { label: 'Seasonings', value: 'Seasonings' },
+                  { label: 'Rice', value: 'Rice' },
+                ]}
+                defaultValue={['Rice']}
+                value={value1}
+                onChange={(value) => {
+                  setValue1(value);
+                }}
+                placeholder="Choose or select category"
+                label="Category"
+              />
+
+              <FieldInput
+                value={v1}
+                onChange={(e) => setV1(e)}
+                label="Price"
+                placeholder="₱ 0.00"
+              />
+
+              <FieldInput
+                value={v1}
+                onChange={(e) => setV1(e)}
+                label="Points"
+                placeholder="0"
+              />
+
+              <FieldInput
+                value={v1}
+                onChange={(e) => setV1(e)}
+                label="Stock"
+                placeholder="Enter product description"
+              />
+
+              <ComboboxField
+                options={[
+                  { label: 'Active', value: 'ACTIVE' },
+                  { label: 'Inactive', value: 'INACTIVE' },
+                ]}
+                value={status}
+                onChange={(value) => {
+                  setStatus(value);
+                }}
+                label="Status"
+                placeholder="Choose or select status"
+              />
             </Dialog.Body>
           </Dialog.Content>
         </Dialog.Positioner>

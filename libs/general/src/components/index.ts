@@ -4,6 +4,7 @@ export * from './Categories';
 export * from './chakra__prebuilts';
 export * from './ComoboxField';
 export * from './DataTable';
+export * from './FieldInput';
 export * from './FileUpload';
 export * from './Footer';
 export * from './HighPoint';

@@ -14,6 +14,7 @@ interface MultiComboboxFieldProps {
   value?: string[];
   onChange?: (value: string[]) => void;
   label?: string;
+  placeholder?: string;
   valueToOptions?:
     | Option[]
     | ((value: string[]) => Option[])
@@ -65,7 +66,6 @@ export const MultiComboboxField = ({
     onValueChange(details) {
       setValue(details.value);
     },
-    onOpenChange: () => {},
     value,
     multiple: true,
   });
@@ -78,7 +78,7 @@ export const MultiComboboxField = ({
     <Combobox.RootProvider value={combobox} className="w-full">
       <Combobox.Label>{props.label}</Combobox.Label>
       <Combobox.Control>
-        <Combobox.Input placeholder="Choose or select category" />
+        <Combobox.Input placeholder={props.placeholder} />
         <Combobox.Trigger>
           {combobox.open ? <PiCaretUp /> : <PiCaretDown />}
         </Combobox.Trigger>

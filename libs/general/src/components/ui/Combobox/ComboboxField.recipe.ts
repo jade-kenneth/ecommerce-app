@@ -5,7 +5,7 @@ import { tv } from 'tailwind-variants';
 export const comboboxRecipe = tv({
   slots: anatomyToRecipeSlots(comboboxAnatomy, {
     label:
-      'mb-1.5 flex items-center gap-0.5 text-sm font-medium text-[#101828] dark:text-[#F5F5F6]',
+      'mb-1.5 flex items-center gap-0.5 text-sm font-bold text-carbon-100-value dark:text-[#F5F5F6]',
     control:
       'flex w-full items-center rounded-[32px] border border-[#EAECF0] bg-white ui-invalid:border-[#D92D20] dark:border-[#26272B] dark:bg-[#0A1117]',
     input:

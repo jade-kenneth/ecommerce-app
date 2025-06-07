@@ -14,6 +14,7 @@ interface ComboboxFieldProps {
   value?: string;
   onChange?: (value: string) => void;
   label?: string;
+  placeholder?: string;
   options:
     | Option[]
     | ((search: string) => Option[])
@@ -21,6 +22,7 @@ interface ComboboxFieldProps {
 }
 export const ComboboxField = ({ options, ...props }: ComboboxFieldProps) => {
   const [items, setItems] = useState<Option[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
   const [value, setValue] = useControllableState({
     onChange: props.onChange,
     value: props.value,
@@ -29,9 +31,10 @@ export const ComboboxField = ({ options, ...props }: ComboboxFieldProps) => {
     () =>
       createListCollection({
         items,
-        itemToString: (item) => item.value,
+        itemToString: (item) => item.label,
         itemToValue: (item) => item.value,
       }),
+
     [items]
   );
 
@@ -40,26 +43,41 @@ export const ComboboxField = ({ options, ...props }: ComboboxFieldProps) => {
   }, [options]);
 
   const { contains } = useFilter({ sensitivity: 'base' });
+
   const handleInputChange = useDebounceCallback(async (search: string) => {
     const newItems = await getOptions(search);
     setItems(newItems.filter((item) => contains(item.label, search)));
   }, 300);
 
+  const loadDefaultValue = async () => {
+    const defaultValue = await getOptions(value);
+    setInputValue(defaultValue.at(0)?.label ?? '');
+  };
+
   const combobox = useCombobox({
     collection,
     onInputValueChange: ({ inputValue }) => {
+      setInputValue(inputValue);
       handleInputChange(inputValue);
-      setValue(inputValue);
     },
+    onValueChange: (details) => {
+      setValue(details.value.at(0) ?? '');
+    },
+    value: value ? [value] : [],
+    inputValue: inputValue,
   });
+
   useEffect(() => {
     handleInputChange('');
+    loadDefaultValue();
   }, []);
+
   return (
     <Combobox.RootProvider value={combobox} className="w-full">
       <Combobox.Label>{props.label}</Combobox.Label>
       <Combobox.Control>
-        <Combobox.Input placeholder="Choose or select category" />
+        <Combobox.Input placeholder={props.placeholder} />
+
         <Combobox.Trigger>
           {combobox.open ? <PiCaretUp /> : <PiCaretDown />}
         </Combobox.Trigger>

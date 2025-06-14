@@ -24,7 +24,8 @@
       "@portal/auth": ["libs/portal/auth/src/index.ts"],
       "@portal/layout": ["libs/portal/layout/src/index.ts"],
       "@portal/theme": ["libs/portal/theme/src/index.ts"],
-      "@utils": ["libs/general/src/utils/index.ts"]
+      "@utils": ["libs/general/src/utils/index.ts"],
+      "@graphql/products": ["libs/general/src/graphql/products.tsx"]
     }
   },
   "exclude": ["node_modules", "tmp"]

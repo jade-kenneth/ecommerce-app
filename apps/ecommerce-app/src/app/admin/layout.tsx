@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="overflow-hidden">
         <AdminLayout>{children}</AdminLayout>
       </body>
     </html>

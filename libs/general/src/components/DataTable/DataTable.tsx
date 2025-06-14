@@ -28,8 +28,10 @@ export function DataTable<T, F extends FilterEntries>({
 
   return (
     <DataTableProvider value={datatable}>
-      <TableContent />
-      <TablePagination />
+      <div className="w-full gap-4 relative">
+        <TableContent />
+        <TablePagination />
+      </div>
     </DataTableProvider>
   );
 }

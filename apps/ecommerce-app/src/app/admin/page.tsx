@@ -20,40 +20,38 @@ import {
   NumberInputField,
   UploadFile,
 } from '@global';
-import { useState } from 'react';
+import { useProductsQuery } from '@graphql/products';
+import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaPlusCircle } from 'react-icons/fa';
 import z from 'zod';
 export default function ManageProducts() {
   const [page, setPage] = useState(1);
+  const { data } = useProductsQuery();
+  const items = useMemo(() => {
+    return (
+      data?.products?.map((item) => ({
+        id: item._id,
+        name: item.name,
+
+        price: item.price,
+
+        points: item.points,
+      })) || []
+    );
+  }, [data]);
   return (
     <Flex direction={'column'} gap={4} p={7}>
       <AddProductButton />
 
       <DataTable
         id="products"
-        items={[
-          {
-            id: '1212',
-            name: 'Product 1',
-            description: 'Product 1 description',
-          },
-          {
-            id: '1212',
-            name: 'Product 2',
-            description: 'Product 1 description',
-          },
-          {
-            id: '1212',
-            name: 'Product 3',
-            description: 'Product 1 description',
-          },
-        ]}
+        items={items}
         columns={[
           {
             heading: 'Image',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>N/A</p>,
             sortable: true,
           },
           {
@@ -71,13 +69,7 @@ export default function ManageProducts() {
           {
             heading: 'Price (₱)',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
-            sortable: true,
-          },
-          {
-            heading: 'Discount (%)',
-            filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>{item.price}</p>,
             sortable: true,
           },
           {
@@ -95,7 +87,7 @@ export default function ManageProducts() {
           {
             heading: 'Points',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>{item.points}</p>,
             sortable: true,
           },
           {

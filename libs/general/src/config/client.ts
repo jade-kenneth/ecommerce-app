@@ -1,5 +1,6 @@
 import {
   ApolloClient,
+  ApolloLink,
   HttpLink,
   InMemoryCache,
   UriFunction,
@@ -9,7 +10,9 @@ import invariant from 'tiny-invariant';
 const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
 
 invariant(portalApi, "'NEXT_PUBLIC_PORTAL_API' is missing");
+
 const portalLink = new HttpLink({ uri: createUrl(portalApi) });
+
 export const apolloCache = new InMemoryCache({
   addTypename: true,
 
@@ -22,9 +25,26 @@ export const apolloCache = new InMemoryCache({
     },
   },
 });
+
+export const apolloLink = ApolloLink.split(
+  () => true,
+  ApolloLink.from([portalLink])
+);
+
 export const apolloClient = new ApolloClient({
-  link: portalLink,
+  link: apolloLink,
   cache: apolloCache,
+  defaultOptions: {
+    watchQuery: {
+      errorPolicy: 'ignore',
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+    },
+    query: {
+      errorPolicy: 'ignore',
+    },
+  },
+  connectToDevTools: false,
 });
 
 function createUrl(url: string): UriFunction {

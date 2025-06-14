@@ -8,7 +8,8 @@
     "server": "nx run ecommerce-server:serve:dev",
     "app": "nx run ecommerce-app:dev --port=4201 ",
     "typegen:watch": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts --watch",
-    "dev": "nx run-many --parallel server app"
+    "dev": "nx run-many --parallel server app",
+    "general:graphql-codegen:products": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin.products"
   },
   "private": true,
   "dependencies": {
@@ -34,7 +35,9 @@
     "class-validator": "^0.14.1",
     "copy-webpack-plugin": "^12.0.2",
     "decimal.js": "^10.4.3",
+    "dotenv": "^16.5.0",
     "graphql": "^16.10.0",
+    "graphql-config": "^5.1.5",
     "graphql-constraint-directive": "^6.0.0",
     "graphql-scalars": "^1.24.0",
     "graphql-tag": "^2.12.6",
@@ -67,6 +70,11 @@
     "@babel/preset-react": "^7.14.5",
     "@eslint/compat": "^1.1.1",
     "@eslint/js": "^9.8.0",
+    "@graphql-codegen/add": "^5.0.3",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-operations": "^4.6.1",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
     "@nrwl/nx-cloud": "^19.1.0",

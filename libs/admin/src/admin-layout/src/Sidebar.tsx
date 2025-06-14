@@ -11,7 +11,6 @@ export default function Sidebar() {
     <Flex
       direction={'column'}
       bg="colors.primary.700"
-      w="280px"
       h="100vh"
       as="nav"
       role="menu"

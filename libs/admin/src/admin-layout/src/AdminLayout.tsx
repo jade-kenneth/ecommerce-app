@@ -6,11 +6,13 @@ import Sidebar from './Sidebar';
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <Flex>
-      <Sidebar />
-      <Flex direction={'column'} w="full">
+      <div className="w-[20%]">
+        <Sidebar />
+      </div>
+      <div className="flex flex-col w-[80%]">
         <Header />
         {children}
-      </Flex>
+      </div>
     </Flex>
   );
 }

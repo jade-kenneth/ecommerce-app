@@ -15,6 +15,7 @@ import {
   ComboboxField,
   DataTable,
   FieldInput,
+  MemberLevelField,
   MultiComboboxField,
   NumberInputField,
   UploadFile,
@@ -127,6 +128,12 @@ enum Status {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
+
+type Value = {
+  type?: 'per-level' | 'bet-amount';
+  perLevel?: Record<string, any>;
+  betAmount?: Record<string, any>;
+};
 const schema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   image: z.string().trim().min(1, 'Image is required'),
@@ -175,6 +182,10 @@ const AddProductButton = () => {
   const [value1, setValue1] = useState<string[]>(['Rice']);
   const [v1, setV1] = useState<string>('');
   const [status, setStatus] = useState<string>('ACTIVE');
+  const [value2, setValue2] = useState<Value>({
+    perLevel: { level_1: { test: '3' }, level_2: { test: '1' } },
+  });
+  console.log(value2, 'value2');
   const form = useForm<z.infer<typeof schema>>({
     mode: 'all',
     defaultValues: {
@@ -330,6 +341,13 @@ const AddProductButton = () => {
                     label="Status"
                   />
                 )}
+              />
+
+              <MemberLevelField
+                valueProps={value2}
+                onValueChange={(data) => {
+                  setValue2(data);
+                }}
               />
             </Dialog.Body>
             <Dialog.Footer className="flex justify-between">

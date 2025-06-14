@@ -50,6 +50,16 @@ export interface FilterEntries {
   [key: string]: Filter;
 }
 
+/**
+ * Structure
+ *
+ * filter = {{
+ *  name: {
+ *    type: 'text',
+ *    }
+ * }}
+ *
+ */
 export type GetFilterKeyValueType<T extends Filter> = T extends TextFilter
   ? string
   : T extends SelectFilter
@@ -67,8 +77,8 @@ export interface UseFilterProps<F extends FilterEntries> {
     entries: F;
     onValueChange: (value: FilterKeyValuePairs<F>) => void;
   };
-  filterBy: string;
-  filterValue: string;
+  filterBy?: string;
+  filterValue?: string;
 }
 
 export interface TableProps<T> {

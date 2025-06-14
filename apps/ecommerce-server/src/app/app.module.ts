@@ -31,7 +31,6 @@ import { ProductsModule } from './products/products.module';
           typePaths: [path.resolve(__dirname, './src/app/schemas/*.gql')],
           resolvers: {
             JSON: JSONResolver,
-
             DateTime: DateTimeResolver,
             ObjectId: ObjectIDResolver,
           },

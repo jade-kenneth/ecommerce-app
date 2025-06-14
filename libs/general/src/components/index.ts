@@ -10,6 +10,7 @@ export * from './Footer';
 export * from './HighPoint';
 export * from './Input';
 export * from './JustForYou';
+export * from './MemberLevelField';
 export * from './NumberInputField';
 export * from './TextareaField';
 export * from './TopSelling';

@@ -6,43 +6,81 @@ import {
   Field,
   Flex,
   Portal,
-  Text,
   useDisclosure,
   useFileUpload,
 } from '@chakra-ui/react';
 import {
+  apolloClient,
   Button,
+  capitalize,
   ComboboxField,
   DataTable,
   FieldInput,
-  MemberLevelField,
+  generateObjectIdString,
   MultiComboboxField,
   NumberInputField,
+  Spinner,
   UploadFile,
 } from '@global';
-import { useProductsQuery } from '@graphql/products';
+import {
+  CategoryType,
+  ProductCoreDataFragment,
+  ProductsDocument,
+  ProductsQuery,
+  ProductsQueryVariables,
+  StatusType,
+  useCreateProductMutation,
+  useProductsQuery,
+} from '@graphql/products';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaPlusCircle } from 'react-icons/fa';
 import z from 'zod';
 export default function ManageProducts() {
   const [page, setPage] = useState(1);
-  const { data } = useProductsQuery();
+  const query = useProductsQuery();
   const items = useMemo(() => {
     return (
-      data?.products?.map((item) => ({
+      query.data?.products?.map((item) => ({
         id: item._id,
         name: item.name,
-
         price: item.price,
-
         points: item.points,
+        stock: item.pieces,
+        category: item.category,
+        status: item.status,
+        discount: item.discount,
+        finalPrice:
+          (item.price ?? 0) - ((item.price ?? 0) * (item.discount || 0)) / 100,
       })) || []
     );
-  }, [data]);
+  }, [query]);
   return (
     <Flex direction={'column'} gap={4} p={7}>
-      <AddProductButton />
+      <AddProductButton
+        onAddProduct={(data) => {
+          const cacheResponse = apolloClient.readQuery<
+            ProductsQuery,
+            ProductsQueryVariables
+          >({
+            query: ProductsDocument,
+            variables: query.variables,
+          });
+
+          if (!cacheResponse) return query.refetch();
+
+          const newProducts = [data, ...(cacheResponse.products || [])];
+
+          apolloClient.writeQuery<ProductsQuery, ProductsQueryVariables>({
+            query: ProductsDocument,
+            variables: query.variables,
+            data: {
+              products: newProducts,
+              __typename: 'Query',
+            },
+          });
+        }}
+      />
 
       <DataTable
         id="products"
@@ -63,7 +101,15 @@ export default function ManageProducts() {
           {
             heading: 'Category',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => (
+              <p>
+                {item.category?.map((category) => {
+                  return capitalize(category, {
+                    delimiter: capitalize.delimiters.UNDERSCORE,
+                  });
+                })}
+              </p>
+            ),
             sortable: true,
           },
           {
@@ -75,13 +121,13 @@ export default function ManageProducts() {
           {
             heading: 'Discount (%)',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>{item.discount ?? '-'}</p>,
             sortable: true,
           },
           {
             heading: 'Final Price (₱)',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>{item.finalPrice}</p>,
             sortable: true,
           },
           {
@@ -93,13 +139,13 @@ export default function ManageProducts() {
           {
             heading: 'Stock ',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>{item.stock ?? '-'}</p>,
             sortable: true,
           },
           {
             heading: 'Status',
             filterable: true,
-            render: (item) => <p>{item.id}</p>,
+            render: (item) => <p>{item.status}</p>,
             sortable: true,
           },
         ]}
@@ -129,7 +175,9 @@ type Value = {
 const schema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   image: z.string().trim().min(1, 'Image is required'),
-  category: z.array(z.string()).min(1, 'At least one category is required'),
+  category: z
+    .array(z.nativeEnum(CategoryType))
+    .min(1, 'At least one category is required'),
   price: z
     .string()
     .trim()
@@ -166,9 +214,13 @@ const schema = z.object({
         });
       }
     }),
-  status: z.nativeEnum(Status).or(z.literal('')),
+  status: z.nativeEnum(StatusType),
 });
-const AddProductButton = () => {
+
+interface AddProductButtonProps {
+  onAddProduct?: (data: ProductCoreDataFragment) => void;
+}
+const AddProductButton = (props: AddProductButtonProps) => {
   const disclosure = useDisclosure();
   const value = useFileUpload();
   const [value1, setValue1] = useState<string[]>(['Rice']);
@@ -187,17 +239,15 @@ const AddProductButton = () => {
       price: '',
       points: '',
       stock: '',
-      status: '',
+      status: StatusType.Available,
     },
   });
-  console.log(form.watch(), 'form watch');
+  const [createProduct, { loading }] = useCreateProductMutation();
   return (
-    <Dialog.Root>
+    <Dialog.Root closeOnInteractOutside>
       <Dialog.Trigger>
         <Flex justify={'space-between'} w="full">
-          <Text sizes={'heading-5'} fontWeight={'medium'}>
-            Manage Products
-          </Text>
+          <p className="text-heading-5 font-medium">Manage Products</p>
           <Button
             display={'flex'}
             alignItems={'center'}
@@ -208,7 +258,7 @@ const AddProductButton = () => {
             w="fit-content"
           >
             <FaPlusCircle />
-            <Text sizes={'paragraph-sm'}> Add Product</Text>
+            <p className="text-paragraph-sm"> Add Product</p>
           </Button>
         </Flex>
       </Dialog.Trigger>
@@ -227,13 +277,7 @@ const AddProductButton = () => {
             </Dialog.CloseTrigger>
 
             <Dialog.Header>
-              <Text
-                sizes={'heading-6'}
-                fontSize={'24px'}
-                fontWeight={'semibold'}
-              >
-                Add Product
-              </Text>
+              <p className="text-heading-6 font-medium">Add Product</p>
             </Dialog.Header>
             <Dialog.Body className="flex flex-col gap-4">
               <Controller
@@ -259,13 +303,12 @@ const AddProductButton = () => {
                 render={({ field }) => {
                   return (
                     <MultiComboboxField
-                      options={[
-                        { label: 'Dairy', value: 'Dairy' },
-                        { label: 'Snacks', value: 'Snacks' },
-                        { label: 'Seasonings', value: 'Seasonings' },
-                        { label: 'Rice', value: 'Rice' },
-                      ]}
-                      defaultValue={['Rice']}
+                      options={Object.values(CategoryType).map((category) => ({
+                        label: capitalize(category, {
+                          delimiter: capitalize.delimiters.UNDERSCORE,
+                        }),
+                        value: category,
+                      }))}
                       value={field.value}
                       onChange={(value) => {
                         field.onChange(value);
@@ -325,21 +368,16 @@ const AddProductButton = () => {
                     onChange={(value) => {
                       field.onChange(value);
                     }}
-                    options={[
-                      { label: 'Active', value: 'ACTIVE' },
-                      { label: 'Inactive', value: 'INACTIVE' },
-                    ]}
+                    options={Object.values(StatusType).map((status) => ({
+                      label: capitalize(status, {
+                        delimiter: capitalize.delimiters.UNDERSCORE,
+                      }),
+                      value: status,
+                    }))}
                     placeholder="Select Status"
                     label="Status"
                   />
                 )}
-              />
-
-              <MemberLevelField
-                valueProps={value2}
-                onValueChange={(data) => {
-                  setValue2(data);
-                }}
               />
             </Dialog.Body>
             <Dialog.Footer className="flex justify-between">
@@ -352,10 +390,46 @@ const AddProductButton = () => {
                   Save as Draft
                 </button>
                 <button
-                  className="bg-primary-700-value p-3 text-white rounded-[32px] text-carbon-500 text-sm font-medium"
-                  onClick={() => disclosure.onClose()}
+                  className="bg-primary-700-value p-3 text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium"
+                  onClick={form.handleSubmit(async (data) => {
+                    const id = generateObjectIdString();
+                    console.log(id, 'idd');
+                    try {
+                      const response = await createProduct({
+                        variables: {
+                          input: {
+                            id,
+                            name: data.name,
+                            category: data.category,
+                            price: parseFloat(data.price),
+                            points: parseInt(data.points, 10),
+                            pieces: parseInt(data.stock, 10),
+
+                            status: data.status,
+                            dateAdded: new Date().toISOString(),
+                          },
+                        },
+                      });
+
+                      props.onAddProduct?.({
+                        ...data,
+                        price: +data.price,
+                        points: +data.points,
+                        _id: id,
+                        __typename: 'Product',
+                      });
+                      disclosure.onClose();
+                      form.reset();
+                    } catch (error) {
+                      console.error('Error creating product:', error);
+                    }
+                  })}
+                  disabled={
+                    !form.formState.isValid || form.formState.isSubmitting
+                  }
                 >
-                  Add Product
+                  <p>Add Product</p>{' '}
+                  {loading && <Spinner className="w-4 h-4" />}
                 </button>
               </div>
             </Dialog.Footer>

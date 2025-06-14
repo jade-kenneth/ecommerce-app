@@ -13,7 +13,9 @@ export class ProductsService {
   ) {}
 
   public async listOfProducts(): Promise<Array<Product>> {
-    return await this.products.list();
+    const data = await this.products.list({}, { sort: { dateAdded: 'desc' } });
+    console.log(data, 'data');
+    return data;
   }
   public async createProduct(params: CreateProductInput) {
     const newObjectId = new Types.ObjectId();

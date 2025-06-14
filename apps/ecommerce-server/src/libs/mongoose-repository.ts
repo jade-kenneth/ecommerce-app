@@ -78,7 +78,13 @@ export class MongooseRepository<
       explain?: true;
     }
   ): Promise<Array<TEntity>> {
-    return await this.model.find();
+    const options: Record<string, never> = {};
+    if (opts?.sort) {
+      Object.assign(options, {
+        sort: opts.sort,
+      });
+    }
+    return await this.model.find(undefined, undefined, options);
   }
   count(
     filter?: Filter<TEntity>,

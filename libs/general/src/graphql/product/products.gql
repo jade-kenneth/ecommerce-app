@@ -1,8 +1,19 @@
+fragment ProductCoreData on Product {
+  _id
+  name
+  price
+  points
+  pieces
+  status
+  discount
+  category
+}
 query Products {
   products {
-    _id
-    name
-    price
-    points
+    ...ProductCoreData
   }
+}
+
+mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input)
 }

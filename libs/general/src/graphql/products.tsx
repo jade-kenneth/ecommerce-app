@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 14 Jun 2025 06:58:36 GMT
+// Last modified: Sat, 14 Jun 2025 09:23:11 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -51,6 +51,7 @@ export type CreateProductInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   discount?: InputMaybe<Scalars['Int']['input']>;
   flashSale?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ObjectID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pieces?: InputMaybe<Scalars['Int']['input']>;
   points?: InputMaybe<Scalars['Int']['input']>;
@@ -87,6 +88,18 @@ export type VoucherInput = {
   value?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type ProductCoreDataFragment = {
+  __typename: 'Product';
+  _id: string;
+  name?: string | null;
+  price?: number | null;
+  points?: number | null;
+  pieces?: number | null;
+  status?: StatusType | null;
+  discount?: number | null;
+  category?: Array<CategoryType> | null;
+};
+
 export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsQuery = {
@@ -97,18 +110,41 @@ export type ProductsQuery = {
     name?: string | null;
     price?: number | null;
     points?: number | null;
+    pieces?: number | null;
+    status?: StatusType | null;
+    discount?: number | null;
+    category?: Array<CategoryType> | null;
   }> | null;
 };
 
+export type CreateProductMutationVariables = Exact<{
+  input: CreateProductInput;
+}>;
+
+export type CreateProductMutation = {
+  __typename: 'Mutation';
+  createProduct?: boolean | null;
+};
+
+export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
+  fragment ProductCoreData on Product {
+    _id
+    name
+    price
+    points
+    pieces
+    status
+    discount
+    category
+  }
+`;
 export const ProductsDocument = /*#__PURE__*/ gql`
   query Products {
     products {
-      _id
-      name
-      price
-      points
+      ...ProductCoreData
     }
   }
+  ${ProductCoreDataFragmentDoc}
 `;
 export function useProductsQuery(
   baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>
@@ -159,3 +195,33 @@ export type ProductsQueryResult = Apollo.QueryResult<
 export function refetchProductsQuery(variables?: ProductsQueryVariables) {
   return { query: ProductsDocument, variables: variables };
 }
+export const CreateProductDocument = /*#__PURE__*/ gql`
+  mutation CreateProduct($input: CreateProductInput!) {
+    createProduct(input: $input)
+  }
+`;
+export type CreateProductMutationFn = Apollo.MutationFunction<
+  CreateProductMutation,
+  CreateProductMutationVariables
+>;
+export function useCreateProductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateProductMutation,
+    CreateProductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateProductMutation,
+    CreateProductMutationVariables
+  >(CreateProductDocument, options);
+}
+export type CreateProductMutationHookResult = ReturnType<
+  typeof useCreateProductMutation
+>;
+export type CreateProductMutationResult =
+  Apollo.MutationResult<CreateProductMutation>;
+export type CreateProductMutationOptions = Apollo.BaseMutationOptions<
+  CreateProductMutation,
+  CreateProductMutationVariables
+>;

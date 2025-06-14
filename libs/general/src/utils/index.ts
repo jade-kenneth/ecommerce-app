@@ -1,4 +1,5 @@
 export * from './anatomyToRecipeSlots';
+export * from './capitalize';
 export * from './createContext';
 export * from './createRecipeContext';
 export * from './createSplitProps';

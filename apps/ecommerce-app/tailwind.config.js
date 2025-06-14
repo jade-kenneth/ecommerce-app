@@ -209,6 +209,32 @@ module.exports = {
         asc: 'sort="ascending"',
         desc: 'sort="descending"',
       },
+      fontSize: {
+        'heading-1': [
+          '4.5rem',
+          { lineHeight: '5.625rem', letterSpacing: '-0.02em' },
+        ],
+        'heading-2': [
+          '3.75rem',
+          { lineHeight: '4.5rem', letterSpacing: '-0.02em' },
+        ],
+        'heading-3': [
+          '3rem',
+          { lineHeight: '3.75rem', letterSpacing: '-0.02em' },
+        ],
+        'heading-4': [
+          '2.25rem',
+          { lineHeight: '2.75rem', letterSpacing: '-0.02em' },
+        ],
+        'heading-5': ['1.875rem', { lineHeight: '2.375rem' }],
+        'heading-6': ['1.5rem', { lineHeight: '2rem' }], // fixed typo: '1. 5rem' → '1.5rem'
+
+        'paragraph-xl': ['1.25rem', { lineHeight: '1.875rem' }],
+        'paragraph-lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'paragraph-md': ['1rem', { lineHeight: '1.5rem' }],
+        'paragraph-sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'paragraph-xs': ['0.75rem', { lineHeight: '1.125rem' }],
+      },
     },
   },
   plugins: [

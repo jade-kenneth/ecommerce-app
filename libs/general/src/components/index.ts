@@ -13,5 +13,6 @@ export * from './Input';
 export * from './JustForYou';
 export * from './MemberLevelField';
 export * from './NumberInputField';
+export * from './Spinner';
 export * from './TextareaField';
 export * from './TopSelling';

@@ -19,7 +19,7 @@ export type Product = {
   status?: StatusType;
   discount?: number;
   points?: number;
-  category?: CategoryType;
+  category?: CategoryType[];
   pieces?: number;
   type?: CategoryType;
   description?: string;
@@ -46,7 +46,7 @@ export async function ProductRepositoryFactory(
       status: String,
       discount: Number,
       points: Number,
-      category: String,
+      category: [String],
       pieces: Number,
       type: String,
       description: String,

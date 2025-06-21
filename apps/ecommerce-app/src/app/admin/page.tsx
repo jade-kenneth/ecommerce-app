@@ -7,7 +7,6 @@ import {
   Flex,
   Portal,
   useDisclosure,
-  useFileUpload,
 } from '@chakra-ui/react';
 import {
   apolloClient,
@@ -205,18 +204,16 @@ const schema = z.object({
       }
     }),
   stock: z
-    .string()
-    .trim()
-    .min(1, 'Stock is required')
-    .superRefine((val, ctx) => {
-      if (!/^\d+$/.test(val)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Stock must be a valid integer',
-        });
-      }
-    }),
+    .number()
+    .int('Must be a whole number')
+    .min(0, 'Stock cannot be negative'),
   status: z.nativeEnum(StatusType),
+  discountPercentage: z
+    .number()
+    .int('Must be a whole number')
+    .min(0)
+    .max(100)
+    .optional(),
 });
 
 interface AddProductButtonProps {
@@ -224,14 +221,7 @@ interface AddProductButtonProps {
 }
 const AddProductButton = (props: AddProductButtonProps) => {
   const disclosure = useDisclosure();
-  const value = useFileUpload();
-  const [value1, setValue1] = useState<string[]>(['Rice']);
-  const [v1, setV1] = useState<string>('');
-  const [status, setStatus] = useState<string>('ACTIVE');
-  const [value2, setValue2] = useState<Value>({
-    perLevel: { level_1: { test: '3' }, level_2: { test: '1' } },
-  });
-  console.log(value2, 'value2');
+
   const form = useForm<z.infer<typeof schema>>({
     mode: 'all',
     defaultValues: {
@@ -240,7 +230,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
       category: [],
       price: '',
       points: '',
-      stock: '',
+      stock: 0,
       status: StatusType.Available,
     },
   });
@@ -336,6 +326,22 @@ const AddProductButton = (props: AddProductButtonProps) => {
               />
               <Controller
                 control={form.control}
+                name="discountPercentage"
+                render={({ field }) => {
+                  return (
+                    <NumberInputField
+                      value={field.value?.toString()}
+                      onChange={(value) => {
+                        field.onChange(+value);
+                      }}
+                      label="Dsicount Percentage"
+                      placeholder="%"
+                    />
+                  );
+                }}
+              />
+              <Controller
+                control={form.control}
                 name="points"
                 render={({ field }) => {
                   return (
@@ -353,7 +359,10 @@ const AddProductButton = (props: AddProductButtonProps) => {
                 render={({ field }) => {
                   return (
                     <NumberInputField
-                      {...field}
+                      value={field.value?.toString()}
+                      onChange={(value) => {
+                        field.onChange(+value);
+                      }}
                       label="Stock"
                       placeholder="0"
                     />
@@ -405,8 +414,8 @@ const AddProductButton = (props: AddProductButtonProps) => {
                             category: data.category,
                             price: parseFloat(data.price),
                             points: data.points,
-                            pieces: parseInt(data.stock, 10),
-
+                            pieces: data.stock,
+                            discount: data.discountPercentage || 0,
                             status: data.status,
                             dateAdded: new Date().toISOString(),
                           },

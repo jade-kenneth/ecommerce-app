@@ -15,7 +15,9 @@ definitionsFactory.generate({
     EmailAddress: 'string',
     JSON: 'Record<string, any>',
     URL: 'string',
+    Decimal: '_Decimal',
   },
-  additionalHeader: "import { Types } from 'mongoose'",
+  additionalHeader:
+    "import { Types } from 'mongoose'\nimport { Decimal as _Decimal } from 'decimal.js'",
   typeDefs: [constraintDirectiveTypeDefs],
 });

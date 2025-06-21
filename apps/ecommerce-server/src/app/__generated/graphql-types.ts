@@ -9,6 +9,7 @@
 /* eslint-disable */
 
 import { Types } from 'mongoose'
+import { Decimal as _Decimal } from 'decimal.js'
 
 export enum StatusType {
     AVAILABLE = "AVAILABLE",
@@ -48,7 +49,7 @@ export interface CreateProductInput {
     price?: Nullable<number>;
     status?: Nullable<StatusType>;
     discount?: Nullable<number>;
-    points?: Nullable<number>;
+    points?: Nullable<Decimal>;
     category?: Nullable<CategoryType[]>;
     pieces?: Nullable<number>;
     type?: Nullable<CategoryType>;
@@ -85,7 +86,7 @@ export interface Product extends Node {
     price?: Nullable<number>;
     status?: Nullable<StatusType>;
     discount?: Nullable<number>;
-    points?: Nullable<number>;
+    points?: Nullable<Decimal>;
     category?: Nullable<CategoryType[]>;
     pieces?: Nullable<number>;
     type?: Nullable<CategoryType>;
@@ -109,4 +110,5 @@ export interface IMutation {
 export type JSON = Record<string, any>;
 export type ObjectId = Types.ObjectId;
 export type DateTime = Date;
+export type Decimal = _Decimal;
 type Nullable<T> = T | null;

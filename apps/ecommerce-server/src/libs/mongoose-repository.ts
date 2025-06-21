@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import { CollationOptions } from 'mongodb';
 import {
   Connection as DBConnection,
@@ -13,7 +14,10 @@ import { Filter, Repository, SortOrder, WriteOptions } from './repository';
 export type RawItem = { _id: Buffer; [key: string]: unknown };
 
 export class MongooseRepository<
-  TEntity extends { _id: Types.ObjectId } = { _id: Types.ObjectId }
+  TEntity extends { _id: Types.ObjectId; points?: Decimal } = {
+    _id: Types.ObjectId;
+    points?: Decimal;
+  }
 > implements Repository<TEntity>
 {
   private readonly _model: Model<RawItem>;

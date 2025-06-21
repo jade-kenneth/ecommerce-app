@@ -1,6 +1,7 @@
 scalar JSON
 scalar ObjectId
 scalar DateTime
+scalar Decimal
 
 interface Node {
   _id: ObjectId!

@@ -103,11 +103,13 @@ export default function ManageProducts() {
             filterable: true,
             render: (item) => (
               <p>
-                {item.category?.map((category) => {
-                  return capitalize(category, {
-                    delimiter: capitalize.delimiters.UNDERSCORE,
-                  });
-                })}
+                {item.category
+                  ?.map((category) => {
+                    return capitalize(category, {
+                      delimiter: capitalize.delimiters.UNDERSCORE,
+                    });
+                  })
+                  .join(', ')}
               </p>
             ),
             sortable: true,
@@ -133,7 +135,7 @@ export default function ManageProducts() {
           {
             heading: 'Points',
             filterable: true,
-            render: (item) => <p>{item.points}</p>,
+            render: (item) => <p>{item.points?.toString()}</p>,
             sortable: true,
           },
           {
@@ -402,7 +404,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                             name: data.name,
                             category: data.category,
                             price: parseFloat(data.price),
-                            points: parseInt(data.points, 10),
+                            points: data.points,
                             pieces: parseInt(data.stock, 10),
 
                             status: data.status,
@@ -414,7 +416,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                       props.onAddProduct?.({
                         ...data,
                         price: +data.price,
-                        points: +data.points,
+                        points: data.points,
                         _id: id,
                         __typename: 'Product',
                       });
@@ -429,7 +431,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                   }
                 >
                   <p>Add Product</p>{' '}
-                  {loading && <Spinner className="w-4 h-4" />}
+                  {loading && <Spinner className="w-3 h-3" />}
                 </button>
               </div>
             </Dialog.Footer>

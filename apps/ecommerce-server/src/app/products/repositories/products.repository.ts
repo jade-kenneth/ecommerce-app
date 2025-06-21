@@ -1,5 +1,7 @@
 import { Connection, Types } from 'mongoose';
 
+import Decimal from 'decimal.js';
+import { Decimal128 } from 'mongodb';
 import { MongooseRepository } from '../../../libs/mongoose-repository';
 import { Repository } from '../../../libs/repository';
 import {
@@ -18,7 +20,7 @@ export type Product = {
   price?: number;
   status?: StatusType;
   discount?: number;
-  points?: number;
+  points?: Decimal;
   category?: CategoryType[];
   pieces?: number;
   type?: CategoryType;
@@ -45,7 +47,7 @@ export async function ProductRepositoryFactory(
       price: Number,
       status: String,
       discount: Number,
-      points: Number,
+      points: Decimal128,
       category: [String],
       pieces: Number,
       type: String,

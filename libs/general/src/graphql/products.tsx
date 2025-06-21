@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 14 Jun 2025 09:23:11 GMT
+// Last modified: Sat, 21 Jun 2025 05:03:26 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -33,6 +33,7 @@ export type Scalars = {
   Int: { input: number; output: number };
   Float: { input: number; output: number };
   DateTime: { input: string | Date; output: string };
+  Decimal: { input: string; output: string };
   JSON: { input: Record<string, any>; output: Record<string, any> };
   ObjectID: { input: string; output: string };
 };
@@ -54,7 +55,7 @@ export type CreateProductInput = {
   id?: InputMaybe<Scalars['ObjectID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pieces?: InputMaybe<Scalars['Int']['input']>;
-  points?: InputMaybe<Scalars['Int']['input']>;
+  points?: InputMaybe<Scalars['Decimal']['input']>;
   price?: InputMaybe<Scalars['Int']['input']>;
   reservation?: InputMaybe<ReservationType>;
   sold?: InputMaybe<Scalars['Int']['input']>;
@@ -93,7 +94,7 @@ export type ProductCoreDataFragment = {
   _id: string;
   name?: string | null;
   price?: number | null;
-  points?: number | null;
+  points?: string | null;
   pieces?: number | null;
   status?: StatusType | null;
   discount?: number | null;
@@ -109,7 +110,7 @@ export type ProductsQuery = {
     _id: string;
     name?: string | null;
     price?: number | null;
-    points?: number | null;
+    points?: string | null;
     pieces?: number | null;
     status?: StatusType | null;
     discount?: number | null;

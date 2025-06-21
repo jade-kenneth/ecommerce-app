@@ -29,7 +29,7 @@ type Product implements Node {
   price: Int
   status: StatusType
   discount: Int
-  points: Int
+  points: Decimal
   category: [CategoryType!]
   pieces: Int
   type: CategoryType
@@ -64,7 +64,7 @@ input CreateProductInput {
   price: Int
   status: StatusType
   discount: Int
-  points: Int
+  points: Decimal
   category: [CategoryType!]
   pieces: Int
   type: CategoryType

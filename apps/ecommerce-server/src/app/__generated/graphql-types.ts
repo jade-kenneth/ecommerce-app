@@ -29,6 +29,25 @@ export enum CategoryType {
     SWEETS = "SWEETS"
 }
 
+export interface ProductsStatusFilterInput {
+    equal?: Nullable<StatusType>;
+    in?: Nullable<StatusType[]>;
+    notIn?: Nullable<StatusType[]>;
+    notEqual?: Nullable<StatusType>;
+}
+
+export interface ProductsCategoryFilterInput {
+    equal?: Nullable<CategoryType>;
+    in?: Nullable<CategoryType[]>;
+    notIn?: Nullable<CategoryType[]>;
+    notEqual?: Nullable<CategoryType>;
+}
+
+export interface ProductsFilterInput {
+    status?: Nullable<ProductsStatusFilterInput>;
+    category?: Nullable<ProductsCategoryFilterInput>;
+}
+
 export interface KeyValuePairInput {
     key: string;
     value: string;
@@ -100,7 +119,7 @@ export interface Product extends Node {
 }
 
 export interface IQuery {
-    products(): Nullable<Product[]> | Promise<Nullable<Product[]>>;
+    products(filter?: Nullable<ProductsFilterInput>): Nullable<Product[]> | Promise<Nullable<Product[]>>;
 }
 
 export interface IMutation {

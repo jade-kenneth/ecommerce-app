@@ -42,8 +42,24 @@ type Product implements Node {
   dateAdded: DateTime
 }
 
+input ProductsStatusFilterInput {
+  equal: StatusType
+  in: [StatusType!]
+  notIn: [StatusType!]
+  notEqual: StatusType
+}
+input ProductsCategoryFilterInput {
+  equal: CategoryType
+  in: [CategoryType!]
+  notIn: [CategoryType!]
+  notEqual: CategoryType
+}
+input ProductsFilterInput {
+  status: ProductsStatusFilterInput
+  category: ProductsCategoryFilterInput
+}
 type Query {
-  products: [Product!]
+  products(filter: ProductsFilterInput): [Product!]
 }
 input KeyValuePairInput {
   key: String!

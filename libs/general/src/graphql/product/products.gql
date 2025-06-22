@@ -8,8 +8,8 @@ fragment ProductCoreData on Product {
   discount
   category
 }
-query Products {
-  products {
+query Products($filter: ProductsFilterInput) {
+  products(filter: $filter) {
     ...ProductCoreData
   }
 }

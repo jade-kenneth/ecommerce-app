@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateProductInput, Product } from '../__generated/graphql-types';
-
 import { Decimal128 } from 'mongodb';
 import { Types } from 'mongoose';
+import { CreateProductInput } from '../__generated/graphql-types';
+
+import { Product } from '../../types/product';
+
+import { Filter } from '../../libs/repository';
 import { ProductRepositoryToken } from './repositories/product.repository.module';
 import { ProductRepository } from './repositories/products.repository';
 
@@ -13,8 +16,14 @@ export class ProductsService {
     private products: ProductRepository
   ) {}
 
-  public async listOfProducts(): Promise<Array<Product>> {
-    const data = await this.products.list({}, { sort: { dateAdded: 'desc' } });
+  public async getProducts(params: {
+    filter: Filter<Product>;
+  }): Promise<Array<Product>> {
+    const { filter } = params;
+
+    const data = await this.products.list(filter, {
+      sort: { dateAdded: 'desc' },
+    });
     let serialized = [];
     const serializeInput = (obj: Record<string, any>) => {
       const result: Record<string, any> = {};

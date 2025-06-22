@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 21 Jun 2025 05:03:26 GMT
+// Last modified: Sun, 22 Jun 2025 11:39:03 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -71,6 +71,25 @@ export type KeyValuePairInput = {
   value: Scalars['String']['input'];
 };
 
+export type ProductsCategoryFilterInput = {
+  equal?: InputMaybe<CategoryType>;
+  in?: InputMaybe<Array<CategoryType>>;
+  notEqual?: InputMaybe<CategoryType>;
+  notIn?: InputMaybe<Array<CategoryType>>;
+};
+
+export type ProductsFilterInput = {
+  category?: InputMaybe<ProductsCategoryFilterInput>;
+  status?: InputMaybe<ProductsStatusFilterInput>;
+};
+
+export type ProductsStatusFilterInput = {
+  equal?: InputMaybe<StatusType>;
+  in?: InputMaybe<Array<StatusType>>;
+  notEqual?: InputMaybe<StatusType>;
+  notIn?: InputMaybe<Array<StatusType>>;
+};
+
 export enum ReservationType {
   Available = 'AVAILABLE',
   Unavailable = 'UNAVAILABLE',
@@ -101,7 +120,9 @@ export type ProductCoreDataFragment = {
   category?: Array<CategoryType> | null;
 };
 
-export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
+export type ProductsQueryVariables = Exact<{
+  filter?: InputMaybe<ProductsFilterInput>;
+}>;
 
 export type ProductsQuery = {
   __typename: 'Query';
@@ -140,8 +161,8 @@ export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
   }
 `;
 export const ProductsDocument = /*#__PURE__*/ gql`
-  query Products {
-    products {
+  query Products($filter: ProductsFilterInput) {
+    products(filter: $filter) {
       ...ProductCoreData
     }
   }

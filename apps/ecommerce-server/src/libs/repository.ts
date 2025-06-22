@@ -1,5 +1,6 @@
 import { CollationOptions } from 'mongodb';
 import { Types } from 'mongoose';
+
 export type Cursor = Buffer;
 
 export type SortOrder = 'asc' | 'desc';
@@ -16,7 +17,6 @@ export type Connection<T> = {
     hasNextPage: boolean;
   };
 };
-
 export type FilterCondition<T> = {
   equal?: T;
   notEqual?: T;
@@ -30,7 +30,6 @@ export type FilterCondition<T> = {
   options?: T;
   text?: T;
 };
-
 export type Filter<T> = {
   [P in keyof T]?: T[P] extends Array<infer U>
     ? U | FilterCondition<U>

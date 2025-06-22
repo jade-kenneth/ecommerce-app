@@ -236,10 +236,10 @@ const AddProductButton = (props: AddProductButtonProps) => {
   });
   const [createProduct, { loading }] = useCreateProductMutation();
   return (
-    <Dialog.Root closeOnInteractOutside>
-      <Dialog.Trigger>
-        <Flex justify={'space-between'} w="full">
-          <p className="text-heading-5 font-medium">Manage Products</p>
+    <Dialog.Root closeOnInteractOutside open={disclosure.open}>
+      <Flex justify={'space-between'} w="full">
+        <p className="text-heading-5 font-medium">Manage Products</p>
+        <Dialog.Trigger>
           <Button
             display={'flex'}
             alignItems={'center'}
@@ -247,13 +247,15 @@ const AddProductButton = (props: AddProductButtonProps) => {
             bg="colors.primary.700"
             gap={2}
             h="36px"
+            cursor={'pointer'}
             w="fit-content"
+            onClick={() => disclosure.onOpen()}
           >
             <FaPlusCircle />
             <p className="text-paragraph-sm"> Add Product</p>
           </Button>
-        </Flex>
-      </Dialog.Trigger>
+        </Dialog.Trigger>
+      </Flex>
 
       <Portal>
         <Dialog.Backdrop />
@@ -265,6 +267,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                 color={'gray'}
                 border={'none'}
                 boxShadow={'none'}
+                onClick={() => disclosure.setOpen(false)}
               />
             </Dialog.CloseTrigger>
 
@@ -404,9 +407,8 @@ const AddProductButton = (props: AddProductButtonProps) => {
                   className="bg-primary-700-value p-3 text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium"
                   onClick={form.handleSubmit(async (data) => {
                     const id = generateObjectIdString();
-                    console.log(id, 'idd');
                     try {
-                      const response = await createProduct({
+                      await createProduct({
                         variables: {
                           input: {
                             id,
@@ -440,7 +442,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                   }
                 >
                   <p>Add Product</p>{' '}
-                  {loading && <Spinner className="w-3 h-3" />}
+                  {loading && <Spinner className="w-2 h-2" />}
                 </button>
               </div>
             </Dialog.Footer>

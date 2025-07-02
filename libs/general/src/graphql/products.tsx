@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 22 Jun 2025 11:39:03 GMT
+// Last modified: Tue, 24 Jun 2025 08:44:47 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -32,6 +32,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  Cursor: { input: string; output: string };
   DateTime: { input: string | Date; output: string };
   Decimal: { input: string; output: string };
   JSON: { input: Record<string, any>; output: Record<string, any> };
@@ -47,12 +48,12 @@ export enum CategoryType {
 }
 
 export type CreateProductInput = {
+  _id: Scalars['ObjectID']['input'];
   category?: InputMaybe<Array<CategoryType>>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   discount?: InputMaybe<Scalars['Int']['input']>;
   flashSale?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ObjectID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pieces?: InputMaybe<Scalars['Int']['input']>;
   points?: InputMaybe<Scalars['Decimal']['input']>;
@@ -126,17 +127,30 @@ export type ProductsQueryVariables = Exact<{
 
 export type ProductsQuery = {
   __typename: 'Query';
-  products?: Array<{
-    __typename: 'Product';
-    _id: string;
-    name?: string | null;
-    price?: number | null;
-    points?: string | null;
-    pieces?: number | null;
-    status?: StatusType | null;
-    discount?: number | null;
-    category?: Array<CategoryType> | null;
-  }> | null;
+  products: {
+    __typename: 'Connection';
+    totalCount: number;
+    pageInfo: {
+      __typename: 'PageInfo';
+      hasNextPage: boolean;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename: 'Edge';
+      cursor: string;
+      node: {
+        __typename: 'Product';
+        _id: string;
+        name?: string | null;
+        price?: number | null;
+        points?: string | null;
+        pieces?: number | null;
+        status?: StatusType | null;
+        discount?: number | null;
+        category?: Array<CategoryType> | null;
+      };
+    }>;
+  };
 };
 
 export type CreateProductMutationVariables = Exact<{
@@ -163,7 +177,17 @@ export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
 export const ProductsDocument = /*#__PURE__*/ gql`
   query Products($filter: ProductsFilterInput) {
     products(filter: $filter) {
-      ...ProductCoreData
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          ...ProductCoreData
+        }
+      }
+      totalCount
     }
   }
   ${ProductCoreDataFragmentDoc}

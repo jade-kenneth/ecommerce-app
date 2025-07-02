@@ -2,7 +2,7 @@ scalar JSON
 scalar ObjectId
 scalar DateTime
 scalar Decimal
-
+scalar Cursor
 interface Node {
   _id: ObjectId!
 }
@@ -10,4 +10,18 @@ interface Node {
 type KeyValuePair {
   key: String!
   value: String!
+}
+type Connection {
+  totalCount: Int!
+  edges: [Edge!]!
+  pageInfo: PageInfo!
+}
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: Cursor
+}
+
+type Edge {
+  cursor: Cursor!
+  node: Node!
 }

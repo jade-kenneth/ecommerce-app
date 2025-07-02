@@ -40,17 +40,17 @@ export default function ManageProducts() {
   const query = useProductsQuery();
   const items = useMemo(() => {
     return (
-      query.data?.products?.map((item) => ({
-        id: item._id,
-        name: item.name,
-        price: item.price,
-        points: item.points,
-        stock: item.pieces,
-        category: item.category,
-        status: item.status,
-        discount: item.discount,
+      query.data?.products.edges?.map(({ node }) => ({
+        id: node._id,
+        name: node.name,
+        price: node.price,
+        points: node.points,
+        stock: node.pieces,
+        category: node.category,
+        status: node.status,
+        discount: node.discount,
         finalPrice:
-          (item.price ?? 0) - ((item.price ?? 0) * (item.discount || 0)) / 100,
+          (node.price ?? 0) - ((node.price ?? 0) * (node.discount || 0)) / 100,
       })) || []
     );
   }, [query]);
@@ -68,13 +68,21 @@ export default function ManageProducts() {
 
           if (!cacheResponse) return query.refetch();
 
-          const newProducts = [data, ...(cacheResponse.products || [])];
-
           apolloClient.writeQuery<ProductsQuery, ProductsQueryVariables>({
             query: ProductsDocument,
             variables: query.variables,
             data: {
-              products: newProducts,
+              products: {
+                ...cacheResponse.products,
+                edges: [
+                  {
+                    __typename: 'Edge',
+                    cursor: '',
+                    node: data,
+                  },
+                  ...(cacheResponse.products.edges || []),
+                ],
+              },
               __typename: 'Query',
             },
           });
@@ -411,7 +419,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                       await createProduct({
                         variables: {
                           input: {
-                            id,
+                            _id: id,
                             name: data.name,
                             category: data.category,
                             price: parseFloat(data.price),

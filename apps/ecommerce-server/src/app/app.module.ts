@@ -12,6 +12,7 @@ import {
 import path from 'path';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
+import { NodeResolver } from './resolver/node.resolver';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ProductsModule } from './products/products.module';
       },
     }),
     ProductsModule,
+    NodeResolver,
   ],
 
   providers: [AppService],

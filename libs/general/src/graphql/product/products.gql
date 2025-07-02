@@ -10,7 +10,18 @@ fragment ProductCoreData on Product {
 }
 query Products($filter: ProductsFilterInput) {
   products(filter: $filter) {
-    ...ProductCoreData
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+
+    edges {
+      cursor
+      node {
+        ...ProductCoreData
+      }
+    }
+    totalCount
   }
 }
 

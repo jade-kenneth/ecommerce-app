@@ -62,7 +62,7 @@ export interface VoucherInput {
 }
 
 export interface CreateProductInput {
-    id?: Nullable<ObjectId>;
+    _id: ObjectId;
     thumbnail?: Nullable<string>;
     name?: Nullable<string>;
     price?: Nullable<number>;
@@ -98,6 +98,22 @@ export interface KeyValuePair {
     value: string;
 }
 
+export interface Connection {
+    totalCount: number;
+    edges: Edge[];
+    pageInfo: PageInfo;
+}
+
+export interface PageInfo {
+    hasNextPage: boolean;
+    endCursor?: Nullable<Cursor>;
+}
+
+export interface Edge {
+    cursor: Cursor;
+    node: Node;
+}
+
 export interface Product extends Node {
     _id: ObjectId;
     thumbnail?: Nullable<string>;
@@ -119,7 +135,7 @@ export interface Product extends Node {
 }
 
 export interface IQuery {
-    products(filter?: Nullable<ProductsFilterInput>): Nullable<Product[]> | Promise<Nullable<Product[]>>;
+    products(filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
 }
 
 export interface IMutation {
@@ -130,4 +146,5 @@ export type JSON = Record<string, any>;
 export type ObjectId = Types.ObjectId;
 export type DateTime = Date;
 export type Decimal = _Decimal;
+export type Cursor = unknown;
 type Nullable<T> = T | null;

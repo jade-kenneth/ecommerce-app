@@ -97,7 +97,7 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
       secondaryPreferred?: true;
       explain?: true;
     }
-  ): Promise<Array<T>>;
+  ): RepositoryIterator<T>;
   count(
     filter?: Filter<T>,
     opts?: {

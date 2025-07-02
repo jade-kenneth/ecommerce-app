@@ -20,6 +20,7 @@ const scalars = {
   JSON: 'Record<string, any>',
   ObjectID: 'string',
   Decimal: 'string',
+  Cursor: 'string',
 };
 
 function createAdminConfig(

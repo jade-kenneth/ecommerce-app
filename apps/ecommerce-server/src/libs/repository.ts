@@ -1,5 +1,5 @@
+import { ObjectId } from '@ecommerce/object-id';
 import { CollationOptions } from 'mongodb';
-import { Types } from 'mongoose';
 
 export type Cursor = Buffer;
 
@@ -71,19 +71,16 @@ export type WriteOptions = {
   writeConcern?: 'primary' | 'majority';
 };
 
-export interface Repository<T extends { _id: Types.ObjectId }> {
+export interface Repository<T extends { _id: ObjectId }> {
   create(data: T, opts?: WriteOptions): Promise<void>;
   update(
-    filter: Types.ObjectId | Filter<T>,
+    filter: ObjectId | Filter<T>,
     data: Partial<Omit<T, 'id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void>;
-  delete(
-    filter: Types.ObjectId | Filter<T>,
-    opts?: WriteOptions
-  ): Promise<void>;
+  delete(filter: ObjectId | Filter<T>, opts?: WriteOptions): Promise<void>;
   find(
-    filter: Types.ObjectId | Filter<T>,
+    filter: ObjectId | Filter<T>,
     opts?: {
       collation?: CollationOptions;
       secondaryPreferred?: true;
@@ -117,7 +114,7 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
     }
   ): Promise<T[]>;
   increment(
-    filter: Types.ObjectId | Filter<T>,
+    filter: ObjectId | Filter<T>,
     field: string,
     amount: number,
     opts?: WriteOptions

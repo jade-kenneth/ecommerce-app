@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-export const generateCursor = (indexOrDate: number | Date, id?: string) =>
+export const generateCursor = (indexOrDate: string, id?: string) =>
   R.pipe(
     () => {
       const buf = Buffer.alloc(8);

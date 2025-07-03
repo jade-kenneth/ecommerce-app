@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Types } from 'mongoose'
+import { ObjectId  as _ObjectId} from '@ecommerce/object-id'
 import { Decimal as _Decimal } from 'decimal.js'
 
 export enum StatusType {
@@ -82,7 +82,7 @@ export interface CreateProductInput {
 }
 
 export interface Node {
-    _id: ObjectId;
+    id: ObjectId;
 }
 
 export interface Voucher {
@@ -143,7 +143,7 @@ export interface IMutation {
 }
 
 export type JSON = Record<string, any>;
-export type ObjectId = Types.ObjectId;
+export type ObjectId = _ObjectId;
 export type DateTime = Date;
 export type Decimal = _Decimal;
 export type Cursor = unknown;

@@ -8,6 +8,8 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
+import { ObjectType } from '@ecommerce-app/object-shared';
+import { ObjectId } from '@ecommerce/object-id';
 import {
   apolloClient,
   Button,
@@ -15,7 +17,6 @@ import {
   ComboboxField,
   DataTable,
   FieldInput,
-  generateObjectIdString,
   MultiComboboxField,
   NumberInputField,
   Spinner,
@@ -414,12 +415,14 @@ const AddProductButton = (props: AddProductButtonProps) => {
                 <button
                   className="bg-primary-700-value p-3 text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium"
                   onClick={form.handleSubmit(async (data) => {
-                    const id = generateObjectIdString();
+                    const _id = ObjectId.generate(ObjectType.Product).toString(
+                      'hex'
+                    );
                     try {
                       await createProduct({
                         variables: {
                           input: {
-                            _id: id,
+                            _id,
                             name: data.name,
                             category: data.category,
                             price: parseFloat(data.price),
@@ -436,7 +439,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                         ...data,
                         price: +data.price,
                         points: data.points,
-                        _id: id,
+                        _id,
                         __typename: 'Product',
                       });
                       disclosure.onClose();

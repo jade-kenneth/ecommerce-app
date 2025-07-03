@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { CreateProductInput } from '../__generated/graphql-types';
 
 import { Product } from '../../types/product';
 
 import { Connection, Filter } from '../../libs/repository';
+import { EventType } from '../../types/common';
+import { generateCursor } from '../../util/generate-cursor';
 import { ProductRepositoryToken } from './repositories/product.repository.module';
 import { ProductRepository } from './repositories/products.repository';
 
@@ -21,15 +22,21 @@ export class ProductsService {
     const { filter } = params;
 
     const data = await this.products
-      .list(filter, { sort: { dateAdded: 'asc' } })
-      .connection({});
+      .list(filter)
+      .connection({ order: 'desc', first: 10 });
 
     return data;
   }
   public async createProduct(params: CreateProductInput) {
-    const newObjectId = new Types.ObjectId();
     await this.products
-      .create({ ...params, _id: newObjectId })
+      .create({
+        ...params,
+
+        cursor: generateCursor(
+          new Date().toISOString(),
+          EventType.ProductCreated.toString()
+        ),
+      })
       .catch(async (err) => {
         console.log(err, 'error');
         return;

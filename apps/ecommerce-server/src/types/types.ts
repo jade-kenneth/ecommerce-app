@@ -15,7 +15,7 @@ export type FilterCondition<T> = {
 };
 
 export type SchemaEntity = {
-  _id: ObjectId;
+  id: ObjectId;
   [key: string]: unknown;
 };
 /** @deprecated */

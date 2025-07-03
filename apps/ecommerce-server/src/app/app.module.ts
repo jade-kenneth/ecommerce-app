@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { constraintDirectiveTypeDefs } from 'graphql-constraint-directive/apollo4';
@@ -13,7 +14,6 @@ import path from 'path';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { NodeResolver } from './resolver/node.resolver';
-
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -44,6 +44,7 @@ import { NodeResolver } from './resolver/node.resolver';
     }),
     ProductsModule,
     NodeResolver,
+    EventEmitterModule.forRoot(),
   ],
 
   providers: [AppService],

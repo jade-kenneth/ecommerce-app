@@ -11,13 +11,13 @@ definitionsFactory.generate({
   defaultScalarType: 'unknown',
   customScalarTypeMapping: {
     DateTime: 'Date',
-    ObjectId: 'Types.ObjectId',
+    ObjectId: '_ObjectId',
     EmailAddress: 'string',
     JSON: 'Record<string, any>',
     URL: 'string',
     Decimal: '_Decimal',
   },
   additionalHeader:
-    "import { Types } from 'mongoose'\nimport { Decimal as _Decimal } from 'decimal.js'",
+    "import { ObjectId  as _ObjectId} from '@ecommerce/object-id'\nimport { Decimal as _Decimal } from 'decimal.js'",
   typeDefs: [constraintDirectiveTypeDefs],
 });

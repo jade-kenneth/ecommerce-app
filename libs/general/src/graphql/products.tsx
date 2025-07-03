@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Tue, 24 Jun 2025 08:44:47 GMT
+// Last modified: Thu, 03 Jul 2025 09:04:01 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;

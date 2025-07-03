@@ -1,3 +1,4 @@
+import { ObjectId } from '@ecommerce/object-id';
 import Decimal from 'decimal.js';
 import { CollationOptions, Decimal128 } from 'mongodb';
 import {
@@ -10,7 +11,6 @@ import {
   Types,
 } from 'mongoose';
 import * as R from 'ramda';
-import { generateCursor } from '../util/generate-cursor';
 import {
   Connection,
   Cursor,
@@ -35,7 +35,7 @@ function normalizeFilterField(field: any): any {
     return field;
   }
 
-  if (field instanceof Types.ObjectId) {
+  if (field instanceof ObjectId) {
     return field;
   }
 
@@ -58,11 +58,11 @@ export function serializeFilter(filter: any): any {
    * so instead we serialize the filter object
    * to be compatible with the MongoDB query format.
    */
-  const data: Record<string, unknown> = R.omit(['_id'], filter);
+  const data: Record<string, unknown> = R.omit(['id'], filter);
 
-  if (filter._id) {
+  if (filter.id) {
     data['_id'] = filter.id;
-    delete filter._id;
+    delete filter.id;
   }
 
   return R.map(serializeFilterField, data);
@@ -144,12 +144,79 @@ function serializeFilterField(field: any): any {
     throw err;
   }
 }
+export function flattenObject(item: any, parentKey?: string): Partial<RawItem> {
+  return R.compose(
+    R.reduce((accum, [key, value]: [string, unknown]) => {
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
 
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        !(value instanceof Array) &&
+        !(value instanceof ObjectId) &&
+        !(value instanceof Decimal) &&
+        !(value instanceof Date) &&
+        !(value instanceof Buffer)
+      ) {
+        return R.mergeRight(accum, flattenObject(value, newKey));
+      }
+
+      return {
+        ...accum,
+        [newKey]: value,
+      };
+    }, {}),
+    R.toPairs
+  )(item) as never;
+}
+
+export function serializeItemCreate(item: any): Partial<RawItem> {
+  const data: Record<string, unknown> = {};
+  const __t: Record<string, number> = {};
+
+  if (item.id) {
+    data['_id'] = item.id.buffer;
+    __t['__t._id'] = 0;
+  }
+
+  for (const [key, value] of R.toPairs(R.omit(['id'], item))) {
+    data[key] = value;
+
+    if (value instanceof ObjectId) {
+      data[key] = value.buffer;
+      __t[`__t.${key}`] = 0;
+    }
+
+    if (value instanceof Decimal) {
+      data[key] = new Types.Decimal128(value.toString());
+      __t[`__t.${key}`] = 1;
+    }
+
+    if (Array.isArray(value)) {
+      data[key] = serializeArray(value);
+    }
+  }
+
+  return { ...data, ...__t };
+}
+function serializeArray(arr: any[]): any[] {
+  return R.map(
+    (item) =>
+      item instanceof ObjectId
+        ? item.buffer
+        : Array.isArray(item)
+        ? serializeArray(item)
+        : typeof item === 'object'
+        ? serializeItem(item)
+        : item,
+    arr
+  );
+}
 export type RawItem = { _id: Buffer; [key: string]: unknown };
 
 export class MongooseRepository<
-  TEntity extends { _id: Types.ObjectId } = {
-    _id: Types.ObjectId;
+  TEntity extends { _id: ObjectId } = {
+    _id: ObjectId;
   }
 > implements Repository<TEntity>
 {
@@ -175,30 +242,37 @@ export class MongooseRepository<
     for (const [indexDefinition, indexOptions] of indexes || []) {
       schema.index(indexDefinition, indexOptions);
     }
+
     this._model = connection.model<RawItem>(name, schema);
   }
+
   public get model() {
     return this._model;
   }
 
   async create(data: TEntity, opts?: WriteOptions): Promise<void> {
-    await this.model.create([data], { opts });
+    console.log(data, 'data to create');
+    try {
+      await this.model.create([data], { opts });
+    } catch (error) {
+      console.error('Error creating item:', error);
+    }
   }
   update(
-    filter: Types.ObjectId | Filter<TEntity>,
+    filter: ObjectId | Filter<TEntity>,
     data: Partial<Omit<TEntity, 'id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
   delete(
-    filter: Types.ObjectId | Filter<TEntity>,
+    filter: ObjectId | Filter<TEntity>,
     opts?: WriteOptions
   ): Promise<void> {
     throw new Error('Method not implemented.');
   }
   find(
-    filter: Types.ObjectId | Filter<TEntity>,
+    filter: ObjectId | Filter<TEntity>,
     opts?: {
       collation?: CollationOptions;
       secondaryPreferred?: true;
@@ -291,7 +365,7 @@ export class MongooseRepository<
           };
         }
 
-        const [edges] = await Promise.all([
+        const [edges, totalCount] = await Promise.all([
           (async () => {
             const values: { node: TEntity; cursor: Buffer }[] = [];
             const res = await model
@@ -304,10 +378,22 @@ export class MongooseRepository<
             for (const value of res) {
               values.push({
                 node: serializeItem(value) as TEntity,
-                cursor: generateCursor(new Date(), value._id.toString()),
+                cursor: value[key] as Buffer,
               });
             }
             return values;
+          })(),
+          (async () => {
+            if (params.totalCount === false) {
+              return;
+            }
+
+            const totalCount = await model.countDocuments(serializedFilter, {
+              ...R.pick(['readPreference'], options),
+              limit: 100000,
+            });
+
+            return totalCount;
           })(),
         ]);
 
@@ -329,7 +415,7 @@ export class MongooseRepository<
             startCursor: R.prop(key, R.head(edges)) as unknown as Buffer,
             endCursor: R.prop(key, R.last(edges)) as unknown as Buffer,
           },
-          totalCount: 10,
+          totalCount: totalCount,
         };
       },
     } as RepositoryIterator<TEntity>;
@@ -355,7 +441,7 @@ export class MongooseRepository<
     throw new Error('Method not implemented.');
   }
   increment(
-    filter: Types.ObjectId | Filter<TEntity>,
+    filter: ObjectId | Filter<TEntity>,
     field: string,
     amount: number,
     opts?: WriteOptions

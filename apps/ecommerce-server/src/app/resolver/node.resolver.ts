@@ -1,12 +1,16 @@
+import { ObjectType } from '@ecommerce-app/object-shared';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Node } from '../../types/common';
+const OBJECT_TYPE_TO_NODE_TYPE_MAPPING = {
+  [ObjectType.Product]: 'Product',
+};
 
-const OBJECT_TYPE_TO_NODE_TYPE_MAPPING = ['Product'];
 @Resolver('Node')
 export class NodeResolver {
   @ResolveField('__resolveType')
-  resolveType(@Parent() node: any) {
-    const type = node.__typename || node.type || 'Product'; // fallback
-
-    return OBJECT_TYPE_TO_NODE_TYPE_MAPPING[0] || null;
+  resolveType(@Parent() node: Node) {
+    const [type] = node._id.buffer;
+    console.log(type, 'type');
+    return OBJECT_TYPE_TO_NODE_TYPE_MAPPING[type] || null;
   }
 }

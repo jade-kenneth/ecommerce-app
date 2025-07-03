@@ -415,9 +415,9 @@ const AddProductButton = (props: AddProductButtonProps) => {
                 <button
                   className="bg-primary-700-value p-3 text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium"
                   onClick={form.handleSubmit(async (data) => {
-                    const _id = ObjectId.generate(ObjectType.Product).toString(
-                      'hex'
-                    );
+                    const _id = ObjectId.generate(
+                      ObjectType.Product
+                    ).toHexString();
                     try {
                       await createProduct({
                         variables: {

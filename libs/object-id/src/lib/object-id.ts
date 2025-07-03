@@ -25,13 +25,13 @@ export class ObjectId {
     this._buffer = buffer;
   }
 
-  public static translate(id: ObjectId, type: number) {
-    const buffer = Buffer.from(<Uint8Array>id.buffer);
+  // public static translate(id: ObjectId, type: number) {
+  //   const buffer = Buffer.from(<Uint8Array>id.buffer);
 
-    buffer[0] = type & 0xff;
+  //   buffer[0] = type & 0xff;
 
-    return ObjectId.from(buffer);
-  }
+  //   return ObjectId.from(buffer);
+  // }
   /**
    * Generates a new ObjectId.
    * * @param type - An optional type byte to differentiate between different kinds of objects.
@@ -105,27 +105,27 @@ export class ObjectId {
     return this._buffer;
   }
 
-  public compare(other: ObjectId) {
-    return this._buffer.compare(<Uint8Array>other._buffer);
-  }
+  // public compare(other: ObjectId) {
+  //   return this._buffer.compare(<Uint8Array>other._buffer);
+  // }
 
-  public equals(other: ObjectId) {
-    return this._buffer.equals(<Uint8Array>other._buffer);
-  }
+  // public equals(other: ObjectId) {
+  //   return this._buffer.equals(<Uint8Array>other._buffer);
+  // }
 
-  public clone() {
-    const buffer = Buffer.alloc(13);
-    this.buffer.copy(<Uint8Array>buffer);
-    return ObjectId.from(buffer);
-  }
+  // public clone() {
+  //   const buffer = Buffer.alloc(13);
+  //   this.buffer.copy(<Uint8Array>buffer);
+  //   return ObjectId.from(buffer);
+  // }
 
-  public toString(encoding?: 'bs58' | 'hex' | 'base64') {
-    if (!encoding || encoding === 'bs58') {
-      return bs58.encode(<Uint8Array>this._buffer);
-    }
+  // public toString(encoding?: 'bs58' | 'hex' | 'base64') {
+  //   if (!encoding || encoding === 'bs58') {
+  //     return bs58.encode(<Uint8Array>this._buffer);
+  //   }
 
-    return this._buffer.toString(encoding);
-  }
+  //   return this._buffer.toString(encoding);
+  // }
 
   public toHexString(): string {
     return this._buffer.toString('hex'); // 24-char hex string

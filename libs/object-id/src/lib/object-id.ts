@@ -1,5 +1,5 @@
 import bs58 from 'bs58';
-import { sha256 } from 'crypto-hash';
+
 import randomBytes from 'randombytes';
 
 /**
@@ -66,21 +66,20 @@ export class ObjectId {
 
     return new ObjectId(buffer);
   }
+  // public static async generateFromKey(type: number, key: string) {
+  //   const buffer = Buffer.alloc(13);
 
-  public static async generateFromKey(type: number, key: string) {
-    const buffer = Buffer.alloc(13);
+  //   buffer[0] = type & 0xff;
 
-    buffer[0] = type & 0xff;
+  //   Buffer.from(await sha256(key, { outputFormat: 'buffer' })).copy(
+  //     <Uint8Array>buffer,
+  //     1,
+  //     0,
+  //     12
+  //   );
 
-    Buffer.from(await sha256(key, { outputFormat: 'buffer' })).copy(
-      <Uint8Array>buffer,
-      1,
-      0,
-      12
-    );
-
-    return new ObjectId(buffer);
-  }
+  //   return new ObjectId(buffer);
+  // }
 
   public static from(value: string | Buffer) {
     if (typeof value === 'string') {

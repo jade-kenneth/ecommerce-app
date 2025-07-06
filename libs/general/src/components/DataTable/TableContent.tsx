@@ -4,7 +4,7 @@ import { useDataTableContext } from './DataTableContext';
 export function TableContent() {
   const datatable = useDataTableContext();
   return (
-    <div className="block grow rounded-lg whitespace-nowrap w-full border-[1px] border-[#F2F2F2] overflow-x-auto">
+    <div className="overflow-x-auto whitespace-nowrap">
       <Flex py={3} px={3}>
         <Text
           color={'colors.carbon.300'}
@@ -37,9 +37,6 @@ export function TableContent() {
             );
           })}
         </Table.Body>
-        <Table.Footer>
-          <Table.Row></Table.Row>
-        </Table.Footer>
       </Table.Root>
     </div>
   );

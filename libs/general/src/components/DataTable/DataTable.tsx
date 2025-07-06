@@ -28,7 +28,7 @@ export function DataTable<T, F extends FilterEntries>({
 
   return (
     <DataTableProvider value={datatable}>
-      <div className="w-full gap-4 relative">
+      <div className="w-full gap-4 relative border-[1px] border-[#F2F2F2] rounded-lg">
         <TableContent />
         <TablePagination />
       </div>

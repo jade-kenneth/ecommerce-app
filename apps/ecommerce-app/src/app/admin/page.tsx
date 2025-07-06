@@ -12,6 +12,7 @@ import { ObjectType } from '@ecommerce-app/object-shared';
 import { ObjectId } from '@ecommerce/object-id';
 import {
   apolloClient,
+  Badge,
   Button,
   capitalize,
   ComboboxField,
@@ -170,7 +171,22 @@ export default function ManageProducts() {
           {
             heading: 'Status',
             filterable: true,
-            render: (item) => <p>{item.status}</p>,
+            render: (item) => (
+              <Badge.Root
+                colorScheme={
+                  item.status === StatusType.Available ? 'success' : 'danger'
+                }
+              >
+                <Badge.Indicator asChild>
+                  <span className="w-2 h-2 rounded-full bg-current" />
+                </Badge.Indicator>
+                <Badge.Label>
+                  {capitalize(item.status ?? '', {
+                    delimiter: capitalize.delimiters.UNDERSCORE,
+                  })}
+                </Badge.Label>
+              </Badge.Root>
+            ),
             sortable: true,
           },
         ]}

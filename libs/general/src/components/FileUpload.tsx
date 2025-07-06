@@ -1,11 +1,12 @@
 'use client';
 import { FileUpload } from '@ark-ui/react';
 
+import { UploadFileMutationResult } from '@graphql/products';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { useControllableState } from '../utils';
 interface UploadFileProps {
-  value?: File[];
-  onChange?: (files: File[]) => void;
+  value?: string;
+  onChange?: (files: string) => void;
 }
 export function UploadFile(props: UploadFileProps) {
   const [value, setValue] = useControllableState({
@@ -17,7 +18,10 @@ export function UploadFile(props: UploadFileProps) {
     <FileUpload.Root
       maxFiles={1}
       className="w-full min-h-[126px] h-auto border-[1px] border-[#F2F2F2]   rounded-[8px] flex items-center justify-center"
-      onFileChange={(details) => setValue(details.acceptedFiles)}
+      onFileChange={async (details) => {
+        const id = await uploadFile(details.acceptedFiles[0]);
+        setValue(id || '');
+      }}
     >
       <FileUpload.Dropzone
         className="flex flex-col gap-3 items-center justify-center w-[inherit] h-[inherit] cursor-pointer"
@@ -56,4 +60,32 @@ export function UploadFile(props: UploadFileProps) {
       <FileUpload.HiddenInput />
     </FileUpload.Root>
   );
+}
+export async function uploadFile(file: File): Promise<string | undefined> {
+  const operations = JSON.stringify({
+    query: `
+      mutation ($file: Upload!) {
+        uploadFile(file: $file)
+      }
+    `,
+    variables: { file: null },
+  });
+
+  const map = JSON.stringify({ '0': ['variables.file'] });
+
+  const formData = new FormData();
+  formData.append('operations', operations);
+  formData.append('map', map);
+  formData.append('0', file);
+
+  const res = await fetch(process.env.NEXT_PUBLIC_PORTAL_API || '', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'x-apollo-operation-name': 'uploadFile',
+    },
+  });
+
+  const data = (await res.json()) as UploadFileMutationResult;
+  return data.data?.uploadFile ?? undefined;
 }

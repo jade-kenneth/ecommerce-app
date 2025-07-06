@@ -18,6 +18,7 @@ const nextConfig = {
     remotePatterns: [
       { hostname: 'plus.unsplash.com' },
       { hostname: 'media.istockphoto.com' },
+      { hostname: 'drive.google.com' },
     ],
   },
 };

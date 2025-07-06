@@ -7,6 +7,7 @@ fragment ProductCoreData on Product {
   status
   discount
   category
+  thumbnail
 }
 query Products($filter: ProductsFilterInput) {
   products(filter: $filter) {

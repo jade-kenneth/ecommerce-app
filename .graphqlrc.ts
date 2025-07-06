@@ -21,6 +21,7 @@ const scalars = {
   ObjectID: 'string',
   Decimal: 'string',
   Cursor: 'string',
+  Upload: 'File',
 };
 
 function createAdminConfig(

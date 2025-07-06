@@ -32,6 +32,7 @@ import {
   useCreateProductMutation,
   useProductsQuery,
 } from '@graphql/products';
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaPlusCircle } from 'react-icons/fa';
@@ -50,6 +51,7 @@ export default function ManageProducts() {
         category: node.category,
         status: node.status,
         discount: node.discount,
+        thumbnail: node.thumbnail,
         finalPrice:
           (node.price ?? 0) - ((node.price ?? 0) * (node.discount || 0)) / 100,
       })) || []
@@ -97,7 +99,20 @@ export default function ManageProducts() {
           {
             heading: 'Image',
             filterable: true,
-            render: (item) => <p>N/A</p>,
+            render: (item) =>
+              item.thumbnail ? (
+                <Image
+                  src={`https://drive.google.com/uc?export=view&id=${item.thumbnail}`}
+                  alt={item.name || 'Product Image'}
+                  width={100}
+                  height={100}
+                  className="rounded-md"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
+                  <p className="text-gray-500">No Image</p>
+                </div>
+              ),
             sortable: true,
           },
           {
@@ -172,16 +187,7 @@ export default function ManageProducts() {
     </Flex>
   );
 }
-enum Status {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-}
 
-type Value = {
-  type?: 'per-level' | 'bet-amount';
-  perLevel?: Record<string, any>;
-  betAmount?: Record<string, any>;
-};
 const schema = z.object({
   name: z.string().trim().min(1, 'Name is required'),
   image: z.string().trim().min(1, 'Image is required'),
@@ -223,6 +229,7 @@ const schema = z.object({
     .min(0)
     .max(100)
     .optional(),
+  thumbnail: z.string().trim().min(1, 'Thumbnail is required'),
 });
 
 interface AddProductButtonProps {
@@ -244,6 +251,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
     },
   });
   const [createProduct, { loading }] = useCreateProductMutation();
+  console.log(form.watch(), 'form watch');
   return (
     <Dialog.Root closeOnInteractOutside open={disclosure.open}>
       <Flex justify={'space-between'} w="full">
@@ -298,7 +306,13 @@ const AddProductButton = (props: AddProductButtonProps) => {
               />
               <Field.Root>
                 <Field.Label>Image</Field.Label>
-                <UploadFile />
+                <Controller
+                  control={form.control}
+                  name="thumbnail"
+                  render={({ field }) => {
+                    return <UploadFile {...field} />;
+                  }}
+                />
               </Field.Root>
 
               <Controller
@@ -426,6 +440,7 @@ const AddProductButton = (props: AddProductButtonProps) => {
                             name: data.name,
                             category: data.category,
                             price: parseFloat(data.price),
+                            thumbnail: data.thumbnail,
                             points: data.points,
                             pieces: data.stock,
                             discount: data.discountPercentage || 0,

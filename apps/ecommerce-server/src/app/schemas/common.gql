@@ -3,6 +3,8 @@ scalar ObjectId
 scalar DateTime
 scalar Decimal
 scalar Cursor
+scalar Upload
+
 interface Node {
   _id: ObjectId!
 }

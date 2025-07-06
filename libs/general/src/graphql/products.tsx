@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Thu, 03 Jul 2025 09:04:01 GMT
+// Last modified: Sat, 05 Jul 2025 05:32:31 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -37,6 +37,7 @@ export type Scalars = {
   Decimal: { input: string; output: string };
   JSON: { input: Record<string, any>; output: Record<string, any> };
   ObjectID: { input: string; output: string };
+  Upload: { input: File; output: File };
 };
 
 export enum CategoryType {
@@ -109,6 +110,15 @@ export type VoucherInput = {
   value?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type UploadFileMutationVariables = Exact<{
+  file: Scalars['Upload']['input'];
+}>;
+
+export type UploadFileMutation = {
+  __typename: 'Mutation';
+  uploadFile?: string | null;
+};
+
 export type ProductCoreDataFragment = {
   __typename: 'Product';
   _id: string;
@@ -119,6 +129,7 @@ export type ProductCoreDataFragment = {
   status?: StatusType | null;
   discount?: number | null;
   category?: Array<CategoryType> | null;
+  thumbnail?: string | null;
 };
 
 export type ProductsQueryVariables = Exact<{
@@ -148,6 +159,7 @@ export type ProductsQuery = {
         status?: StatusType | null;
         discount?: number | null;
         category?: Array<CategoryType> | null;
+        thumbnail?: string | null;
       };
     }>;
   };
@@ -172,8 +184,39 @@ export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
     status
     discount
     category
+    thumbnail
   }
 `;
+export const UploadFileDocument = /*#__PURE__*/ gql`
+  mutation UploadFile($file: Upload!) {
+    uploadFile(file: $file)
+  }
+`;
+export type UploadFileMutationFn = Apollo.MutationFunction<
+  UploadFileMutation,
+  UploadFileMutationVariables
+>;
+export function useUploadFileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UploadFileMutation,
+    UploadFileMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UploadFileMutation, UploadFileMutationVariables>(
+    UploadFileDocument,
+    options
+  );
+}
+export type UploadFileMutationHookResult = ReturnType<
+  typeof useUploadFileMutation
+>;
+export type UploadFileMutationResult =
+  Apollo.MutationResult<UploadFileMutation>;
+export type UploadFileMutationOptions = Apollo.BaseMutationOptions<
+  UploadFileMutation,
+  UploadFileMutationVariables
+>;
 export const ProductsDocument = /*#__PURE__*/ gql`
   query Products($filter: ProductsFilterInput) {
     products(filter: $filter) {

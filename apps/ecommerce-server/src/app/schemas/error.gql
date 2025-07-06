@@ -1,0 +1,15 @@
+interface Error {
+  message: String!
+}
+
+type FileSizeTooBigError implements Error {
+  message: String!
+}
+
+type FileFormatNotSupportedError implements Error {
+  message: String!
+}
+
+type FileNameTooLongError implements Error {
+  message: String!
+}

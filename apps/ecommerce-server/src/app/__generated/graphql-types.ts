@@ -82,7 +82,11 @@ export interface CreateProductInput {
 }
 
 export interface Node {
-    id: ObjectId;
+    _id: ObjectId;
+}
+
+export interface Error {
+    message: string;
 }
 
 export interface Voucher {
@@ -114,6 +118,23 @@ export interface Edge {
     node: Node;
 }
 
+export interface FileSizeTooBigError extends Error {
+    message: string;
+}
+
+export interface FileFormatNotSupportedError extends Error {
+    message: string;
+}
+
+export interface FileNameTooLongError extends Error {
+    message: string;
+}
+
+export interface IMutation {
+    uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
+    createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+}
+
 export interface Product extends Node {
     _id: ObjectId;
     thumbnail?: Nullable<string>;
@@ -138,13 +159,11 @@ export interface IQuery {
     products(filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
 }
 
-export interface IMutation {
-    createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
-}
-
 export type JSON = Record<string, any>;
 export type ObjectId = _ObjectId;
 export type DateTime = Date;
 export type Decimal = _Decimal;
 export type Cursor = unknown;
+export type Upload = unknown;
+export type UploadFileError = FileSizeTooBigError | FileFormatNotSupportedError | FileNameTooLongError;
 type Nullable<T> = T | null;

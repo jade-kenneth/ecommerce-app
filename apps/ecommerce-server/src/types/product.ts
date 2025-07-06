@@ -29,14 +29,14 @@ export interface Voucher {
   value?: number;
 }
 export type Product = Node & {
-  thumbnail?: string;
-  name?: string;
-  price?: number;
-  status?: StatusType;
-  discount?: number;
-  points?: Decimal;
-  category?: CategoryType[];
-  pieces?: number;
+  thumbnail: string;
+  name: string;
+  price: number;
+  status: StatusType;
+  discount: number;
+  points: Decimal;
+  category: CategoryType[];
+  pieces: number;
   type?: CategoryType;
   description?: string;
   reservation?: ReservationType;

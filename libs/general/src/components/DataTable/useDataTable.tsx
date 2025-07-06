@@ -1,3 +1,4 @@
+import { ListCollection } from '@ark-ui/react';
 import React from 'react';
 
 export interface Column<T> {
@@ -82,7 +83,7 @@ export interface UseFilterProps<F extends FilterEntries> {
 }
 
 export interface TableProps<T> {
-  items: T[];
+  collections: ListCollection<T>;
   columns: Column<T>[];
   loading?: boolean;
   pagination?: PaginationProps;
@@ -110,7 +111,7 @@ export function useFilter<F extends FilterEntries>(props?: UseFilterProps<F>) {
 }
 export function useTable<T>({
   columns,
-  items,
+  collections,
   loading,
   onRowSelect,
   pagination,
@@ -126,15 +127,13 @@ export function useTable<T>({
 
   return {
     columns,
-    items,
+    collections,
     loading,
     pagination,
     sorting,
-
     sortBy,
     sortOrder,
     filters,
-
     handleRowSelect,
   };
 }

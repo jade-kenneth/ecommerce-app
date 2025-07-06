@@ -63,14 +63,14 @@ export interface VoucherInput {
 
 export interface CreateProductInput {
     _id: ObjectId;
-    thumbnail?: Nullable<string>;
-    name?: Nullable<string>;
-    price?: Nullable<number>;
-    status?: Nullable<StatusType>;
-    discount?: Nullable<number>;
-    points?: Nullable<Decimal>;
-    category?: Nullable<CategoryType[]>;
-    pieces?: Nullable<number>;
+    thumbnail: string;
+    name: string;
+    price: number;
+    status: StatusType;
+    discount: number;
+    points: Decimal;
+    category: CategoryType[];
+    pieces: number;
     type?: Nullable<CategoryType>;
     description?: Nullable<string>;
     reservation?: Nullable<ReservationType>;
@@ -137,14 +137,14 @@ export interface IMutation {
 
 export interface Product extends Node {
     _id: ObjectId;
-    thumbnail?: Nullable<string>;
-    name?: Nullable<string>;
-    price?: Nullable<number>;
-    status?: Nullable<StatusType>;
-    discount?: Nullable<number>;
-    points?: Nullable<Decimal>;
+    thumbnail: string;
+    name: string;
+    price: number;
+    status: StatusType;
+    discount: number;
+    points: Decimal;
     category?: Nullable<CategoryType[]>;
-    pieces?: Nullable<number>;
+    pieces: number;
     type?: Nullable<CategoryType>;
     description?: Nullable<string>;
     reservation?: Nullable<ReservationType>;
@@ -156,7 +156,7 @@ export interface Product extends Node {
 }
 
 export interface IQuery {
-    products(filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
+    products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
 }
 
 export type JSON = Record<string, any>;
@@ -165,5 +165,4 @@ export type DateTime = Date;
 export type Decimal = _Decimal;
 export type Cursor = unknown;
 export type Upload = unknown;
-export type UploadFileError = FileSizeTooBigError | FileFormatNotSupportedError | FileNameTooLongError;
 type Nullable<T> = T | null;

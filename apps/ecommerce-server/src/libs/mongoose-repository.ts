@@ -13,7 +13,6 @@ import {
 import * as R from 'ramda';
 import {
   Connection,
-  Cursor,
   Filter,
   Repository,
   RepositoryIterator,
@@ -170,48 +169,6 @@ export function flattenObject(item: any, parentKey?: string): Partial<RawItem> {
   )(item) as never;
 }
 
-export function serializeItemCreate(item: any): Partial<RawItem> {
-  const data: Record<string, unknown> = {};
-  const __t: Record<string, number> = {};
-
-  if (item.id) {
-    data['_id'] = item.id.buffer;
-    __t['__t._id'] = 0;
-  }
-
-  for (const [key, value] of R.toPairs(R.omit(['id'], item))) {
-    data[key] = value;
-
-    if (value instanceof ObjectId) {
-      data[key] = value.buffer;
-      __t[`__t.${key}`] = 0;
-    }
-
-    if (value instanceof Decimal) {
-      data[key] = new Types.Decimal128(value.toString());
-      __t[`__t.${key}`] = 1;
-    }
-
-    if (Array.isArray(value)) {
-      data[key] = serializeArray(value);
-    }
-  }
-
-  return { ...data, ...__t };
-}
-function serializeArray(arr: any[]): any[] {
-  return R.map(
-    (item) =>
-      item instanceof ObjectId
-        ? item.buffer
-        : Array.isArray(item)
-        ? serializeArray(item)
-        : typeof item === 'object'
-        ? serializeItem(item)
-        : item,
-    arr
-  );
-}
 export type RawItem = { _id: Buffer; [key: string]: unknown };
 
 export class MongooseRepository<
@@ -324,34 +281,17 @@ export class MongooseRepository<
 
         return values;
       },
-      offset: (skip = 0) => {
-        const values: TEntity[] = [];
 
-        return {
-          collect: async ({ limit = 0, sort = 'desc' } = {}): Promise<
-            TEntity[]
-          > => {
-            for await (const value of model
-              .find(serializedFilter, null, options)
-              .limit(limit)
-              .skip(skip)
-              .sort(<never>sort)) {
-              values.push(serializeItem(value) as TEntity);
-            }
-
-            return values;
-          },
-        };
-      },
       connection: async (params: {
         first?: number;
-        after?: Cursor;
+        after?: string;
         cursor?: string;
         order?: 'asc' | 'desc';
         totalCount?: false;
       }): Promise<Connection<TEntity>> => {
-        const model = this.model;
+        const limit = params.first || 100;
         const key = params.cursor || 'cursor';
+
         let filter = serializedFilter;
 
         const operator = params.order === 'desc' ? '$lt' : '$gt';
@@ -360,28 +300,19 @@ export class MongooseRepository<
           filter = {
             ...serializedFilter,
             [key]: {
-              [operator]: params.after,
+              [operator]: Buffer.from(params.after, 'base64'),
             },
           };
         }
 
-        const [edges, totalCount] = await Promise.all([
+        const [values, totalCount] = await Promise.all([
           (async () => {
-            const values: { node: TEntity; cursor: Buffer }[] = [];
-            const res = await model
+            return await model
               .find(filter, null, {
                 sort: { [key]: params.order === 'desc' ? -1 : 1 },
-                limit: params.first,
+                limit: limit + 1,
               })
               .lean();
-
-            for (const value of res) {
-              values.push({
-                node: serializeItem(value) as TEntity,
-                cursor: value[key] as Buffer,
-              });
-            }
-            return values;
           })(),
           (async () => {
             if (params.totalCount === false) {
@@ -396,8 +327,9 @@ export class MongooseRepository<
             return totalCount;
           })(),
         ]);
-
-        if (R.isEmpty(edges)) {
+        console.log(values, 'values');
+        console.log(filter, 'filter');
+        if (R.isEmpty(values)) {
           return {
             totalCount: 0,
             edges: [],
@@ -408,10 +340,22 @@ export class MongooseRepository<
             },
           };
         }
+
+        const hasNextPage = values.length > limit;
+
+        if (hasNextPage) values.pop();
+
+        const edges = R.map((value: any) => {
+          return {
+            node: serializeItem(value),
+            cursor: value[key],
+          };
+        }, values);
+
         return {
           edges,
           pageInfo: {
-            hasNextPage: false,
+            hasNextPage,
             startCursor: R.prop(key, R.head(edges)) as unknown as Buffer,
             endCursor: R.prop(key, R.last(edges)) as unknown as Buffer,
           },

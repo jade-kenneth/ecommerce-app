@@ -16,11 +16,19 @@ export default function TablePagination() {
         itemLabel: (details) => `Page ${details.page}`,
       }}
     >
-      <Pagination.PrevTrigger>
+      <Pagination.PrevTrigger
+        onClick={() =>
+          table.pagination?.onPageChange?.(table.pagination.page - 1)
+        }
+      >
         <LuChevronLeft /> Previous
       </Pagination.PrevTrigger>
 
-      <Pagination.NextTrigger>
+      <Pagination.NextTrigger
+        onClick={() =>
+          table.pagination?.onPageChange?.(table.pagination.page + 1)
+        }
+      >
         Next <LuChevronRight />
       </Pagination.NextTrigger>
     </Pagination.Root>

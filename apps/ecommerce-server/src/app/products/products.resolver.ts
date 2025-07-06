@@ -10,8 +10,12 @@ export class ProductResolver {
   constructor(private readonly productService: ProductsService) {}
 
   @Query('products')
-  async products(@Args('filter') filter?: Filter<Product>) {
-    return this.productService.getProducts({ filter });
+  async products(
+    @Args('first') first: number,
+    @Args('after') after: string,
+    @Args('filter') filter?: Filter<Product>
+  ) {
+    return this.productService.getProducts({ filter, after, first });
   }
 
   @Mutation('createProduct')

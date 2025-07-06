@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 05 Jul 2025 05:32:31 GMT
+// Last modified: Sun, 06 Jul 2025 15:39:56 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -50,19 +50,19 @@ export enum CategoryType {
 
 export type CreateProductInput = {
   _id: Scalars['ObjectID']['input'];
-  category?: InputMaybe<Array<CategoryType>>;
+  category: Array<CategoryType>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  discount?: InputMaybe<Scalars['Int']['input']>;
+  discount: Scalars['Int']['input'];
   flashSale?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  pieces?: InputMaybe<Scalars['Int']['input']>;
-  points?: InputMaybe<Scalars['Decimal']['input']>;
-  price?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
+  pieces: Scalars['Int']['input'];
+  points: Scalars['Decimal']['input'];
+  price: Scalars['Int']['input'];
   reservation?: InputMaybe<ReservationType>;
   sold?: InputMaybe<Scalars['Int']['input']>;
-  status?: InputMaybe<StatusType>;
-  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  status: StatusType;
+  thumbnail: Scalars['String']['input'];
   type?: InputMaybe<CategoryType>;
   variations?: InputMaybe<Array<KeyValuePairInput>>;
   vouchers?: InputMaybe<Array<VoucherInput>>;
@@ -122,17 +122,19 @@ export type UploadFileMutation = {
 export type ProductCoreDataFragment = {
   __typename: 'Product';
   _id: string;
-  name?: string | null;
-  price?: number | null;
-  points?: string | null;
-  pieces?: number | null;
-  status?: StatusType | null;
-  discount?: number | null;
+  name: string;
+  price: number;
+  points: string;
+  pieces: number;
+  status: StatusType;
+  discount: number;
   category?: Array<CategoryType> | null;
-  thumbnail?: string | null;
+  thumbnail: string;
 };
 
 export type ProductsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
   filter?: InputMaybe<ProductsFilterInput>;
 }>;
 
@@ -152,14 +154,14 @@ export type ProductsQuery = {
       node: {
         __typename: 'Product';
         _id: string;
-        name?: string | null;
-        price?: number | null;
-        points?: string | null;
-        pieces?: number | null;
-        status?: StatusType | null;
-        discount?: number | null;
+        name: string;
+        price: number;
+        points: string;
+        pieces: number;
+        status: StatusType;
+        discount: number;
         category?: Array<CategoryType> | null;
-        thumbnail?: string | null;
+        thumbnail: string;
       };
     }>;
   };
@@ -218,8 +220,8 @@ export type UploadFileMutationOptions = Apollo.BaseMutationOptions<
   UploadFileMutationVariables
 >;
 export const ProductsDocument = /*#__PURE__*/ gql`
-  query Products($filter: ProductsFilterInput) {
-    products(filter: $filter) {
+  query Products($first: Int, $after: Cursor, $filter: ProductsFilterInput) {
+    products(first: $first, after: $after, filter: $filter) {
       pageInfo {
         hasNextPage
         endCursor

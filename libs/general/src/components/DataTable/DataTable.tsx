@@ -9,7 +9,7 @@ type DatTableProps<T, F extends FilterEntries> = UseDataTableProps<T, F> & {
 };
 export function DataTable<T, F extends FilterEntries>({
   columns,
-  items,
+  collections,
   loading,
   onRowSelect,
   filtering,
@@ -18,7 +18,7 @@ export function DataTable<T, F extends FilterEntries>({
 }: DatTableProps<T, F>) {
   const datatable = useDataTable({
     columns,
-    items,
+    collections,
     filtering,
     loading,
     onRowSelect,

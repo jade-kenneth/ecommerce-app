@@ -54,7 +54,7 @@ export type RepositoryIterator<T> = AsyncIterableIterator<T> & {
   };
   connection(params: {
     first?: number;
-    after?: Cursor;
+    after?: string;
     cursor?: string;
     order?: 'asc' | 'desc';
     totalCount?: boolean;

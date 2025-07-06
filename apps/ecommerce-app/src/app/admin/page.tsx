@@ -1,5 +1,6 @@
 'use client';
 
+import { createListCollection } from '@ark-ui/react';
 import {
   CloseButton,
   Dialog,
@@ -22,6 +23,7 @@ import {
   NumberInputField,
   Spinner,
   UploadFile,
+  usePaginated,
 } from '@global';
 import {
   CategoryType,
@@ -33,31 +35,40 @@ import {
   useCreateProductMutation,
   useProductsQuery,
 } from '@graphql/products';
+import { Checkbox } from 'libs/general/src/components/ui/Checkbox';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { Reducer, useReducer } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaPlusCircle } from 'react-icons/fa';
+import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import z from 'zod';
+
+interface PageState {
+  page: number;
+  pageSize: number;
+}
 export default function ManageProducts() {
-  const [page, setPage] = useState(1);
-  const query = useProductsQuery();
-  const items = useMemo(() => {
-    return (
-      query.data?.products.edges?.map(({ node }) => ({
-        id: node._id,
-        name: node.name,
-        price: node.price,
-        points: node.points,
-        stock: node.pieces,
-        category: node.category,
-        status: node.status,
-        discount: node.discount,
-        thumbnail: node.thumbnail,
-        finalPrice:
-          (node.price ?? 0) - ((node.price ?? 0) * (node.discount || 0)) / 100,
-      })) || []
-    );
-  }, [query]);
+  const [state, setState] = useReducer<Reducer<PageState, Partial<PageState>>>(
+    (prev, next) => ({
+      ...prev,
+      ...next,
+    }),
+    { page: 1, pageSize: 1 }
+  );
+  const query = useProductsQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      first: 1,
+    },
+  });
+
+  const { currentPage, totalPages } = usePaginated(() => {
+    if (!query.data) return [];
+
+    return query.data.products.edges.map(({ node }) => node);
+  }, state);
+  console.log(state, 'state');
+  console.log(query.data, 'query');
   return (
     <Flex direction={'column'} gap={4} p={7}>
       <AddProductButton
@@ -95,7 +106,11 @@ export default function ManageProducts() {
 
       <DataTable
         id="products"
-        items={items}
+        collections={createListCollection({
+          items: currentPage,
+          itemToValue: (item) => item._id,
+          itemToString: (item) => item.name,
+        })}
         columns={[
           {
             heading: 'Image',
@@ -107,7 +122,7 @@ export default function ManageProducts() {
                   alt={item.name || 'Product Image'}
                   width={100}
                   height={100}
-                  className="rounded-md"
+                  className="rounded-md aspect-[1/1] object-cover w-12 h-12"
                 />
               ) : (
                 <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
@@ -153,7 +168,9 @@ export default function ManageProducts() {
           {
             heading: 'Final Price (₱)',
             filterable: true,
-            render: (item) => <p>{item.finalPrice}</p>,
+            render: (item) => (
+              <p>{item.price - (item.price * item.discount) / 100}</p>
+            ),
             sortable: true,
           },
           {
@@ -165,7 +182,7 @@ export default function ManageProducts() {
           {
             heading: 'Stock ',
             filterable: true,
-            render: (item) => <p>{item.stock ?? '-'}</p>,
+            render: (item) => <p>{item.pieces ?? '-'}</p>,
             sortable: true,
           },
           {
@@ -191,12 +208,20 @@ export default function ManageProducts() {
           },
         ]}
         pagination={{
-          page,
-          pageSize: 10,
-          totalItems: 100,
-          onPageChange: (page) => {
-            console.log(page, 'page');
-            setPage(page);
+          page: state.page,
+          pageSize: state.pageSize,
+          totalItems: query.data?.products.totalCount ?? 0,
+          onPageChange: async (page) => {
+            if (page > totalPages) {
+              await query.fetchMore({
+                variables: {
+                  ...query.variables,
+
+                  after: query.data?.products.pageInfo.endCursor,
+                },
+              });
+            }
+            setState({ page });
           },
         }}
       />
@@ -267,7 +292,8 @@ const AddProductButton = (props: AddProductButtonProps) => {
     },
   });
   const [createProduct, { loading }] = useCreateProductMutation();
-  console.log(form.watch(), 'form watch');
+
+  const price = parseFloat(form.watch('price') || '0');
   return (
     <Dialog.Root closeOnInteractOutside open={disclosure.open}>
       <Flex justify={'space-between'} w="full">
@@ -366,22 +392,60 @@ const AddProductButton = (props: AddProductButtonProps) => {
                   );
                 }}
               />
-              <Controller
-                control={form.control}
-                name="discountPercentage"
-                render={({ field }) => {
-                  return (
-                    <NumberInputField
-                      value={field.value?.toString()}
-                      onChange={(value) => {
-                        field.onChange(+value);
-                      }}
-                      label="Dsicount Percentage"
-                      placeholder="%"
-                    />
-                  );
-                }}
-              />
+              <Checkbox.Root className="flex flex-col gap-2 items-start">
+                <div className="flex flex-row-reverse gap-2">
+                  <Checkbox.Label className="text-carbon-500 text-sm font-medium">
+                    Apply Discount
+                  </Checkbox.Label>
+                  <Checkbox.Control>
+                    <Checkbox.Indicator className="flex items-center justify-center">
+                      <IoCheckmarkCircleOutline />
+                    </Checkbox.Indicator>
+                  </Checkbox.Control>
+                </div>
+                <Checkbox.HiddenInput />
+                <Checkbox.Context>
+                  {({ checked }) => {
+                    return checked ? (
+                      <Controller
+                        control={form.control}
+                        name="discountPercentage"
+                        render={({ field }) => {
+                          const discountedPrice =
+                            price -
+                            parseFloat(
+                              (price * ((field.value || 0) / 100)).toFixed(2)
+                            );
+                          return (
+                            <div className="flex bg-carbon-950-value  gap-6 p-4 rounded-xl flex-col w-full">
+                              <NumberInputField
+                                value={field.value?.toString()}
+                                onChange={(value) => {
+                                  field.onChange(+value);
+                                }}
+                                label="Discount (%)"
+                                placeholder="%"
+                              />
+                              <FieldInput
+                                label="Final Price"
+                                disabled
+                                value={`₱ ${
+                                  isNaN(discountedPrice)
+                                    ? '0.00'
+                                    : discountedPrice
+                                }`}
+                                className="w-full text-carbon-300-value "
+                              />
+                            </div>
+                          );
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    );
+                  }}
+                </Checkbox.Context>
+              </Checkbox.Root>
               <Controller
                 control={form.control}
                 name="points"
@@ -470,6 +534,8 @@ const AddProductButton = (props: AddProductButtonProps) => {
                         ...data,
                         price: +data.price,
                         points: data.points,
+                        pieces: data.stock,
+                        discount: data.discountPercentage || 0,
                         _id,
                         __typename: 'Product',
                       });

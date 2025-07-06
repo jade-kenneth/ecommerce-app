@@ -7,3 +7,4 @@ export * from './dataAttr';
 export * from './hexToRgba';
 export * from './numberFormatter';
 export * from './useControllableState';
+export * from './usePaginated';

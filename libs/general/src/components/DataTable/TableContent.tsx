@@ -27,7 +27,7 @@ export function TableContent() {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {datatable.table.items.map((item) => {
+          {datatable.table.collections?.items?.map((item) => {
             return (
               <Table.Row>
                 {datatable.table.columns.map((column) => {

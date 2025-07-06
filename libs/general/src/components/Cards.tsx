@@ -1,11 +1,14 @@
 import { Flex, Text } from '@chakra-ui/react';
+import { ProductCoreDataFragment } from '@graphql/products';
 import Image from 'next/image';
 import { FaHeart, FaStar } from 'react-icons/fa';
 import { medal } from '../images';
-import { CardProps } from './types';
 
-export const Cards = (props: CardProps) => {
-  const discount = (props.price * (props.offPercent / 100)).toFixed(2);
+export const Cards = (props: ProductCoreDataFragment) => {
+  const discount = parseFloat(
+    (props.price * (props.discount / 100)).toFixed(2)
+  );
+
   return (
     <Flex
       w="220.8px"
@@ -24,13 +27,13 @@ export const Cards = (props: CardProps) => {
         borderTopRightRadius={'12px'}
         justify={'center'}
         position={'relative'}
+        overflow={'hidden'}
       >
         <Image
-          src={props.imgSrc}
+          src={`https://drive.google.com/uc?export=view&id=${props.thumbnail}`}
           alt="item"
-          objectFit="cover"
-          width={100}
-          height={100}
+          layout="fill"
+          className="max-w-full aspect-[1/1]  object-cover"
         />
 
         <Flex
@@ -40,7 +43,7 @@ export const Cards = (props: CardProps) => {
           top={3}
           left={3}
         >
-          {props.isTop && (
+          {true && (
             <Flex
               bg="colors.error.600"
               width={'62px'}
@@ -56,7 +59,7 @@ export const Cards = (props: CardProps) => {
               <Text sizes={'paragraph-xs'}>TOP</Text>
             </Flex>
           )}
-          {props.isHighPoint && (
+          {true && (
             <Flex
               bg="colors.success.700"
               height={'26px'}
@@ -73,7 +76,7 @@ export const Cards = (props: CardProps) => {
             </Flex>
           )}
         </Flex>
-        {props.offPercent > 0 && (
+        {props.discount > 0 && (
           <Flex
             position={'absolute'}
             bg={'colors.primary.700'}
@@ -88,12 +91,12 @@ export const Cards = (props: CardProps) => {
             alignItems={'center'}
             direction={'column'}
           >
-            <Text sizes="paragraph-xs">{props.offPercent}%</Text>
+            <Text sizes="paragraph-xs">{props.discount}%</Text>
             <Text sizes="paragraph-xs">OFF</Text>
           </Flex>
         )}
         <Flex bottom={0} left={0} position={'absolute'}>
-          {props.rewards > 0 && (
+          {+props.points > 0 && (
             <Flex
               bg={'colors.warning.500'}
               width={'75px'}
@@ -104,11 +107,11 @@ export const Cards = (props: CardProps) => {
               direction={'column'}
             >
               <Text sizes="paragraph-xs" fontWeight={600}>
-                {props.rewards} points
+                {props.points} points
               </Text>
             </Flex>
           )}
-          {props.offPercent > 0 && (
+          {props.discount > 0 && (
             <Flex
               bg={'#FF6666'}
               width={'94px'}
@@ -119,17 +122,23 @@ export const Cards = (props: CardProps) => {
               alignItems={'center'}
               direction={'column'}
             >
-              <Text sizes="paragraph-xs">
-                Save -
-                {(props.price * (props.offPercent / 100)).toLocaleString(
-                  'en-US',
-                  {
-                    currency: 'PHP',
-                    style: 'currency',
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </Text>
+              {(() => {
+                const discountThreshold = 100000;
+                return (
+                  <Text sizes="paragraph-xs" className="!text-[10px]">
+                    Save -{' '}
+                    {discount.toLocaleString('en-US', {
+                      currency: 'PHP',
+                      style: 'currency',
+                      maximumFractionDigits: 2,
+                      ...(discount >= discountThreshold && {
+                        notation: 'compact',
+                        compactDisplay: 'short',
+                      }),
+                    })}
+                  </Text>
+                );
+              })()}
             </Flex>
           )}
         </Flex>
@@ -149,13 +158,22 @@ export const Cards = (props: CardProps) => {
             sizes={'paragraph-lg'}
             mb="6px"
           >
-            {(props.price - +discount).toLocaleString('en-US', {
-              currency: 'PHP',
-              style: 'currency',
-              maximumFractionDigits: 2,
-            })}
+            {(() => {
+              const amount = props.price - discount;
+              const useCompact = amount >= 1000000;
+              console.log('useCompact', useCompact, amount);
+              return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'PHP',
+                maximumFractionDigits: 2,
+                ...(useCompact && {
+                  notation: 'compact',
+                  compactDisplay: 'short',
+                }),
+              }).format(amount);
+            })()}
           </Text>
-          {props.offPercent > 0 && (
+          {props.discount > 0 && (
             <Text
               color="colors.carbon.25"
               textDecoration={'line-through'}
@@ -163,7 +181,7 @@ export const Cards = (props: CardProps) => {
               position={'relative'}
               top={0}
             >
-              {props.price.toLocaleString('en-US', {
+              {(+props.price).toLocaleString('en-US', {
                 currency: 'PHP',
                 style: 'currency',
                 maximumFractionDigits: 2,
@@ -177,14 +195,14 @@ export const Cards = (props: CardProps) => {
               return (
                 <FaStar
                   style={{
-                    color: props.rating >= idx + 1 ? '#FFA000' : '#D2D2D2',
+                    color: 3 >= idx + 1 ? '#FFA000' : '#D2D2D2',
                   }}
                 />
               );
             })}
           </Flex>
           <Text color={'colors.carbon.500'} sizes={'paragraph-xs'}>
-            {props.sold.toLocaleString('en-US', {
+            {(100).toLocaleString('en-US', {
               notation: 'compact',
               compactDisplay: 'short',
             })}{' '}

@@ -16,14 +16,14 @@ import {
 
 export type Product = {
   _id: ObjectId;
-  name?: string;
-  thumbnail?: string;
-  price?: number;
-  status?: StatusType;
-  discount?: number;
-  points?: Decimal;
-  category?: CategoryType[];
-  pieces?: number;
+  name: string;
+  thumbnail: string;
+  price: number;
+  status: StatusType;
+  discount: number;
+  points: Decimal;
+  category: CategoryType[];
+  pieces: number;
   type?: CategoryType;
   description?: string;
   reservation?: ReservationType;

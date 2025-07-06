@@ -24,14 +24,14 @@ interface Voucher {
 
 type Product implements Node {
   _id: ObjectId!
-  thumbnail: String
-  name: String
-  price: Int
-  status: StatusType
-  discount: Int
-  points: Decimal
+  thumbnail: String!
+  name: String!
+  price: Int!
+  status: StatusType!
+  discount: Int!
+  points: Decimal!
   category: [CategoryType!]
-  pieces: Int
+  pieces: Int!
   type: CategoryType
   description: String
   reservation: ReservationType
@@ -59,7 +59,7 @@ input ProductsFilterInput {
   category: ProductsCategoryFilterInput
 }
 type Query {
-  products(filter: ProductsFilterInput): Connection!
+  products(first: Int, after: Cursor, filter: ProductsFilterInput): Connection!
 }
 input KeyValuePairInput {
   key: String!
@@ -75,14 +75,14 @@ input VoucherInput {
 
 input CreateProductInput {
   _id: ObjectId!
-  thumbnail: String
-  name: String
-  price: Int
-  status: StatusType
-  discount: Int
-  points: Decimal
-  category: [CategoryType!]
-  pieces: Int
+  thumbnail: String!
+  name: String!
+  price: Int!
+  status: StatusType!
+  discount: Int!
+  points: Decimal!
+  category: [CategoryType!]!
+  pieces: Int!
   type: CategoryType
   description: String
   reservation: ReservationType

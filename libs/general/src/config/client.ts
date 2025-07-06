@@ -2,29 +2,16 @@ import {
   ApolloClient,
   ApolloLink,
   HttpLink,
-  InMemoryCache,
   UriFunction,
 } from '@apollo/client';
 import invariant from 'tiny-invariant';
+import { apolloCache } from './cache';
 
 const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
 
 invariant(portalApi, "'NEXT_PUBLIC_PORTAL_API' is missing");
 
 const portalLink = new HttpLink({ uri: createUrl(portalApi) });
-
-export const apolloCache = new InMemoryCache({
-  addTypename: true,
-
-  typePolicies: {
-    Query: {
-      // keyFields: ['id', ...keyArgs],
-      fields: {
-        //   platforms: { ...relayStylePagination(), keyArgs },
-      },
-    },
-  },
-});
 
 export const apolloLink = ApolloLink.split(
   () => true,

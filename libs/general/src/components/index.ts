@@ -16,4 +16,6 @@ export * from './NumberInputField';
 export * from './Spinner';
 export * from './TextareaField';
 export * from './TopSelling';
-export * as Badge from './ui/Badge';
+export * from './ui/Badge';
+export * from './ui/Field';
+export * from './ui/Menu';

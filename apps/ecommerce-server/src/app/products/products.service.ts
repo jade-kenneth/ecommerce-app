@@ -26,7 +26,7 @@ export class ProductsService {
 
     const data = await this.products
       .list(filter)
-      .connection({ after, first, order: 'asc' });
+      .connection({ after, first, order: 'desc' });
 
     return data;
   }

@@ -3,7 +3,8 @@ import { useControllableState } from '@utils';
 import { useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useDebounceCallback } from 'usehooks-ts';
-import { Field } from '../ui/FieldInput';
+import { Field } from '../ui/Field';
+
 interface InputProps extends UseFieldProps {
   placeholder?: string;
   label?: string;

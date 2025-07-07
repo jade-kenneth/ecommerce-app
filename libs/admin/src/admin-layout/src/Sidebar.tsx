@@ -11,7 +11,7 @@ export default function Sidebar() {
     <Flex
       direction={'column'}
       bg="colors.primary.700"
-      height="100%"
+      height="100dvh"
       as="nav"
       role="menu"
       gap={'4px'}
@@ -29,7 +29,7 @@ export default function Sidebar() {
         icon={IoStorefrontOutline}
         path="manage-products"
         isActive
-        label="Manage Producs"
+        label="Manage Products"
       />
       <NavItem icon={CiSettings} path="settings" label="Settings" />
     </Flex>

@@ -1,8 +1,12 @@
 import Decimal from 'decimal.js';
 import { Node } from './common';
+
+// Services consumes this types
 export enum StatusType {
-  AVAILABLE = 'AVAILABLE',
-  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  ACTIVE = 'ACTIVE',
+  SOLD_OUT = 'SOLD_OUT',
+  INACTIVE = 'INACTIVE',
+  DRAFT = 'DRAFT',
 }
 
 export enum ReservationType {

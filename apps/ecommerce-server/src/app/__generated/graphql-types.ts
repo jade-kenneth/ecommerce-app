@@ -12,8 +12,10 @@ import { ObjectId  as _ObjectId} from '@ecommerce/object-id'
 import { Decimal as _Decimal } from 'decimal.js'
 
 export enum StatusType {
-    AVAILABLE = "AVAILABLE",
-    OUT_OF_STOCK = "OUT_OF_STOCK"
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+    SOLD_OUT = "SOLD_OUT",
+    DRAFT = "DRAFT"
 }
 
 export enum ReservationType {

@@ -1,9 +1,9 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 06 Jul 2025 15:39:56 GMT
-import { gql } from '@apollo/client';
+// Last modified: Mon, 07 Jul 2025 03:20:30 GMT
 import * as Apollo from '@apollo/client';
+import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -98,8 +98,10 @@ export enum ReservationType {
 }
 
 export enum StatusType {
-  Available = 'AVAILABLE',
-  OutOfStock = 'OUT_OF_STOCK',
+  Active = 'ACTIVE',
+  Draft = 'DRAFT',
+  Inactive = 'INACTIVE',
+  SoldOut = 'SOLD_OUT',
 }
 
 export type VoucherInput = {

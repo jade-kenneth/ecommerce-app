@@ -5,9 +5,11 @@ import { tv } from 'tailwind-variants';
 export const checkboxRecipe = tv({
   slots: anatomyToRecipeSlots(checkboxAnatomy, {
     root: 'flex items-center',
+
     control: 'flex shrink-0 items-center justify-center',
     label: 'font-medium',
   }),
+
   variants: {
     size: {
       sm: {

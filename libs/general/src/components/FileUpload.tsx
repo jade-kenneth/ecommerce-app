@@ -1,10 +1,11 @@
 'use client';
-import { FileUpload } from '@ark-ui/react';
+import { UseFileUploadProps } from '@ark-ui/react';
 
 import { UploadFileMutationResult } from '@graphql/products';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { useControllableState } from '../utils';
-interface UploadFileProps {
+import { FileUpload } from './ui/FileUpload';
+interface UploadFileProps extends UseFileUploadProps {
   value?: string;
   onChange?: (files: string) => void;
 }
@@ -16,17 +17,22 @@ export function UploadFile(props: UploadFileProps) {
 
   return (
     <FileUpload.Root
-      maxFiles={1}
-      className="w-full min-h-[126px] h-auto border-[1px] border-[#F2F2F2]   rounded-[8px] flex items-center justify-center"
+      accept={'image/*'}
       onFileChange={async (details) => {
-        const id = await uploadFile(details.acceptedFiles[0]);
-        setValue(id || '');
+        if (details.acceptedFiles.length > 0) {
+          try {
+            const id = await uploadFile(details.acceptedFiles[0]);
+            setValue(id || '');
+          } catch (error) {
+            console.log('Error uploading file:', error);
+          }
+          return;
+        }
+        setValue('');
       }}
+      data-invalid={props.invalid ? '' : undefined}
     >
-      <FileUpload.Dropzone
-        className="flex flex-col gap-3 items-center justify-center w-[inherit] h-[inherit] cursor-pointer"
-        hidden={(value?.length || 0) > 0}
-      >
+      <FileUpload.Dropzone hidden={!!value}>
         <IoCloudUploadOutline />
         <FileUpload.Trigger>
           <p className="text-primary-700-value font-medium text-sm">
@@ -41,15 +47,11 @@ export function UploadFile(props: UploadFileProps) {
       <FileUpload.Context>
         {({ acceptedFiles }) =>
           acceptedFiles.map((file) => (
-            <FileUpload.Item
-              key={file.name}
-              file={file}
-              className="w-[inherit] h-[inherit] flex items-center justify-center relative"
-            >
+            <FileUpload.Item key={file.name} file={file}>
               <FileUpload.ItemPreview type="image/*">
                 <FileUpload.ItemPreviewImage />
               </FileUpload.ItemPreview>
-              <FileUpload.ItemDeleteTrigger className="absolute right-1 top-0">
+              <FileUpload.ItemDeleteTrigger onClick={() => setValue('')}>
                 X
               </FileUpload.ItemDeleteTrigger>
             </FileUpload.Item>

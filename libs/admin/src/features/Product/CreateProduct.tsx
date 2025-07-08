@@ -24,54 +24,67 @@ import {
   StatusType,
   useCreateProductMutation,
 } from '@graphql/products';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox } from 'libs/general/src/components/ui/Checkbox';
 import { Controller, useForm } from 'react-hook-form';
 import { FaPlusCircle } from 'react-icons/fa';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import z from 'zod';
-const schema = z.object({
-  name: z.string().trim().min(1, 'Name is required'),
-  image: z.string().trim().min(1, 'Image is required'),
-  category: z
-    .array(z.nativeEnum(CategoryType))
-    .min(1, 'At least one category is required'),
-  price: z
-    .string()
-    .trim()
-    .min(1, 'Price is required')
-    .superRefine((val, ctx) => {
-      if (!/^\d+(\.\d{1,2})?$/.test(val)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Price must be a valid number with up to two decimal places',
-        });
-      }
-    }),
-  points: z
-    .string()
-    .trim()
-    .min(1, 'Points is required')
-    .superRefine((val, ctx) => {
-      if (!/^\d+$/.test(val)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Points must be a valid integer',
-        });
-      }
-    }),
-  stock: z
-    .number()
-    .int('Must be a whole number')
-    .min(0, 'Stock cannot be negative'),
-  status: z.nativeEnum(StatusType),
-  discountPercentage: z
-    .number()
-    .int('Must be a whole number')
-    .min(0)
-    .max(100)
-    .optional(),
-  thumbnail: z.string().trim().min(1, 'Thumbnail is required'),
-});
+const SchemaDefinition = z
+  .object({
+    name: z.string().trim().min(1, 'Name is required'),
+    category: z
+      .array(z.nativeEnum(CategoryType))
+      .min(1, 'At least one category is required'),
+    price: z
+      .string()
+      .trim()
+      .min(1, 'Price is required')
+      .superRefine((val, ctx) => {
+        if (!/^\d+(\.\d{1,2})?$/.test(val)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+              'Price must be a valid number with up to two decimal places',
+          });
+        }
+      }),
+    points: z
+      .string()
+      .trim()
+      .min(1, 'Points is required')
+      .superRefine((val, ctx) => {
+        if (!/^\d+$/.test(val)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Points must be a valid integer',
+          });
+        }
+      }),
+    stock: z
+      .number()
+      .int('Must be a whole number')
+      .min(1, 'Stock cannot be negative'),
+    status: z.nativeEnum(StatusType),
+    discountPercentage: z
+      .number()
+      .int('Must be a whole number')
+      .min(0)
+      .max(100)
+      .optional(),
+
+    thumbnail: z.string().trim().min(1, 'Thumbnail is required'),
+    discountToggle: z.boolean().default(false).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.discountToggle && !data.discountPercentage) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please provide a discount percentage',
+        path: ['discountPercentage'],
+      });
+    }
+  });
 
 interface AddProductButtonProps {
   onAddProduct?: (data: ProductCoreDataFragment) => void;
@@ -79,21 +92,26 @@ interface AddProductButtonProps {
 export const CreateProduct = (props: AddProductButtonProps) => {
   const disclosure = useDisclosure();
 
-  const form = useForm<z.infer<typeof schema>>({
+  const form = useForm<z.infer<typeof SchemaDefinition>>({
     mode: 'all',
     defaultValues: {
       name: '',
-      image: '',
       category: [],
       price: '',
       points: '',
       stock: 0,
       status: StatusType.Active,
+      thumbnail: '',
+      discountToggle: false,
     },
+    resolver: zodResolver(SchemaDefinition),
   });
   const [createProduct, { loading }] = useCreateProductMutation();
 
   const price = parseFloat(form.watch('price') || '0');
+
+  console.log(form.watch(), 'watch');
+  console.log(form.formState.errors, 'errors');
   return (
     <Dialog.Root closeOnInteractOutside open={disclosure.open}>
       <Flex justify={'space-between'} w="full">
@@ -140,7 +158,9 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                 render={({ field }) => (
                   <FieldInput
                     label="Name"
+                    invalid={!!form.formState.errors.name}
                     {...field}
+                    required
                     placeholder="Product Name"
                     className="w-full"
                   />
@@ -151,46 +171,71 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                 control={form.control}
                 name="thumbnail"
                 render={({ field }) => {
-                  return <UploadFile {...field} />;
+                  return (
+                    <UploadFile
+                      {...field}
+                      invalid={!!form.formState.errors.thumbnail}
+                    />
+                  );
                 }}
               />
 
-              <Controller
-                control={form.control}
-                name="category"
-                render={({ field }) => {
-                  return (
-                    <MultiComboboxField
-                      options={Object.values(CategoryType).map((category) => ({
-                        label: capitalize(category, {
-                          delimiter: capitalize.delimiters.UNDERSCORE,
-                        }),
-                        value: category,
-                      }))}
-                      value={field.value}
-                      onChange={(value) => {
-                        field.onChange(value);
-                      }}
-                      placeholder="Choose or select category"
-                      label="Category"
-                    />
-                  );
+              <Field.Root invalid={!!form.formState.errors.category}>
+                <Controller
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => {
+                    return (
+                      <MultiComboboxField
+                        options={Object.values(CategoryType).map(
+                          (category) => ({
+                            label: capitalize(category, {
+                              delimiter: capitalize.delimiters.UNDERSCORE,
+                            }),
+                            value: category,
+                          })
+                        )}
+                        value={field.value}
+                        onChange={(value) => {
+                          field.onChange(value);
+                        }}
+                        placeholder="Choose or select category"
+                        label="Category"
+                      />
+                    );
+                  }}
+                />
+              </Field.Root>
+              <Field.Root invalid={!!form.formState.errors.price}>
+                <Controller
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => {
+                    return (
+                      <NumberInputField
+                        {...field}
+                        label="Price"
+                        placeholder="₱ 0.00"
+                      />
+                    );
+                  }}
+                />
+              </Field.Root>
+              <Checkbox.Root
+                className="flex flex-col gap-2 items-start"
+                checked={form.watch('discountToggle')}
+                onCheckedChange={(details) => {
+                  if (details.checked) {
+                    form.setValue('discountToggle', true, {
+                      shouldValidate: true,
+                    });
+                  } else {
+                    form.setValue('discountToggle', false, {
+                      shouldValidate: true,
+                    });
+                  }
                 }}
-              />
-              <Controller
-                control={form.control}
-                name="price"
-                render={({ field }) => {
-                  return (
-                    <NumberInputField
-                      {...field}
-                      label="Price"
-                      placeholder="₱ 0.00"
-                    />
-                  );
-                }}
-              />
-              <Checkbox.Root className="flex flex-col gap-2 items-start">
+              >
                 <div className="flex flex-row-reverse gap-2">
                   <Checkbox.Label className="text-carbon-500 text-sm font-medium">
                     Apply Discount
@@ -202,48 +247,42 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                   </Checkbox.Control>
                 </div>
                 <Checkbox.HiddenInput />
-                <Checkbox.Context>
-                  {({ checked }) => {
-                    return checked ? (
-                      <Controller
-                        control={form.control}
-                        name="discountPercentage"
-                        render={({ field }) => {
-                          const discountedPrice =
-                            price -
-                            parseFloat(
-                              (price * ((field.value || 0) / 100)).toFixed(2)
-                            );
-                          return (
-                            <div className="flex bg-carbon-950-value  gap-6 p-4 rounded-xl flex-col w-full">
-                              <NumberInputField
-                                value={field.value?.toString()}
-                                onChange={(value) => {
-                                  field.onChange(+value);
-                                }}
-                                label="Discount (%)"
-                                placeholder="%"
-                              />
-                              <FieldInput
-                                label="Final Price"
-                                disabled
-                                value={`₱ ${
-                                  isNaN(discountedPrice)
-                                    ? '0.00'
-                                    : discountedPrice
-                                }`}
-                                className="w-full text-carbon-300-value "
-                              />
-                            </div>
-                          );
-                        }}
-                      />
-                    ) : (
-                      <></>
+              </Checkbox.Root>
+              {form.getValues('discountToggle') && (
+                <Controller
+                  control={form.control}
+                  name="discountPercentage"
+                  render={({ field }) => {
+                    const discountedPrice =
+                      price -
+                      parseFloat(
+                        (price * ((field.value || 0) / 100)).toFixed(2)
+                      );
+                    return (
+                      <div className="flex bg-carbon-950-value  gap-6 p-4 rounded-xl flex-col w-full">
+                        <NumberInputField
+                          value={field.value?.toString()}
+                          onChange={(value) => {
+                            form.setValue('discountPercentage', +value, {
+                              shouldValidate: true,
+                            });
+                          }}
+                          label="Discount (%)"
+                          placeholder="%"
+                        />
+                        <FieldInput
+                          label="Final Price"
+                          disabled
+                          value={`₱ ${
+                            isNaN(discountedPrice) ? '0.00' : discountedPrice
+                          }`}
+                          className="w-full text-carbon-300-value "
+                        />
+                      </div>
                     );
                   }}
-                </Checkbox.Context>
-              </Checkbox.Root>
+                />
+              )}
               <Field.Root invalid={!!form.formState.errors.points}>
                 <Controller
                   control={form.control}
@@ -300,11 +339,10 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                 />
               </Field.Root>
             </Dialog.Body>
-            <Dialog.Footer className="flex justify-between">
-              <button onClick={() => form.reset()}>Clear</button>
+            <Dialog.Footer className="flex justify-end">
               <div className="flex gap-2 items-center">
                 <button
-                  className="bg-primary-700-value p-3 text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium"
+                  className="bg-primary-700-value p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
                   onClick={form.handleSubmit(async (data) => {
                     const _id = ObjectId.generate(
                       ObjectType.Product
@@ -342,8 +380,10 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                       console.error('Error creating product:', error);
                     }
                   })}
-                  disabled={
+                  data-disabled={
                     !form.formState.isValid || form.formState.isSubmitting
+                      ? ''
+                      : undefined
                   }
                 >
                   <p>Add Product</p>{' '}

@@ -92,10 +92,11 @@ export default function ManageProducts() {
           {
             heading: 'Image',
             filterable: true,
-            render: (item) =>
-              item.thumbnail ? (
+            render: (item) => {
+              console.log(item.thumbnail.split('/upload'));
+              return item.thumbnail ? (
                 <Image
-                  src={`https://drive.google.com/uc?export=view&id=${item.thumbnail}`}
+                  src={item.thumbnail}
                   alt={item.name || 'Product Image'}
                   width={100}
                   height={100}
@@ -105,7 +106,9 @@ export default function ManageProducts() {
                 <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
                   <p className="text-gray-500">No Image</p>
                 </div>
-              ),
+              );
+            },
+
             sortable: true,
           },
           {

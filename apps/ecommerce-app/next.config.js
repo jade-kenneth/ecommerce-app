@@ -19,6 +19,7 @@ const nextConfig = {
       { hostname: 'plus.unsplash.com' },
       { hostname: 'media.istockphoto.com' },
       { hostname: 'drive.google.com' },
+      { hostname: 'res.cloudinary.com' },
     ],
   },
 };

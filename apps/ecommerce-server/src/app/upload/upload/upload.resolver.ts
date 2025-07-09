@@ -5,25 +5,39 @@ import {
   FileUpload,
   GraphQLUpload,
 } from 'graphql-upload/graphqlUploadExpress.js';
+import { CloudinaryService } from '../cloudinary/cloudinary/cloudinary.service';
 import { GoogleDriveService } from '../google-drive/google-drive.service';
-
 @Resolver()
 export class UploadResolver {
-  constructor(private readonly driveService: GoogleDriveService) {}
+  constructor(
+    private readonly driveService: GoogleDriveService,
+    private readonly cloudinaryService: CloudinaryService
+  ) {}
 
-  @Mutation(() => Boolean)
+  // @Mutation(() => Boolean)
+  // async uploadFileNotUsed(
+  //   @Args({ name: 'file', type: () => GraphQLUpload }) file: Promise<FileUpload>
+  // ) {
+  //   const { createReadStream, filename, mimetype } = await file;
+
+  //   const stream = createReadStream();
+
+  //   const uploadedFile = await this.driveService.uploadFile(
+  //     stream,
+  //     filename,
+  //     mimetype
+  //   );
+  //   return uploadedFile.id; // Return Google Drive file ID
+  // }
+
+  @Mutation(() => String)
   async uploadFile(
     @Args({ name: 'file', type: () => GraphQLUpload }) file: Promise<FileUpload>
-  ) {
-    const { createReadStream, filename, mimetype } = await file;
+  ): Promise<string> {
+    const { createReadStream } = await file;
 
-    const stream = createReadStream();
+    const result = await this.cloudinaryService.uploadFile(createReadStream());
 
-    const uploadedFile = await this.driveService.uploadFile(
-      stream,
-      filename,
-      mimetype
-    );
-    return uploadedFile.id; // Return Google Drive file ID
+    return result.secure_url;
   }
 }

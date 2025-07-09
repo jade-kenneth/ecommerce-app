@@ -84,7 +84,7 @@ export async function uploadFile(file: File): Promise<string | undefined> {
     method: 'POST',
     body: formData,
     headers: {
-      'x-apollo-operation-name': 'uploadFile',
+      'apollo-require-preflight': 'true', // ✅ this tells Apollo to allow multipart
     },
   });
 

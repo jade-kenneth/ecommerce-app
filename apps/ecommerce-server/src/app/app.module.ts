@@ -5,7 +5,6 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import { constraintDirectiveTypeDefs } from 'graphql-constraint-directive/apollo4';
@@ -38,6 +37,7 @@ import { UploadModule } from './upload/upload/upload.module';
       useFactory: async () => {
         const options: ApolloDriverConfig = {
           playground: true,
+          csrfPrevention: false,
           introspection: true,
           typePaths: [path.resolve(__dirname, './src/app/schemas/*.gql')],
           resolvers: {
@@ -54,7 +54,6 @@ import { UploadModule } from './upload/upload/upload.module';
     }),
     ProductsModule,
     NodeResolver,
-    EventEmitterModule.forRoot(),
     UploadModule,
   ],
 

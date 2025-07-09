@@ -30,7 +30,7 @@ export const Cards = (props: ProductCoreDataFragment) => {
         overflow={'hidden'}
       >
         <Image
-          src={`https://drive.google.com/uc?export=view&id=${props.thumbnail}`}
+          src={props.thumbnail}
           alt="item"
           layout="fill"
           className="max-w-full aspect-[1/1]  object-cover"

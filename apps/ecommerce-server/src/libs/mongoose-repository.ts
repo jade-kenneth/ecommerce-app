@@ -233,11 +233,15 @@ export class MongooseRepository<
       return;
     }
   }
-  delete(
+  public async delete(
     filter: ObjectId | Filter<TEntity>,
     opts?: WriteOptions
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const options = R.pick(['upsert'], opts || {});
+    if (typeof filter === 'string') {
+      await this.model.deleteOne({ _id: filter }, options);
+      return;
+    }
   }
   find(
     filter: ObjectId | Filter<TEntity>,

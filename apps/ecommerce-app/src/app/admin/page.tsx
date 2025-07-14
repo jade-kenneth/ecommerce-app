@@ -1,7 +1,7 @@
 'use client';
 
 import { createListCollection } from '@ark-ui/react';
-import { CreateProduct, UpdateProduct } from '@backoffice/admin';
+import { CreateProduct, DeleteProduct, UpdateProduct } from '@backoffice/admin';
 import { Flex } from '@chakra-ui/react';
 import {
   apolloClient,
@@ -236,6 +236,7 @@ export default function ManageProducts() {
                         });
                       }}
                     />
+                    <DeleteProduct data={item} />
                   </Menu.Content>
                 </Menu.Positioner>
               </Menu.Root>

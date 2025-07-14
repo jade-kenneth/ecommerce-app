@@ -102,6 +102,10 @@ export interface UpdateProductInput {
     dateAdded?: Nullable<DateTime>;
 }
 
+export interface DeleteProductInput {
+    _id: ObjectId;
+}
+
 export interface Node {
     _id: ObjectId;
 }
@@ -155,6 +159,7 @@ export interface IMutation {
     uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
     createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    deleteProduct(input: DeleteProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export interface Product extends Node {

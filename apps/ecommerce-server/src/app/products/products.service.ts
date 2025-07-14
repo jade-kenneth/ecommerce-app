@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CreateProductInput,
+  DeleteProductInput,
   UpdateProductInput,
 } from '../__generated/graphql-types';
 
@@ -59,5 +60,12 @@ export class ProductsService {
         console.log(err, 'error');
         return;
       });
+  }
+  public async deleteProduct(params: DeleteProductInput) {
+    try {
+      await this.products.delete(params._id);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
   }
 }

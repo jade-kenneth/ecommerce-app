@@ -112,7 +112,12 @@ input UpdateProductInput {
   vouchers: [VoucherInput!]
   dateAdded: DateTime
 }
+
+input DeleteProductInput {
+  _id: ObjectId!
+}
 type Mutation {
   createProduct(input: CreateProductInput!): Boolean
   updateProduct(input: UpdateProductInput!): Boolean
+  deleteProduct(input: DeleteProductInput!): Boolean
 }

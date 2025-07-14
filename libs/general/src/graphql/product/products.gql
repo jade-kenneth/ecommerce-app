@@ -33,3 +33,7 @@ mutation CreateProduct($input: CreateProductInput!) {
 mutation UpdateProduct($input: UpdateProductInput!) {
   updateProduct(input: $input)
 }
+
+mutation DeleteProduct($input: DeleteProductInput!) {
+  deleteProduct(input: $input)
+}

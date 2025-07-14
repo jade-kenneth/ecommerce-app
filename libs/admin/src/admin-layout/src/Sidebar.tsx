@@ -7,6 +7,7 @@ import { CiSettings } from 'react-icons/ci';
 import { FaHome } from 'react-icons/fa';
 import { IoStorefrontOutline } from 'react-icons/io5';
 export default function Sidebar() {
+  const router = useRouter();
   return (
     <Flex
       direction={'column'}
@@ -21,7 +22,8 @@ export default function Sidebar() {
       <Image
         src={logoWhite}
         alt="logo"
-        style={{ marginBottom: '24px', width: '133.35px', height: '32px' }}
+        className="mb-6 w-[133.35px] h-[32px] cursor-pointer"
+        onClick={() => router.push('/')}
       />
 
       <NavItem icon={FaHome} path="dashboard" label="Dashboard" />

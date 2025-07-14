@@ -10,7 +10,7 @@ export class NodeResolver {
   @ResolveField('__resolveType')
   resolveType(@Parent() node: Node) {
     const [type] = node._id.buffer;
-    console.log(type, 'type');
+
     return OBJECT_TYPE_TO_NODE_TYPE_MAPPING[type] || null;
   }
 }

@@ -1,10 +1,4 @@
-import {
-  CloseButton,
-  Dialog,
-  Flex,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { CloseButton, Dialog, Portal, useDisclosure } from '@chakra-ui/react';
 import {
   capitalize,
   ComboboxField,
@@ -56,17 +50,13 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
 
   return (
     <Dialog.Root closeOnInteractOutside open={disclosure.open}>
-      <Flex justify={'space-between'} w="full">
-        <Dialog.Trigger>
-          <div
-            className="flex items-center gap-2 rounded-lg cursor-pointer outline-none  transition-colors"
-            onClick={() => disclosure.onOpen()}
-          >
-            <FaEdit />
-            <p className="text-paragraph-sm"> Edit</p>
-          </div>
-        </Dialog.Trigger>
-      </Flex>
+      <div
+        className="flex w-full items-center gap-2 rounded-lg cursor-pointer outline-none  transition-colors"
+        onClick={() => disclosure.onOpen()}
+      >
+        <FaEdit />
+        <p className="text-paragraph-sm"> Edit</p>
+      </div>
 
       <Portal>
         <Dialog.Backdrop />

@@ -69,7 +69,7 @@ export interface CreateProductInput {
     name: string;
     price: number;
     status: StatusType;
-    discount: number;
+    discount?: Nullable<number>;
     points: Decimal;
     category: CategoryType[];
     pieces: number;
@@ -79,6 +79,25 @@ export interface CreateProductInput {
     flashSale?: Nullable<boolean>;
     variations?: Nullable<KeyValuePairInput[]>;
     sold?: Nullable<number>;
+    vouchers?: Nullable<VoucherInput[]>;
+    dateAdded?: Nullable<DateTime>;
+}
+
+export interface UpdateProductInput {
+    _id: ObjectId;
+    thumbnail: string;
+    name: string;
+    price: number;
+    status: StatusType;
+    discount?: Nullable<number>;
+    points: Decimal;
+    category: CategoryType[];
+    pieces: number;
+    type?: Nullable<CategoryType>;
+    description?: Nullable<string>;
+    reservation?: Nullable<ReservationType>;
+    flashSale?: Nullable<boolean>;
+    variations?: Nullable<KeyValuePairInput[]>;
     vouchers?: Nullable<VoucherInput[]>;
     dateAdded?: Nullable<DateTime>;
 }
@@ -135,6 +154,7 @@ export interface FileNameTooLongError extends Error {
 export interface IMutation {
     uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
     createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export interface Product extends Node {

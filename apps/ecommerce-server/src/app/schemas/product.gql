@@ -81,7 +81,7 @@ input CreateProductInput {
   name: String!
   price: Int!
   status: StatusType!
-  discount: Int!
+  discount: Int
   points: Decimal!
   category: [CategoryType!]!
   pieces: Int!
@@ -94,6 +94,25 @@ input CreateProductInput {
   vouchers: [VoucherInput!]
   dateAdded: DateTime
 }
+input UpdateProductInput {
+  _id: ObjectId!
+  thumbnail: String!
+  name: String!
+  price: Int!
+  status: StatusType!
+  discount: Int
+  points: Decimal!
+  category: [CategoryType!]!
+  pieces: Int!
+  type: CategoryType
+  description: String
+  reservation: ReservationType
+  flashSale: Boolean
+  variations: [KeyValuePairInput!]
+  vouchers: [VoucherInput!]
+  dateAdded: DateTime
+}
 type Mutation {
   createProduct(input: CreateProductInput!): Boolean
+  updateProduct(input: UpdateProductInput!): Boolean
 }

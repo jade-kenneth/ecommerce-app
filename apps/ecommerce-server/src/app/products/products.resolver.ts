@@ -2,7 +2,10 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Product } from '../../types/product';
 
 import { Filter } from '../../libs/repository';
-import { CreateProductInput } from '../__generated/graphql-types';
+import {
+  CreateProductInput,
+  UpdateProductInput,
+} from '../__generated/graphql-types';
 import { ProductsService } from './products.service';
 
 @Resolver('Products')
@@ -21,5 +24,10 @@ export class ProductResolver {
   @Mutation('createProduct')
   async createProduct(@Args('input') input: CreateProductInput) {
     return this.productService.createProduct(input);
+  }
+
+  @Mutation('updateProduct')
+  async updateProduct(@Args('input') input: UpdateProductInput) {
+    return this.productService.updateProduct(input);
   }
 }

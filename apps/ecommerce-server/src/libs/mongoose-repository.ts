@@ -208,19 +208,30 @@ export class MongooseRepository<
   }
 
   async create(data: TEntity, opts?: WriteOptions): Promise<void> {
-    console.log(data, 'data to create');
     try {
       await this.model.create([data], { opts });
     } catch (error) {
       console.error('Error creating item:', error);
     }
   }
-  update(
+  public async update(
     filter: ObjectId | Filter<TEntity>,
     data: Partial<Omit<TEntity, 'id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    const options = R.pick(['upsert'], opts || {});
+
+    if (typeof filter === 'string') {
+      await this.model.updateOne(
+        { _id: filter },
+        {
+          $set: data,
+        },
+        options
+      );
+
+      return;
+    }
   }
   delete(
     filter: ObjectId | Filter<TEntity>,
@@ -327,8 +338,7 @@ export class MongooseRepository<
             return totalCount;
           })(),
         ]);
-        console.log(values, 'values');
-        console.log(filter, 'filter');
+
         if (R.isEmpty(values)) {
           return {
             totalCount: 0,

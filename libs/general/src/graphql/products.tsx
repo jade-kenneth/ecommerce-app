@@ -1,9 +1,9 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Mon, 07 Jul 2025 03:20:30 GMT
-import * as Apollo from '@apollo/client';
+// Last modified: Sat, 12 Jul 2025 19:14:28 GMT
 import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -53,7 +53,7 @@ export type CreateProductInput = {
   category: Array<CategoryType>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  discount: Scalars['Int']['input'];
+  discount?: InputMaybe<Scalars['Int']['input']>;
   flashSale?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
   pieces: Scalars['Int']['input'];
@@ -103,6 +103,25 @@ export enum StatusType {
   Inactive = 'INACTIVE',
   SoldOut = 'SOLD_OUT',
 }
+
+export type UpdateProductInput = {
+  _id: Scalars['ObjectID']['input'];
+  category: Array<CategoryType>;
+  dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  discount?: InputMaybe<Scalars['Int']['input']>;
+  flashSale?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  pieces: Scalars['Int']['input'];
+  points: Scalars['Decimal']['input'];
+  price: Scalars['Int']['input'];
+  reservation?: InputMaybe<ReservationType>;
+  status: StatusType;
+  thumbnail: Scalars['String']['input'];
+  type?: InputMaybe<CategoryType>;
+  variations?: InputMaybe<Array<KeyValuePairInput>>;
+  vouchers?: InputMaybe<Array<VoucherInput>>;
+};
 
 export type VoucherInput = {
   code?: InputMaybe<Scalars['String']['input']>;
@@ -176,6 +195,15 @@ export type CreateProductMutationVariables = Exact<{
 export type CreateProductMutation = {
   __typename: 'Mutation';
   createProduct?: boolean | null;
+};
+
+export type UpdateProductMutationVariables = Exact<{
+  input: UpdateProductInput;
+}>;
+
+export type UpdateProductMutation = {
+  __typename: 'Mutation';
+  updateProduct?: boolean | null;
 };
 
 export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
@@ -317,4 +345,34 @@ export type CreateProductMutationResult =
 export type CreateProductMutationOptions = Apollo.BaseMutationOptions<
   CreateProductMutation,
   CreateProductMutationVariables
+>;
+export const UpdateProductDocument = /*#__PURE__*/ gql`
+  mutation UpdateProduct($input: UpdateProductInput!) {
+    updateProduct(input: $input)
+  }
+`;
+export type UpdateProductMutationFn = Apollo.MutationFunction<
+  UpdateProductMutation,
+  UpdateProductMutationVariables
+>;
+export function useUpdateProductMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProductMutation,
+    UpdateProductMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateProductMutation,
+    UpdateProductMutationVariables
+  >(UpdateProductDocument, options);
+}
+export type UpdateProductMutationHookResult = ReturnType<
+  typeof useUpdateProductMutation
+>;
+export type UpdateProductMutationResult =
+  Apollo.MutationResult<UpdateProductMutation>;
+export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProductMutation,
+  UpdateProductMutationVariables
 >;

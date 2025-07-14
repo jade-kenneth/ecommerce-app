@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateProductInput } from '../__generated/graphql-types';
+import {
+  CreateProductInput,
+  UpdateProductInput,
+} from '../__generated/graphql-types';
 
 import { Product } from '../../types/product';
 
@@ -38,6 +41,19 @@ export class ProductsService {
           new Date(),
           ObjectId.generate(ObjectType.Product)
         ),
+      })
+      .catch(async (err) => {
+        console.log(err, 'error');
+        return;
+      });
+  }
+
+  public async updateProduct(params: UpdateProductInput) {
+    const { _id, ...updateData } = params;
+
+    await this.products
+      .update(_id, {
+        ...updateData,
       })
       .catch(async (err) => {
         console.log(err, 'error');

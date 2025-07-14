@@ -37,7 +37,7 @@ export type Product = Node & {
   name: string;
   price: number;
   status: StatusType;
-  discount: number;
+  discount?: number;
   points: Decimal;
   category: CategoryType[];
   pieces: number;

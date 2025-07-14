@@ -1,7 +1,7 @@
 'use client';
 
 import { createListCollection } from '@ark-ui/react';
-import { CreateProduct } from '@backoffice/admin';
+import { CreateProduct, UpdateProduct } from '@backoffice/admin';
 import { Flex } from '@chakra-ui/react';
 import {
   apolloClient,
@@ -198,7 +198,47 @@ export default function ManageProducts() {
                 <Menu.Positioner>
                   <Menu.Content className="min-w-[115px]">
                     <Menu.ItemGroup>
-                      <Menu.Item value="1">Item 1</Menu.Item>
+                      <Menu.Item value="1">
+                        <UpdateProduct
+                          data={item}
+                          onUpdateProduct={async (data) => {
+                            const res = apolloClient.readQuery<
+                              ProductsQuery,
+                              ProductsQueryVariables
+                            >({
+                              query: ProductsDocument,
+                              variables: query.variables,
+                            });
+
+                            if (!res?.products) return query.refetch();
+
+                            const edges = res.products.edges.map((edge) => {
+                              if (edge.node._id === data._id) {
+                                return {
+                                  ...edge,
+                                  node: data,
+                                };
+                              }
+                              return edge;
+                            });
+
+                            apolloClient.writeQuery<
+                              ProductsQuery,
+                              ProductsQueryVariables
+                            >({
+                              query: ProductsDocument,
+                              variables: query.variables,
+                              data: {
+                                products: {
+                                  ...res.products,
+                                  edges,
+                                },
+                                __typename: 'Query',
+                              },
+                            });
+                          }}
+                        />
+                      </Menu.Item>
                       <Menu.Item value="2">Item 2</Menu.Item>
                       <Menu.Item value="3">Item 3</Menu.Item>
                     </Menu.ItemGroup>

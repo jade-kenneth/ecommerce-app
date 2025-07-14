@@ -29,3 +29,7 @@ query Products($first: Int, $after: Cursor, $filter: ProductsFilterInput) {
 mutation CreateProduct($input: CreateProductInput!) {
   createProduct(input: $input)
 }
+
+mutation UpdateProduct($input: UpdateProductInput!) {
+  updateProduct(input: $input)
+}

@@ -2,6 +2,9 @@
 import { UseFileUploadProps } from '@ark-ui/react';
 
 import { UploadFileMutationResult } from '@graphql/products';
+import { isString } from 'lodash';
+import Image from 'next/image';
+import { useRef } from 'react';
 import { IoCloudUploadOutline } from 'react-icons/io5';
 import { useControllableState } from '../utils';
 import { FileUpload } from './ui/FileUpload';
@@ -14,6 +17,7 @@ export function UploadFile(props: UploadFileProps) {
     value: props.value,
     onChange: props.onChange,
   });
+  const ref = useRef<HTMLButtonElement>(null);
 
   return (
     <FileUpload.Root
@@ -30,11 +34,12 @@ export function UploadFile(props: UploadFileProps) {
         }
         setValue('');
       }}
+      className="relative"
       data-invalid={props.invalid ? '' : undefined}
     >
       <FileUpload.Dropzone hidden={!!value}>
         <IoCloudUploadOutline />
-        <FileUpload.Trigger>
+        <FileUpload.Trigger ref={ref}>
           <p className="text-primary-700-value font-medium text-sm">
             Click to upload image
           </p>
@@ -44,20 +49,19 @@ export function UploadFile(props: UploadFileProps) {
         </p>
       </FileUpload.Dropzone>
 
-      <FileUpload.Context>
-        {({ acceptedFiles }) =>
-          acceptedFiles.map((file) => (
-            <FileUpload.Item key={file.name} file={file}>
-              <FileUpload.ItemPreview type="image/*">
-                <FileUpload.ItemPreviewImage />
-              </FileUpload.ItemPreview>
-              <FileUpload.ItemDeleteTrigger onClick={() => setValue('')}>
-                X
-              </FileUpload.ItemDeleteTrigger>
-            </FileUpload.Item>
-          ))
-        }
-      </FileUpload.Context>
+      {isString(value) && value !== '' && (
+        <div className="relative w-full h-full  rounded-md overflow-hidden">
+          <Image src={value} alt="thumbnail" fill className="object-cover" />
+
+          <div
+            aria-label="overlay"
+            className="absolute inset-0 gap-2 bg-black/50 text-white cursor-pointer  flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+          >
+            <p onClick={() => ref.current?.click()}>Update</p>
+            <p onClick={() => setValue('')}>Delete</p>
+          </div>
+        </div>
+      )}
 
       <FileUpload.HiddenInput />
     </FileUpload.Root>

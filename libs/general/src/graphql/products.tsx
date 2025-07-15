@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Mon, 14 Jul 2025 07:36:24 GMT
+// Last modified: Tue, 15 Jul 2025 02:36:33 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -41,11 +41,17 @@ export type Scalars = {
 };
 
 export enum CategoryType {
-  Dairy = 'DAIRY',
-  Fish = 'FISH',
-  Fruit = 'FRUIT',
+  Beverages = 'BEVERAGES',
+  Canned = 'CANNED',
+  DailyDishes = 'DAILY_DISHES',
+  Essentials = 'ESSENTIALS',
+  HealthWellness = 'HEALTH_WELLNESS',
+  HouseholdItems = 'HOUSEHOLD_ITEMS',
+  Instant = 'INSTANT',
+  PersonalCare = 'PERSONAL_CARE',
+  Rice = 'RICE',
+  Snacks = 'SNACKS',
   Sweets = 'SWEETS',
-  Vegetables = 'VEGETABLES',
 }
 
 export type CreateProductInput = {

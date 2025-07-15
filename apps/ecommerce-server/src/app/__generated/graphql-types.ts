@@ -24,11 +24,17 @@ export enum ReservationType {
 }
 
 export enum CategoryType {
-    FRUIT = "FRUIT",
-    DAIRY = "DAIRY",
-    VEGETABLES = "VEGETABLES",
-    FISH = "FISH",
-    SWEETS = "SWEETS"
+    BEVERAGES = "BEVERAGES",
+    CANNED = "CANNED",
+    INSTANT = "INSTANT",
+    RICE = "RICE",
+    ESSENTIALS = "ESSENTIALS",
+    SNACKS = "SNACKS",
+    PERSONAL_CARE = "PERSONAL_CARE",
+    HOUSEHOLD_ITEMS = "HOUSEHOLD_ITEMS",
+    SWEETS = "SWEETS",
+    HEALTH_WELLNESS = "HEALTH_WELLNESS",
+    DAILY_DISHES = "DAILY_DISHES"
 }
 
 export interface ProductsStatusFilterInput {

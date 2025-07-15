@@ -9,11 +9,17 @@ enum ReservationType {
   UNAVAILABLE
 }
 enum CategoryType {
-  FRUIT
-  DAIRY
-  VEGETABLES
-  FISH
+  BEVERAGES
+  CANNED
+  INSTANT
+  RICE
+  ESSENTIALS
+  SNACKS
+  PERSONAL_CARE
+  HOUSEHOLD_ITEMS
   SWEETS
+  HEALTH_WELLNESS
+  DAILY_DISHES
 }
 
 interface Voucher {

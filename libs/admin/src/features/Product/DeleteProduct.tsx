@@ -1,18 +1,12 @@
 import { CloseButton, Dialog, Portal, useDisclosure } from '@chakra-ui/react';
 import { Spinner } from '@global';
-import {
-  ProductCoreDataFragment,
-  useDeleteProductMutation,
-} from '@graphql/products';
+import { useDeleteProductMutation } from '@graphql/products';
 import { FaTrash } from 'react-icons/fa';
+import { useProductProviderContext } from './ProductContext';
 
-interface AddProductButtonProps {
-  data: ProductCoreDataFragment;
-  onUpdateProduct?: (data: ProductCoreDataFragment) => void;
-}
-export const DeleteProduct = (props: AddProductButtonProps) => {
+export const DeleteProduct = () => {
   const disclosure = useDisclosure();
-
+  const context = useProductProviderContext();
   const [deleteProduct, { loading }] = useDeleteProductMutation({
     optimisticResponse: {
       __typename: 'Mutation',
@@ -20,7 +14,7 @@ export const DeleteProduct = (props: AddProductButtonProps) => {
     },
     update(cache) {
       cache.evict({
-        id: cache.identify(props.data),
+        id: cache.identify(context),
       });
     },
   });
@@ -66,7 +60,7 @@ export const DeleteProduct = (props: AddProductButtonProps) => {
                     await deleteProduct({
                       variables: {
                         input: {
-                          _id: props.data._id,
+                          _id: context._id,
                         },
                       },
                     });

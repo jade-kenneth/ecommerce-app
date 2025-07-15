@@ -32,7 +32,7 @@ export const Highlight: FunctionComponent<HighlightProps> = ({
         </Box>
         <Flex
           divideX="1px"
-          divideColor={'colors.primary.950'}
+          divideColor={'colors.primary.600'}
           divideStyle="ridge"
         >
           <HStack px="16px">

@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
+import { Tokens } from 'apps/ecommerce-server/src/types/tokens';
 import { ProductRepositoryFactory } from './products.repository';
 
-export const ProductRepositoryToken = Symbol('ProductRepository');
 @Module({
   providers: [
     {
-      provide: ProductRepositoryToken,
+      provide: Tokens.ProductRepositoryToken,
       useFactory: ProductRepositoryFactory,
       inject: [getConnectionToken()],
     },
   ],
-  exports: [ProductRepositoryToken],
+  exports: [Tokens.ProductRepositoryToken],
 })
 export class ProductsRepositoryModule {}

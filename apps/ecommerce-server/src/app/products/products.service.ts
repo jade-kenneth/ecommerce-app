@@ -11,13 +11,14 @@ import { ObjectType } from '@ecommerce-app/object-shared';
 import { ObjectId } from '@ecommerce/object-id';
 import { Connection, Filter } from '../../libs/repository';
 import { generateCursor } from '../../util/generate-cursor';
-import { ProductRepositoryToken } from './repositories/product.repository.module';
+
+import { Tokens } from '../../types/tokens';
 import { ProductRepository } from './repositories/products.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @Inject(ProductRepositoryToken)
+    @Inject(Tokens.ProductRepositoryToken)
     private products: ProductRepository
   ) {}
 

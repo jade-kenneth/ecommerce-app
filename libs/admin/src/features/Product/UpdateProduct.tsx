@@ -21,26 +21,28 @@ import { Controller, useForm } from 'react-hook-form';
 import { FaEdit } from 'react-icons/fa';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import z from 'zod';
+import { useProductProviderContext } from './ProductContext';
 import { SchemaDefinition } from './utils';
 
 interface AddProductButtonProps {
-  data: ProductCoreDataFragment;
   onUpdateProduct?: (data: ProductCoreDataFragment) => void;
 }
 export const UpdateProduct = (props: AddProductButtonProps) => {
   const disclosure = useDisclosure();
 
+  const context = useProductProviderContext();
+
   const form = useForm<z.infer<typeof SchemaDefinition>>({
     mode: 'all',
     defaultValues: {
-      name: props.data.name,
-      category: props.data.category as CategoryType[],
-      price: props.data.price.toString(),
-      points: props.data.points.toString(),
-      stock: props.data.pieces,
-      status: props.data.status,
-      thumbnail: props.data.thumbnail,
-      discountToggle: props.data.discount > 0,
+      name: context.name,
+      category: context.category as CategoryType[],
+      price: context.price.toString(),
+      points: context.points.toString(),
+      stock: context.pieces,
+      status: context.status,
+      thumbnail: context.thumbnail,
+      discountToggle: context.discount > 0,
     },
     resolver: zodResolver(SchemaDefinition),
   });
@@ -272,7 +274,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                       await updateProduct({
                         variables: {
                           input: {
-                            _id: props.data._id,
+                            _id: context._id,
                             name: data.name,
                             category: data.category,
                             price: parseFloat(data.price),
@@ -291,7 +293,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                         price: +data.price,
                         pieces: data.stock,
                         discount: data.discountPercentage || 0,
-                        _id: props.data._id,
+                        _id: context._id,
                         __typename: 'Product',
                       });
                       disclosure.onClose();
@@ -305,7 +307,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                       : undefined
                   }
                 >
-                  <p>Add Product</p>{' '}
+                  <p>Update Product</p>{' '}
                   {loading && <Spinner className="w-2 h-2" />}
                 </button>
               </div>

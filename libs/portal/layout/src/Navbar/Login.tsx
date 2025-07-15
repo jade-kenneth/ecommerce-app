@@ -9,9 +9,9 @@ import {
   useDisclosure,
   UseDisclosureProps,
 } from '@chakra-ui/react';
-import { Input, logoBlack } from '@global';
+import { Button, Input, logoBlack } from '@global';
 import Image from 'next/image';
-import { FaRegEyeSlash } from 'react-icons/fa';
+import { FaFacebook, FaRegEyeSlash } from 'react-icons/fa';
 interface LoginProps {
   children?: (value: UseDisclosureProps) => React.ReactNode;
 }
@@ -90,8 +90,8 @@ export function Login({ children }: LoginProps) {
                       <FaRegEyeSlash
                         cursor={'pointer'}
                         style={{
-                          height: '28px',
-                          width: '28px',
+                          height: '20px',
+                          width: '20px',
                         }}
                       />
                     ),
@@ -112,6 +112,32 @@ export function Login({ children }: LoginProps) {
                   Forgot your Password?
                 </Text>
               </Flex>
+
+              <Button
+                w={'full'}
+                className="bg-primary-700-value"
+                borderRadius={'50px'}
+                mt={6}
+              >
+                Sign in
+              </Button>
+
+              <p className="w-fit mx-auto mt-4">
+                Don't have an account yet?{' '}
+                <span className="text-primary-700-value text-paragraph-sm font-semibold">
+                  Register here
+                </span>
+              </p>
+              <p className="mx-auto w-fit mt-4">Or sign in using</p>
+              <div className="flex items-center  justify-center gap-4 my-4">
+                <FaFacebook className="text-[#3C5A99] w-[28px] h-[28px]" />
+                <Image
+                  src={'/google.png'}
+                  alt="google"
+                  width={28}
+                  height={28}
+                />
+              </div>
             </Dialog.Body>
 
             <Dialog.CloseTrigger>

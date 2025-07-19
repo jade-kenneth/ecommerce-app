@@ -99,7 +99,10 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                 render={({ field }) => {
                   return (
                     <UploadFile
-                      {...field}
+                      value={field.value ? [field.value] : []}
+                      onChange={(files) => {
+                        field.onChange(files[0]);
+                      }}
                       invalid={!!form.formState.errors.thumbnail}
                     />
                   );

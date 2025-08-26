@@ -41,7 +41,7 @@ export function UploadFile({ maxFiles = 1, ...props }: UploadFileProps) {
         className="relative"
         data-invalid={props.invalid ? '' : undefined}
       >
-        <FileUpload.Dropzone hidden={maxFiles === 1}>
+        <FileUpload.Dropzone hidden={value.length > 0}>
           <IoCloudUploadOutline />
           <FileUpload.Trigger ref={ref}>
             <p className="text-primary-700-value font-medium text-sm">
@@ -53,7 +53,7 @@ export function UploadFile({ maxFiles = 1, ...props }: UploadFileProps) {
           </p>
         </FileUpload.Dropzone>
 
-        {maxFiles === 1 && (
+        {maxFiles === 1 && value.length > 0 && (
           <div className="relative w-full h-full  rounded-md overflow-hidden">
             <Image
               src={value[0]}
@@ -74,7 +74,7 @@ export function UploadFile({ maxFiles = 1, ...props }: UploadFileProps) {
 
         <FileUpload.HiddenInput />
       </FileUpload.Root>
-      {maxFiles > 1 && (
+      {maxFiles > 1 && value.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2">
           {value.map((file, index) => {
             return (

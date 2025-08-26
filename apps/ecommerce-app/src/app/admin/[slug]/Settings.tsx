@@ -1,4 +1,4 @@
-import { FieldInput, UploadFile } from '@global';
+import { Field, FieldInput, UploadFile } from '@global';
 
 export function Settings() {
   return (
@@ -19,7 +19,10 @@ export function Settings() {
         value="0"
       />
 
-      <UploadFile maxFiles={5} />
+      <Field.Root className="mt-8">
+        <Field.Label>Homepage Carousel</Field.Label>
+        <UploadFile maxFiles={5} />
+      </Field.Root>
     </div>
   );
 }

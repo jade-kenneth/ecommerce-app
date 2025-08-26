@@ -18,6 +18,7 @@ import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
 import { AppService } from './app.service';
+import { ConfigModule } from './config/config.module';
 import { ProductsModule } from './products/products.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { UploadModule } from './upload/upload/upload.module';
@@ -55,6 +56,7 @@ import { UploadModule } from './upload/upload/upload.module';
     ProductsModule,
     NodeResolver,
     UploadModule,
+    ConfigModule,
   ],
 
   providers: [AppService],

@@ -37,6 +37,19 @@ export enum CategoryType {
     DAILY_DISHES = "DAILY_DISHES"
 }
 
+export interface CreateConfigInput {
+    highPointsThreshold: number;
+    topSoldThreshold: number;
+    carouselItems: string[];
+}
+
+export interface UpdateConfigInput {
+    _id: ObjectId;
+    highPointsThreshold: number;
+    topSoldThreshold: number;
+    carouselItems: string[];
+}
+
 export interface ProductsStatusFilterInput {
     equal?: Nullable<StatusType>;
     in?: Nullable<StatusType[]>;
@@ -116,6 +129,12 @@ export interface Node {
     _id: ObjectId;
 }
 
+export interface Config {
+    highPointsThreshold?: Nullable<number>;
+    topSoldThreshold?: Nullable<number>;
+    carouselItems?: Nullable<Nullable<string>[]>;
+}
+
 export interface Error {
     message: string;
 }
@@ -149,6 +168,20 @@ export interface Edge {
     node: Node;
 }
 
+export interface IQuery {
+    config(): Config | Promise<Config>;
+    products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
+}
+
+export interface IMutation {
+    createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateConfig(input: UpdateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
+    createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    deleteProduct(input: DeleteProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+}
+
 export interface FileSizeTooBigError extends Error {
     message: string;
 }
@@ -159,13 +192,6 @@ export interface FileFormatNotSupportedError extends Error {
 
 export interface FileNameTooLongError extends Error {
     message: string;
-}
-
-export interface IMutation {
-    uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
-    createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
-    updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
-    deleteProduct(input: DeleteProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
 }
 
 export interface Product extends Node {
@@ -186,10 +212,6 @@ export interface Product extends Node {
     sold?: Nullable<number>;
     vouchers?: Nullable<Voucher[]>;
     dateAdded?: Nullable<DateTime>;
-}
-
-export interface IQuery {
-    products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
 }
 
 export type JSON = Record<string, any>;

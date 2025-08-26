@@ -42,6 +42,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
       stock: context.pieces,
       status: context.status,
       thumbnail: context.thumbnail,
+      discountPercentage: context.discount,
       discountToggle: context.discount > 0,
     },
     resolver: zodResolver(SchemaDefinition),

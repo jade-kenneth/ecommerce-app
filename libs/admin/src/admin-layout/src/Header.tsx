@@ -1,3 +1,4 @@
+'use client';
 import { Avatar, Flex, Icon, Text } from '@chakra-ui/react';
 import { FaRegBell } from 'react-icons/fa';
 import { TbDoorExit } from 'react-icons/tb';

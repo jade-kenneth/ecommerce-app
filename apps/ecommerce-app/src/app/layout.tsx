@@ -1,6 +1,6 @@
 import { AuthProvider } from '@portal/auth';
-import { Provider } from '@portal/theme';
 
+import ToastContainer from 'libs/general/src/components/ToastContainer';
 import { ClientApolloProvider } from './client-layout';
 import './globals.css';
 
@@ -8,6 +8,9 @@ export const metadata = {
   title: 'Amy Store Web App',
   description: 'Your next gen shopping experience',
 };
+
+import { Provider } from '@portal/theme';
+
 export default function RootLayout({
   children,
 }: {
@@ -19,6 +22,7 @@ export default function RootLayout({
         <ClientApolloProvider>
           <AuthProvider>
             <Provider> {children}</Provider>
+            <ToastContainer />
           </AuthProvider>
         </ClientApolloProvider>
       </body>

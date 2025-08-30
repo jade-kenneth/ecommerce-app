@@ -1,3 +1,4 @@
+'use client';
 import { chakra, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { logoWhite } from '@global';
 import Image from 'next/image';

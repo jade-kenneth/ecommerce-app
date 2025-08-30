@@ -1,6 +1,12 @@
 import { ObjectType } from '@ecommerce-app/object-shared';
 import { ObjectId } from '@ecommerce/object-id';
-import { Button, Field, FieldInput, UploadFile } from '@global';
+import {
+  Button,
+  CarouselFileUpload,
+  Field,
+  FieldInput,
+  toaster,
+} from '@global';
 import {
   useConfigQuery,
   useCreateConfigMutation,
@@ -71,6 +77,7 @@ export function Settings() {
             },
           },
         });
+        toaster.success({ description: 'Configuration saved!' });
       })}
     >
       <h1 className="text-2xl font-bold mb-1">Settings</h1>
@@ -114,7 +121,7 @@ export function Settings() {
           return (
             <Field.Root className="mt-8">
               <Field.Label>Homepage Carousel</Field.Label>
-              <UploadFile
+              <CarouselFileUpload
                 maxFiles={5}
                 value={field.value}
                 onChange={field.onChange}

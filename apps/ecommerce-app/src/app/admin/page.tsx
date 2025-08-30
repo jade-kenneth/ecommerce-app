@@ -1,11 +1,7 @@
 'use client';
 
-import ManageProducts from './ManageProduct';
+import { ManageProducts } from '../manage-product';
 
 export default function Index() {
-  return (
-    <>
-      <ManageProducts />
-    </>
-  );
+  return <ManageProducts />;
 }

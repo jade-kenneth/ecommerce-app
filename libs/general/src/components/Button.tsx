@@ -1,7 +1,8 @@
+'use client';
 import type { ButtonProps, RecipeVariantProps } from '@chakra-ui/react';
-import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { buttonRecipe, colors } from '@portal/theme';
+import dynamic from 'next/dynamic';
 import { PropsWithChildren } from 'react';
 import { hexToRgba } from '../utils';
 
@@ -9,7 +10,12 @@ type ButtonVariantProps = RecipeVariantProps<ReturnType<typeof buttonRecipe>>;
 interface IButtonProps extends ButtonProps, ButtonVariantProps {
   colorTheme?: keyof typeof colors.colors;
 }
-
+const ChakraButton = dynamic(
+  () => import('@chakra-ui/react').then((mod) => mod.Button),
+  {
+    ssr: false,
+  }
+);
 export const Button = ({
   colorTheme = 'primary',
   ...props

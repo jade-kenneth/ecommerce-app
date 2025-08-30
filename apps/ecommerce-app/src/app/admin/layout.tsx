@@ -9,11 +9,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="overflow-x-hidden">
-        <AdminLayout>{children}</AdminLayout>
-      </body>
-    </html>
-  );
+  return <AdminLayout>{children}</AdminLayout>;
 }

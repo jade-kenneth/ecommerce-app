@@ -1,3 +1,4 @@
+'use client';
 import {
   CloseButton,
   Dialog,
@@ -56,8 +57,6 @@ export const CreateProduct = (props: AddProductButtonProps) => {
 
   const price = parseFloat(form.watch('price') || '0');
 
-  console.log(form.watch(), 'watch');
-  console.log(form.formState.errors, 'errors');
   return (
     <Dialog.Root closeOnInteractOutside open={disclosure.open}>
       <Flex justify={'space-between'} w="full">

@@ -62,12 +62,12 @@ export function CarouselFileUpload({
         <div className="flex flex-wrap gap-2 mt-2">
           {value.map((file, index) => {
             return (
-              <div className="relative w-[100px] h-[100px] rounded-md overflow-hidden">
+              <div className="relative rounded-md w-[200px] h-[200px] overflow-hidden">
                 <Image
                   src={file}
                   alt="thumbnail"
                   fill
-                  className="object-cover"
+                  className="object-cover  aspect-[1/1] "
                 />
 
                 <div

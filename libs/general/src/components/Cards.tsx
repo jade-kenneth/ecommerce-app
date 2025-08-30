@@ -4,7 +4,11 @@ import Image from 'next/image';
 import { FaHeart, FaStar } from 'react-icons/fa';
 import { medal } from '../images';
 
-export const Cards = (props: ProductCoreDataFragment) => {
+interface CardsProps extends ProductCoreDataFragment {
+  isTopSold?: boolean;
+  isHighPoint?: boolean;
+}
+export const Cards = (props: CardsProps) => {
   const discount = parseFloat(
     (props.price * (props.discount / 100)).toFixed(2)
   );
@@ -43,7 +47,7 @@ export const Cards = (props: ProductCoreDataFragment) => {
           top={3}
           left={3}
         >
-          {true && (
+          {props.isTopSold && (
             <Flex
               bg="colors.error.600"
               width={'62px'}
@@ -59,7 +63,7 @@ export const Cards = (props: ProductCoreDataFragment) => {
               <Text sizes={'paragraph-xs'}>TOP</Text>
             </Flex>
           )}
-          {true && (
+          {props.isHighPoint && (
             <Flex
               bg="colors.success.700"
               height={'26px'}

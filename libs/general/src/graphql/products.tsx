@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Tue, 15 Jul 2025 02:36:33 GMT
+// Last modified: Wed, 27 Aug 2025 12:51:08 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -53,6 +53,13 @@ export enum CategoryType {
   Snacks = 'SNACKS',
   Sweets = 'SWEETS',
 }
+
+export type CreateConfigInput = {
+  _id: Scalars['ObjectID']['input'];
+  carouselItems: Array<Scalars['String']['input']>;
+  highPointsThreshold: Scalars['Int']['input'];
+  topSoldThreshold: Scalars['Int']['input'];
+};
 
 export type CreateProductInput = {
   _id: Scalars['ObjectID']['input'];
@@ -113,6 +120,13 @@ export enum StatusType {
   Inactive = 'INACTIVE',
   SoldOut = 'SOLD_OUT',
 }
+
+export type UpdateConfigInput = {
+  _id: Scalars['ObjectID']['input'];
+  carouselItems: Array<Scalars['String']['input']>;
+  highPointsThreshold: Scalars['Int']['input'];
+  topSoldThreshold: Scalars['Int']['input'];
+};
 
 export type UpdateProductInput = {
   _id: Scalars['ObjectID']['input'];
@@ -223,6 +237,72 @@ export type DeleteProductMutationVariables = Exact<{
 export type DeleteProductMutation = {
   __typename: 'Mutation';
   deleteProduct?: boolean | null;
+};
+
+export type ConfigQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ConfigQuery = {
+  __typename: 'Query';
+  config: {
+    __typename: 'Config';
+    _id: string;
+    highPointsThreshold?: number | null;
+    topSoldThreshold?: number | null;
+    carouselItems: Array<string>;
+  };
+};
+
+export type CreateConfigMutationVariables = Exact<{
+  input: CreateConfigInput;
+}>;
+
+export type CreateConfigMutation = {
+  __typename: 'Mutation';
+  createConfig?: boolean | null;
+};
+
+export type UpdateConfigMutationVariables = Exact<{
+  input: UpdateConfigInput;
+}>;
+
+export type UpdateConfigMutation = {
+  __typename: 'Mutation';
+  updateConfig?: boolean | null;
+};
+
+export type HighPointProductsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<ProductsFilterInput>;
+}>;
+
+export type HighPointProductsQuery = {
+  __typename: 'Query';
+  highPointProducts: {
+    __typename: 'Connection';
+    totalCount: number;
+    pageInfo: {
+      __typename: 'PageInfo';
+      hasNextPage: boolean;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename: 'Edge';
+      cursor: string;
+      node: {
+        __typename: 'Product';
+        _id: string;
+        name: string;
+        price: number;
+        points: string;
+        pieces: number;
+        status: StatusType;
+        discount: number;
+        category?: Array<CategoryType> | null;
+        thumbnail: string;
+      };
+    }>;
+  };
 };
 
 export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
@@ -425,3 +505,198 @@ export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<
   DeleteProductMutation,
   DeleteProductMutationVariables
 >;
+export const ConfigDocument = /*#__PURE__*/ gql`
+  query Config {
+    config {
+      _id
+      highPointsThreshold
+      topSoldThreshold
+      carouselItems
+    }
+  }
+`;
+export function useConfigQuery(
+  baseOptions?: Apollo.QueryHookOptions<ConfigQuery, ConfigQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ConfigQuery, ConfigQueryVariables>(
+    ConfigDocument,
+    options
+  );
+}
+export function useConfigLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ConfigQuery, ConfigQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ConfigQuery, ConfigQueryVariables>(
+    ConfigDocument,
+    options
+  );
+}
+export function useConfigSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ConfigQuery, ConfigQueryVariables>(
+    ConfigDocument,
+    options
+  );
+}
+export type ConfigQueryHookResult = ReturnType<typeof useConfigQuery>;
+export type ConfigLazyQueryHookResult = ReturnType<typeof useConfigLazyQuery>;
+export type ConfigSuspenseQueryHookResult = ReturnType<
+  typeof useConfigSuspenseQuery
+>;
+export type ConfigQueryResult = Apollo.QueryResult<
+  ConfigQuery,
+  ConfigQueryVariables
+>;
+export function refetchConfigQuery(variables?: ConfigQueryVariables) {
+  return { query: ConfigDocument, variables: variables };
+}
+export const CreateConfigDocument = /*#__PURE__*/ gql`
+  mutation CreateConfig($input: CreateConfigInput!) {
+    createConfig(input: $input)
+  }
+`;
+export type CreateConfigMutationFn = Apollo.MutationFunction<
+  CreateConfigMutation,
+  CreateConfigMutationVariables
+>;
+export function useCreateConfigMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateConfigMutation,
+    CreateConfigMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateConfigMutation,
+    CreateConfigMutationVariables
+  >(CreateConfigDocument, options);
+}
+export type CreateConfigMutationHookResult = ReturnType<
+  typeof useCreateConfigMutation
+>;
+export type CreateConfigMutationResult =
+  Apollo.MutationResult<CreateConfigMutation>;
+export type CreateConfigMutationOptions = Apollo.BaseMutationOptions<
+  CreateConfigMutation,
+  CreateConfigMutationVariables
+>;
+export const UpdateConfigDocument = /*#__PURE__*/ gql`
+  mutation UpdateConfig($input: UpdateConfigInput!) {
+    updateConfig(input: $input)
+  }
+`;
+export type UpdateConfigMutationFn = Apollo.MutationFunction<
+  UpdateConfigMutation,
+  UpdateConfigMutationVariables
+>;
+export function useUpdateConfigMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateConfigMutation,
+    UpdateConfigMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateConfigMutation,
+    UpdateConfigMutationVariables
+  >(UpdateConfigDocument, options);
+}
+export type UpdateConfigMutationHookResult = ReturnType<
+  typeof useUpdateConfigMutation
+>;
+export type UpdateConfigMutationResult =
+  Apollo.MutationResult<UpdateConfigMutation>;
+export type UpdateConfigMutationOptions = Apollo.BaseMutationOptions<
+  UpdateConfigMutation,
+  UpdateConfigMutationVariables
+>;
+export const HighPointProductsDocument = /*#__PURE__*/ gql`
+  query HighPointProducts(
+    $first: Int
+    $after: Cursor
+    $filter: ProductsFilterInput
+  ) {
+    highPointProducts(first: $first, after: $after, filter: $filter) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          ...ProductCoreData
+        }
+      }
+      totalCount
+    }
+  }
+  ${ProductCoreDataFragmentDoc}
+`;
+export function useHighPointProductsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    HighPointProductsQuery,
+    HighPointProductsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    HighPointProductsQuery,
+    HighPointProductsQueryVariables
+  >(HighPointProductsDocument, options);
+}
+export function useHighPointProductsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HighPointProductsQuery,
+    HighPointProductsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HighPointProductsQuery,
+    HighPointProductsQueryVariables
+  >(HighPointProductsDocument, options);
+}
+export function useHighPointProductsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        HighPointProductsQuery,
+        HighPointProductsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    HighPointProductsQuery,
+    HighPointProductsQueryVariables
+  >(HighPointProductsDocument, options);
+}
+export type HighPointProductsQueryHookResult = ReturnType<
+  typeof useHighPointProductsQuery
+>;
+export type HighPointProductsLazyQueryHookResult = ReturnType<
+  typeof useHighPointProductsLazyQuery
+>;
+export type HighPointProductsSuspenseQueryHookResult = ReturnType<
+  typeof useHighPointProductsSuspenseQuery
+>;
+export type HighPointProductsQueryResult = Apollo.QueryResult<
+  HighPointProductsQuery,
+  HighPointProductsQueryVariables
+>;
+export function refetchHighPointProductsQuery(
+  variables?: HighPointProductsQueryVariables
+) {
+  return { query: HighPointProductsDocument, variables: variables };
+}

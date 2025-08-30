@@ -1,28 +1,132 @@
-import { Field, FieldInput, UploadFile } from '@global';
+import { ObjectType } from '@ecommerce-app/object-shared';
+import { ObjectId } from '@ecommerce/object-id';
+import { Button, Field, FieldInput, UploadFile } from '@global';
+import {
+  useConfigQuery,
+  useCreateConfigMutation,
+  useUpdateConfigMutation,
+} from '@graphql/products';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const Definition = z.object({
+  highPointsThreshold: z.string().min(0).default('0'),
+  topSoldThreshold: z.string().min(0).default('0'),
+  carouselItems: z.array(z.string()).default([]),
+});
 
 export function Settings() {
+  const { data } = useConfigQuery();
+  const config = data?.config;
+
+  const form = useForm({
+    resolver: zodResolver(Definition),
+  });
+
+  const [update] = useUpdateConfigMutation();
+  const [create] = useCreateConfigMutation();
+
+  useMemo(
+    () =>
+      form.reset({
+        highPointsThreshold: config?.highPointsThreshold?.toString() || '0',
+        topSoldThreshold: config?.topSoldThreshold?.toString() || '0',
+        carouselItems: config?.carouselItems ?? [],
+      }),
+    [data]
+  );
+
   return (
-    <div className="p-7">
+    <form
+      className="p-7"
+      onSubmit={form.handleSubmit(async (data) => {
+        if (!config?._id) {
+          const generatedId = ObjectId.generate(
+            ObjectType.Config
+          ).toHexString();
+
+          await create({
+            variables: {
+              input: {
+                _id: generatedId,
+                highPointsThreshold: parseInt(data.highPointsThreshold, 10),
+                topSoldThreshold: parseInt(data.topSoldThreshold, 10),
+                carouselItems: data.carouselItems || [],
+              },
+            },
+          });
+
+          return;
+        }
+
+        await update({
+          variables: {
+            input: {
+              _id: config?._id || '',
+              highPointsThreshold: parseInt(data.highPointsThreshold, 10),
+              topSoldThreshold: parseInt(data.topSoldThreshold, 10),
+              carouselItems: data.carouselItems || [],
+            },
+          },
+        });
+      })}
+    >
       <h1 className="text-2xl font-bold mb-1">Settings</h1>
       <p className="text-xl">Manage your application settings here.</p>
 
-      <FieldInput
-        className="mt-8 w-[300px]"
-        required
-        label="High points threshold"
-        value="0"
+      <Controller
+        name={'highPointsThreshold'}
+        control={form.control}
+        render={({ field }) => {
+          return (
+            <FieldInput
+              value={field.value?.toString() || '0'}
+              onChange={field.onChange}
+              className="mt-8 w-[300px]"
+              required
+              label="High points threshold"
+            />
+          );
+        }}
       />
-      <FieldInput
-        className="mt-8 w-[300px]"
-        required
-        label="Top sold threshold"
-        value="0"
+      <Controller
+        control={form.control}
+        name="topSoldThreshold"
+        render={({ field }) => {
+          return (
+            <FieldInput
+              value={field.value?.toString() || '0'}
+              onChange={field.onChange}
+              className="mt-8 w-[300px]"
+              required
+              label="Top sold threshold"
+            />
+          );
+        }}
       />
 
-      <Field.Root className="mt-8">
-        <Field.Label>Homepage Carousel</Field.Label>
-        <UploadFile maxFiles={5} />
-      </Field.Root>
-    </div>
+      <Controller
+        control={form.control}
+        name="carouselItems"
+        render={({ field }) => {
+          return (
+            <Field.Root className="mt-8">
+              <Field.Label>Homepage Carousel</Field.Label>
+              <UploadFile
+                maxFiles={5}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </Field.Root>
+          );
+        }}
+      />
+
+      <Button type="submit" className="mt-4">
+        Save Changes
+      </Button>
+    </form>
   );
 }

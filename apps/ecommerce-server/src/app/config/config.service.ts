@@ -1,5 +1,3 @@
-import { ObjectType } from '@ecommerce-app/object-shared';
-import { ObjectId } from '@ecommerce/object-id';
 import { Inject, Injectable } from '@nestjs/common';
 import { Tokens } from '../../types/tokens';
 import {
@@ -14,12 +12,12 @@ export class ConfigService {
 
   public async getConfig(): Promise<Config> {
     const config = await this.config.list({}).collect();
+
     return config[0];
   }
 
   public async createConfig(params: CreateConfigInput) {
-    const generateId = ObjectId.generate(ObjectType.Config);
-    await this.config.create({ _id: generateId, ...params });
+    await this.config.create(params);
   }
 
   public async updateConfig(params: UpdateConfigInput) {
@@ -33,5 +31,10 @@ export class ConfigService {
         console.error(err, 'error updating config');
         return;
       });
+  }
+
+  public async getHighPointsThreshold() {
+    const { highPointsThreshold } = await this.getConfig();
+    return highPointsThreshold;
   }
 }

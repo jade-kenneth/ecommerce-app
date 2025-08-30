@@ -1,10 +1,12 @@
-interface Config {
+type Config {
+  _id: ObjectId!
   highPointsThreshold: Int
   topSoldThreshold: Int
-  carouselItems: [String]
+  carouselItems: [String!]!
 }
 
 input CreateConfigInput {
+  _id: ObjectId!
   highPointsThreshold: Int!
   topSoldThreshold: Int!
   carouselItems: [String!]!
@@ -20,6 +22,7 @@ input UpdateConfigInput {
 type Query {
   config: Config!
 }
+
 type Mutation {
   createConfig(input: CreateConfigInput!): Boolean
 }

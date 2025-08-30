@@ -12,14 +12,17 @@ import { ObjectId } from '@ecommerce/object-id';
 import { Connection, Filter } from '../../libs/repository';
 import { generateCursor } from '../../util/generate-cursor';
 
+import Decimal from 'decimal.js';
 import { Tokens } from '../../types/tokens';
+import { ConfigService } from '../config/config.service';
 import { ProductRepository } from './repositories/products.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @Inject(Tokens.ProductRepositoryToken)
-    private products: ProductRepository
+    private products: ProductRepository,
+    private configService: ConfigService
   ) {}
 
   public async getProducts(params: {
@@ -68,5 +71,24 @@ export class ProductsService {
     } catch (error) {
       console.error('Error deleting product:', error);
     }
+  }
+
+  public async getHighPointsProducts(params: {
+    first?: number;
+    after?: string;
+    filter: Filter<Product>;
+  }): Promise<Connection<Product>> {
+    const { filter = {}, after, first } = params;
+    const highPoint = await this.configService.getHighPointsThreshold();
+    const data = await this.products
+      .list({
+        ...filter,
+        points: {
+          greaterThanOrEqual: new Decimal(highPoint),
+        },
+      })
+      .connection({ after, first, order: 'desc' });
+
+    return data;
   }
 }

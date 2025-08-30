@@ -37,3 +37,39 @@ mutation UpdateProduct($input: UpdateProductInput!) {
 mutation DeleteProduct($input: DeleteProductInput!) {
   deleteProduct(input: $input)
 }
+
+query Config {
+  config {
+    _id
+    highPointsThreshold
+    topSoldThreshold
+    carouselItems
+  }
+}
+mutation CreateConfig($input: CreateConfigInput!) {
+  createConfig(input: $input)
+}
+mutation UpdateConfig($input: UpdateConfigInput!) {
+  updateConfig(input: $input)
+}
+
+query HighPointProducts(
+  $first: Int
+  $after: Cursor
+  $filter: ProductsFilterInput
+) {
+  highPointProducts(first: $first, after: $after, filter: $filter) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+
+    edges {
+      cursor
+      node {
+        ...ProductCoreData
+      }
+    }
+    totalCount
+  }
+}

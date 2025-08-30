@@ -22,6 +22,15 @@ export class ProductResolver {
     return this.productService.getProducts({ filter, after, first });
   }
 
+  @Query('highPointProducts')
+  async highPointProducts(
+    @Args('first') first: number,
+    @Args('after') after: string,
+    @Args('filter') filter?: Filter<Product>
+  ) {
+    return this.productService.getHighPointsProducts({ filter, after, first });
+  }
+
   @Mutation('createProduct')
   async createProduct(@Args('input') input: CreateProductInput) {
     return this.productService.createProduct(input);

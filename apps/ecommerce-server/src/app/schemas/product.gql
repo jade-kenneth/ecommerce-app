@@ -69,6 +69,14 @@ input ProductsFilterInput {
 type Query {
   products(first: Int, after: Cursor, filter: ProductsFilterInput): Connection!
 }
+
+type Query {
+  highPointProducts(
+    first: Int
+    after: Cursor
+    filter: ProductsFilterInput
+  ): Connection!
+}
 input KeyValuePairInput {
   key: String!
   value: String!

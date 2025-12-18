@@ -1,6 +1,7 @@
 import { ObjectType } from '@ecommerce-app/object-shared';
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Node } from '../../types/common';
+
 const OBJECT_TYPE_TO_NODE_TYPE_MAPPING = {
   [ObjectType.Product]: 'Product',
 };

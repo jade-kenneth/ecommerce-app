@@ -1,0 +1,17 @@
+enum AccountType {
+  ADMIN
+  MEMBER
+}
+input CreateAccountInput {
+  _id: ObjectId
+  emailAddress: String!
+  password: String!
+  mobileNumber: String
+}
+
+type Mutation {
+  createAdminAccount(input: CreateAccountInput!): Boolean
+}
+type Mutation {
+  createMemberAccount(input: CreateAccountInput!): Boolean
+}

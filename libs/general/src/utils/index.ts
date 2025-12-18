@@ -6,5 +6,6 @@ export * from './createSplitProps';
 export * from './dataAttr';
 export * from './hexToRgba';
 export * from './numberFormatter';
+export * from './sha256';
 export * from './useControllableState';
 export * from './usePaginated';

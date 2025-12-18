@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useProductsQuery } from '@graphql/products';
+import { useProductsQuery } from '@graphql/generated';
 import { FunctionComponent } from 'react';
 import { LuArrowDown } from 'react-icons/lu';
 import { Button } from './Button';

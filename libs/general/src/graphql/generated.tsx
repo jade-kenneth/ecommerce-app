@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Wed, 27 Aug 2025 12:51:08 GMT
+// Last modified: Thu, 18 Dec 2025 06:23:18 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -40,6 +40,11 @@ export type Scalars = {
   Upload: { input: File; output: File };
 };
 
+export enum AccountType {
+  Admin = 'ADMIN',
+  Member = 'MEMBER',
+}
+
 export enum CategoryType {
   Beverages = 'BEVERAGES',
   Canned = 'CANNED',
@@ -53,6 +58,13 @@ export enum CategoryType {
   Snacks = 'SNACKS',
   Sweets = 'SWEETS',
 }
+
+export type CreateAccountInput = {
+  _id?: InputMaybe<Scalars['ObjectID']['input']>;
+  emailAddress: Scalars['String']['input'];
+  mobileNumber?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+};
 
 export type CreateConfigInput = {
   _id: Scalars['ObjectID']['input'];
@@ -153,6 +165,24 @@ export type VoucherInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   value?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CreateMemberAccountMutationVariables = Exact<{
+  input: CreateAccountInput;
+}>;
+
+export type CreateMemberAccountMutation = {
+  __typename: 'Mutation';
+  createMemberAccount?: boolean | null;
+};
+
+export type CreateAdminAccountMutationVariables = Exact<{
+  input: CreateAccountInput;
+}>;
+
+export type CreateAdminAccountMutation = {
+  __typename: 'Mutation';
+  createAdminAccount?: boolean | null;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -318,6 +348,66 @@ export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
     thumbnail
   }
 `;
+export const CreateMemberAccountDocument = /*#__PURE__*/ gql`
+  mutation CreateMemberAccount($input: CreateAccountInput!) {
+    createMemberAccount(input: $input)
+  }
+`;
+export type CreateMemberAccountMutationFn = Apollo.MutationFunction<
+  CreateMemberAccountMutation,
+  CreateMemberAccountMutationVariables
+>;
+export function useCreateMemberAccountMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateMemberAccountMutation,
+    CreateMemberAccountMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateMemberAccountMutation,
+    CreateMemberAccountMutationVariables
+  >(CreateMemberAccountDocument, options);
+}
+export type CreateMemberAccountMutationHookResult = ReturnType<
+  typeof useCreateMemberAccountMutation
+>;
+export type CreateMemberAccountMutationResult =
+  Apollo.MutationResult<CreateMemberAccountMutation>;
+export type CreateMemberAccountMutationOptions = Apollo.BaseMutationOptions<
+  CreateMemberAccountMutation,
+  CreateMemberAccountMutationVariables
+>;
+export const CreateAdminAccountDocument = /*#__PURE__*/ gql`
+  mutation CreateAdminAccount($input: CreateAccountInput!) {
+    createAdminAccount(input: $input)
+  }
+`;
+export type CreateAdminAccountMutationFn = Apollo.MutationFunction<
+  CreateAdminAccountMutation,
+  CreateAdminAccountMutationVariables
+>;
+export function useCreateAdminAccountMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAdminAccountMutation,
+    CreateAdminAccountMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateAdminAccountMutation,
+    CreateAdminAccountMutationVariables
+  >(CreateAdminAccountDocument, options);
+}
+export type CreateAdminAccountMutationHookResult = ReturnType<
+  typeof useCreateAdminAccountMutation
+>;
+export type CreateAdminAccountMutationResult =
+  Apollo.MutationResult<CreateAdminAccountMutation>;
+export type CreateAdminAccountMutationOptions = Apollo.BaseMutationOptions<
+  CreateAdminAccountMutation,
+  CreateAdminAccountMutationVariables
+>;
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file)

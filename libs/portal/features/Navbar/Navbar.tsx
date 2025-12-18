@@ -3,14 +3,14 @@ import {
   Button,
   CartIcon,
   ColorModeButton,
-  Input,
+  DebounceInput,
   logo,
   SearchIcon,
   UserIcon,
 } from '@global';
 import Image from 'next/image';
 import { FunctionComponent } from 'react';
-import { Login } from './Login';
+import { AuthForm } from './AuthForm';
 interface NavbarProps {
   logoSrc?: string;
 }
@@ -30,7 +30,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
         alt="brand"
         style={{ height: '32px', width: '133px' }}
       />
-      <Input
+      <DebounceInput
         rounded={'32px'}
         h="48px"
         hasDebounce
@@ -76,15 +76,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc = logo }) => {
         <HStack as="button" cursor={'pointer'} role="button" px="20px">
           <UserIcon />
 
-          <Login>
-            {({ onOpen }) => {
-              return (
-                <Text sizes={'paragraph-sm'} onClick={onOpen}>
-                  Register / Log In
-                </Text>
-              );
-            }}
-          </Login>
+          <AuthForm />
         </HStack>
         <HStack as="button" cursor={'pointer'} role="button" px="20px">
           <CartIcon />

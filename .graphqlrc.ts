@@ -77,10 +77,10 @@ function createAdminConfig(
 }
 
 const projects = {
-  'ecommerce-app.admin.products': createAdminConfig(
+  'ecommerce-app.admin': createAdminConfig(
     NEXT_PUBLIC_PORTAL_API,
-    './libs/general/src/graphql/product/**/*.gql',
-    './libs/general/src/graphql/products.tsx'
+    './libs/general/src/graphql/**/*.gql',
+    './libs/general/src/graphql/generated.tsx'
   ),
 };
 

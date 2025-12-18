@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { useHighPointProductsQuery } from '@graphql/products';
+import { useHighPointProductsQuery } from '@graphql/generated';
 import { FunctionComponent } from 'react';
 import { Cards } from './Cards';
 import Container from './Container';

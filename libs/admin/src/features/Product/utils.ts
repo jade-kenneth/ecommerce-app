@@ -1,4 +1,4 @@
-import { CategoryType, StatusType } from '@graphql/products';
+import { CategoryType, StatusType } from '@graphql/generated';
 import * as z from 'zod';
 export const SchemaDefinition = z
   .object({

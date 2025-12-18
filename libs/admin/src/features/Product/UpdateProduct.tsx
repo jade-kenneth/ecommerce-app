@@ -14,7 +14,7 @@ import {
   ProductCoreDataFragment,
   StatusType,
   useUpdateProductMutation,
-} from '@graphql/products';
+} from '@graphql/generated';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox } from 'libs/general/src/components/ui/Checkbox';
 import { Controller, useForm } from 'react-hook-form';

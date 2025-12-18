@@ -1,0 +1,6 @@
+mutation CreateMemberAccount($input: CreateAccountInput!) {
+  createMemberAccount(input: $input)
+}
+mutation CreateAdminAccount($input: CreateAccountInput!) {
+  createAdminAccount(input: $input)
+}

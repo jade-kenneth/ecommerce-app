@@ -22,6 +22,7 @@ import { ConfigModule } from './config/config.module';
 import { ProductsModule } from './products/products.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { UploadModule } from './upload/upload/upload.module';
+import { AccountModule } from './user-session/account/account.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -53,6 +54,7 @@ import { UploadModule } from './upload/upload/upload.module';
         return options;
       },
     }),
+    AccountModule,
     ProductsModule,
     NodeResolver,
     UploadModule,

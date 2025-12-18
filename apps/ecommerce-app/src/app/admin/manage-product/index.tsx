@@ -22,7 +22,7 @@ import {
   ProductsQueryVariables,
   StatusType,
   useProductsQuery,
-} from '@graphql/products';
+} from '@graphql/generated';
 import Image from 'next/image';
 import { Reducer, useReducer } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';

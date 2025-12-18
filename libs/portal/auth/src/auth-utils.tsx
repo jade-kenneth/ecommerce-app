@@ -8,10 +8,10 @@ import {
   useState,
 } from 'react';
 
+import axios from 'axios';
 import { getMaintenance } from './portal/maintenance';
 import { createSession } from './session-utils';
 import { Maintenance, Session } from './type';
-
 interface CreateAuthProviderConfig {
   getSessionFn: ReturnType<typeof createSession>;
   getMaintenanceFn: ReturnType<typeof getMaintenance>;
@@ -20,6 +20,14 @@ interface CreateAuthProviderConfig {
 interface AuthState {
   session: Session;
   maintenance: Maintenance;
+}
+
+const create_session = () => {
+  const response = axios.post;
+};
+
+export async function login() {
+  throw new Error('Not implemented');
 }
 
 export const createAuthProvider = ({

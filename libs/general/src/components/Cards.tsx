@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { ProductCoreDataFragment } from '@graphql/products';
+import { ProductCoreDataFragment } from '@graphql/generated';
 import Image from 'next/image';
 import { FaHeart, FaStar } from 'react-icons/fa';
 import { medal } from '../images';

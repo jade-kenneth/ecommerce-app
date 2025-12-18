@@ -4,6 +4,8 @@ import {
   InputProps as ChakraInputProps,
   useControllableState,
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useDebounceCallback } from 'usehooks-ts';
 import { InputGroup, InputGroupProps } from './chakra__prebuilts';
 
 /**
@@ -24,9 +26,11 @@ interface IInputProps extends Omit<ChakraInputProps, 'onChange' | 'value'> {
   debounceDelay?: number;
 }
 
-export const Input = ({
+export const DebounceInput = ({
   inputGroupProps,
   onChange: onChangeProps,
+  debounceDelay = 250,
+  hasDebounce = true,
   value: valueProp,
   ...props
 }: IInputProps) => {
@@ -35,13 +39,20 @@ export const Input = ({
     onChange: onChangeProps,
   });
 
+  const debounceSetValue = useDebounceCallback(setValue, debounceDelay);
+
+  const [internalValue, setInternalValue] = useState(value);
+
   return (
     <InputGroup w="full" {...inputGroupProps}>
       <ChakraInput
-        value={value}
+        value={internalValue}
         fontSize="14px"
         onChange={(e) => {
-          setValue(e.target.value);
+          hasDebounce
+            ? debounceSetValue(e.target.value)
+            : setValue(e.target.value);
+          setInternalValue(e.target.value);
         }}
         {...props}
       />

@@ -1,6 +1,6 @@
 import { CloseButton, Dialog, Portal, useDisclosure } from '@chakra-ui/react';
 import { Spinner } from '@global';
-import { useDeleteProductMutation } from '@graphql/products';
+import { useDeleteProductMutation } from '@graphql/generated';
 import { FaTrash } from 'react-icons/fa';
 import { useProductProviderContext } from './ProductContext';
 

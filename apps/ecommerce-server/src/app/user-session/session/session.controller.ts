@@ -1,6 +1,5 @@
-import { ObjectType } from '@ecommerce-app/object-shared';
-import { ObjectId } from '@ecommerce/object-id';
 import {
+  Controller,
   ForbiddenException,
   InternalServerErrorException,
   Post,
@@ -8,10 +7,14 @@ import {
 } from '@nestjs/common';
 import ms from 'ms';
 import { AuthRequest, TokenType } from '../types';
-import { JwtService } from './jwt.service';
-import { Session, SessionStatus } from './repositories/session.repository';
-import { SessionService } from './session.service';
 
+import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
+
+import { ObjectType } from 'apps/ecommerce-server/src/libs/object-shared';
+import { JwtService } from '../jwt/jwt.service';
+import { Session } from './repositories/session.repository';
+import { SessionService } from './session.service';
+@Controller()
 export class SessionController {
   constructor(
     private readonly session: SessionService,
@@ -26,17 +29,15 @@ export class SessionController {
       Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
       604800
     );
-    const { user, ipAddress, location } = request;
+
+    const { user } = request.body;
+
     const session: Session = {
       _id: ObjectId.generate(ObjectType.Session),
       account: user._id,
       // jti: randomBytes(12),
       dateTimeCreated: timestamp,
       dateTimeLastRefreshed: timestamp,
-      fingerprint: <string>request.headers['fingerprint'] ?? null,
-      status: request.forVerification
-        ? SessionStatus.PENDING
-        : SessionStatus.READY,
     };
 
     try {
@@ -63,7 +64,7 @@ export class SessionController {
       );
       return {
         session: {
-          id: session._id.toString(),
+          id: session._id,
           dateTimeCreated: session.dateTimeCreated.toISOString(),
         },
         accessToken,

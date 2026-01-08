@@ -1,33 +1,27 @@
-import { ObjectType } from '@ecommerce-app/object-shared';
-import { ObjectId } from '@ecommerce/object-id';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as R from 'ramda';
 import { CreateAccountInput } from '../../__generated/graphql-types';
 import { AccountService } from './account.service';
-@Resolver('AccountResolver')
+@Resolver('Accounts')
 export class AccountResolver {
   constructor(private readonly account: AccountService) {}
 
   @Mutation('createMemberAccount')
   async createMemberAccount(@Args('input') input: CreateAccountInput) {
     const data = {
-      ...R.pick(['emailAddress', 'password'], input),
-      _id:
-        input._id ?? ObjectId.generate(ObjectType.MemberAccount).toHexString(),
+      ...R.pick(['emailAddress', 'password', '_id'], input),
     };
-    await this.account.createMemberAccount(data).catch(async (err) => {
-      throw err;
-    });
+    return this.account.createMemberAccount(data);
   }
   @Mutation('createAdminAccount')
   async createAdminAccount(@Args('input') input: CreateAccountInput) {
     const data = {
-      ...R.pick(['emailAddress', 'password'], input),
-      _id:
-        input._id ?? ObjectId.generate(ObjectType.AdminAccount).toHexString(),
+      ...R.pick(['emailAddress', 'password', '_id'], input),
     };
-    await this.account.createAdminAccount(data).catch(async (err) => {
-      throw err;
-    });
+    return this.account.createAdminAccount(data);
+  }
+  @Query('memberAccounts')
+  async memberAccounts() {
+    return await this.account.memberAccounts();
   }
 }

@@ -19,12 +19,17 @@ import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
 import { AppService } from './app.service';
 import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
 import { ProductsModule } from './products/products.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { UploadModule } from './upload/upload/upload.module';
 import { AccountModule } from './user-session/account/account.module';
+import { JwtModule } from './user-session/jwt/jwt.module';
+import { SessionController } from './user-session/session/session.controller';
+import { SessionModule } from './user-session/session/session.module';
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       useFactory: async () => ({
         uri: process.env.DATABASE_MONGODB_URI,
@@ -54,14 +59,25 @@ import { AccountModule } from './user-session/account/account.module';
         return options;
       },
     }),
+    JwtModule.forRootAsync({
+      useFactory: async (config: ConfigService) => ({
+        secret: config.getString('JWT_SECRET_KEY'),
+        oldSecret: config.getString('OLD_JWT_SECRET_KEY', {
+          optional: true,
+        }),
+      }),
+      inject: [ConfigService],
+    }),
     AccountModule,
     ProductsModule,
     NodeResolver,
     UploadModule,
     ConfigModule,
+    SessionModule,
   ],
 
   providers: [AppService],
+  controllers: [SessionController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

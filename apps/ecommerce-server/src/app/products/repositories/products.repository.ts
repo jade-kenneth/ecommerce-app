@@ -1,6 +1,6 @@
 import { Connection } from 'mongoose';
 
-import { ObjectId } from '@ecommerce/object-id';
+import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import Decimal from 'decimal.js';
 import { Decimal128 } from 'mongodb';
 import { MongooseRepository } from '../../../libs/mongoose-repository';

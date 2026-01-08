@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ObjectId } from '@ecommerce/object-id';
+import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import { AccountType } from 'apps/ecommerce-server/src/types/common';
 import bcrypt from 'bcrypt';
 import { Filter } from '../../../libs/repository';
@@ -46,6 +46,10 @@ export class AccountService {
   // async deleteAccounts(filter: Filter<Pick<Account, 'platform'>>) {
   //   await this.accounts.delete(filter, { writeConcern: 'primary' });
   // }
+
+  async memberAccounts() {
+    return await this.accounts.list().collect();
+  }
 
   async findAccount(filter: ObjectId | Filter<Account>) {
     return this.accounts.find(filter);

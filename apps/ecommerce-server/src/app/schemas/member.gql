@@ -3,15 +3,22 @@ enum AccountType {
   MEMBER
 }
 input CreateAccountInput {
-  _id: ObjectId
+  _id: ObjectId!
   emailAddress: String!
   password: String!
   mobileNumber: String
 }
-
+type Account {
+  _id: ObjectId
+  emailAddress: String!
+  role: String!
+}
 type Mutation {
   createAdminAccount(input: CreateAccountInput!): Boolean
 }
 type Mutation {
   createMemberAccount(input: CreateAccountInput!): Boolean
+}
+type Query {
+  memberAccounts: [Account!]!
 }

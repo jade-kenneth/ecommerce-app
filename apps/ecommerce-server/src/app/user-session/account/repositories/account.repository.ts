@@ -1,11 +1,11 @@
-import { ObjectId } from '@ecommerce/object-id';
 import { MongooseRepository } from 'apps/ecommerce-server/src/libs/mongoose-repository';
+import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import { Repository } from 'apps/ecommerce-server/src/libs/repository';
 
 import { AccountType } from 'apps/ecommerce-server/src/types/common';
 import { Connection } from 'mongoose';
 
-export type Account = Node & {
+export type Account = {
   _id: ObjectId;
   // platform?: ObjectId | null;
   // name: string;
@@ -17,20 +17,20 @@ export type Account = Node & {
   mobileNumber?: string;
   // twoFADetails?: TwoFADetails;
 } & (
-    | {
-        role: AccountType.Admin;
-      }
-    | {
-        role: AccountType.Member;
-        // secretQuestion?: string;
-        // secretAnswer?: string;
-        // mobileNumber?: string;
-        // facebookDetails?: FacebookDetails;
-        // googleDetails?: GoogleDetails;
+  | {
+      role: AccountType.Admin;
+    }
+  | {
+      role: AccountType.Member;
+      // secretQuestion?: string;
+      // secretAnswer?: string;
+      // mobileNumber?: string;
+      // facebookDetails?: FacebookDetails;
+      // googleDetails?: GoogleDetails;
 
-        // verified?: boolean;
-      }
-  );
+      // verified?: boolean;
+    }
+);
 
 export type AccountRepository = Repository<Account>;
 
@@ -39,9 +39,9 @@ export function AccountRepositoryFactory(
 ): AccountRepository {
   return new MongooseRepository<Account>(
     connection,
-    'Account',
+    'Accounts',
     {
-      _id: Buffer,
+      _id: ObjectId,
       // platform: Buffer,
       // name: String,
       // role: String,

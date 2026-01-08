@@ -1,6 +1,6 @@
-import { ObjectId } from '@ecommerce/object-id';
 import { createHash } from 'crypto';
 import * as R from 'ramda';
+import { ObjectId } from '../libs/object-id';
 
 type Argument = number | bigint | string | ObjectId | Date | null | undefined;
 

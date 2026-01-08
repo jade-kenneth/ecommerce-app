@@ -1,4 +1,4 @@
-import { ObjectId } from '@ecommerce/object-id';
+import { ObjectId } from '../libs/object-id';
 
 export type Node = {
   _id: ObjectId;

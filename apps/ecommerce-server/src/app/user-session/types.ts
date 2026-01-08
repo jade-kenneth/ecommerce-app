@@ -1,5 +1,5 @@
-import { ObjectId } from '@ecommerce/object-id';
 import { Request } from 'express';
+import { ObjectId } from '../../libs/object-id';
 import { AccountType } from '../../types/common';
 import { Account } from './account/repositories/account.repository';
 import { Session } from './session/repositories/session.repository';

@@ -1,5 +1,5 @@
-import { ObjectId } from '@ecommerce/object-id';
 import { CollationOptions } from 'mongodb';
+import { ObjectId } from './object-id';
 
 export type Cursor = Buffer;
 

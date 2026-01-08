@@ -1,13 +1,18 @@
 'use client';
 
 import { createListCollection } from '@ark-ui/react';
+
+import { Flex } from '@chakra-ui/react';
+
+import Image from 'next/image';
+import { Reducer, useReducer } from 'react';
+import { TbDotsVertical } from 'react-icons/tb';
 import {
   CreateProduct,
   DeleteProduct,
   ProductProvider,
   UpdateProduct,
-} from '@backoffice/admin';
-import { Flex } from '@chakra-ui/react';
+} from '../../libs/admin';
 import {
   apolloClient,
   Badge,
@@ -15,17 +20,14 @@ import {
   DataTable,
   Menu,
   usePaginated,
-} from '@global';
+} from '../../libs/global/src';
 import {
   ProductsDocument,
   ProductsQuery,
   ProductsQueryVariables,
   StatusType,
   useProductsQuery,
-} from '@graphql/generated';
-import Image from 'next/image';
-import { Reducer, useReducer } from 'react';
-import { TbDotsVertical } from 'react-icons/tb';
+} from '../../libs/global/src/graphql/generated';
 interface PageState {
   page: number;
   pageSize: number;

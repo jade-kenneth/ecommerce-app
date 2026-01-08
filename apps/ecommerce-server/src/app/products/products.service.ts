@@ -7,12 +7,13 @@ import {
 
 import { Product } from '../../types/product';
 
-import { ObjectType } from '@ecommerce-app/object-shared';
-import { ObjectId } from '@ecommerce/object-id';
 import { Connection, Filter } from '../../libs/repository';
 import { generateCursor } from '../../util/generate-cursor';
 
 import Decimal from 'decimal.js';
+import { ObjectId } from '../../libs/object-id';
+
+import { ObjectType } from '../../libs/object-shared';
 import { Tokens } from '../../types/tokens';
 import { ConfigService } from '../config/config.service';
 import { ProductRepository } from './repositories/products.repository';
@@ -42,6 +43,7 @@ export class ProductsService {
     await this.products
       .create({
         ...params,
+
         cursor: generateCursor(
           new Date(),
           ObjectId.generate(ObjectType.Product)
@@ -79,7 +81,7 @@ export class ProductsService {
     filter: Filter<Product>;
   }): Promise<Connection<Product>> {
     const { filter = {}, after, first } = params;
-    const highPoint = await this.configService.getHighPointsThreshold();
+    const highPoint = this.configService.getString('HIGHPOINT_THRESHOLD') ?? 1;
     const data = await this.products
       .list({
         ...filter,

@@ -18,6 +18,6 @@ definitionsFactory.generate({
     Decimal: '_Decimal',
   },
   additionalHeader:
-    "import { ObjectId  as _ObjectId} from '@ecommerce/object-id'\nimport { Decimal as _Decimal } from 'decimal.js'",
+    "import { ObjectId  as _ObjectId} from '../../libs/object-id'\nimport { Decimal as _Decimal } from 'decimal.js'",
   typeDefs: [constraintDirectiveTypeDefs],
 });

@@ -1,14 +1,17 @@
 'use client';
+
 import {
   Carousel,
   Categories,
   Footer,
+  FrequentlySearched,
+  Highlight,
   HighPoint,
   JustForYou,
+  Navbar,
   TopSelling,
-} from '@global';
-import { FrequentlySearched, Highlight, Layout, Navbar } from '@portal/layout';
-
+} from '../libs/portal/features';
+import { Layout } from '../libs/portal/layout/Layout';
 export default function Index() {
   return (
     <Layout>

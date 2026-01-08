@@ -1,4 +1,3 @@
-import { ObjectId } from '@ecommerce/object-id';
 import Decimal from 'decimal.js';
 import { CollationOptions, Decimal128 } from 'mongodb';
 import {
@@ -11,6 +10,7 @@ import {
   Types,
 } from 'mongoose';
 import * as R from 'ramda';
+import { ObjectId } from './object-id';
 import {
   Connection,
   Filter,

@@ -1,5 +1,5 @@
-import { ObjectId } from '@ecommerce/object-id';
 import { Inject } from '@nestjs/common';
+import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import { Filter } from '../../../libs/repository';
 import { Tokens } from '../../../types/tokens';
 import { Session, SessionRepository } from './repositories/session.repository';

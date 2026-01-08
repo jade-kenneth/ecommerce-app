@@ -14,22 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {
-      "@backoffice/admin": ["libs/admin/src/index.ts"],
-      "@backoffice/layout": ["libs/admin/src/admin-layout/index.ts"],
-      "@ecommerce-app/globally": ["libs/globally/src/index.ts"],
-      "@ecommerce-app/globally/server": ["libs/globally/src/server.ts"],
-      "@ecommerce-app/object-shared": ["libs/object-shared/src/index.ts"],
-      "@ecommerce/object-id": ["libs/object-id/src/index.ts"],
-      "@global": ["libs/general/src/index.ts"],
-      "@global/server": ["libs/general/src/server.ts"],
-      "@graphql/generated": ["libs/general/src/graphql/generated.tsx"],
-
-      "@portal/auth": ["libs/portal/auth/src/index.ts"],
-      "@portal/layout": ["libs/portal/layout/src/index.ts"],
-      "@portal/theme": ["libs/portal/theme/src/index.ts"],
-      "@utils": ["libs/general/src/utils/index.ts"]
-    }
+    "paths": {}
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,18 +1,19 @@
-import { ObjectType } from '@ecommerce-app/object-shared';
-import { ObjectId } from '@ecommerce/object-id';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   CarouselFileUpload,
   Field,
   FieldInput,
+  ObjectType,
   toaster,
-} from '@global';
+} from 'apps/ecommerce-app/src/libs/global/src';
 import {
   useConfigQuery,
   useCreateConfigMutation,
   useUpdateConfigMutation,
-} from '@graphql/generated';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from 'apps/ecommerce-app/src/libs/global/src/graphql/generated';
+import { ObjectId } from 'apps/ecommerce-app/src/libs/global/src/utils/object-id';
+
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -49,9 +50,7 @@ export function Settings() {
       className="p-7"
       onSubmit={form.handleSubmit(async (data) => {
         if (!config?._id) {
-          const generatedId = ObjectId.generate(
-            ObjectType.Config
-          ).toHexString();
+          const generatedId = ObjectId.generate(ObjectType.Config).toString();
 
           await create({
             variables: {

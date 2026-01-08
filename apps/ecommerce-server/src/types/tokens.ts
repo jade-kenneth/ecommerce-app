@@ -1,7 +1,7 @@
 export const Tokens = {
   AsyncClient: Symbol('AsyncClient'),
   ProductRepositoryToken: Symbol('ProductRepositoryToken'),
-  ConfigToken: Symbol('ConfigToken'),
+  ConfigOptions: Symbol('ConfigOptions'),
   SessionRepository: Symbol('SessionRepository'),
   AccountRepository: Symbol('AccountRepository'),
   JwtServiceOptions: Symbol('JwtServiceOptions'),

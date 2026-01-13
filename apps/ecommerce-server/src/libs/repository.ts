@@ -75,7 +75,7 @@ export interface Repository<T extends { _id: ObjectId }> {
   create(data: T, opts?: WriteOptions): Promise<void>;
   update(
     filter: ObjectId | Filter<T>,
-    data: Partial<Omit<T, 'id'>>,
+    data: Partial<Omit<T, '_id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void>;
   delete(filter: ObjectId | Filter<T>, opts?: WriteOptions): Promise<void>;

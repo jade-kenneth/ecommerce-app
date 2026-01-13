@@ -10,6 +10,7 @@ export enum SessionStatus {
 export type Session = {
   _id: ObjectId;
   account: ObjectId;
+  jti: Buffer;
   dateTimeCreated: Date;
   dateTimeLastRefreshed: Date;
   fingerprint?: string;
@@ -23,16 +24,16 @@ export function SessionRepositoryFactory(
     connection,
     'Session',
     {
-      account: Buffer,
-      // jti: Buffer,
+      account: ObjectId,
+      jti: Buffer,
       dateTimeCreated: Date,
       dateTimeLastRefreshed: Date,
       fingerprint: String,
       status: String,
     },
     [
-      // [{ account: 1 }], // recommended by MongoDB
-      // [{ jti: 1, account: 1, fingerprint: 1 }],
+      [{ account: 1 }], // recommended by MongoDB
+      [{ jti: 1, account: 1, fingerprint: 1 }],
       [{ dateTimeLastRefreshed: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 30 }],
     ]
   );

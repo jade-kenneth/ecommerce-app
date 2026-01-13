@@ -24,7 +24,7 @@ export class SessionService {
 
   async updateSession(
     filter: ObjectId | Filter<Session>,
-    data: Partial<Omit<Session, 'id'>>
+    data: Partial<Omit<Session, '_id'>>
   ) {
     return this.sessionRepository.update(filter, data);
   }

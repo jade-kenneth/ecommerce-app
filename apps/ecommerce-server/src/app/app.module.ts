@@ -18,6 +18,7 @@ import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
 import { AppService } from './app.service';
+import { AuthMiddleware } from './auth/auth-middleware';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { ProductsModule } from './products/products.module';
@@ -54,6 +55,9 @@ import { SessionModule } from './user-session/session/session.module';
             Upload: GraphQLUpload,
           },
           typeDefs: [constraintDirectiveTypeDefs],
+
+          // destructure context to get req object from middleware
+          context: ({ req }) => ({ claims: req.claims }),
         };
 
         return options;
@@ -82,7 +86,7 @@ import { SessionModule } from './user-session/session/session.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(graphqlUploadExpress())
-      .forRoutes({ path: 'graphql', method: RequestMethod.ALL }); //apply auth and permission middleware later
+      .apply(graphqlUploadExpress(), AuthMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL }); //apply auth and permission middleware later
   }
 }

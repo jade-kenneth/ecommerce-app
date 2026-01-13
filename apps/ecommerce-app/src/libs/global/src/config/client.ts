@@ -4,18 +4,33 @@ import {
   HttpLink,
   UriFunction,
 } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import invariant from 'tiny-invariant';
+import { getSession } from '../auth/service';
 import { apolloCache } from './cache';
 
 const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
 
+const AUTH_LINK = setContext(async (_req, ctx) => {
+  const session = await getSession();
+  if (session.status === 'authenticated') {
+    return {
+      ...ctx,
+      headers: {
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+    };
+  }
+});
+
 invariant(portalApi, "'NEXT_PUBLIC_PORTAL_API' is missing");
 
-const portalLink = new HttpLink({ uri: createUrl(portalApi) });
+const PORTAL_LINK = new HttpLink({ uri: createUrl(portalApi) });
+const BASE_LINK = ApolloLink.from([AUTH_LINK]);
 
 export const apolloLink = ApolloLink.split(
   () => true,
-  ApolloLink.from([portalLink])
+  ApolloLink.from([BASE_LINK.concat(PORTAL_LINK)])
 );
 
 export const apolloClient = new ApolloClient({

@@ -216,7 +216,7 @@ export class MongooseRepository<
   }
   public async update(
     filter: ObjectId | Filter<TEntity>,
-    data: Partial<Omit<TEntity, 'id'>>,
+    data: Partial<Omit<TEntity, '_id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void> {
     const options = R.pick(['upsert'], opts || {});
@@ -243,7 +243,7 @@ export class MongooseRepository<
       return;
     }
   }
-  find(
+  async find(
     filter: ObjectId | Filter<TEntity>,
     opts?: {
       collation?: CollationOptions;
@@ -251,7 +251,8 @@ export class MongooseRepository<
       explain?: true;
     }
   ): Promise<TEntity> {
-    throw new Error('Method not implemented.');
+    const doc = await this.model.findOne(filter, null);
+    return doc ? (serializeItem(doc) as TEntity) : null;
   }
 
   list(

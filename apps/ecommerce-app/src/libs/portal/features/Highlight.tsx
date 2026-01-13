@@ -2,6 +2,7 @@ import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 
 import { FunctionComponent } from 'react';
 import { MedalIcon, PhoneIcon, TruckIcon } from '../../global/src';
+import { useSession } from '../../global/src/auth';
 
 interface HighlightProps {
   storeName?: string;
@@ -12,6 +13,8 @@ export const Highlight: FunctionComponent<HighlightProps> = ({
   contact = '09123453476',
   storeName = 'Welcome to AmyStore',
 }) => {
+  const session = useSession();
+  console.log('Highlight Session:', session);
   return (
     <Flex
       height={'44px'}

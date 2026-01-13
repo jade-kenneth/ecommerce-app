@@ -11,6 +11,7 @@ export type AuthRequest = Request & {
   location?: string;
   forVerification?: boolean;
   scheme?: string;
+  claims: Claims;
 };
 export enum TokenType {
   Access = 'access',
@@ -28,4 +29,13 @@ export type MemberAccount = Account & {
   nickName?: string;
   emailAddress?: string;
   mobileNumber?: string;
+};
+export type Claims = {
+  sub: string;
+  type: TokenType;
+  session: string;
+  role: AccountType;
+  iap: string;
+  jti?: string;
+  platform?: string;
 };

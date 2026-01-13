@@ -1,13 +1,23 @@
 import { Flex, Text } from '@chakra-ui/react';
 
-import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle, FaRegEyeSlash } from 'react-icons/fa';
-import { Button, Field, Input } from '../../global/src';
+import z from 'zod';
+import { Button, Field, Input, toaster } from '../../global/src';
+import { authenticate } from '../../global/src/auth/service';
 import { Checkbox } from '../../global/src/components/ui/Checkbox';
+import { AccountType } from '../../global/src/graphql/generated';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;
 }
+
+const definition = z.object({
+  emailAddress: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
+});
+
 export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const socialButtons = [
     {
@@ -19,8 +29,26 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       label: 'Google',
     },
   ];
+
+  const form = useForm({
+    resolver: zodResolver(definition),
+  });
+
+  const onSubmit = form.handleSubmit(async (data) => {
+    try {
+      await authenticate({
+        emailAddress: data.emailAddress,
+        password: data.password,
+        role: AccountType.Member,
+      });
+      toaster.success({ description: 'Successfully logged in!' });
+    } catch (error) {
+      console.log(error, 'error');
+      toaster.error({ description: 'Failed to log in. Please try again.' });
+    }
+  });
   return (
-    <React.Fragment>
+    <form onSubmit={onSubmit}>
       <Field.Root>
         <Field.Label>
           <Text
@@ -28,35 +56,58 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
             color={'colors.carbon.100'}
             fontWeight={700}
           >
-            Email
+            Email Address
           </Text>
         </Field.Label>
-        <Input placeholder="Enter your email" rounded="32px" />
+
+        <Controller
+          control={form.control}
+          name="emailAddress"
+          render={({ field, fieldState }) => {
+            return (
+              <Field.Root invalid={!!fieldState.invalid}>
+                <Input
+                  placeholder="Enter your email"
+                  rounded="32px"
+                  {...field}
+                />
+                <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
+              </Field.Root>
+            );
+          }}
+        />
       </Field.Root>
       <Field.Root className="mt-6">
-        <Field.Label>
-          <Text
-            sizes="paragraph-sm"
-            color={'colors.carbon.100'}
-            fontWeight={700}
-          >
-            Password
-          </Text>
-        </Field.Label>
-        <Input
-          type="password"
-          placeholder="Enter your password"
-          rounded="32px"
-          inputGroupProps={{
-            endElement: (
-              <FaRegEyeSlash
-                cursor={'pointer'}
-                style={{
-                  height: '20px',
-                  width: '20px',
-                }}
-              />
-            ),
+        <Text sizes="paragraph-sm" color={'colors.carbon.100'} fontWeight={700}>
+          Password
+        </Text>
+        <Controller
+          control={form.control}
+          name="password"
+          render={({ field, fieldState }) => {
+            return (
+              <Field.Root invalid={!!fieldState.invalid}>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  rounded="32px"
+                  inputGroupProps={{
+                    endElement: (
+                      <FaRegEyeSlash
+                        cursor={'pointer'}
+                        style={{
+                          height: '20px',
+                          width: '20px',
+                        }}
+                      />
+                    ),
+                  }}
+                  {...field}
+                />
+
+                <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
+              </Field.Root>
+            );
           }}
         />
       </Field.Root>
@@ -80,6 +131,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         className="bg-primary-700-value"
         borderRadius={'50px'}
         mt={6}
+        type="submit"
       >
         Sign in
       </Button>
@@ -111,6 +163,6 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           </button>
         ))}
       </div>
-    </React.Fragment>
+    </form>
   );
 };

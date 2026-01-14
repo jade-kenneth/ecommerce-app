@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:app": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts && npx nx run ecommerce-app:build",
+    "build:app": "npx @chakra-ui/cli typegen ./apps/ecommerce-app/src/libs/global/theme/src/theme/index.ts && npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
     "server": "nx run ecommerce-server:serve:production",
     "app": "nx run ecommerce-app:dev --port=4201 ",

@@ -24,7 +24,7 @@ export interface AuthenticateInput {
 export async function refreshSession(input: RefreshSession) {
   try {
     const response = await axios.post<Token>('/session/refresh', input, {
-      baseURL: 'http://localhost:4202',
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
       headers: {
         Authorization: `Bearer ${input.refreshToken}`,
       },
@@ -40,7 +40,7 @@ export async function refreshSession(input: RefreshSession) {
 export async function createSession(input: CreateSessionInput) {
   try {
     const response = await axios.post<Token>('/sessions', input, {
-      baseURL: 'http://localhost:4202',
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
     });
     return response.data;
   } catch (error) {
@@ -52,7 +52,7 @@ export async function createSession(input: CreateSessionInput) {
 export async function authenticate(input: AuthenticateInput) {
   try {
     const response = await axios.post<Token>('/session/authenticate', input, {
-      baseURL: 'http://localhost:4202',
+      baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
       headers: {
         Role: input.role,
       },

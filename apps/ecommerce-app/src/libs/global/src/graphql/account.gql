@@ -4,3 +4,11 @@ mutation CreateMemberAccount($input: CreateAccountInput!) {
 mutation CreateAdminAccount($input: CreateAccountInput!) {
   createAdminAccount(input: $input)
 }
+
+query Self {
+  self {
+    _id
+    emailAddress
+    role
+  }
+}

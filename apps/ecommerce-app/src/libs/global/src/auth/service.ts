@@ -25,7 +25,6 @@ export async function getSession(): Promise<Session> {
         refreshToken: session.refreshToken,
       };
     } catch (error) {
-      console.log('Error refreshing session:', error);
       return {
         status: 'unauthenticated',
       };

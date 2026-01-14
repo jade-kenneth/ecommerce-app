@@ -87,6 +87,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(graphqlUploadExpress(), AuthMiddleware)
+      .exclude()
       .forRoutes({ path: '*', method: RequestMethod.ALL }); //apply auth and permission middleware later
   }
 }

@@ -7,14 +7,21 @@ import {
   ColorModeButton,
   DebounceInput,
   SearchIcon,
+  Show,
+  useGlobalStore,
   UserIcon,
 } from '../../global/src';
+import { useSelfQuery } from '../../global/src/graphql/generated';
 import { AuthForm } from './AuthForm';
 interface NavbarProps {
   logoSrc?: string;
 }
 
 export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
+  const globalStore = useGlobalStore((state) => state.authenticate);
+  const { data } = useSelfQuery({
+    skip: !globalStore.isAuthenticated,
+  });
   return (
     <Flex
       className="max-w-screen"
@@ -74,11 +81,18 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         color="colors.primary.700"
         fontWeight={600}
       >
-        <HStack as="button" cursor={'pointer'} role="button" px="20px">
-          <UserIcon />
+        <Show
+          when={!globalStore.isAuthenticated}
+          fallback={
+            <p className="px-5 flex items-center">{`Welcome back, ${data?.self?.emailAddress}!`}</p>
+          }
+        >
+          <HStack as="button" cursor={'pointer'} role="button" px="20px">
+            <UserIcon />
 
-          <AuthForm />
-        </HStack>
+            <AuthForm />
+          </HStack>
+        </Show>
         <HStack as="button" cursor={'pointer'} role="button" px="20px">
           <CartIcon />
           <Text sizes={'paragraph-sm'}>Cart</Text>

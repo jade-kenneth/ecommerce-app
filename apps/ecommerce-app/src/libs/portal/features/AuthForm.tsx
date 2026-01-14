@@ -8,7 +8,7 @@ import {
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { Show } from '../../global/src';
+import { Show, useGlobalStore } from '../../global/src';
 
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
@@ -16,8 +16,12 @@ import { SignupForm } from './SignupForm';
 export function AuthForm() {
   const disclosure = useDisclosure();
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const globalStore = useGlobalStore((state) => state.authenticate);
   return (
-    <Dialog.Root lazyMount>
+    <Dialog.Root
+      open={!globalStore.isAuthenticated && disclosure.open}
+      lazyMount
+    >
       <Dialog.Trigger>
         <Text sizes={'paragraph-sm'} onClick={disclosure.onOpen}>
           Register / Log In

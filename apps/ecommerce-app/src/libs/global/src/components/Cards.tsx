@@ -75,7 +75,7 @@ export const Cards = (props: CardsProps) => {
               color="white"
               gap="4px"
             >
-              <Image src={'/medal.png'} width={18} height={18} alt="medal" />
+              <Image src={'/medal.svg'} width={18} height={18} alt="medal" />
               <Text sizes={'paragraph-xs'}>HIGH-POINT</Text>
             </Flex>
           )}

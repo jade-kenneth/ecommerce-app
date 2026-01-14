@@ -10,4 +10,5 @@ export * from './object-id';
 export * from './object-shared';
 export * from './sha256';
 export * from './useControllableState';
+export * from './useGlobalStore';
 export * from './usePaginated';

@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Thu, 18 Dec 2025 06:23:18 GMT
+// Last modified: Wed, 14 Jan 2026 01:58:59 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -60,7 +60,7 @@ export enum CategoryType {
 }
 
 export type CreateAccountInput = {
-  _id?: InputMaybe<Scalars['ObjectID']['input']>;
+  _id: Scalars['ObjectID']['input'];
   emailAddress: Scalars['String']['input'];
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
@@ -183,6 +183,18 @@ export type CreateAdminAccountMutationVariables = Exact<{
 export type CreateAdminAccountMutation = {
   __typename: 'Mutation';
   createAdminAccount?: boolean | null;
+};
+
+export type SelfQueryVariables = Exact<{ [key: string]: never }>;
+
+export type SelfQuery = {
+  __typename: 'Query';
+  self?: {
+    __typename: 'Account';
+    _id: string;
+    emailAddress: string;
+    role: string;
+  } | null;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -408,6 +420,53 @@ export type CreateAdminAccountMutationOptions = Apollo.BaseMutationOptions<
   CreateAdminAccountMutation,
   CreateAdminAccountMutationVariables
 >;
+export const SelfDocument = /*#__PURE__*/ gql`
+  query Self {
+    self {
+      _id
+      emailAddress
+      role
+    }
+  }
+`;
+export function useSelfQuery(
+  baseOptions?: Apollo.QueryHookOptions<SelfQuery, SelfQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SelfQuery, SelfQueryVariables>(SelfDocument, options);
+}
+export function useSelfLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SelfQuery, SelfQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SelfQuery, SelfQueryVariables>(
+    SelfDocument,
+    options
+  );
+}
+export function useSelfSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<SelfQuery, SelfQueryVariables>(
+    SelfDocument,
+    options
+  );
+}
+export type SelfQueryHookResult = ReturnType<typeof useSelfQuery>;
+export type SelfLazyQueryHookResult = ReturnType<typeof useSelfLazyQuery>;
+export type SelfSuspenseQueryHookResult = ReturnType<
+  typeof useSelfSuspenseQuery
+>;
+export type SelfQueryResult = Apollo.QueryResult<SelfQuery, SelfQueryVariables>;
+export function refetchSelfQuery(variables?: SelfQueryVariables) {
+  return { query: SelfDocument, variables: variables };
+}
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file)

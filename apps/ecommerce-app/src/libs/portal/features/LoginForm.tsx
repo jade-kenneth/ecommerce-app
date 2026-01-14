@@ -4,7 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle, FaRegEyeSlash } from 'react-icons/fa';
 import z from 'zod';
-import { Button, Field, Input, toaster } from '../../global/src';
+import {
+  Button,
+  Field,
+  Input,
+  toaster,
+  useGlobalStore,
+} from '../../global/src';
 import { authenticate } from '../../global/src/auth/service';
 import { Checkbox } from '../../global/src/components/ui/Checkbox';
 import { AccountType } from '../../global/src/graphql/generated';
@@ -33,7 +39,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const form = useForm({
     resolver: zodResolver(definition),
   });
-
+  const globalStore = useGlobalStore((state) => state.authenticate);
   const onSubmit = form.handleSubmit(async (data) => {
     try {
       await authenticate({
@@ -42,6 +48,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         role: AccountType.Member,
       });
       toaster.success({ description: 'Successfully logged in!' });
+      globalStore.setIsAuthenticated(true);
     } catch (error) {
       console.log(error, 'error');
       toaster.error({ description: 'Failed to log in. Please try again.' });

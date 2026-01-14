@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import { useGlobalStore } from '../utils';
 import { getSession } from './service';
 import { LazySession } from './type';
 
@@ -12,11 +13,13 @@ export const useAuth = (): UseAuthReturn => {
   const [session, setSession] = useState<LazySession>({
     status: 'loading',
   });
-
+  const globalStore = useGlobalStore((state) => state.authenticate);
   useEffect(() => {
     const fetchSession = async () => {
-      console.log('Fetching session...');
       const session = await getSession();
+      if (session.status === 'unauthenticated')
+        globalStore.setIsAuthenticated(false);
+      else globalStore.setIsAuthenticated(true);
       setSession(session);
     };
 

@@ -21,8 +21,11 @@ export class AuthMiddleware implements NestMiddleware {
       return next();
     }
 
+    if (['products'].includes(req.body.operationName)) {
+      return next();
+    }
     const [, token] = req.headers.authorization.match(JWT_REGEX) || [];
-    console.log(token, 'token');
+
     if (!token) {
       return next();
     }

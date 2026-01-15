@@ -2,7 +2,12 @@ import { Flex, Text } from '@chakra-ui/react';
 
 import Image from 'next/image';
 import { FaHeart, FaStar } from 'react-icons/fa';
-import { ProductCoreDataFragment } from '../graphql/generated';
+import { TbShoppingCartPlus } from 'react-icons/tb';
+import {
+  ProductCoreDataFragment,
+  useAddToCartMutation,
+} from '../graphql/generated';
+import { ObjectId } from '../utils';
 
 interface CardsProps extends ProductCoreDataFragment {
   isTopSold?: boolean;
@@ -12,7 +17,7 @@ export const Cards = (props: CardsProps) => {
   const discount = parseFloat(
     (props.price * (props.discount / 100)).toFixed(2)
   );
-
+  const [mutate] = useAddToCartMutation();
   return (
     <Flex
       w="220.8px"
@@ -99,7 +104,12 @@ export const Cards = (props: CardsProps) => {
             <Text sizes="paragraph-xs">OFF</Text>
           </Flex>
         )}
-        <Flex bottom={0} left={0} position={'absolute'}>
+        <Flex
+          bottom={0}
+          left={0}
+          position={'absolute'}
+          className="flex items-center w-full"
+        >
           {+props.points > 0 && (
             <Flex
               bg={'colors.warning.500'}
@@ -145,6 +155,27 @@ export const Cards = (props: CardsProps) => {
               })()}
             </Flex>
           )}
+          <button
+            className="text-primary-900-value ml-auto mr-2 cursor-pointer"
+            onClick={async () => {
+              console.log(
+                ObjectId.from(Buffer.from(props._id, 'hex')).toString(),
+                'iddd'
+              );
+              await mutate({
+                variables: {
+                  input: {
+                    productId: ObjectId.from(
+                      Buffer.from(props._id, 'hex')
+                    ).toString(),
+                    quantity: 1,
+                  },
+                },
+              });
+            }}
+          >
+            <TbShoppingCartPlus className="size-5 stroke-3" />
+          </button>
         </Flex>
       </Flex>
       <Flex direction={'column'} p="12px">

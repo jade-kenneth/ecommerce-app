@@ -18,9 +18,9 @@ interface NavbarProps {
 }
 
 export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
-  const globalStore = useGlobalStore((state) => state.authenticate);
+  const globalStore = useGlobalStore((state) => state);
   const { data } = useSelfQuery({
-    skip: !globalStore.isAuthenticated,
+    skip: !globalStore.authenticate.isAuthenticated,
   });
   return (
     <Flex
@@ -78,11 +78,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         divideX="1.5px"
         divideColor={'colors.primary.700'}
         divideStyle="ridge"
-        color="colors.primary.700"
         fontWeight={600}
       >
         <Show
-          when={!globalStore.isAuthenticated}
+          when={!globalStore.authenticate.isAuthenticated}
           fallback={
             <p className="px-5 flex items-center">{`Welcome back, ${data?.self?.emailAddress}!`}</p>
           }
@@ -94,8 +93,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           </HStack>
         </Show>
         <HStack as="button" cursor={'pointer'} role="button" px="20px">
-          <CartIcon />
-          <Text sizes={'paragraph-sm'}>Cart</Text>
+          <button
+            className="flex gap-2"
+            onClick={() => globalStore.cart.setIsOpen(true)}
+          >
+            <CartIcon />
+
+            <Text sizes={'paragraph-sm'}>Cart</Text>
+          </button>
         </HStack>
         <ColorModeButton />
       </Flex>

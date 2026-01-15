@@ -19,6 +19,7 @@ import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
+import { CartsModule } from './carts/carts.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { ProductsModule } from './products/products.module';
@@ -78,6 +79,7 @@ import { SessionModule } from './user-session/session/session.module';
     UploadModule,
     ConfigModule,
     SessionModule,
+    CartsModule,
   ],
 
   providers: [AppService],

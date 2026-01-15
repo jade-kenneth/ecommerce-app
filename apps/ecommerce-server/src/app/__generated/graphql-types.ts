@@ -16,6 +16,32 @@ export enum AccountType {
     MEMBER = "MEMBER"
 }
 
+export enum CartStatus {
+    ACTIVE = "ACTIVE",
+    CHECKED_OUT = "CHECKED_OUT"
+}
+
+export enum ShippingType {
+    STANDARD = "STANDARD",
+    EXPRESS = "EXPRESS",
+    SAME_DAY = "SAME_DAY"
+}
+
+export enum PaymentMethodType {
+    GCASH = "GCASH",
+    CARD = "CARD",
+    BANK_TRANSFER = "BANK_TRANSFER",
+    CASH_ON_DELIVERY = "CASH_ON_DELIVERY"
+}
+
+export enum OrderStatus {
+    PENDING = "PENDING",
+    PAID = "PAID",
+    SHIPPED = "SHIPPED",
+    COMPLETED = "COMPLETED",
+    CANCELLED = "CANCELLED"
+}
+
 export enum StatusType {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE",
@@ -47,6 +73,21 @@ export interface CreateAccountInput {
     emailAddress: string;
     password: string;
     mobileNumber?: Nullable<string>;
+}
+
+export interface AddToCartInput {
+    productId: ObjectId;
+    quantity: number;
+}
+
+export interface UpdateCartItemInput {
+    productId: ObjectId;
+    quantity: number;
+}
+
+export interface CheckoutInput {
+    shippingOptionId: string;
+    paymentMethodId: string;
 }
 
 export interface CreateConfigInput {
@@ -163,6 +204,11 @@ export interface Account {
 export interface IMutation {
     createAdminAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     createMemberAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    addToCart(input: AddToCartInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateCartItem(input: UpdateCartItemInput): Cart | Promise<Cart>;
+    removeFromCart(productId: ObjectId): Cart | Promise<Cart>;
+    clearCart(): Cart | Promise<Cart>;
+    checkout(input: CheckoutInput): Order | Promise<Order>;
     createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateConfig(input: UpdateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
@@ -173,10 +219,66 @@ export interface IMutation {
 
 export interface IQuery {
     memberAccounts(): Account[] | Promise<Account[]>;
-    memberAccount(): Nullable<Account> | Promise<Nullable<Account>>;
+    self(): Nullable<Account> | Promise<Nullable<Account>>;
+    carts(): Cart[] | Promise<Cart[]>;
+    shippingOptions(): ShippingOption[] | Promise<ShippingOption[]>;
+    paymentMethods(): PaymentMethod[] | Promise<PaymentMethod[]>;
+    myOrders(): Order[] | Promise<Order[]>;
+    order(id: ObjectId): Nullable<Order> | Promise<Nullable<Order>>;
     config(): Config | Promise<Config>;
     products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
     highPointProducts(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
+}
+
+export interface CartItem {
+    product: Product;
+    quantity: number;
+    unitPrice: string;
+    totalPrice: string;
+}
+
+export interface PaymentMethod {
+    _id: ObjectId;
+    type: PaymentMethodType;
+    label: string;
+    description?: Nullable<string>;
+    isActive: boolean;
+}
+
+export interface ShippingOption {
+    _id: ObjectId;
+    type: ShippingType;
+    label: string;
+    description?: Nullable<string>;
+    fee: string;
+    estimatedDays?: Nullable<string>;
+}
+
+export interface Cart {
+    _id: ObjectId;
+    items?: Nullable<Nullable<CartItem>[]>;
+    ownerId: ObjectId;
+    subtotal: string;
+    tax: string;
+    shippingFee: string;
+    total: string;
+    status: CartStatus;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Order {
+    _id: ObjectId;
+    items?: Nullable<Nullable<CartItem>[]>;
+    ownerId: ObjectId;
+    shippingOption: ShippingOption;
+    paymentMethod: PaymentMethod;
+    subtotal: string;
+    tax: string;
+    shippingFee: string;
+    total: string;
+    status: OrderStatus;
+    createdAt: string;
 }
 
 export interface KeyValuePair {

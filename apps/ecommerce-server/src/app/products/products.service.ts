@@ -75,6 +75,14 @@ export class ProductsService {
     }
   }
 
+  public async findProduct(id: ObjectId) {
+    try {
+      return await this.products.find(id);
+    } catch (error) {
+      console.error('Error finding product:', error);
+    }
+  }
+
   public async getHighPointsProducts(params: {
     first?: number;
     after?: string;

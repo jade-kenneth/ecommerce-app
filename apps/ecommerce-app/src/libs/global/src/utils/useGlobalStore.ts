@@ -6,6 +6,10 @@ interface GlobalState {
     isAuthenticated: boolean;
     setIsAuthenticated: (value: boolean) => void;
   };
+  cart: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
+  };
 }
 
 export const useGlobalStore = create<GlobalState>()(
@@ -20,6 +24,11 @@ export const useGlobalStore = create<GlobalState>()(
               isAuthenticated,
             },
           })),
+      },
+      cart: {
+        isOpen: false,
+        setIsOpen: (isOpen) =>
+          set((prev) => ({ ...prev, cart: { ...prev.cart, isOpen } })),
       },
     }))
   )

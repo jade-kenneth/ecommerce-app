@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Wed, 14 Jan 2026 01:58:59 GMT
+// Last modified: Thu, 15 Jan 2026 15:55:07 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -45,6 +45,16 @@ export enum AccountType {
   Member = 'MEMBER',
 }
 
+export type AddToCartInput = {
+  productId: Scalars['ObjectID']['input'];
+  quantity: Scalars['Int']['input'];
+};
+
+export enum CartStatus {
+  Active = 'ACTIVE',
+  CheckedOut = 'CHECKED_OUT',
+}
+
 export enum CategoryType {
   Beverages = 'BEVERAGES',
   Canned = 'CANNED',
@@ -58,6 +68,11 @@ export enum CategoryType {
   Snacks = 'SNACKS',
   Sweets = 'SWEETS',
 }
+
+export type CheckoutInput = {
+  paymentMethodId: Scalars['ID']['input'];
+  shippingOptionId: Scalars['ID']['input'];
+};
 
 export type CreateAccountInput = {
   _id: Scalars['ObjectID']['input'];
@@ -102,6 +117,21 @@ export type KeyValuePairInput = {
   value: Scalars['String']['input'];
 };
 
+export enum OrderStatus {
+  Cancelled = 'CANCELLED',
+  Completed = 'COMPLETED',
+  Paid = 'PAID',
+  Pending = 'PENDING',
+  Shipped = 'SHIPPED',
+}
+
+export enum PaymentMethodType {
+  BankTransfer = 'BANK_TRANSFER',
+  Card = 'CARD',
+  CashOnDelivery = 'CASH_ON_DELIVERY',
+  Gcash = 'GCASH',
+}
+
 export type ProductsCategoryFilterInput = {
   equal?: InputMaybe<CategoryType>;
   in?: InputMaybe<Array<CategoryType>>;
@@ -126,12 +156,23 @@ export enum ReservationType {
   Unavailable = 'UNAVAILABLE',
 }
 
+export enum ShippingType {
+  Express = 'EXPRESS',
+  SameDay = 'SAME_DAY',
+  Standard = 'STANDARD',
+}
+
 export enum StatusType {
   Active = 'ACTIVE',
   Draft = 'DRAFT',
   Inactive = 'INACTIVE',
   SoldOut = 'SOLD_OUT',
 }
+
+export type UpdateCartItemInput = {
+  productId: Scalars['ObjectID']['input'];
+  quantity: Scalars['Int']['input'];
+};
 
 export type UpdateConfigInput = {
   _id: Scalars['ObjectID']['input'];
@@ -195,6 +236,15 @@ export type SelfQuery = {
     emailAddress: string;
     role: string;
   } | null;
+};
+
+export type AddToCartMutationVariables = Exact<{
+  input: AddToCartInput;
+}>;
+
+export type AddToCartMutation = {
+  __typename: 'Mutation';
+  addToCart?: boolean | null;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -467,6 +517,35 @@ export type SelfQueryResult = Apollo.QueryResult<SelfQuery, SelfQueryVariables>;
 export function refetchSelfQuery(variables?: SelfQueryVariables) {
   return { query: SelfDocument, variables: variables };
 }
+export const AddToCartDocument = /*#__PURE__*/ gql`
+  mutation AddToCart($input: AddToCartInput!) {
+    addToCart(input: $input)
+  }
+`;
+export type AddToCartMutationFn = Apollo.MutationFunction<
+  AddToCartMutation,
+  AddToCartMutationVariables
+>;
+export function useAddToCartMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddToCartMutation,
+    AddToCartMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AddToCartMutation, AddToCartMutationVariables>(
+    AddToCartDocument,
+    options
+  );
+}
+export type AddToCartMutationHookResult = ReturnType<
+  typeof useAddToCartMutation
+>;
+export type AddToCartMutationResult = Apollo.MutationResult<AddToCartMutation>;
+export type AddToCartMutationOptions = Apollo.BaseMutationOptions<
+  AddToCartMutation,
+  AddToCartMutationVariables
+>;
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file)

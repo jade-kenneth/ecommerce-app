@@ -1,0 +1,117 @@
+enum CartStatus {
+  ACTIVE
+  CHECKED_OUT
+}
+
+enum ShippingType {
+  STANDARD
+  EXPRESS
+  SAME_DAY
+}
+
+enum PaymentMethodType {
+  GCASH
+  CARD
+  BANK_TRANSFER
+  CASH_ON_DELIVERY
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+type CartItem {
+  product: Product!
+  quantity: Int!
+  unitPrice: String!
+  totalPrice: String!
+}
+
+type PaymentMethod {
+  _id: ObjectId!
+  type: PaymentMethodType!
+  label: String!
+  description: String
+  isActive: Boolean!
+}
+
+type ShippingOption {
+  _id: ObjectId!
+  type: ShippingType!
+  label: String!
+  description: String
+  fee: String!
+  estimatedDays: String
+}
+
+type Cart {
+  _id: ObjectId!
+  items: [CartItem]
+  ownerId: ObjectId!
+  subtotal: String!
+  tax: String!
+  shippingFee: String!
+  total: String!
+
+  status: CartStatus!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Order {
+  _id: ObjectId!
+  items: [CartItem]
+  ownerId: ObjectId!
+  shippingOption: ShippingOption!
+  paymentMethod: PaymentMethod!
+
+  subtotal: String!
+  tax: String!
+  shippingFee: String!
+  total: String!
+
+  status: OrderStatus!
+  createdAt: String!
+}
+
+input AddToCartInput {
+  productId: ObjectId!
+  quantity: Int!
+}
+
+input UpdateCartItemInput {
+  productId: ObjectId!
+  quantity: Int!
+}
+input CheckoutInput {
+  shippingOptionId: ID!
+  paymentMethodId: ID!
+}
+
+type Query {
+  # Cart
+  carts: [Cart!]!
+
+  # Checkout options
+  shippingOptions: [ShippingOption!]!
+  paymentMethods: [PaymentMethod!]!
+
+  # Orders
+  myOrders: [Order!]!
+  order(id: ObjectId!): Order
+}
+
+type Mutation {
+  # Cart actions
+  addToCart(input: AddToCartInput!): Boolean
+  updateCartItem(input: UpdateCartItemInput!): Cart!
+  removeFromCart(productId: ObjectId!): Cart!
+  clearCart: Cart!
+
+  # Checkout
+  checkout(input: CheckoutInput!): Order!
+}

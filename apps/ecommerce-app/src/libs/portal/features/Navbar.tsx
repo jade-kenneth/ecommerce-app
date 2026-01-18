@@ -1,10 +1,11 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FunctionComponent } from 'react';
+import { CiSettings } from 'react-icons/ci';
+import { twMerge } from 'tailwind-merge';
 import {
   Button,
   CartIcon,
-  ColorModeButton,
   DebounceInput,
   SearchIcon,
   Show,
@@ -13,6 +14,7 @@ import {
 } from '../../global/src';
 import { useSelfQuery } from '../../global/src/graphql/generated';
 import { AuthForm } from './AuthForm';
+import { useCartContext } from './Cart/CartContext';
 interface NavbarProps {
   logoSrc?: string;
 }
@@ -22,11 +24,12 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   const { data } = useSelfQuery({
     skip: !globalStore.authenticate.isAuthenticated,
   });
+
+  const context = useCartContext();
   return (
     <Flex
       className="max-w-screen"
       py="36px"
-      mt="42px"
       justify={'space-between'}
       flexWrap={'wrap'}
       alignItems={'center'}
@@ -74,36 +77,47 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           ),
         }}
       />
-      <Flex
-        divideX="1.5px"
-        divideColor={'colors.primary.700'}
-        divideStyle="ridge"
-        fontWeight={600}
-      >
-        <Show
-          when={!globalStore.authenticate.isAuthenticated}
-          fallback={
-            <p className="px-5 flex items-center">{`Welcome back, ${data?.self?.emailAddress}!`}</p>
-          }
+      <div className="flex gap-2 items-center">
+        <Flex
+          divideX="1.5px"
+          divideColor={'colors.primary.700'}
+          divideStyle="ridge"
+          fontWeight={600}
         >
-          <HStack as="button" cursor={'pointer'} role="button" px="20px">
-            <UserIcon />
-
-            <AuthForm />
-          </HStack>
-        </Show>
-        <HStack as="button" cursor={'pointer'} role="button" px="20px">
-          <button
-            className="flex gap-2"
-            onClick={() => globalStore.cart.setIsOpen(true)}
+          <Show
+            when={!globalStore.authenticate.isAuthenticated}
+            fallback={
+              <p className="px-5 flex items-center">{`Welcome back, ${data?.self?.emailAddress}!`}</p>
+            }
           >
-            <CartIcon />
+            <HStack as="button" cursor={'pointer'} role="button" px="20px">
+              <UserIcon />
 
-            <Text sizes={'paragraph-sm'}>Cart</Text>
-          </button>
-        </HStack>
-        <ColorModeButton />
-      </Flex>
+              <AuthForm />
+            </HStack>
+          </Show>
+          <HStack as="button" cursor={'pointer'} role="button" px="20px">
+            <button
+              className="flex gap-2 relative cursor-pointer"
+              onClick={() => globalStore.cart.setIsOpen(true)}
+            >
+              <p
+                className={twMerge(
+                  'w-[20px] text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-5 h-[20px] rounded-full bg-[red]'
+                )}
+              >
+                {context.state.itemsCount}
+              </p>
+              <CartIcon />
+
+              <Text sizes={'paragraph-sm'}>Cart</Text>
+            </button>
+          </HStack>
+
+          {/* <ColorModeButton /> */}
+        </Flex>
+        <CiSettings className="text-primary-700-value size-5" />
+      </div>
     </Flex>
   );
 };

@@ -69,6 +69,7 @@ export const Card = ({ imgSrc, name, size }: CardProps) => {
         borderWidth: '1px',
         zIndex: 1,
         borderRadius: '16px',
+        boxShadow: 'md',
       }}
     >
       <Flex zIndex={2} flex={0.8} w="full" align={'center'} justify={'center'}>

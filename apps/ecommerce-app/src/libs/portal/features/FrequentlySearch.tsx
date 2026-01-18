@@ -7,7 +7,7 @@ export const FrequentlySearched: FunctionComponent<
   FrequentlySearchedProps
 > = () => {
   return (
-    <Flex py="16px" borderY={'1px solid #EAEAEA'}>
+    <Flex py="16px" borderBottom={'1px solid #EAEAEA'}>
       <Flex
         className="max-w-screen"
         align={'center'}

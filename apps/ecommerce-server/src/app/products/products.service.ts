@@ -11,9 +11,8 @@ import { Connection, Filter } from '../../libs/repository';
 import { generateCursor } from '../../util/generate-cursor';
 
 import Decimal from 'decimal.js';
-import { ObjectId } from '../../libs/object-id';
-
-import { ObjectType } from '../../libs/object-shared';
+import { Types } from 'mongoose';
+import { ObjectType } from '../../types/common';
 import { Tokens } from '../../types/tokens';
 import { ConfigService } from '../config/config.service';
 import { ProductRepository } from './repositories/products.repository';
@@ -43,11 +42,9 @@ export class ProductsService {
     await this.products
       .create({
         ...params,
-
-        cursor: generateCursor(
-          new Date(),
-          ObjectId.generate(ObjectType.Product)
-        ),
+        _id: new Types.ObjectId(),
+        nodeType: ObjectType.Product,
+        cursor: generateCursor(new Date(), new Types.ObjectId()),
       })
       .catch(async (err) => {
         console.log(err, 'error');
@@ -75,7 +72,7 @@ export class ProductsService {
     }
   }
 
-  public async findProduct(id: ObjectId) {
+  public async findProduct(id: Types.ObjectId) {
     try {
       return await this.products.find(id);
     } catch (error) {

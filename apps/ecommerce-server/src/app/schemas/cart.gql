@@ -25,7 +25,7 @@ enum OrderStatus {
 }
 
 type CartItem {
-  product: Product!
+  productId: ObjectId!
   quantity: Int!
   unitPrice: String!
   totalPrice: String!
@@ -50,8 +50,7 @@ type ShippingOption {
 
 type Cart {
   _id: ObjectId!
-  items: [CartItem]
-  ownerId: ObjectId!
+  items: [CartItem!]!
   subtotal: String!
   tax: String!
   shippingFee: String!
@@ -65,7 +64,6 @@ type Cart {
 type Order {
   _id: ObjectId!
   items: [CartItem]
-  ownerId: ObjectId!
   shippingOption: ShippingOption!
   paymentMethod: PaymentMethod!
 
@@ -88,13 +86,13 @@ input UpdateCartItemInput {
   quantity: Int!
 }
 input CheckoutInput {
-  shippingOptionId: ID!
-  paymentMethodId: ID!
+  shippingOptionId: ObjectId!
+  paymentMethodId: ObjectId!
 }
 
 type Query {
   # Cart
-  carts: [Cart!]!
+  cart(id: ObjectId!): Cart!
 
   # Checkout options
   shippingOptions: [ShippingOption!]!
@@ -114,4 +112,17 @@ type Mutation {
 
   # Checkout
   checkout(input: CheckoutInput!): Order!
+}
+
+type CartProductDetails {
+  thumbnail: String!
+  name: String!
+  price: Decimal!
+  productId: ObjectId!
+}
+input ProductByIdsInput {
+  ids: [ObjectId!]!
+}
+type Query {
+  productByIds(ids: ProductByIdsInput): CartProductDetails!
 }

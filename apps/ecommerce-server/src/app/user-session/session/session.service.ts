@@ -1,5 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
+
+import { Types } from 'mongoose';
 import { Filter } from '../../../libs/repository';
 import { Tokens } from '../../../types/tokens';
 import { Session, SessionRepository } from './repositories/session.repository';
@@ -14,16 +15,16 @@ export class SessionService {
     await this.sessionRepository.create(session);
   }
 
-  async deleteSession(filter: ObjectId | Filter<Session>) {
+  async deleteSession(filter: Types.ObjectId | Filter<Session>) {
     return this.sessionRepository.delete(filter);
   }
 
-  async findSession(filter: ObjectId | Filter<Session>) {
+  async findSession(filter: Types.ObjectId | Filter<Session>) {
     return this.sessionRepository.find(filter);
   }
 
   async updateSession(
-    filter: ObjectId | Filter<Session>,
+    filter: Types.ObjectId | Filter<Session>,
     data: Partial<Omit<Session, '_id'>>
   ) {
     return this.sessionRepository.update(filter, data);

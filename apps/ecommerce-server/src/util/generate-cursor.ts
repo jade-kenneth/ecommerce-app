@@ -1,8 +1,15 @@
 import { createHash } from 'crypto';
+import { Types } from 'mongoose';
 import * as R from 'ramda';
-import { ObjectId } from '../libs/object-id';
 
-type Argument = number | bigint | string | ObjectId | Date | null | undefined;
+type Argument =
+  | number
+  | bigint
+  | string
+  | Types.ObjectId
+  | Date
+  | null
+  | undefined;
 
 export function generateCursor(...args: Argument[]): Buffer {
   return Buffer.concat(
@@ -37,7 +44,7 @@ export function generateCursor(...args: Argument[]): Buffer {
         return buffer;
       }
 
-      if (value instanceof ObjectId) {
+      if (value instanceof Types.ObjectId) {
         return hash(value.toString()).subarray(0, 6);
       }
 

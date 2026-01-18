@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Thu, 15 Jan 2026 15:55:07 GMT
+// Last modified: Sat, 17 Jan 2026 19:29:58 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -70,8 +70,8 @@ export enum CategoryType {
 }
 
 export type CheckoutInput = {
-  paymentMethodId: Scalars['ID']['input'];
-  shippingOptionId: Scalars['ID']['input'];
+  paymentMethodId: Scalars['ObjectID']['input'];
+  shippingOptionId: Scalars['ObjectID']['input'];
 };
 
 export type CreateAccountInput = {
@@ -89,7 +89,6 @@ export type CreateConfigInput = {
 };
 
 export type CreateProductInput = {
-  _id: Scalars['ObjectID']['input'];
   category: Array<CategoryType>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -112,6 +111,13 @@ export type DeleteProductInput = {
   _id: Scalars['ObjectID']['input'];
 };
 
+export type IdFilterInput = {
+  equal?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  notEqual?: InputMaybe<Scalars['String']['input']>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type KeyValuePairInput = {
   key: Scalars['String']['input'];
   value: Scalars['String']['input'];
@@ -132,6 +138,10 @@ export enum PaymentMethodType {
   Gcash = 'GCASH',
 }
 
+export type ProductByIdsInput = {
+  ids: Array<Scalars['ObjectID']['input']>;
+};
+
 export type ProductsCategoryFilterInput = {
   equal?: InputMaybe<CategoryType>;
   in?: InputMaybe<Array<CategoryType>>;
@@ -140,6 +150,7 @@ export type ProductsCategoryFilterInput = {
 };
 
 export type ProductsFilterInput = {
+  _id?: InputMaybe<IdFilterInput>;
   category?: InputMaybe<ProductsCategoryFilterInput>;
   status?: InputMaybe<ProductsStatusFilterInput>;
 };
@@ -245,6 +256,76 @@ export type AddToCartMutationVariables = Exact<{
 export type AddToCartMutation = {
   __typename: 'Mutation';
   addToCart?: boolean | null;
+};
+
+export type CartQueryVariables = Exact<{
+  id: Scalars['ObjectID']['input'];
+}>;
+
+export type CartQuery = {
+  __typename: 'Query';
+  cart: {
+    __typename: 'Cart';
+    _id: string;
+    subtotal: string;
+    tax: string;
+    status: CartStatus;
+    createdAt: string;
+    updatedAt: string;
+    items: Array<{
+      __typename: 'CartItem';
+      productId: string;
+      quantity: number;
+      unitPrice: string;
+      totalPrice: string;
+    }>;
+  };
+};
+
+export type MyOrdersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyOrdersQuery = {
+  __typename: 'Query';
+  myOrders: Array<{
+    __typename: 'Order';
+    _id: string;
+    subtotal: string;
+    tax: string;
+    shippingFee: string;
+    total: string;
+    status: OrderStatus;
+    createdAt: string;
+    items?: Array<{
+      __typename: 'CartItem';
+      productId: string;
+      quantity: number;
+      unitPrice: string;
+      totalPrice: string;
+    } | null> | null;
+    shippingOption: {
+      __typename: 'ShippingOption';
+      type: ShippingType;
+      label: string;
+      description?: string | null;
+      estimatedDays?: string | null;
+      fee: string;
+    };
+  }>;
+};
+
+export type ShippingOptionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ShippingOptionsQuery = {
+  __typename: 'Query';
+  shippingOptions: Array<{
+    __typename: 'ShippingOption';
+    _id: string;
+    type: ShippingType;
+    label: string;
+    description?: string | null;
+    fee: string;
+    estimatedDays?: string | null;
+  }>;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -546,6 +627,209 @@ export type AddToCartMutationOptions = Apollo.BaseMutationOptions<
   AddToCartMutation,
   AddToCartMutationVariables
 >;
+export const CartDocument = /*#__PURE__*/ gql`
+  query Cart($id: ObjectID!) {
+    cart(id: $id) {
+      _id
+      items {
+        productId
+        quantity
+        unitPrice
+        totalPrice
+      }
+      subtotal
+      tax
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export function useCartQuery(
+  baseOptions: Apollo.QueryHookOptions<CartQuery, CartQueryVariables> &
+    ({ variables: CartQueryVariables; skip?: boolean } | { skip: boolean })
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CartQuery, CartQueryVariables>(CartDocument, options);
+}
+export function useCartLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CartQuery, CartQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CartQuery, CartQueryVariables>(
+    CartDocument,
+    options
+  );
+}
+export function useCartSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<CartQuery, CartQueryVariables>(
+    CartDocument,
+    options
+  );
+}
+export type CartQueryHookResult = ReturnType<typeof useCartQuery>;
+export type CartLazyQueryHookResult = ReturnType<typeof useCartLazyQuery>;
+export type CartSuspenseQueryHookResult = ReturnType<
+  typeof useCartSuspenseQuery
+>;
+export type CartQueryResult = Apollo.QueryResult<CartQuery, CartQueryVariables>;
+export function refetchCartQuery(variables: CartQueryVariables) {
+  return { query: CartDocument, variables: variables };
+}
+export const MyOrdersDocument = /*#__PURE__*/ gql`
+  query MyOrders {
+    myOrders {
+      _id
+      items {
+        productId
+        quantity
+        unitPrice
+        totalPrice
+      }
+      shippingOption {
+        type
+        label
+        description
+        estimatedDays
+        fee
+      }
+      subtotal
+      tax
+      shippingFee
+      total
+      status
+      createdAt
+    }
+  }
+`;
+export function useMyOrdersQuery(
+  baseOptions?: Apollo.QueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MyOrdersQuery, MyOrdersQueryVariables>(
+    MyOrdersDocument,
+    options
+  );
+}
+export function useMyOrdersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MyOrdersQuery,
+    MyOrdersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MyOrdersQuery, MyOrdersQueryVariables>(
+    MyOrdersDocument,
+    options
+  );
+}
+export function useMyOrdersSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<MyOrdersQuery, MyOrdersQueryVariables>(
+    MyOrdersDocument,
+    options
+  );
+}
+export type MyOrdersQueryHookResult = ReturnType<typeof useMyOrdersQuery>;
+export type MyOrdersLazyQueryHookResult = ReturnType<
+  typeof useMyOrdersLazyQuery
+>;
+export type MyOrdersSuspenseQueryHookResult = ReturnType<
+  typeof useMyOrdersSuspenseQuery
+>;
+export type MyOrdersQueryResult = Apollo.QueryResult<
+  MyOrdersQuery,
+  MyOrdersQueryVariables
+>;
+export function refetchMyOrdersQuery(variables?: MyOrdersQueryVariables) {
+  return { query: MyOrdersDocument, variables: variables };
+}
+export const ShippingOptionsDocument = /*#__PURE__*/ gql`
+  query ShippingOptions {
+    shippingOptions {
+      _id
+      type
+      label
+      description
+      fee
+      estimatedDays
+    }
+  }
+`;
+export function useShippingOptionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ShippingOptionsQuery,
+    ShippingOptionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ShippingOptionsQuery, ShippingOptionsQueryVariables>(
+    ShippingOptionsDocument,
+    options
+  );
+}
+export function useShippingOptionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ShippingOptionsQuery,
+    ShippingOptionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ShippingOptionsQuery,
+    ShippingOptionsQueryVariables
+  >(ShippingOptionsDocument, options);
+}
+export function useShippingOptionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ShippingOptionsQuery,
+        ShippingOptionsQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    ShippingOptionsQuery,
+    ShippingOptionsQueryVariables
+  >(ShippingOptionsDocument, options);
+}
+export type ShippingOptionsQueryHookResult = ReturnType<
+  typeof useShippingOptionsQuery
+>;
+export type ShippingOptionsLazyQueryHookResult = ReturnType<
+  typeof useShippingOptionsLazyQuery
+>;
+export type ShippingOptionsSuspenseQueryHookResult = ReturnType<
+  typeof useShippingOptionsSuspenseQuery
+>;
+export type ShippingOptionsQueryResult = Apollo.QueryResult<
+  ShippingOptionsQuery,
+  ShippingOptionsQueryVariables
+>;
+export function refetchShippingOptionsQuery(
+  variables?: ShippingOptionsQueryVariables
+) {
+  return { query: ShippingOptionsDocument, variables: variables };
+}
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file)

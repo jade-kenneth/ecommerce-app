@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { ObjectId  as _ObjectId} from '../../libs/object-id'
+import { Types  } from 'mongoose'
 import { Decimal as _Decimal } from 'decimal.js'
 
 export enum AccountType {
@@ -86,8 +86,12 @@ export interface UpdateCartItemInput {
 }
 
 export interface CheckoutInput {
-    shippingOptionId: string;
-    paymentMethodId: string;
+    shippingOptionId: ObjectId;
+    paymentMethodId: ObjectId;
+}
+
+export interface ProductByIdsInput {
+    ids: ObjectId[];
 }
 
 export interface CreateConfigInput {
@@ -118,9 +122,17 @@ export interface ProductsCategoryFilterInput {
     notEqual?: Nullable<CategoryType>;
 }
 
+export interface IdFilterInput {
+    equal?: Nullable<string>;
+    in?: Nullable<string[]>;
+    notIn?: Nullable<string[]>;
+    notEqual?: Nullable<string>;
+}
+
 export interface ProductsFilterInput {
     status?: Nullable<ProductsStatusFilterInput>;
     category?: Nullable<ProductsCategoryFilterInput>;
+    _id?: Nullable<IdFilterInput>;
 }
 
 export interface KeyValuePairInput {
@@ -137,7 +149,6 @@ export interface VoucherInput {
 }
 
 export interface CreateProductInput {
-    _id: ObjectId;
     thumbnail: string;
     name: string;
     price: number;
@@ -220,18 +231,19 @@ export interface IMutation {
 export interface IQuery {
     memberAccounts(): Account[] | Promise<Account[]>;
     self(): Nullable<Account> | Promise<Nullable<Account>>;
-    carts(): Cart[] | Promise<Cart[]>;
+    cart(id: ObjectId): Cart | Promise<Cart>;
     shippingOptions(): ShippingOption[] | Promise<ShippingOption[]>;
     paymentMethods(): PaymentMethod[] | Promise<PaymentMethod[]>;
     myOrders(): Order[] | Promise<Order[]>;
     order(id: ObjectId): Nullable<Order> | Promise<Nullable<Order>>;
+    productByIds(ids?: Nullable<ProductByIdsInput>): CartProductDetails | Promise<CartProductDetails>;
     config(): Config | Promise<Config>;
     products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
     highPointProducts(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
 }
 
 export interface CartItem {
-    product: Product;
+    productId: ObjectId;
     quantity: number;
     unitPrice: string;
     totalPrice: string;
@@ -256,8 +268,7 @@ export interface ShippingOption {
 
 export interface Cart {
     _id: ObjectId;
-    items?: Nullable<Nullable<CartItem>[]>;
-    ownerId: ObjectId;
+    items: CartItem[];
     subtotal: string;
     tax: string;
     shippingFee: string;
@@ -270,7 +281,6 @@ export interface Cart {
 export interface Order {
     _id: ObjectId;
     items?: Nullable<Nullable<CartItem>[]>;
-    ownerId: ObjectId;
     shippingOption: ShippingOption;
     paymentMethod: PaymentMethod;
     subtotal: string;
@@ -279,6 +289,13 @@ export interface Order {
     total: string;
     status: OrderStatus;
     createdAt: string;
+}
+
+export interface CartProductDetails {
+    thumbnail: string;
+    name: string;
+    price: Decimal;
+    productId: ObjectId;
 }
 
 export interface KeyValuePair {
@@ -323,6 +340,7 @@ export interface FileNameTooLongError extends Error {
 
 export interface Product extends Node {
     _id: ObjectId;
+    nodeType: string;
     thumbnail: string;
     name: string;
     price: number;
@@ -342,7 +360,7 @@ export interface Product extends Node {
 }
 
 export type JSON = Record<string, any>;
-export type ObjectId = _ObjectId;
+export type ObjectId = Types.ObjectId;
 export type DateTime = Date;
 export type Decimal = _Decimal;
 export type Cursor = unknown;

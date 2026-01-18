@@ -10,7 +10,7 @@ import {
   Types,
 } from 'mongoose';
 import * as R from 'ramda';
-import { ObjectId } from './object-id';
+
 import {
   Connection,
   Filter,
@@ -34,7 +34,7 @@ function normalizeFilterField(field: any): any {
     return field;
   }
 
-  if (field instanceof ObjectId) {
+  if (field instanceof Types.ObjectId) {
     return field;
   }
 
@@ -152,7 +152,7 @@ export function flattenObject(item: any, parentKey?: string): Partial<RawItem> {
         typeof value === 'object' &&
         value !== null &&
         !(value instanceof Array) &&
-        !(value instanceof ObjectId) &&
+        !(value instanceof Types.ObjectId) &&
         !(value instanceof Decimal) &&
         !(value instanceof Date) &&
         !(value instanceof Buffer)
@@ -172,8 +172,8 @@ export function flattenObject(item: any, parentKey?: string): Partial<RawItem> {
 export type RawItem = { _id: Buffer; [key: string]: unknown };
 
 export class MongooseRepository<
-  TEntity extends { _id: ObjectId } = {
-    _id: ObjectId;
+  TEntity extends { _id: Types.ObjectId } = {
+    _id: Types.ObjectId;
   }
 > implements Repository<TEntity>
 {
@@ -215,12 +215,22 @@ export class MongooseRepository<
     }
   }
   public async update(
-    filter: ObjectId | Filter<TEntity>,
+    filter: Types.ObjectId | Filter<TEntity>,
     data: Partial<Omit<TEntity, '_id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void> {
     const options = R.pick(['upsert'], opts || {});
+    if (filter instanceof Types.ObjectId) {
+      await this.model.updateOne(
+        { _id: filter },
+        {
+          $set: data,
+        },
+        options
+      );
 
+      return;
+    }
     if (typeof filter === 'string') {
       await this.model.updateOne(
         { _id: filter },
@@ -234,7 +244,7 @@ export class MongooseRepository<
     }
   }
   public async delete(
-    filter: ObjectId | Filter<TEntity>,
+    filter: Types.ObjectId | Filter<TEntity>,
     opts?: WriteOptions
   ): Promise<void> {
     const options = R.pick(['upsert'], opts || {});
@@ -244,7 +254,7 @@ export class MongooseRepository<
     }
   }
   async find(
-    filter: ObjectId | Filter<TEntity>,
+    filter: Types.ObjectId | Filter<TEntity>,
     opts?: {
       collation?: CollationOptions;
       secondaryPreferred?: true;
@@ -400,7 +410,7 @@ export class MongooseRepository<
     throw new Error('Method not implemented.');
   }
   increment(
-    filter: ObjectId | Filter<TEntity>,
+    filter: Types.ObjectId | Filter<TEntity>,
     field: string,
     amount: number,
     opts?: WriteOptions

@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AddToCartInput, CartStatus } from '../__generated/graphql-types';
 
-import { ObjectId } from '../../libs/object-id';
+import { Types } from 'mongoose';
 import { Filter } from '../../libs/repository';
+import { ObjectType } from '../../types/common';
 import { Tokens } from '../../types/tokens';
 import { ProductsService } from '../products/products.service';
 import { Cart, CartRepository } from './repositories/carts.repository';
@@ -15,7 +16,7 @@ export class CartsService {
     private readonly products: ProductsService
   ) {}
 
-  public async getCarts(params: {
+  public async getCart(params: {
     first?: number;
     after?: string;
     filter: Filter<Cart>;
@@ -32,44 +33,76 @@ export class CartsService {
     params: AddToCartInput & { _id: string };
   }) {
     const timestamp = new Date();
-
-    const cart = await this.carts.find(ObjectId.from(params._id));
+    const product = await this.products.findProduct(
+      new Types.ObjectId(params.productId)
+    );
+    const cart = await this.carts.find(new Types.ObjectId(params._id));
 
     if (!cart) {
       await this.carts.create({
-        _id: ObjectId.from(Buffer.from(params._id, 'hex')),
+        _id: new Types.ObjectId(params._id),
         createdAt: timestamp,
-        items: [],
+        items: [
+          {
+            productId: params.productId,
+            quantity: params.quantity,
+            totalPrice: '0',
+            unitPrice: '0',
+          },
+        ],
         shippingFee: '0',
         status: CartStatus.ACTIVE,
         subtotal: '0',
         tax: '0',
         total: '0',
         updatedAt: timestamp,
+        nodeType: ObjectType.Cart,
       });
     }
-    const product = await this.products.findProduct(ObjectId.from(params._id));
 
     if (!product) throw new Error('Product not found');
 
-    const item = cart.items.find(
-      (item) => item.product._id === params.productId
+    if (!cart?.items.length) return;
+
+    let item = cart.items.find((item) =>
+      item.productId.equals(params.productId)
     );
 
     if (item) {
       item.quantity += params.quantity;
-      item.totalPrice = (
-        Number(item.quantity) * Number(item.unitPrice)
-      ).toString();
+      item.totalPrice = (item.quantity * Number(item.unitPrice)).toString();
+
+      await recalcCart(cart);
+
+      const updatedItems = cart.items.map((cartItem) =>
+        cartItem.productId.equals(item.productId) ? item : cartItem
+      );
+
+      await this.carts.update(new Types.ObjectId(params._id), {
+        items: updatedItems,
+      });
+    } else {
+      await this.carts.update(new Types.ObjectId(params._id), {
+        items: [
+          ...cart.items,
+          {
+            productId: params.productId,
+            quantity: params.quantity,
+            totalPrice: '0',
+            unitPrice: '0',
+          },
+        ],
+      });
     }
 
-    await recalcCart(cart);
-
-    console.log(cart, 'cart');
     // await this.carts.create({ ...params }).catch(async (err) => {
     //   console.log(err, 'error');
     //   return;
     // });
+  }
+
+  public async findCart(id: Types.ObjectId) {
+    return this.carts.find(id);
   }
 
   // public async updateProduct(params: UpdateProductInput) {
@@ -114,7 +147,7 @@ export class CartsService {
 export async function recalcCart(cart: Cart) {
   const VAT_RATE = 0.12; //TODO configure this as config
   // 1️⃣ Subtotal (sum of all item totals)
-  cart.subtotal = cart.items
+  cart.subtotal = cart?.items
     .reduce(
       (sum, item) =>
         Number(sum) + Number(item.unitPrice) * Number(item.quantity),

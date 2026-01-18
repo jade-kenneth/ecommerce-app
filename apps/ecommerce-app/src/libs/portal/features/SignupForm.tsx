@@ -1,19 +1,19 @@
 import { Text } from '@chakra-ui/react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { ObjectId } from 'bson';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaEye, FaFacebook, FaGoogle, FaRegEyeSlash } from 'react-icons/fa';
 import z from 'zod';
-import { Button, Field, Input, ObjectType, toaster } from '../../global/src';
+import { Button, Field, Input, toaster } from '../../global/src';
 
 import { create_session } from '../../global/src/auth/service';
 import {
   AccountType,
   useCreateMemberAccountMutation,
 } from '../../global/src/graphql/generated';
-import { ObjectId } from '../../global/src/utils/object-id';
+
 interface SignupFormProps {
   onToggleToLogin?: () => void;
 }
@@ -70,7 +70,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
   const [mutate] = useCreateMemberAccountMutation();
 
   const onSubmit = form.handleSubmit(async (data) => {
-    const _id = ObjectId.generate(ObjectType.MemberAccount).toString();
+    const _id = new ObjectId().toHexString();
     try {
       await mutate({
         variables: {

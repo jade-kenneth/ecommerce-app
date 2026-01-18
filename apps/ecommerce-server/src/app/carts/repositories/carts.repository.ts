@@ -1,12 +1,11 @@
-import { Connection } from 'mongoose';
+import { Connection, Types } from 'mongoose';
 
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import { MongooseRepository } from '../../../libs/mongoose-repository';
 import { Repository } from '../../../libs/repository';
+import { Node } from '../../../types/common';
 import { CartItem, CartStatus } from '../../__generated/graphql-types';
 
-export type Cart = {
-  _id: ObjectId;
+export type Cart = Node & {
   items: CartItem[];
   subtotal: String;
   tax: String;
@@ -15,6 +14,13 @@ export type Cart = {
   status: CartStatus;
   createdAt: Date;
   updatedAt: Date;
+};
+
+const CartItemSchema = {
+  productId: Types.ObjectId,
+  quantity: Number,
+  unitPrice: Number,
+  totalPrice: Number,
 };
 
 export type CartRepository = Repository<Cart>;
@@ -26,9 +32,7 @@ export async function CartRepositoryFactory(
     connection,
     'Carts',
     {
-      _id: ObjectId,
-      items: [Buffer],
-      ownerId: ObjectId,
+      items: [CartItemSchema],
       subtotal: String,
       tax: String,
       shippingFee: String,

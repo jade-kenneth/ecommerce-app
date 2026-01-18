@@ -6,6 +6,7 @@ import {
   CreateProductInput,
   DeleteProductInput,
   UpdateProductInput,
+  ProductByIdsInput
 } from '../__generated/graphql-types';
 import { ProductsService } from './products.service';
 
@@ -49,5 +50,10 @@ export class ProductResolver {
   @Mutation('deleteProduct')
   async deleteProduct(@Args('input') input: DeleteProductInput) {
     return this.productService.deleteProduct(input);
+  }
+
+  @Query('productByIds')
+  async getProductByIds(@Args('input') input: ProductByIdsInput) {
+    return this.productService.findProduct
   }
 }

@@ -1,5 +1,6 @@
 import { CollationOptions } from 'mongodb';
-import { ObjectId } from './object-id';
+
+import { Types } from 'mongoose';
 
 export type Cursor = Buffer;
 
@@ -71,16 +72,19 @@ export type WriteOptions = {
   writeConcern?: 'primary' | 'majority';
 };
 
-export interface Repository<T extends { _id: ObjectId }> {
+export interface Repository<T extends { _id: Types.ObjectId }> {
   create(data: T, opts?: WriteOptions): Promise<void>;
   update(
-    filter: ObjectId | Filter<T>,
+    filter: Types.ObjectId | Filter<T>,
     data: Partial<Omit<T, '_id'>>,
     opts?: WriteOptions & { upsert?: boolean }
   ): Promise<void>;
-  delete(filter: ObjectId | Filter<T>, opts?: WriteOptions): Promise<void>;
+  delete(
+    filter: Types.ObjectId | Filter<T>,
+    opts?: WriteOptions
+  ): Promise<void>;
   find(
-    filter: ObjectId | Filter<T>,
+    filter: Types.ObjectId | Filter<T>,
     opts?: {
       collation?: CollationOptions;
       secondaryPreferred?: true;
@@ -114,21 +118,21 @@ export interface Repository<T extends { _id: ObjectId }> {
     }
   ): Promise<T[]>;
   increment(
-    filter: ObjectId | Filter<T>,
+    filter: Types.ObjectId | Filter<T>,
     field: string,
     amount: number,
     opts?: WriteOptions
   ): Promise<null | number>;
 }
 
-// export interface PGRepository<T extends { id: ObjectId }> {
+// export interface PGRepository<T extends { id: Types.ObjectId }> {
 //   create(data: T): Promise<void>;
 //   update(
-//     filter: Types.ObjectId | Filter<T>,
+//     filter: Types.Types.ObjectId | Filter<T>,
 //     data: Partial<Omit<T, 'id'>>
 //   ): Promise<void>;
-//   delete(filter: Types.ObjectId | Filter<T>): Promise<void>;
-//   find(filter: Types.ObjectId | Filter<T>): Promise<T | null>;
+//   delete(filter: Types.Types.ObjectId | Filter<T>): Promise<void>;
+//   find(filter: Types.Types.ObjectId | Filter<T>): Promise<T | null>;
 //   list(filter?: Filter<T>): Promise<RepositoryIterator<T>>;
 //   count(filter?: Filter<T>): Promise<number>;
 // }

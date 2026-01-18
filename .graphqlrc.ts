@@ -18,7 +18,7 @@ const scalars = {
     output: 'string',
   },
   JSON: 'Record<string, any>',
-  ObjectId: 'string',
+  ObjectID: 'string',
   Decimal: 'string',
   Cursor: 'string',
   Upload: 'File',

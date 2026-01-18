@@ -1,15 +1,16 @@
 import { MongooseRepository } from 'apps/ecommerce-server/src/libs/mongoose-repository';
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
+
 import { Repository } from 'apps/ecommerce-server/src/libs/repository';
-import { Connection } from 'mongoose';
+import { Connection, Types } from 'mongoose';
+
 export enum SessionStatus {
   PENDING = 'PENDING',
   READY = 'READY',
 }
 
 export type Session = {
-  _id: ObjectId;
-  account: ObjectId;
+  _id: Types.ObjectId;
+  account: Types.ObjectId;
   jti: Buffer;
   dateTimeCreated: Date;
   dateTimeLastRefreshed: Date;
@@ -24,7 +25,7 @@ export function SessionRepositoryFactory(
     connection,
     'Session',
     {
-      account: ObjectId,
+      account: Types.ObjectId,
       jti: Buffer,
       dateTimeCreated: Date,
       dateTimeLastRefreshed: Date,

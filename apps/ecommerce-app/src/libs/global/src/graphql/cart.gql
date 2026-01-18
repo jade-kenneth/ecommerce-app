@@ -1,3 +1,55 @@
 mutation AddToCart($input: AddToCartInput!) {
   addToCart(input: $input)
 }
+
+query Cart($id: ObjectID!) {
+  cart(id: $id) {
+    _id
+    items {
+      productId
+      quantity
+      unitPrice
+      totalPrice
+    }
+    subtotal
+    tax
+    status
+    createdAt
+    updatedAt
+  }
+}
+query MyOrders {
+  myOrders {
+    _id
+    items {
+      productId
+      quantity
+      unitPrice
+      totalPrice
+    }
+    shippingOption {
+      type
+      label
+      description
+      estimatedDays
+      fee
+    }
+    subtotal
+    tax
+    shippingFee
+    total
+    status
+    createdAt
+  }
+}
+
+query ShippingOptions {
+  shippingOptions {
+    _id
+    type
+    label
+    description
+    fee
+    estimatedDays
+  }
+}

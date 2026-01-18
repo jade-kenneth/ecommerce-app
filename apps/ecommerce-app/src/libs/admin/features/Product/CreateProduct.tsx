@@ -21,7 +21,6 @@ import {
   FieldInput,
   MultiComboboxField,
   NumberInputField,
-  ObjectType,
   Spinner,
   UploadFile,
 } from '../../../global/src';
@@ -33,7 +32,6 @@ import {
   StatusType,
   useCreateProductMutation,
 } from '../../../global/src/graphql/generated';
-import { ObjectId } from '../../../global/src/utils/object-id';
 import { SchemaDefinition } from './utils';
 
 interface AddProductButtonProps {
@@ -295,14 +293,10 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                 <button
                   className="bg-primary-700-value p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
                   onClick={form.handleSubmit(async (data) => {
-                    const _id = ObjectId.generate(
-                      ObjectType.Product
-                    ).toString();
                     try {
                       await createProduct({
                         variables: {
                           input: {
-                            _id,
                             name: data.name,
                             category: data.category,
                             price: parseFloat(data.price),
@@ -322,7 +316,7 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                         points: data.points,
                         pieces: data.stock,
                         discount: data.discountPercentage || 0,
-                        _id,
+
                         __typename: 'Product',
                       });
                       disclosure.onClose();

@@ -10,11 +10,9 @@ import {
 import ms from 'ms';
 import { AuthRequest, TokenType } from '../types';
 
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
-
-import { ObjectType } from 'apps/ecommerce-server/src/libs/object-shared';
 import bcrypt from 'bcrypt';
 import { DateTime } from 'luxon';
+import { Types } from 'mongoose';
 import * as R from 'ramda';
 import randomBytes from 'randombytes';
 import { RefreshJwtGuard } from '../../auth/guards/refresh-jwt.guard';
@@ -43,7 +41,7 @@ export class SessionController {
     const { user } = request.body;
 
     const session: Session = {
-      _id: ObjectId.generate(ObjectType.Session),
+      _id: new Types.ObjectId(),
       account: user._id,
       jti: randomBytes(12),
       dateTimeCreated: timestamp,
@@ -153,7 +151,7 @@ export class SessionController {
 
       return {
         session: {
-          id: ObjectId.generate(ObjectType.Session).toString(),
+          _id: new Types.ObjectId(),
 
           dateTimeCreated: timestamp.toISOString(),
           dateTimeLastRefreshed: timestamp.toISOString(),
@@ -206,7 +204,7 @@ export class SessionController {
     }
 
     const session: Session = {
-      _id: ObjectId.generate(ObjectType.Session),
+      _id: new Types.ObjectId(),
       account: account._id,
       jti: randomBytes(12),
       dateTimeCreated: timestamp,

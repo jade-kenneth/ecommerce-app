@@ -17,11 +17,9 @@ export function AuthForm() {
   const disclosure = useDisclosure();
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const globalStore = useGlobalStore((state) => state.authenticate);
+  if (globalStore.isAuthenticated) return;
   return (
-    <Dialog.Root
-      open={!globalStore.isAuthenticated && disclosure.open}
-      lazyMount
-    >
+    <Dialog.Root lazyMount>
       <Dialog.Trigger>
         <Text sizes={'paragraph-sm'} onClick={disclosure.onOpen}>
           Register / Log In

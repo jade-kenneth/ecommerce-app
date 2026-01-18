@@ -3,11 +3,13 @@ import { Flex, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FaHeart, FaStar } from 'react-icons/fa';
 import { TbShoppingCartPlus } from 'react-icons/tb';
+import { useCartContext } from '../../../portal/features/Cart/CartContext';
 import {
   ProductCoreDataFragment,
   useAddToCartMutation,
 } from '../graphql/generated';
-import { ObjectId } from '../utils';
+import { useGlobalStore } from '../utils';
+import { Button } from './Button';
 
 interface CardsProps extends ProductCoreDataFragment {
   isTopSold?: boolean;
@@ -18,6 +20,9 @@ export const Cards = (props: CardsProps) => {
     (props.price * (props.discount / 100)).toFixed(2)
   );
   const [mutate] = useAddToCartMutation();
+  const globalStore = useGlobalStore((state) => state);
+
+  const context = useCartContext();
   return (
     <Flex
       w="220.8px"
@@ -155,27 +160,6 @@ export const Cards = (props: CardsProps) => {
               })()}
             </Flex>
           )}
-          <button
-            className="text-primary-900-value ml-auto mr-2 cursor-pointer"
-            onClick={async () => {
-              console.log(
-                ObjectId.from(Buffer.from(props._id, 'hex')).toString(),
-                'iddd'
-              );
-              await mutate({
-                variables: {
-                  input: {
-                    productId: ObjectId.from(
-                      Buffer.from(props._id, 'hex')
-                    ).toString(),
-                    quantity: 1,
-                  },
-                },
-              });
-            }}
-          >
-            <TbShoppingCartPlus className="size-5 stroke-3" />
-          </button>
         </Flex>
       </Flex>
       <Flex direction={'column'} p="12px">
@@ -196,7 +180,7 @@ export const Cards = (props: CardsProps) => {
             {(() => {
               const amount = props.price - discount;
               const useCompact = amount >= 1000000;
-              console.log('useCompact', useCompact, amount);
+
               return new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'PHP',
@@ -244,6 +228,31 @@ export const Cards = (props: CardsProps) => {
             sold
           </Text>
         </Flex>
+        <Button
+          className="text-white items-center justify-center h-[40px] mt-3 flex gap-2  cursor-pointer"
+          onClick={async () => {
+            try {
+              await mutate({
+                variables: {
+                  input: {
+                    productId: props._id,
+                    quantity: 1,
+                  },
+                },
+              });
+              context.addCartItem({
+                name: props.name,
+                price: props.price,
+                productId: props._id,
+                quantity: 1,
+                thumbnail: props.thumbnail,
+              });
+            } catch (error) {}
+          }}
+        >
+          <TbShoppingCartPlus className="size-5 stroke-3" />{' '}
+          <p className="text-base font-medium">Add to Cart</p>
+        </Button>
       </Flex>
     </Flex>
   );

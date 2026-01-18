@@ -1,5 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
+
+import { Types } from 'mongoose';
 import * as R from 'ramda';
 import { CreateAccountInput } from '../../__generated/graphql-types';
 import { Claims } from '../types';
@@ -30,7 +31,7 @@ export class AccountResolver {
   @Query('self')
   async self(@Context('claims') claims: Claims) {
     return await this.account.findAccount({
-      _id: ObjectId.from(Buffer.from(claims.sub, 'hex')),
+      _id: new Types.ObjectId(claims.sub),
     });
   }
 }

@@ -32,6 +32,7 @@ interface Voucher {
 
 type Product implements Node {
   _id: ObjectId!
+  nodeType: String!
   thumbnail: String!
   name: String!
   price: Int!
@@ -62,9 +63,17 @@ input ProductsCategoryFilterInput {
   notIn: [CategoryType!]
   notEqual: CategoryType
 }
+
+input IdFilterInput {
+  equal: String
+  in: [String!]
+  notIn: [String!]
+  notEqual: String
+}
 input ProductsFilterInput {
   status: ProductsStatusFilterInput
   category: ProductsCategoryFilterInput
+  _id: IdFilterInput
 }
 type Query {
   products(first: Int, after: Cursor, filter: ProductsFilterInput): Connection!
@@ -90,7 +99,6 @@ input VoucherInput {
 }
 
 input CreateProductInput {
-  _id: ObjectId!
   thumbnail: String!
   name: String!
   price: Int!

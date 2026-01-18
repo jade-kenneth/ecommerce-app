@@ -21,11 +21,8 @@ export const Highlight: FunctionComponent<HighlightProps> = ({
       py="12px"
       w="full"
       bg="colors.primary.700"
-      position={'fixed'}
       alignItems={'center'}
       color="colors.primary.950"
-      top={0}
-      zIndex={'docked'}
     >
       <Flex className="max-w-screen" justify={'space-between'}>
         <Box>

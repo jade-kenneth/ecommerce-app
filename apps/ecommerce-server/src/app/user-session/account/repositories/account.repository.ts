@@ -1,12 +1,12 @@
 import { MongooseRepository } from 'apps/ecommerce-server/src/libs/mongoose-repository';
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
+
 import { Repository } from 'apps/ecommerce-server/src/libs/repository';
 
 import { AccountType } from 'apps/ecommerce-server/src/types/common';
-import { Connection } from 'mongoose';
+import { Connection, Types } from 'mongoose';
 
 export type Account = {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   // platform?: ObjectId | null;
   // name: string;
   password: string;
@@ -41,7 +41,7 @@ export function AccountRepositoryFactory(
     connection,
     'Accounts',
     {
-      _id: ObjectId,
+      _id: Types.ObjectId,
       // platform: Buffer,
       // name: String,
       // role: String,

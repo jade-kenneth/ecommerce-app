@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import { AccountType } from 'apps/ecommerce-server/src/types/common';
 import bcrypt from 'bcrypt';
+import { Types } from 'mongoose';
 import { Filter } from '../../../libs/repository';
 import { Tokens } from '../../../types/tokens';
 import { Account, AccountRepository } from './repositories/account.repository';
@@ -32,12 +32,12 @@ export class AccountService {
     });
   }
 
-  async deleteAccount(filter: ObjectId | Filter<Account>) {
+  async deleteAccount(filter: Types.ObjectId | Filter<Account>) {
     await this.accounts.delete(filter, { writeConcern: 'primary' });
   }
 
   async updateAccount(
-    filter: ObjectId | Filter<Account>,
+    filter: Types.ObjectId | Filter<Account>,
     data: Partial<Omit<Account, 'id'>>
   ) {
     await this.accounts.update(filter, data, { writeConcern: 'primary' });
@@ -51,7 +51,7 @@ export class AccountService {
     return await this.accounts.list().collect();
   }
 
-  async findAccount(filter: ObjectId | Filter<Account>) {
+  async findAccount(filter: Types.ObjectId | Filter<Account>) {
     return this.accounts.find(filter);
   }
 }

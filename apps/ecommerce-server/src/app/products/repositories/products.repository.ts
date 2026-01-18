@@ -1,10 +1,10 @@
-import { Connection } from 'mongoose';
+import { Connection, Types } from 'mongoose';
 
-import { ObjectId } from 'apps/ecommerce-server/src/libs/object-id';
 import Decimal from 'decimal.js';
 import { Decimal128 } from 'mongodb';
 import { MongooseRepository } from '../../../libs/mongoose-repository';
 import { Repository } from '../../../libs/repository';
+import { Node } from '../../../types/common';
 import {
   CategoryType,
   DateTime,
@@ -14,8 +14,8 @@ import {
   Voucher,
 } from '../../__generated/graphql-types';
 
-export type Product = {
-  _id: ObjectId;
+export type Product = Node & {
+  _id: Types.ObjectId;
   name: string;
   thumbnail: string;
   price: number;
@@ -43,8 +43,9 @@ export async function ProductRepositoryFactory(
     connection,
     'Products',
     {
-      _id: ObjectId,
+      _id: Types.ObjectId,
       name: String,
+      nodeType: String,
       thumbnail: String,
       price: Number,
       status: String,

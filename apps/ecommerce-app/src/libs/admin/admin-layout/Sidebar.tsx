@@ -27,6 +27,8 @@ export default function Sidebar() {
         alt="logo"
         className="mb-6 w-[133.35px] h-[32px] cursor-pointer"
         onClick={() => router.push('/')}
+        width={133.35}
+        height={32}
       />
 
       <NavItem icon={FaHome} path="dashboard" label="Dashboard" />

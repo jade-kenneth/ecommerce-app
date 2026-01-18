@@ -1,7 +1,8 @@
-import { ObjectId } from '../libs/object-id';
+import { Types } from 'mongoose';
 
 export type Node = {
-  _id: ObjectId;
+  _id: Types.ObjectId;
+  nodeType: ObjectType;
 };
 
 export enum EventType {
@@ -12,6 +13,7 @@ export enum EventType {
 export enum ObjectType {
   Product = 'Product',
   Account = 'Account',
+  Cart = 'Cart',
 }
 export enum AccountType {
   Admin = 'ADMIN',

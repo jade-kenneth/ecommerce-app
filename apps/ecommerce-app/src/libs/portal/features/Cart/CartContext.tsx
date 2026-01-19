@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { createContext } from '../../../global/src';
-import { CartStatus } from '../../../global/src/graphql/generated';
 import { useCart } from './useCart';
-
 
 export const [CartContext, useCartContext] =
   createContext<ReturnType<typeof useCart>>();
@@ -13,6 +11,6 @@ export interface CartProviderProps {
 
 export function CartProvider(props: CartProviderProps) {
   const context = useCart();
-
+  console.log('CartContext', context);
   return <CartContext value={context}>{props.children}</CartContext>;
 }

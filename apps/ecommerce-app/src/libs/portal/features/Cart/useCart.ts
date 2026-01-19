@@ -1,3 +1,4 @@
+'use client';
 import { omit } from 'es-toolkit';
 import { useEffect, useReducer } from 'react';
 import {
@@ -96,7 +97,7 @@ export const useCart = () => {
   }
 
   useEffect(() => {
-    if (!productsData || !cartData?.cart) return;
+    if (!productsData?.products.edges.length || !cartData?.cart) return;
 
     const PRODUCTS_MAP = new Map(
       productsData.products.edges.map((p) => [

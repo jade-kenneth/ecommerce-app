@@ -1,5 +1,6 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { FunctionComponent } from 'react';
 import { CiSettings } from 'react-icons/ci';
 import { twMerge } from 'tailwind-merge';
@@ -24,6 +25,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   const { data } = useSelfQuery({
     skip: !globalStore.authenticate.isAuthenticated,
   });
+  const router = useRouter();
 
   const context = useCartContext();
   return (
@@ -99,7 +101,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           <HStack as="button" cursor={'pointer'} role="button" px="20px">
             <button
               className="flex gap-2 relative cursor-pointer"
-              onClick={() => globalStore.cart.setIsOpen(true)}
+              onClick={() => router.push('/cart')}
             >
               <p
                 className={twMerge(

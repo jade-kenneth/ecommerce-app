@@ -83,6 +83,7 @@
     "ts-morph": "^25.0.0",
     "type-fest": "^5.3.1",
     "usehooks-ts": "^3.1.0",
+    "xendit-node": "^7.0.0",
     "yamljs": "^0.3.0",
     "zod": "^3.25.56",
     "zustand": "^5.0.10"

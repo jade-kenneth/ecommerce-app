@@ -108,6 +108,14 @@ export interface UpdateConfigInput {
     carouselItems: string[];
 }
 
+export interface CreateGcashPaymentInput {
+    amount: number;
+    referenceId?: Nullable<string>;
+    successUrl: string;
+    failureUrl: string;
+    description?: Nullable<string>;
+}
+
 export interface ProductsStatusFilterInput {
     equal?: Nullable<StatusType>;
     in?: Nullable<StatusType[]>;
@@ -223,6 +231,7 @@ export interface IMutation {
     createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateConfig(input: UpdateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
+    createGcashPayment(input?: Nullable<CreateGcashPaymentInput>): Nullable<CheckoutUrl> | Promise<Nullable<CheckoutUrl>>;
     createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     deleteProduct(input: DeleteProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -336,6 +345,10 @@ export interface FileFormatNotSupportedError extends Error {
 
 export interface FileNameTooLongError extends Error {
     message: string;
+}
+
+export interface CheckoutUrl {
+    checkout_url?: Nullable<string>;
 }
 
 export interface Product extends Node {

@@ -22,6 +22,7 @@ import { AuthMiddleware } from './auth/auth-middleware';
 import { CartsModule } from './carts/carts.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { PaymentsModule } from './payments/payment.module';
 import { ProductsModule } from './products/products.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { UploadModule } from './upload/upload/upload.module';
@@ -80,6 +81,7 @@ import { SessionModule } from './user-session/session/session.module';
     ConfigModule,
     SessionModule,
     CartsModule,
+    PaymentsModule,
   ],
 
   providers: [AppService],

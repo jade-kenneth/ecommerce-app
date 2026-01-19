@@ -1,4 +1,5 @@
 import { capitalize, numberFormatter } from '../../../global/src';
+import { useCreateGcashPaymentMutation } from '../../../global/src/graphql/generated';
 import { useCartContext } from './CartContext';
 
 export const OrderSummary = () => {
@@ -13,8 +14,9 @@ export const OrderSummary = () => {
     Number(context.state.cart.shipping?.fee || 0) +
     totalAmount * 0.12; // Assuming 12% VAT
 
+  const [mutate] = useCreateGcashPaymentMutation();
   return (
-    <div className="sticky">
+    <div className="sticky top-0">
       <div className="  bg-white rounded-2xl shadow-lg p-6 space-y-6">
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-semibold text-gray-800">Order Summary</h2>
@@ -62,11 +64,11 @@ export const OrderSummary = () => {
                 {capitalize(context.state.cart.shipping?.type ?? '', {
                   delimiter: capitalize.delimiters.UNDERSCORE,
                 })}{' '}
-                <p className="text-sm font-normal text-gray-600">
+                <span className="text-sm font-normal text-gray-600">
                   (
                   {context.state.cart.shipping?.description ?? 'No description'}
                   )
-                </p>
+                </span>
               </p>
             </div>
           </div>
@@ -98,7 +100,28 @@ export const OrderSummary = () => {
       </div>
 
       <div className="max-w-md mx-auto mt-6 space-y-4">
-        <button className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-primary-700-value transition">
+        <button
+          className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-primary-700-value transition"
+          onClick={async () => {
+            const res = await mutate({
+              variables: {
+                input: {
+                  amount: totalAmountWithShippingAndTax as unknown as string,
+                  failureUrl: window.location.href,
+                  successUrl: window.location.href,
+                  referenceId: `order-${Date.now()}`,
+                  description: 'Payment for order #' + `order-${Date.now()}`,
+                },
+              },
+            });
+
+            const checkoutUrl =
+              res.data?.createGcashPayment?.actions?.[0]?.value;
+            if (checkoutUrl) {
+              window.location.href = checkoutUrl;
+            }
+          }}
+        >
           Proceed to Checkout
         </button>
 

@@ -1,0 +1,42 @@
+input CreateGcashPaymentInput {
+  amount: Decimal!
+  referenceId: String
+  successUrl: String!
+  failureUrl: String!
+  description: String
+}
+
+type CheckoutUrl {
+  checkout_url: String
+}
+
+type ChannelProperties {
+  success_return_url: String
+  failure_return_url: String
+}
+
+type PaymentAction {
+  type: String
+  descriptor: String
+  value: String
+}
+type PaymentRequestResponse {
+  payment_request_id: String
+  country: String
+  currency: String
+  business_id: String
+  reference_id: String
+  description: String
+  created: String
+  updated: String
+  status: String
+  capture_method: String
+  channel_code: String
+  request_amount: Decimal
+  channel_properties: ChannelProperties
+  type: String
+  actions: [PaymentAction]
+}
+type Mutation {
+  createGcashPayment(input: CreateGcashPaymentInput): PaymentRequestResponse
+}

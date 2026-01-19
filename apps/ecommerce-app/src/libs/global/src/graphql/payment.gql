@@ -1,0 +1,9 @@
+mutation CreateGcashPayment($input: CreateGcashPaymentInput) {
+  createGcashPayment(input: $input) {
+    reference_id
+    actions {
+      value
+    }
+    payment_request_id
+  }
+}

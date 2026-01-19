@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 17 Jan 2026 19:29:58 GMT
+// Last modified: Sun, 18 Jan 2026 09:40:05 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -86,6 +86,14 @@ export type CreateConfigInput = {
   carouselItems: Array<Scalars['String']['input']>;
   highPointsThreshold: Scalars['Int']['input'];
   topSoldThreshold: Scalars['Int']['input'];
+};
+
+export type CreateGcashPaymentInput = {
+  amount: Scalars['Decimal']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  failureUrl: Scalars['String']['input'];
+  referenceId?: InputMaybe<Scalars['String']['input']>;
+  successUrl: Scalars['String']['input'];
 };
 
 export type CreateProductInput = {
@@ -335,6 +343,23 @@ export type UploadFileMutationVariables = Exact<{
 export type UploadFileMutation = {
   __typename: 'Mutation';
   uploadFile?: string | null;
+};
+
+export type CreateGcashPaymentMutationVariables = Exact<{
+  input?: InputMaybe<CreateGcashPaymentInput>;
+}>;
+
+export type CreateGcashPaymentMutation = {
+  __typename: 'Mutation';
+  createGcashPayment?: {
+    __typename: 'PaymentRequestResponse';
+    reference_id?: string | null;
+    payment_request_id?: string | null;
+    actions?: Array<{
+      __typename: 'PaymentAction';
+      value?: string | null;
+    } | null> | null;
+  } | null;
 };
 
 export type ProductCoreDataFragment = {
@@ -859,6 +884,42 @@ export type UploadFileMutationResult =
 export type UploadFileMutationOptions = Apollo.BaseMutationOptions<
   UploadFileMutation,
   UploadFileMutationVariables
+>;
+export const CreateGcashPaymentDocument = /*#__PURE__*/ gql`
+  mutation CreateGcashPayment($input: CreateGcashPaymentInput) {
+    createGcashPayment(input: $input) {
+      reference_id
+      actions {
+        value
+      }
+      payment_request_id
+    }
+  }
+`;
+export type CreateGcashPaymentMutationFn = Apollo.MutationFunction<
+  CreateGcashPaymentMutation,
+  CreateGcashPaymentMutationVariables
+>;
+export function useCreateGcashPaymentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateGcashPaymentMutation,
+    CreateGcashPaymentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateGcashPaymentMutation,
+    CreateGcashPaymentMutationVariables
+  >(CreateGcashPaymentDocument, options);
+}
+export type CreateGcashPaymentMutationHookResult = ReturnType<
+  typeof useCreateGcashPaymentMutation
+>;
+export type CreateGcashPaymentMutationResult =
+  Apollo.MutationResult<CreateGcashPaymentMutation>;
+export type CreateGcashPaymentMutationOptions = Apollo.BaseMutationOptions<
+  CreateGcashPaymentMutation,
+  CreateGcashPaymentMutationVariables
 >;
 export const ProductsDocument = /*#__PURE__*/ gql`
   query Products($first: Int, $after: Cursor, $filter: ProductsFilterInput) {

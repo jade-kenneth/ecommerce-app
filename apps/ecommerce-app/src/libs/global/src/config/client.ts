@@ -46,7 +46,6 @@ export const apolloClient = new ApolloClient({
       errorPolicy: 'ignore',
     },
   },
-  connectToDevTools: false,
 });
 
 function createUrl(url: string): UriFunction {

@@ -14,7 +14,6 @@ const keyArgs = [
 ];
 export const possibleTypes = { Query: [] };
 export const apolloCache = new InMemoryCache({
-  addTypename: true,
   possibleTypes,
   typePolicies: {
     Query: {

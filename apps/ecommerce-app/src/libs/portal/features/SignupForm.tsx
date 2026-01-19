@@ -6,7 +6,13 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaEye, FaFacebook, FaGoogle, FaRegEyeSlash } from 'react-icons/fa';
 import z from 'zod';
-import { Button, Field, Input, toaster } from '../../global/src';
+import {
+  Button,
+  Field,
+  Input,
+  toaster,
+  useGlobalStore,
+} from '../../global/src';
 
 import { create_session } from '../../global/src/auth/service';
 import {
@@ -50,7 +56,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       label: 'Google',
     },
   ];
-
+  const globalStore = useGlobalStore((state) => state);
   const [state, setState] = useState<{
     showPassword: boolean;
     showConfirmPassword: boolean;
@@ -67,7 +73,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       confirmPassword: '',
     },
   });
-  const [mutate] = useCreateMemberAccountMutation();
+  const [mutate, { loading }] = useCreateMemberAccountMutation();
 
   const onSubmit = form.handleSubmit(async (data) => {
     const _id = new ObjectId().toHexString();
@@ -82,14 +88,15 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
           },
         },
       });
+
       // TODO
       /** poll login -> interval 1500 ms **/
-      setTimeout(() => {
-        create_session({ user: { _id, role: AccountType.Member } });
+      setTimeout(async () => {
+        await create_session({ user: { _id, role: AccountType.Member } });
+        globalStore.authenticate.setIsAuthenticated(true);
+        form.reset();
+        toaster.success({ description: 'Account created successfully' });
       }, 3000);
-
-      form.reset();
-      toaster.success({ description: 'Account created successfully' });
     } catch (error) {
       toaster.error({ description: 'Failed to create account' });
     }
@@ -99,7 +106,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
     <div className="flex items-center gap-2.5 relative bg-white-25 rounded-xl">
       <form
         onSubmit={onSubmit}
-        className="flex-col items-start gap-12 flex relative  w-full"
+        className="flex-col items-start gap-6 flex relative  w-full"
       >
         <div className="flex flex-col gap-6 relative  w-full">
           <Field.Root invalid={!!form.formState.errors.emailAddress}>
@@ -295,8 +302,8 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
             w={'full'}
             className="bg-primary-700-value"
             borderRadius={'50px'}
-            mt={6}
             type="submit"
+            loading={loading}
           >
             Create Account
           </Button>

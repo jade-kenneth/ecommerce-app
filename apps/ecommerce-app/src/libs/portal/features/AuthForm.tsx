@@ -1,18 +1,12 @@
-import {
-  CloseButton,
-  Dialog,
-  Portal,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Dialog, Portal, Text, useDisclosure } from '@chakra-ui/react';
 
 import Image from 'next/image';
 import { useState } from 'react';
 import { Show, useGlobalStore } from '../../global/src';
 
+import { IoMdClose } from 'react-icons/io';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
-
 export function AuthForm() {
   const disclosure = useDisclosure();
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
@@ -28,7 +22,7 @@ export function AuthForm() {
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content>
+          <Dialog.Content className="rounded-xl p-7 border-[1px]">
             <Dialog.Header
               mt="20px"
               display={'flex'}
@@ -85,7 +79,7 @@ export function AuthForm() {
             </Dialog.Body>
 
             <Dialog.CloseTrigger>
-              <CloseButton size="sm" />
+              <IoMdClose className="bg-primary-500-value p-1 size-6 absolute -top-9 -right-9 cursor-pointer text-white rounded-md" />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>

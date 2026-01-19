@@ -89,16 +89,16 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           <Show
             when={!globalStore.authenticate.isAuthenticated}
             fallback={
-              <p className="px-5 flex items-center">{`Welcome back, ${data?.self?.emailAddress}!`}</p>
+              <p className="px-5 flex items-center">{`Hi, ${data?.self?.emailAddress}!`}</p>
             }
           >
-            <HStack as="button" cursor={'pointer'} role="button" px="20px">
+            <HStack cursor={'pointer'} px="20px">
               <UserIcon />
 
               <AuthForm />
             </HStack>
           </Show>
-          <HStack as="button" cursor={'pointer'} role="button" px="20px">
+          <HStack cursor={'pointer'} px="20px">
             <button
               className="flex gap-2 relative cursor-pointer"
               onClick={() => router.push('/cart')}

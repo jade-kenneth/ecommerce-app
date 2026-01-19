@@ -25,6 +25,7 @@ export async function refreshSession(input: RefreshSession) {
   try {
     const response = await axios.post<Token>('/session/refresh', input, {
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+
       headers: {
         Authorization: `Bearer ${input.refreshToken}`,
       },

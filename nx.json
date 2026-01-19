@@ -66,13 +66,6 @@
       }
     }
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheDirectory": "/tmp/nx-cache"
-      }
-    }
-  },
-  "nxCloudAccessToken": "NDY2MDFhZWEtMWJjNy00YjkyLWJhOGYtYTk5YTBmMGQwYzk1fHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "NDY2MDFhZWEtMWJjNy00YjkyLWJhOGYtYTk5YTBmMGQwYzk1fHJlYWQtd3JpdGU=",
+  "cacheDirectory": "/tmp/nx-cache"
 }

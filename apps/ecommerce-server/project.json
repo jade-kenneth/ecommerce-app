@@ -25,7 +25,6 @@
         "buildTarget": "ecommerce-server:build",
         "runBuildTargetDependencies": false
       },
-
       "configurations": {
         "development": {
           "buildTarget": "ecommerce-server:build:development",

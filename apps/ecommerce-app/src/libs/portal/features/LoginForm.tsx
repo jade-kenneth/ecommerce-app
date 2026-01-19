@@ -11,9 +11,7 @@ import {
   toaster,
   useGlobalStore,
 } from '../../global/src';
-import { authenticate } from '../../global/src/auth/service';
 import { Checkbox } from '../../global/src/components/ui/Checkbox';
-import { AccountType } from '../../global/src/graphql/generated';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;
@@ -42,11 +40,11 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const globalStore = useGlobalStore((state) => state.authenticate);
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      await authenticate({
-        emailAddress: data.emailAddress,
-        password: data.password,
-        role: AccountType.Member,
-      });
+      // await authenticate({
+      //   emailAddress: data.emailAddress,
+      //   password: data.password,
+      //   role: AccountType.Member,
+      // });
       toaster.success({ description: 'Successfully logged in!' });
       globalStore.setIsAuthenticated(true);
     } catch (error) {

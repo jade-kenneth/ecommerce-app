@@ -137,7 +137,6 @@ const createStore = (): Store => {
       arg1?: StoreValue[T],
       arg2?: number
     ): Promise<void> {
-      console.log(arg0, 'arg0');
       if (isPlainObject(arg0)) {
         return new Promise<void>((resolve) => {
           setexp(

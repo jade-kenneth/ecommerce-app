@@ -100,7 +100,6 @@ export const ManageProducts = () => {
             heading: 'Image',
             filterable: true,
             render: (item) => {
-              console.log(item.thumbnail.split('/upload'));
               return item.thumbnail ? (
                 <Image
                   src={item.thumbnail}

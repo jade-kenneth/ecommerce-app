@@ -1,5 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 
+import assert from 'assert';
 import { Types } from 'mongoose';
 import * as R from 'ramda';
 import { CreateAccountInput } from '../../__generated/graphql-types';
@@ -30,6 +31,7 @@ export class AccountResolver {
 
   @Query('self')
   async self(@Context('claims') claims: Claims) {
+    assert(claims?.sub, 'unauthorized');
     return await this.account.findAccount({
       _id: new Types.ObjectId(claims.sub),
     });

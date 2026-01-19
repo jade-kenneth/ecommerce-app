@@ -50,7 +50,6 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       toaster.success({ description: 'Successfully logged in!' });
       globalStore.setIsAuthenticated(true);
     } catch (error) {
-      console.log(error, 'error');
       toaster.error({ description: 'Failed to log in. Please try again.' });
     }
   });

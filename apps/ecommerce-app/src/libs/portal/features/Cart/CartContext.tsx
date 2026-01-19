@@ -11,6 +11,6 @@ export interface CartProviderProps {
 
 export function CartProvider(props: CartProviderProps) {
   const context = useCart();
-  console.log('CartContext', context);
+
   return <CartContext value={context}>{props.children}</CartContext>;
 }

@@ -13,15 +13,15 @@ export async function getSession(): Promise<Session> {
       };
     }
     try {
-      // const session = await services.refreshSession({ refreshToken });
-      // await store.set({
-      //   accessToken: session.accessToken,
-      // });
-      // return {
-      //   status: 'authenticated',
-      //   accessToken: session.accessToken,
-      //   refreshToken: session.refreshToken,
-      // };
+      const session = await services.refreshSession({ refreshToken });
+      await store.set({
+        accessToken: session.accessToken,
+      });
+      return {
+        status: 'authenticated',
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
+      };
     } catch (error) {
       return {
         status: 'unauthenticated',
@@ -30,7 +30,7 @@ export async function getSession(): Promise<Session> {
   }
   return {
     status: 'authenticated',
-    accessToken: 'sakls',
+    accessToken,
     refreshToken,
   };
 }

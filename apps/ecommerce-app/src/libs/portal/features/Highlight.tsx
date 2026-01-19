@@ -14,7 +14,7 @@ export const Highlight: FunctionComponent<HighlightProps> = ({
   storeName = 'Welcome to AmyStore',
 }) => {
   const session = useSession();
-  console.log('Highlight Session:', session);
+
   return (
     <Flex
       height={'44px'}

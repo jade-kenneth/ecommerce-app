@@ -155,7 +155,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       <p className="mx-auto w-fit mt-4">Or sign in using</p>
       <div className="flex w-[296px] mx-auto mt-4 items-start gap-3 relative ">
         {socialButtons.map((button, index) => (
-          <span
+          <button
             key={index}
             type="button"
             className="flex gap-3 items-center justify-center  px-3.5 py-2.5 relative flex-1 grow bg-white-25 rounded-[32px] overflow-hidden border border-solid border-carbon-800 shadow-shadows-shadow-xs cursor-pointer"
@@ -167,7 +167,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
                 {button.label}
               </span>
             </span>
-          </span>
+          </button>
         ))}
       </div>
     </form>

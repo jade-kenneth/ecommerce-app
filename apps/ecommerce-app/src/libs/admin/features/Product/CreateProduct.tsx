@@ -316,7 +316,7 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                         points: data.points,
                         pieces: data.stock,
                         discount: data.discountPercentage || 0,
-
+                        _id: 'FIXME',
                         __typename: 'Product',
                       });
                       disclosure.onClose();

@@ -4,7 +4,6 @@ import {
   CarouselFileUpload,
   Field,
   FieldInput,
-  ObjectType,
   toaster,
 } from 'apps/ecommerce-app/src/libs/global/src';
 import {
@@ -12,7 +11,6 @@ import {
   useCreateConfigMutation,
   useUpdateConfigMutation,
 } from 'apps/ecommerce-app/src/libs/global/src/graphql/generated';
-import { ObjectId } from 'apps/ecommerce-app/src/libs/global/src/utils/object-id';
 
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -50,12 +48,10 @@ export function Settings() {
       className="p-7"
       onSubmit={form.handleSubmit(async (data) => {
         if (!config?._id) {
-          const generatedId = ObjectId.generate(ObjectType.Config).toString();
-
           await create({
             variables: {
               input: {
-                _id: generatedId,
+                _id: 'FIXME',
                 highPointsThreshold: parseInt(data.highPointsThreshold, 10),
                 topSoldThreshold: parseInt(data.topSoldThreshold, 10),
                 carouselItems: data.carouselItems || [],

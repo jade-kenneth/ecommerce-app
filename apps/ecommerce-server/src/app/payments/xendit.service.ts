@@ -4,8 +4,7 @@ import axios from 'axios';
 @Injectable()
 export class XenditService {
   private readonly baseURL = 'https://api.xendit.co';
-  private readonly secretKey =
-    'xnd_development_6NLQ5QJ90XOyVfK4s6CO3TJwvuexsUn1MKlAHX85LENT1mDqROX5RjP0nWS1FTp4';
+  private readonly secretKey = process.env.XENDIT_SECRET_KEY;
 
   private client() {
     return axios.create({

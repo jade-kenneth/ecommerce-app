@@ -5,5 +5,5 @@ export * from './config';
 export * from './icons';
 
 export * from './constant';
-export * from './object-id';
+
 export * from './utils';

@@ -6,7 +6,7 @@ export * from './createSplitProps';
 export * from './dataAttr';
 export * from './hexToRgba';
 export * from './numberFormatter';
-export * from './object-id';
+
 export * from './object-shared';
 export * from './sha256';
 export * from './useControllableState';

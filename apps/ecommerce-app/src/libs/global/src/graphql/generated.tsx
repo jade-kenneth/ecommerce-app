@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 18 Jan 2026 09:40:05 GMT
+// Last modified: Mon, 19 Jan 2026 05:15:22 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -600,6 +600,15 @@ export function useSelfLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useSelfSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>
+): Apollo.UseSuspenseQueryResult<SelfQuery, SelfQueryVariables>;
+export function useSelfSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>
+): Apollo.UseSuspenseQueryResult<SelfQuery | undefined, SelfQueryVariables>;
 export function useSelfSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -686,6 +695,15 @@ export function useCartLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useCartSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>
+): Apollo.UseSuspenseQueryResult<CartQuery, CartQueryVariables>;
+export function useCartSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>
+): Apollo.UseSuspenseQueryResult<CartQuery | undefined, CartQueryVariables>;
 export function useCartSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -756,6 +774,21 @@ export function useMyOrdersLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useMyOrdersSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    MyOrdersQuery,
+    MyOrdersQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<MyOrdersQuery, MyOrdersQueryVariables>;
+export function useMyOrdersSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  MyOrdersQuery | undefined,
+  MyOrdersQueryVariables
+>;
 export function useMyOrdersSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -820,6 +853,27 @@ export function useShippingOptionsLazyQuery(
     ShippingOptionsQueryVariables
   >(ShippingOptionsDocument, options);
 }
+// @ts-ignore
+export function useShippingOptionsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ShippingOptionsQuery,
+    ShippingOptionsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  ShippingOptionsQuery,
+  ShippingOptionsQueryVariables
+>;
+export function useShippingOptionsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ShippingOptionsQuery,
+        ShippingOptionsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  ShippingOptionsQuery | undefined,
+  ShippingOptionsQueryVariables
+>;
 export function useShippingOptionsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -960,6 +1014,21 @@ export function useProductsLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useProductsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProductsQuery,
+    ProductsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<ProductsQuery, ProductsQueryVariables>;
+export function useProductsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>
+): Apollo.UseSuspenseQueryResult<
+  ProductsQuery | undefined,
+  ProductsQueryVariables
+>;
 export function useProductsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -1106,6 +1175,18 @@ export function useConfigLazyQuery(
     options
   );
 }
+// @ts-ignore
+export function useConfigSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ConfigQuery,
+    ConfigQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<ConfigQuery, ConfigQueryVariables>;
+export function useConfigSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>
+): Apollo.UseSuspenseQueryResult<ConfigQuery | undefined, ConfigQueryVariables>;
 export function useConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
@@ -1238,6 +1319,27 @@ export function useHighPointProductsLazyQuery(
     HighPointProductsQueryVariables
   >(HighPointProductsDocument, options);
 }
+// @ts-ignore
+export function useHighPointProductsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    HighPointProductsQuery,
+    HighPointProductsQueryVariables
+  >
+): Apollo.UseSuspenseQueryResult<
+  HighPointProductsQuery,
+  HighPointProductsQueryVariables
+>;
+export function useHighPointProductsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        HighPointProductsQuery,
+        HighPointProductsQueryVariables
+      >
+): Apollo.UseSuspenseQueryResult<
+  HighPointProductsQuery | undefined,
+  HighPointProductsQueryVariables
+>;
 export function useHighPointProductsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken

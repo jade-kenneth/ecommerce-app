@@ -159,7 +159,7 @@
     "webpack-cli": "^5.1.4"
   },
   "workspaces": [
-    "apps/ecommerce-app/*",
-    "apps/ecommerce-server/*"
+    "apps/ecommerce-app",
+    "apps/ecommerce-server"
   ]
 }

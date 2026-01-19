@@ -8,7 +8,11 @@ import { FaEye, FaFacebook, FaGoogle, FaRegEyeSlash } from 'react-icons/fa';
 import z from 'zod';
 import { Button, Field, Input, toaster } from '../../global/src';
 
-import { useCreateMemberAccountMutation } from '../../global/src/graphql/generated';
+import { create_session } from '../../global/src/auth/service';
+import {
+  AccountType,
+  useCreateMemberAccountMutation,
+} from '../../global/src/graphql/generated';
 
 interface SignupFormProps {
   onToggleToLogin?: () => void;
@@ -80,9 +84,9 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       });
       // TODO
       /** poll login -> interval 1500 ms **/
-      // setTimeout(() => {
-      //   create_session({ user: { _id, role: AccountType.Member } });
-      // }, 3000);
+      setTimeout(() => {
+        create_session({ user: { _id, role: AccountType.Member } });
+      }, 3000);
 
       form.reset();
       toaster.success({ description: 'Account created successfully' });

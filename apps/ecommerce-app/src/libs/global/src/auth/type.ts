@@ -1,9 +1,11 @@
 import { Merge } from 'type-fest';
+import { AccountType } from '../graphql/generated';
 
 export type Session__Authenticated = {
   accessToken: string;
   refreshToken: string | null | undefined;
   status: 'authenticated';
+  role: AccountType;
 };
 
 export type Session__Unauthenticated = Merge<

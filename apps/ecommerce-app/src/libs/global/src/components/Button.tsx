@@ -3,7 +3,9 @@ import type { ButtonProps, RecipeVariantProps } from '@chakra-ui/react';
 
 import dynamic from 'next/dynamic';
 import { PropsWithChildren } from 'react';
-import { buttonRecipe, colors } from '../../theme/src';
+
+import { colors } from '../theme';
+import { buttonRecipe } from '../theme/recipes/button';
 import { hexToRgba } from '../utils';
 type ButtonVariantProps = RecipeVariantProps<ReturnType<typeof buttonRecipe>>;
 interface IButtonProps extends ButtonProps, ButtonVariantProps {

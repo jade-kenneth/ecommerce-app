@@ -3,6 +3,7 @@ import { isBoolean, isNull, isPlainObject, isUndefined } from 'es-toolkit';
 import { isNil } from 'lodash';
 import z from 'zod';
 import {
+  ACCOUNT_ROLE,
   AUTH_ACCESS_TOKEN_LOCAL_STORAGE_KEY,
   AUTH_REFRESH_TOKEN_LOCAL_STORAGE_KEY,
 } from '../constant';
@@ -18,6 +19,7 @@ function $(id: StoreId) {
   const map: Record<StoreId, string> = {
     accessToken: AUTH_ACCESS_TOKEN_LOCAL_STORAGE_KEY,
     refreshToken: AUTH_REFRESH_TOKEN_LOCAL_STORAGE_KEY,
+    role: ACCOUNT_ROLE,
   };
 
   return map[id];
@@ -41,7 +43,7 @@ type Store = {
     ): Promise<void>;
   };
   del?: (...keys: [StoreId, ...StoreId[]]) => Promise<void>;
-  clear?: () => Promise<void>;
+  clear: () => Promise<void>;
 };
 
 function set(key: string, value: string | boolean | null | undefined) {
@@ -113,7 +115,9 @@ function getexp(key: string) {
       .parse(JSON.parse(value));
 
     if (isAfter(obj.__t, new Date())) return obj.__v;
-  } catch {}
+  } catch {
+    /* empty */
+  }
 
   localStorage.removeItem(key);
   return undefined;
@@ -155,6 +159,12 @@ const createStore = (): Store => {
       }
 
       return new Promise<void>((resolve) => {
+        resolve();
+      });
+    },
+    clear: async () => {
+      new Promise<void>((resolve) => {
+        localStorage.clear();
         resolve();
       });
     },

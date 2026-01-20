@@ -43,7 +43,7 @@ export async function createSession(input: CreateSessionInput) {
     const response = await axios.post<Token>('/sessions', input, {
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
     });
-    return response.data;
+    return { ...response.data, role: input.user.role };
   } catch (error) {
     console.error('Error creating session:', error);
     throw error;
@@ -59,7 +59,7 @@ export async function authenticate(input: AuthenticateInput) {
       },
     });
 
-    return response.data;
+    return { ...response.data, role: input.role };
   } catch (error) {
     console.error('Error authenticating session:', error);
     throw error;

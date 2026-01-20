@@ -4,6 +4,8 @@ import { FunctionComponent } from 'react';
 
 import Container from '../../global/src/components/Container';
 
+//TODO
+
 interface CategoriesProps {}
 
 export const Categories: FunctionComponent<CategoriesProps> = () => {
@@ -33,7 +35,7 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
       >
         {items.map(({ name, src, size }) => {
           return (
-            <GridItem display={'flex'} alignItems={'center'}>
+            <GridItem key={name} display={'flex'} alignItems={'center'}>
               <Card name={name} imgSrc={src} size={size} />
             </GridItem>
           );

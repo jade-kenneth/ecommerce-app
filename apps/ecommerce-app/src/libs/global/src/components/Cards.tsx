@@ -213,6 +213,7 @@ export const Cards = (props: CardsProps) => {
             {Array.from({ length: 5 }).map((_, idx) => {
               return (
                 <FaStar
+                  key={idx}
                   style={{
                     color: 3 >= idx + 1 ? '#FFA000' : '#D2D2D2',
                   }}
@@ -247,7 +248,9 @@ export const Cards = (props: CardsProps) => {
                 quantity: 1,
                 thumbnail: props.thumbnail,
               });
-            } catch (error) {}
+            } catch (error) {
+              /* empty */
+            }
           }}
         >
           <TbShoppingCartPlus className="size-5 stroke-3" />{' '}

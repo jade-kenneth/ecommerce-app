@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
 import { Input } from '../../../global/src';
 import { useCartContext } from './CartContext';
+import { EmptyCart } from './EmptyCart';
 export const Items = () => {
   const context = useCartContext();
 
@@ -14,10 +15,14 @@ export const Items = () => {
 
   return (
     <div className="flex flex-col gap-5 mt-5">
+      {!context.state.cart.items.length && <EmptyCart />}
       {context.state.cart.items?.map((item, idx) => {
         let quantity = form.getValues(`items.${idx}.quantity`) || 1;
         return (
-          <div className="flex gap-4 w-full  p-5 rounded-md shadow-lg border-[1px] border-[#f2efef] hover:shadow-lg">
+          <div
+            key={item.productId}
+            className="flex gap-4 w-full  p-5 rounded-md shadow-lg border-[1px] border-[#f2efef] hover:shadow-lg"
+          >
             <Image
               src={item.thumbnail || ''}
               alt="Product Image"

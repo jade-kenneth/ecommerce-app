@@ -1,6 +1,7 @@
 import { AuthProvider } from '../libs/global/src/auth';
 import ToastContainer from '../libs/global/src/components/ToastContainer';
-import { Provider } from '../libs/global/theme/src';
+import { Provider } from '../libs/global/src/theme/provider';
+
 import { ClientCartProvider } from './cart-provider';
 import { ClientApolloProvider } from './client-layout';
 import './globals.css';

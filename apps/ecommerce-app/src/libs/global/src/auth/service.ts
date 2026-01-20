@@ -4,8 +4,11 @@ import { store } from './store';
 import { Session } from './type';
 
 export async function getSession(): Promise<Session> {
-  const { accessToken, refreshToken } = await store.get();
-
+  const { accessToken, refreshToken, role } = await store.get();
+  if (!role) {
+    await store.clear();
+    return { status: 'unauthenticated' };
+  }
   if (!accessToken) {
     if (!refreshToken) {
       return {
@@ -21,6 +24,7 @@ export async function getSession(): Promise<Session> {
         status: 'authenticated',
         accessToken: session.accessToken,
         refreshToken: session.refreshToken,
+        role,
       };
     } catch (error) {
       return {
@@ -32,22 +36,29 @@ export async function getSession(): Promise<Session> {
     status: 'authenticated',
     accessToken,
     refreshToken,
+    role,
   };
 }
 export async function create_session(input: services.CreateSessionInput) {
-  const { accessToken, refreshToken } = await services.createSession(input);
+  const { accessToken, refreshToken, role } = await services.createSession(
+    input
+  );
 
   await store.set({
     accessToken,
     refreshToken,
+    role,
   });
 }
 
 export async function authenticate(input: AuthenticateInput) {
-  const { accessToken, refreshToken } = await services.authenticate(input);
+  const { accessToken, refreshToken, role } = await services.authenticate(
+    input
+  );
 
   await store.set({
     accessToken,
     refreshToken,
+    role,
   });
 }

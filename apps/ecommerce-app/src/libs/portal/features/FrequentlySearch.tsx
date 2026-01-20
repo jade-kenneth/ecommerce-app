@@ -29,6 +29,7 @@ export const FrequentlySearched: FunctionComponent<
         ].map((searched) => {
           return (
             <Badge
+              key={searched}
               variant="plain"
               py="8px"
               px="14px"

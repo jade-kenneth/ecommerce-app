@@ -232,6 +232,10 @@ export const Cards = (props: CardsProps) => {
         <Button
           className="text-white items-center justify-center h-[40px] mt-3 flex gap-2  cursor-pointer"
           onClick={async () => {
+            if (!globalStore.authenticate.isAuthenticated) {
+              globalStore.signIn.setIsSignIn(true);
+              return;
+            }
             try {
               await mutate({
                 variables: {

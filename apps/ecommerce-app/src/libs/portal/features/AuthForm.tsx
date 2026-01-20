@@ -10,12 +10,15 @@ import { SignupForm } from './SignupForm';
 export function AuthForm() {
   const disclosure = useDisclosure();
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const globalStore = useGlobalStore((state) => state.authenticate);
-  if (globalStore.isAuthenticated) return;
+  const globalStore = useGlobalStore((state) => state);
+  if (globalStore.authenticate.isAuthenticated) return;
   return (
-    <Dialog.Root lazyMount>
+    <Dialog.Root lazyMount open={globalStore.signIn.isSignIn}>
       <Dialog.Trigger>
-        <Text sizes={'paragraph-sm'} onClick={disclosure.onOpen}>
+        <Text
+          sizes={'paragraph-sm'}
+          onClick={() => globalStore.signIn.setIsSignIn(true)}
+        >
           Register / Log In
         </Text>
       </Dialog.Trigger>
@@ -78,7 +81,9 @@ export function AuthForm() {
               )}
             </Dialog.Body>
 
-            <Dialog.CloseTrigger>
+            <Dialog.CloseTrigger
+              onClick={() => globalStore.signIn.setIsSignIn(false)}
+            >
               <IoMdClose className="bg-primary-500-value p-1 size-6 absolute -top-9 -right-9 cursor-pointer text-white rounded-md" />
             </Dialog.CloseTrigger>
           </Dialog.Content>

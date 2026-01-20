@@ -40,10 +40,14 @@ export async function refreshSession(input: RefreshSession) {
 
 export async function createSession(input: CreateSessionInput) {
   try {
-    const response = await axios.post<Token>('/sessions', input, {
-      baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
-    });
-    return { ...response.data, role: input.user.role };
+    const response = await axios.post<Token & { role: AccountType }>(
+      '/sessions',
+      input,
+      {
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+      }
+    );
+    return response.data;
   } catch (error) {
     console.error('Error creating session:', error);
     throw error;
@@ -52,14 +56,18 @@ export async function createSession(input: CreateSessionInput) {
 
 export async function authenticate(input: AuthenticateInput) {
   try {
-    const response = await axios.post<Token>('/session/authenticate', input, {
-      baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
-      headers: {
-        Role: input.role,
-      },
-    });
+    const response = await axios.post<Token & { role: AccountType }>(
+      '/session/authenticate',
+      input,
+      {
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+        headers: {
+          Role: input.role,
+        },
+      }
+    );
 
-    return { ...response.data, role: input.role };
+    return response.data;
   } catch (error) {
     console.error('Error authenticating session:', error);
     throw error;

@@ -17,6 +17,7 @@ const AUTH_LINK = setContext(async (_req, ctx) => {
     return {
       ...ctx,
       headers: {
+        Role: session.role,
         Authorization: `Bearer ${session.accessToken}`,
       },
     };

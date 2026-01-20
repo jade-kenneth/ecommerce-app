@@ -18,7 +18,7 @@ export const useAuth = (): UseAuthReturn => {
     const fetchSession = async () => {
       try {
         const session = await getSession();
-
+        console.log(session, 'session');
         if (session.status === 'unauthenticated') {
           globalStore.setIsAuthenticated(false);
         } else {

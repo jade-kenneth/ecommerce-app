@@ -88,6 +88,7 @@ export class SessionController {
         },
         accessToken,
         refreshToken,
+        role: user.role,
       };
     } catch (error) {
       if (error instanceof ForbiddenException) {
@@ -245,6 +246,7 @@ export class SessionController {
     return {
       accessToken,
       refreshToken,
+      role: account.role,
     };
   }
 }

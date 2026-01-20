@@ -7,6 +7,7 @@ import {
   AUTH_ACCESS_TOKEN_LOCAL_STORAGE_KEY,
   AUTH_REFRESH_TOKEN_LOCAL_STORAGE_KEY,
 } from '../constant';
+import { AccountType } from '../graphql/generated';
 import { Session__Authenticated } from './type';
 
 type StoreId = keyof Omit<Session__Authenticated, 'status'>;
@@ -123,16 +124,22 @@ function getexp(key: string) {
   return undefined;
 }
 
+function get(key: string) {
+  const val = localStorage.getItem(key) || undefined;
+  return val;
+}
+
 const createStore = (): Store => {
   return {
     get(): Promise<StoreValue> {
       return new Promise<StoreValue>((resolve) => {
         const accessToken = getexp($('accessToken'));
         const refreshToken = getexp($('refreshToken'));
-
+        const role = get($('role'));
         resolve({
           accessToken,
           refreshToken,
+          role: role as AccountType,
         });
       });
     },
@@ -153,6 +160,7 @@ const createStore = (): Store => {
             arg0.refreshToken,
             addDays(new Date(), 30).getTime()
           );
+          set($('role'), arg0.role);
 
           resolve();
         });

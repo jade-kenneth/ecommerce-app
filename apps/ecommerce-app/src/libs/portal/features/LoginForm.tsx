@@ -143,7 +143,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       </Button>
 
       <p className="w-fit mx-auto mt-4">
-        Don't have an account yet?{' '}
+        Don&apos;t have an account yet?{' '}
         <span
           className="text-primary-700-value text-paragraph-sm font-semibold cursor-pointer"
           onClick={() => onToggleToSignup?.()}

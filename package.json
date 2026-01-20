@@ -5,10 +5,10 @@
   "scripts": {
     "build:app": "npx @chakra-ui/cli typegen ./apps/ecommerce-app/src/libs/global/src/theme/index.ts && npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
-    "server": "nx run ecommerce-server:serve:production",
+    "server": "nx serve ecommerce-server",
     "app": "nx run ecommerce-app:dev --port=4201 ",
     "typegen:watch": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts --watch",
-    "dev": "nx run-many --parallel server app",
+    "dev": "nx run-many --parallel --targets=serve,dev --projects=ecommerce-server,ecommerce-app",
     "general:graphql-codegen": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin"
   },
   "private": true,

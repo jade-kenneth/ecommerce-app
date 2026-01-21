@@ -9,15 +9,15 @@ import {
   HighPoint,
   JustForYou,
   TopSelling,
-} from '../libs/portal/features';
-import { Layout } from '../libs/portal/layout/Layout';
+} from '~/features/portal';
+import { Layout } from '../libs/features/portal/layout/Layout';
 
 const ClientOnlyNavbar = dynamic(
-  () => import('../libs/portal/features').then((mod) => mod.Navbar),
+  () => import('~/features/portal').then((mod) => mod.Navbar),
   { ssr: false }
 );
 const ClientOnlyCategories = dynamic(
-  () => import('../libs/portal/features').then((mod) => mod.Categories),
+  () => import('~/features/portal').then((mod) => mod.Categories),
   { ssr: false }
 );
 

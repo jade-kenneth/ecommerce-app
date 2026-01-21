@@ -1,4 +1,20 @@
-Authentication Flow
+# account repository
+
+# session controller
+
+# apollo config
+
+# jwt service
+
+# auth guard
+
+# refresh guard
+
+# auth middleware
+
+# These files work together to create, validate, refresh, and authorize user sessions.
+
+# Authentication Flow
 
 This document explains the full authentication lifecycle including signup, login, session management, and request authorization.
 

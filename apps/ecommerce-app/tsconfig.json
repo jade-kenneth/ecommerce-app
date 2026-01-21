@@ -19,6 +19,20 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
+    "paths": {
+      "~/components/*": ["./src/libs/components/*"],
+      "~/constants": ["./src/libs/global/constant.ts"],
+      "~/contexts/*": ["./src/libs/global/contexts/*"],
+      "~/config/*": ["./src/libs/config/*"],
+      "~/providers/*": ["./src/libs/providers/*"],
+      "~/features/*": ["./src/libs/features/*"],
+      "~/graphql/*": ["./src/libs/graphql/*"],
+      "~/theme/*": ["./src/libs/theme/*"],
+      "~/utils/*": ["./src/libs/utils/*"],
+      "~/icons/*": ["./src/libs/icons/*"],
+      "~/hooks/*": ["./src/libs/hooks/*"]
+    },
     "types": ["jest", "node"],
     "target": "ESNext",
     "moduleResolution": "bundler",

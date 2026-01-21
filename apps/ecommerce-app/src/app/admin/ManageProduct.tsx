@@ -7,27 +7,25 @@ import { Flex } from '@chakra-ui/react';
 import Image from 'next/image';
 import { Reducer, useReducer } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
+import { DataTable } from '~/components/DataTable';
+import { Badge, Menu } from '~/components/ui';
+import { apolloClient } from '~/config/client';
 import {
   CreateProduct,
   DeleteProduct,
   ProductProvider,
   UpdateProduct,
-} from '../../libs/admin';
-import {
-  apolloClient,
-  Badge,
-  capitalize,
-  DataTable,
-  Menu,
-  usePaginated,
-} from '../../libs/global/src';
+} from '~/features/admin';
 import {
   ProductsDocument,
   ProductsQuery,
   ProductsQueryVariables,
   StatusType,
   useProductsQuery,
-} from '../../libs/global/src/graphql/generated';
+} from '~/graphql/generated';
+import { usePaginated } from '~/hooks/usePaginated';
+import { capitalize } from '~/utils/capitalize';
+
 interface PageState {
   page: number;
   pageSize: number;

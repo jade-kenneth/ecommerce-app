@@ -1,20 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Button,
-  CarouselFileUpload,
-  Field,
-  FieldInput,
-  toaster,
-} from 'apps/ecommerce-app/src/libs/global/src';
+import { Field } from '~/components/ui';
 import {
   useConfigQuery,
   useCreateConfigMutation,
   useUpdateConfigMutation,
-} from 'apps/ecommerce-app/src/libs/global/src/graphql/generated';
+} from '~/graphql/generated';
 
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Button } from '~/components/Button';
+import { CarouselFileUpload } from '~/components/CarouselFileUpload';
+import { FieldInput } from '~/components/FieldInput';
+import { toaster } from '~/components/ToastContainer';
 
 const Definition = z.object({
   highPointsThreshold: z.string().min(0).default('0'),

@@ -4,30 +4,28 @@ import { createListCollection } from '@ark-ui/react';
 
 import { Flex } from '@chakra-ui/react';
 
+import Image from 'next/image';
+import { Reducer, useReducer } from 'react';
+import { TbDotsVertical } from 'react-icons/tb';
+import { DataTable } from '~/components/DataTable';
+import { Badge, Menu } from '~/components/ui';
+import { apolloClient } from '~/config/client';
 import {
   CreateProduct,
   DeleteProduct,
   ProductProvider,
   UpdateProduct,
-} from 'apps/ecommerce-app/src/libs/admin';
-import {
-  apolloClient,
-  Badge,
-  capitalize,
-  DataTable,
-  Menu,
-  usePaginated,
-} from 'apps/ecommerce-app/src/libs/global/src';
+} from '~/features/admin';
 import {
   ProductsDocument,
   ProductsQuery,
   ProductsQueryVariables,
   StatusType,
   useProductsQuery,
-} from 'apps/ecommerce-app/src/libs/global/src/graphql/generated';
-import Image from 'next/image';
-import { Reducer, useReducer } from 'react';
-import { TbDotsVertical } from 'react-icons/tb';
+} from '~/graphql/generated';
+import { usePaginated } from '~/hooks/usePaginated';
+import { capitalize } from '~/utils/capitalize';
+
 interface PageState {
   page: number;
   pageSize: number;

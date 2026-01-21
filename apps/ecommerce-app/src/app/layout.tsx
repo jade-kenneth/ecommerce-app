@@ -1,9 +1,8 @@
-import { AuthProvider } from '../libs/global/src/auth';
-import ToastContainer from '../libs/global/src/components/ToastContainer';
-import { Provider } from '../libs/global/src/theme/provider';
-
-import { ClientCartProvider } from './cart-provider';
-import { ClientApolloProvider } from './client-layout';
+import { ToastContainer } from '~/components/ToastContainer';
+import { AuthProvider } from '~/providers/AuthProvider';
+import { ClientCartProvider } from '~/providers/CartProvider';
+import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
+import { Provider } from '~/theme/provider';
 import './globals.css';
 
 export default function RootLayout({

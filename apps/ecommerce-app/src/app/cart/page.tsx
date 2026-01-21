@@ -12,15 +12,10 @@ declare global {
   }
 }
 
-import {
-  Footer,
-  FrequentlySearched,
-  Highlight,
-} from '../../libs/portal/features';
-import { Cart } from '../../libs/portal/features/Cart';
+import { Cart, Footer, FrequentlySearched, Highlight } from '~/features/portal';
 
 const ClientOnlyNavbar = dynamic(
-  () => import('../../libs/portal/features').then((mod) => mod.Navbar),
+  () => import('~/features/portal').then((mod) => mod.Navbar),
   { ssr: false }
 );
 

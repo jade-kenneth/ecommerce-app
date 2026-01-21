@@ -1,4 +1,4 @@
-import { AdminLayout } from 'apps/ecommerce-app/src/libs/admin/admin-layout';
+import { AdminLayout } from '~/features/admin';
 
 export default function RootLayout({
   children,

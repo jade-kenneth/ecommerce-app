@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:app": "npx @chakra-ui/cli typegen ./apps/ecommerce-app/src/libs/global/src/theme/index.ts && npx nx run ecommerce-app:build",
+    "build:app": "npx @chakra-ui/cli typegen ./apps/ecommerce-app/src/libs/theme/index.ts && npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
-    "server": "nx serve ecommerce-server",
+    "server": "JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 nx serve ecommerce-server",
     "app": "nx run ecommerce-app:dev --port=4201 ",
-    "typegen:watch": "npx @chakra-ui/cli typegen ./libs/portal/theme/src/theme/index.ts --watch",
-    "dev": "nx run-many --parallel --targets=serve,dev --projects=ecommerce-server,ecommerce-app",
+    "typegen:watch": "npx @chakra-ui/cli typegen ./libs/theme/index.ts --watch",
+    "dev": "concurrently \"npm run app\" \"JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 npm run server\"",
     "general:graphql-codegen": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin"
   },
   "private": true,

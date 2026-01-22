@@ -2,25 +2,38 @@ import { addDays, addMinutes, isAfter } from 'date-fns';
 import { isBoolean, isNull, isPlainObject, isUndefined } from 'es-toolkit';
 import { isNil } from 'lodash';
 import z from 'zod';
+import { AccountType } from '~/graphql/generated';
+import { Session__Authenticated } from '~/providers/AuthProvider';
 import {
   ACCOUNT_ROLE,
   AUTH_ACCESS_TOKEN_LOCAL_STORAGE_KEY,
   AUTH_REFRESH_TOKEN_LOCAL_STORAGE_KEY,
-} from '../../constant';
-import { AccountType } from '../../graphql/generated';
-import { Session__Authenticated } from './type';
+  LICENSE_CODE_LOCAL_STORAGE_KEY,
+} from '../constant';
 
-type StoreId = keyof Omit<Session__Authenticated, 'status'>;
-type StoreValue = { [K in StoreId]?: Session__Authenticated[K] | null };
+type License = {
+  licenseCode: string;
+};
 
-type StoreIdWithExpiration = Extract<StoreId, 'accessToken' | 'refreshToken'>;
-type StoreIdWithoutExpiration = Exclude<StoreId, StoreIdWithExpiration>;
+type AuthId = keyof Omit<Session__Authenticated, 'status'>;
+type LicenseId = keyof License;
 
-function $(id: StoreId) {
-  const map: Record<StoreId, string> = {
+type StoreValue =
+  | { [K in AuthId]?: Session__Authenticated[K] | null } & {
+      [X in LicenseId]?: License[X] | null;
+    };
+
+type AuthIdWithExpiration = Extract<AuthId, 'accessToken' | 'refreshToken'>;
+type AuthIdWithoutExpiration = Exclude<AuthId, AuthIdWithExpiration>;
+
+type StoreKey = AuthId | LicenseId;
+
+function $(id: StoreKey) {
+  const map: Record<StoreKey, string> = {
     accessToken: AUTH_ACCESS_TOKEN_LOCAL_STORAGE_KEY,
     refreshToken: AUTH_REFRESH_TOKEN_LOCAL_STORAGE_KEY,
     role: ACCOUNT_ROLE,
+    licenseCode: LICENSE_CODE_LOCAL_STORAGE_KEY,
   };
 
   return map[id];
@@ -29,21 +42,21 @@ function $(id: StoreId) {
 type Store = {
   get: {
     (): Promise<StoreValue>;
-    <T extends StoreId>(key: T): Promise<StoreValue[T]>;
+    <T extends StoreKey>(key: T): Promise<StoreValue[T]>;
   };
   set: {
     (value: StoreValue): Promise<void>;
-    <T extends StoreIdWithoutExpiration>(
+    <T extends AuthIdWithoutExpiration>(
       key: T,
       value: StoreValue[T]
     ): Promise<void>;
-    <T extends StoreIdWithExpiration>(
+    <T extends AuthIdWithExpiration & LicenseId>(
       key: T,
       value: StoreValue[T],
       expires: number
     ): Promise<void>;
   };
-  del?: (...keys: [StoreId, ...StoreId[]]) => Promise<void>;
+  del?: (...keys: [StoreKey, ...StoreKey[]]) => Promise<void>;
   clear: () => Promise<void>;
 };
 
@@ -128,7 +141,11 @@ function get(key: string) {
   const val = localStorage.getItem(key) || undefined;
   return val;
 }
-
+function del(...keys: string[]) {
+  keys.forEach((key) => {
+    localStorage.removeItem(key);
+  });
+}
 const createStore = (): Store => {
   return {
     get(): Promise<StoreValue> {
@@ -136,14 +153,16 @@ const createStore = (): Store => {
         const accessToken = getexp($('accessToken'));
         const refreshToken = getexp($('refreshToken'));
         const role = get($('role'));
+        const licenseCode = getexp($('licenseCode'));
         resolve({
           accessToken,
           refreshToken,
           role: role as AccountType,
+          licenseCode,
         });
       });
     },
-    set<T extends StoreId>(
+    set<T extends StoreKey>(
       arg0: StoreValue | T,
       arg1?: StoreValue[T],
       arg2?: number
@@ -160,8 +179,12 @@ const createStore = (): Store => {
             arg0.refreshToken,
             addDays(new Date(), 30).getTime()
           );
+          setexp(
+            $('licenseCode'),
+            arg0.licenseCode,
+            addMinutes(new Date(), 30).getTime()
+          );
           set($('role'), arg0.role);
-
           resolve();
         });
       }
@@ -170,9 +193,15 @@ const createStore = (): Store => {
         resolve();
       });
     },
-    clear: async () => {
-      new Promise<void>((resolve) => {
-        localStorage.clear();
+    del(...keys) {
+      return new Promise((resolve) => {
+        del(...keys.map((k) => $(k)));
+        resolve();
+      });
+    },
+    clear() {
+      return new Promise((resolve) => {
+        del($('role'), $('accessToken'), $('refreshToken'), $('licenseCode'));
         resolve();
       });
     },

@@ -1,6 +1,8 @@
-import { Assign } from '@ark-ui/react';
+import { Assign, mergeProps } from '@ark-ui/react';
+import { omit, pick } from 'es-toolkit';
 import * as React from 'react';
 import { VariantProps } from 'tailwind-variants';
+import { Simplify } from 'type-fest';
 import { createSplitProps } from './createSplitProps';
 
 type GenericProps = Record<string, any>;
@@ -24,18 +26,23 @@ export function createRecipeContext<
   }
 
   function withRootProvider<Props extends GenericProps>(
-    Component: React.ComponentType<Props>
+    Component: React.ComponentType<Props>,
+    defaultProps: Partial<Props> = {}
   ) {
     const StyledComponent = (props: Props) => {
-      const [recipeProps, localProps] = createSplitProps(recipe.variantKeys)(
-        props
-      );
+      const [recipeProps, localProps] = React.useMemo(() => {
+        return splitProps(props, recipe.variantKeys as string[]);
+      }, [props]);
 
       const context = recipe(recipeProps);
 
+      const mergedProps = React.useMemo(() => {
+        return mergeProps<GenericProps>(defaultProps, localProps) as Props;
+      }, [localProps]);
+
       return (
         <RecipeContext.Provider value={context}>
-          <Component {...(localProps as Props)} />
+          <Component {...mergedProps} />
         </RecipeContext.Provider>
       );
     };
@@ -130,4 +137,14 @@ export function createRecipeContext<
     withProvider,
     withContext,
   };
+}
+
+export function splitProps<T extends Record<string, any>, K extends keyof T>(
+  props: T,
+  keys: K[]
+): [Simplify<Pick<T, K>>, Simplify<Omit<T, K>>] {
+  const a = pick(props, keys);
+  const b = omit(props, keys);
+
+  return [a, b];
 }

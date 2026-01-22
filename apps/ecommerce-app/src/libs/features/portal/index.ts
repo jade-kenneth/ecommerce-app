@@ -1,3 +1,4 @@
+'use client';
 export * from './Carousel';
 export * from './Cart';
 export * from './Categories';

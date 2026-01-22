@@ -1,3 +1,4 @@
+'use client';
 import { Dialog, Portal, Text, useDisclosure } from '@chakra-ui/react';
 
 import Image from 'next/image';

@@ -34,6 +34,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
       justify={'space-between'}
       flexWrap={'wrap'}
       alignItems={'center'}
+      aria-hidden={!globalStore.authenticate.isAuthenticated}
+      aria-disabled={!globalStore.authenticate.isAuthenticated}
+      aria-readonly={!globalStore.authenticate.isAuthenticated}
     >
       <Image
         src={'/LogoBlack.png'}

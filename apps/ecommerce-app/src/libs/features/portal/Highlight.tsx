@@ -1,6 +1,5 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 
-import { FunctionComponent } from 'react';
 import { MedalIcon } from '~/icons/MedalIcon';
 import { PhoneIcon } from '~/icons/PhoneIcon';
 import { TruckIcon } from '~/icons/TruckIcon';
@@ -9,12 +8,14 @@ import { useSession } from '~/providers/AuthProvider';
 interface HighlightProps {
   storeName?: string;
   contact?: string;
+  disabled?: boolean;
 }
 
-export const Highlight: FunctionComponent<HighlightProps> = ({
+export const Highlight = ({
   contact = '09123453476',
   storeName = 'Welcome to AmyStore',
-}) => {
+  disabled = false,
+}: HighlightProps) => {
   const session = useSession();
 
   return (

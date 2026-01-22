@@ -120,9 +120,10 @@ module.exports = {
         overlay: '1300',
         modal: '1400',
         popover: '1500',
-        skipLink: '1600',
-        toast: '1700',
-        tooltip: '1800',
+        dialog: '1600',
+        skipLink: '1700',
+        toast: '1800',
+        tooltip: '1900',
       },
       spacing: {
         4.5: '1.125rem',

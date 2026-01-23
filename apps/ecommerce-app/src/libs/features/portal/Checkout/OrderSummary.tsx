@@ -120,9 +120,9 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                       amount:
                         totalAmountWithShippingAndTax as unknown as string,
                       failureUrl:
-                        window.location.origin + 'cart/checkout?t=failure',
+                        window.location.origin + '/cart/checkout?t=failure',
                       successUrl:
-                        window.location.origin + 'cart/checkout?t=success',
+                        window.location.origin + '/cart/checkout?t=success',
                       referenceId: `order-${Date.now()}`,
                       description:
                         'Payment for order #' + `order-${Date.now()}`,

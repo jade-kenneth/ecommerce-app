@@ -17,7 +17,7 @@ export const useLicense = (options: UseLicenseOptions) => {
   const [state, setState] = useReducer(
     (prev: LicenseState, next: Partial<LicenseState>) => ({ ...prev, ...next }),
     {
-      isLicensed: true,
+      isLicensed: false,
       loading: true,
     }
   );
@@ -63,7 +63,6 @@ export const useLicense = (options: UseLicenseOptions) => {
       loading: false,
     });
   };
-  console.log('License is valid until:', state.isLicensed);
 
   return {
     isLicensed: state.isLicensed,

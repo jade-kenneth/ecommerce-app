@@ -1,4 +1,4 @@
-import { Key, Shield } from 'lucide-react';
+import { Key, ShieldCheck } from 'lucide-react';
 import { PropsWithChildren, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Dialog } from '~/components/Dialog';
@@ -23,11 +23,11 @@ export const LicenseDialog = (props: PropsWithChildren) => {
     <Dialog.Root open={true}>
       <Dialog.Backdrop>{props.children}</Dialog.Backdrop>
       <Dialog.Positioner className="bg-white/80 flex justify-center items-center">
-        <Dialog.Content className="flex justify-center items-center">
-          <div className="w-full max-w-xl bg-white rounded-3xl shadow-lg p-12">
+        <Dialog.Content className="flex justify-center  items-center">
+          <div className="  max-w-[550px] rounded-3xl shadow-lg px-12 py-3">
             <div className="flex flex-col items-center mb-8">
               <div className="w-20 h-20 bg-primary-100-value rounded-full flex items-center justify-center mb-6">
-                <Shield
+                <ShieldCheck
                   size={40}
                   className="text-primary-600-value"
                   strokeWidth={1.5}
@@ -66,17 +66,12 @@ export const LicenseDialog = (props: PropsWithChildren) => {
               <p className="text-gray-600">
                 Don&apos;t have a license?{' '}
                 <a
-                  href="#"
+                  href="https://www.facebook.com/jeidosenpaitsx/"
+                  target="_blank"
                   className="text-primary-600-value hover:text-primary-700-value font-medium"
                 >
                   Contact admin
                 </a>
-              </p>
-            </div>
-            <div className="bg-carbon-950-value  rounded-md flex flex-col items-center py-5 justify-center mt-8 text-center">
-              <p className="text-gray-500 text-sm mb-2">Demo License Code</p>
-              <p className="text-gray-900 font-mono text-lg font-bold tracking-widest">
-                DEMO-CODE-FREE-TRIAL
               </p>
             </div>
           </div>

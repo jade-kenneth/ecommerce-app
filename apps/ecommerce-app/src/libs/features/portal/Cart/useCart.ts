@@ -10,7 +10,6 @@ import {
   useProductsQuery,
   useSelfQuery,
 } from '~/graphql/generated';
-import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 
 export interface Item {
   thumbnail: string;
@@ -66,9 +65,8 @@ export const useCart = () => {
   });
 
   const productIds = cartData?.cart.items?.map((p) => p?.productId ?? '') ?? [];
-  const licenseContext = useLicenseContext();
+
   const { data: productsData } = useProductsQuery({
-    skip: !licenseContext.isLicensed,
     variables: {
       filter: {
         _id: { in: productIds },

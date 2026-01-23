@@ -1,6 +1,8 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  HttpException,
   InternalServerErrorException,
   Post,
 } from '@nestjs/common';
@@ -15,16 +17,22 @@ export class LicenseController {
   @Post('validate/license')
   async validateLicense(@Body() request: { code: string }): Promise<License> {
     try {
-      const data = await this.license.findLicense({
-        code: request.code,
-      });
+      const data = await this.license.findLicense({ code: request.code });
 
-      if (!isAfter(new Date(data.expirationDate), new Date())) {
-        throw new InternalServerErrorException('License is expired');
+      const isExpired = !isAfter(data.expirationDate, new Date());
+
+      if (isExpired) {
+        throw new BadRequestException('License is expired');
       }
+
       return data;
     } catch (error) {
-      throw new InternalServerErrorException();
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      console.error('Unexpected error validating license:', error);
+      throw new InternalServerErrorException('Something went wrong');
     }
   }
 }

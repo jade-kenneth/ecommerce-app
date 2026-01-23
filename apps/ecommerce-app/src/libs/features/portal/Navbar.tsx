@@ -47,6 +47,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         style={{ height: '32px', width: '133px' }}
         width={133}
         height={32}
+        onClick={() => router.push('/')}
       />
       <DebounceInput
         rounded={'32px'}
@@ -110,7 +111,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
             >
               <p
                 className={twMerge(
-                  'w-[20px] text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-5 h-[20px] rounded-full bg-[red]'
+                  'w-[20px] text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-5 h-[20px] rounded-full bg-[red]',
                 )}
               >
                 {cartContext.state.itemsCount}

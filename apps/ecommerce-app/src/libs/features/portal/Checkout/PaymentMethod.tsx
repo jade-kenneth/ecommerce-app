@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { PaymentMethodType } from '~/graphql/generated';
-import { useCartContext } from './CartContext';
+import { useCartContext } from '../Cart/CartContext';
 
 type PaymentOptionCardProps = {
   title: string;
@@ -27,7 +27,7 @@ export function PaymentOptionCard({
         'text-left w-full rounded-xl p-5 border transition',
         selected
           ? 'bg-primary-50-value border-primary-300-value shadow-sm'
-          : 'border-carbon-200-value hover:border-primary-400-value'
+          : 'border-carbon-200-value hover:border-primary-400-value',
       )}
     >
       <div className="flex items-start gap-3">
@@ -36,7 +36,7 @@ export function PaymentOptionCard({
             'p-3 rounded-lg',
             selected
               ? 'bg-primary-600-value text-white'
-              : 'bg-carbon-900-value text-carbon-100-value'
+              : 'bg-carbon-900-value text-carbon-100-value',
           )}
         >
           {icon}

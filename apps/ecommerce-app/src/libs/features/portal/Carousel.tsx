@@ -45,7 +45,6 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
             <SwiperSlide>
               <Image
                 src={item}
-                objectFit="cover"
                 alt="carousel-image"
                 width={1280}
                 height={1000}

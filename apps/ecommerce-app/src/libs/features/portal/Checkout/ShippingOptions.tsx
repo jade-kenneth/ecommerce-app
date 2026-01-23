@@ -1,6 +1,6 @@
 import { MdLocalShipping } from 'react-icons/md';
 import { ShippingType } from '~/graphql/generated';
-import { useCartContext } from './CartContext';
+import { useCartContext } from '../Cart/CartContext';
 
 type ShippingOption = {
   name: string;

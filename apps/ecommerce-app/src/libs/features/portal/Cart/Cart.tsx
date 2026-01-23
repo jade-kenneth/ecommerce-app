@@ -1,8 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { LuMoveLeft } from 'react-icons/lu';
+import { OrderSummary } from '../Checkout/OrderSummary';
 import { Items } from './Items';
-import { OrderSummary } from './OrderSummary';
-import PaymentMethod from './PaymentMethod';
 export const Cart = () => {
   const router = useRouter();
   return (
@@ -17,12 +16,12 @@ export const Cart = () => {
 
       <p className="text-heading-5 font-bold mt-5">Shopping Cart</p>
 
-      <div className="flex justify-between ">
-        <div className="flex flex-col w-[850px] justify-between ">
+      <div className="flex justify-between gap-10">
+        <div className="flex flex-col flex-[1.5] w-[850px] justify-between ">
           <Items />
-          <PaymentMethod />
+          {/* <PaymentMethod /> */}
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-1 flex-col gap-5">
           {/* <ShippingOptions /> */}
           <div className="relative h-[600px]">
             <OrderSummary />

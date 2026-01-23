@@ -1,5 +1,5 @@
 'use client';
-import { format, isAfter } from 'date-fns';
+import { isAfter } from 'date-fns';
 import { useEffect, useReducer } from 'react';
 import { store } from '~/store';
 import { getLicense } from './service';
@@ -17,19 +17,16 @@ export const useLicense = (options: UseLicenseOptions) => {
   const [state, setState] = useReducer(
     (prev: LicenseState, next: Partial<LicenseState>) => ({ ...prev, ...next }),
     {
-      isLicensed: false,
+      isLicensed: true,
       loading: true,
-    }
+    },
   );
 
   async function validateLicense() {
     try {
       const { licenseCode } = await store.get();
       const data = await getLicense(licenseCode || '');
-      console.log(
-        'valid',
-        format(new Date(data.expirationDate), 'yyyy-MM-dd HH:mm:ss')
-      );
+
       if (isAfter(new Date(data.expirationDate), new Date())) {
         setState({
           isLicensed: true,

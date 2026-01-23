@@ -2,23 +2,21 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "preserve",
+
     "strict": true,
     "noEmit": true,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
-    "module": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "lib": ["dom", "dom.iterable", "ESNext"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
       "~/components/*": ["./src/libs/components/*"],
@@ -34,22 +32,24 @@
       "~/hooks/*": ["./src/libs/hooks/*"],
 
       "~/store": ["./src/libs/store/store.ts"]
-    },
-    "types": ["jest", "node"],
-    "target": "ESNext",
-    "moduleResolution": "bundler",
-    "skipLibCheck": true
+    }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
+
     "../../apps/ecommerce-app/.next/types/**/*.ts",
     "../../dist/apps/ecommerce-app/.next/types/**/*.ts",
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "tailwind.config.js"
+
+    "next-env.d.ts"
   ],
-  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "jest.config.cts",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }

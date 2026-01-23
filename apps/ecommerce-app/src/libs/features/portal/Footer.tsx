@@ -17,38 +17,20 @@ export const Footer = () => {
         w="full"
       >
         <Flex direction={'column'}>
-          <Image
-            src={'/LogoWhite.png'}
-            objectFit="cover"
-            alt="logo"
-            width={150}
-            height={150}
-          />
+          <Image src={'/LogoWhite.png'} alt="logo" width={150} height={150} />
 
           <Text mt="34px" fontWeight={700} mb="20px" sizes={'paragraph-xl'}>
             Contact Us
           </Text>
           <Flex align={'start'} fontWeight={600} mb="20px" gap="11px">
-            <Image
-              src={'/fb.svg'}
-              objectFit="cover"
-              alt="logo"
-              width={20}
-              height={20}
-            />
+            <Image src={'/fb.svg'} alt="logo" width={20} height={20} />
             <Flex direction={'column'}>
               <Text sizes={'paragraph-md'}>Facebook App</Text>
               <Text sizes={'paragraph-md'}>Kenneth Mejia Jumawan</Text>
             </Flex>
           </Flex>
           <Flex align={'start'} fontWeight={600} gap="11px">
-            <Image
-              src={'/phone.svg'}
-              objectFit="cover"
-              alt="logo"
-              width={20}
-              height={20}
-            />
+            <Image src={'/phone.svg'} alt="logo" width={20} height={20} />
             <Flex direction={'column'}>
               <Text sizes={'paragraph-md'}>Call Us</Text>
               <Text sizes={'paragraph-md'}>+639 52 480 3589</Text>

@@ -1,12 +1,10 @@
-import { Box } from '@chakra-ui/react';
-
 import { PropsWithChildren } from 'react';
 import { ColorModeProvider } from '~/components/chakra__prebuilts';
 
 export const Layout = (props: PropsWithChildren) => {
   return (
-    <Box minWidth={'1280px'}>
+    <div className="min-w-[1280px] mx-auto">
       <ColorModeProvider>{props.children}</ColorModeProvider>
-    </Box>
+    </div>
   );
 };

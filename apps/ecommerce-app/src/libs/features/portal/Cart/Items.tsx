@@ -2,9 +2,14 @@ import Image from 'next/image';
 import { Controller, useForm } from 'react-hook-form';
 import { TbTrash } from 'react-icons/tb';
 import { Input } from '~/components/Input';
+import { Show } from '~/components/Show';
 import { useCartContext } from './CartContext';
 import { EmptyCart } from './EmptyCart';
-export const Items = () => {
+
+interface ItemsProps {
+  isCheckout?: boolean;
+}
+export const Items = ({ isCheckout = false }: ItemsProps) => {
   const context = useCartContext();
 
   const form = useForm({
@@ -35,62 +40,72 @@ export const Items = () => {
               <p className="text-paragraph-sm text-primary-700-value font-bold text-gray-600">
                 ₱{item.price}
               </p>
+              <Show
+                when={!isCheckout}
+                fallback={
+                  <p className="text-paragraph-sm text-gray-600">
+                    Quantity: {quantity}
+                  </p>
+                }
+              >
+                <div className="flex items-center gap-2 w-fit text-paragraph-sm text-gray-600">
+                  <button
+                    className="text-lg cursor-pointer"
+                    onClick={() => {
+                      if (quantity <= 1) return;
 
-              <div className="flex items-center gap-2 w-fit text-paragraph-sm text-gray-600">
-                <button
-                  className="text-lg cursor-pointer"
-                  onClick={() => {
-                    if (quantity <= 1) return;
+                      form.setValue(
+                        `items.${idx}.quantity`,
+                        (form.getValues(`items.${idx}.quantity`) || 1) - 1,
+                      );
 
-                    form.setValue(
-                      `items.${idx}.quantity`,
-                      (form.getValues(`items.${idx}.quantity`) || 1) - 1
-                    );
-
-                    quantity -= 1;
-                  }}
-                >
-                  -
-                </button>
-                <Controller
-                  control={form.control}
-                  name={`items.${idx}.quantity`}
-                  render={({ field }) => (
-                    <Input
-                      type="number"
-                      value={field.value?.toString() || '1'}
-                      className="w-[90px]"
-                      onChange={(e) => {
-                        field.onChange(Number(e));
-                      }}
-                    />
-                  )}
-                />
-                <button
-                  className="text-lg cursor-pointer"
-                  onClick={() => {
-                    form.setValue(
-                      `items.${idx}.quantity`,
-                      (form.watch(`items.${idx}.quantity`) || 1) + 1
-                    );
-                    context.addCartItem(item);
-                  }}
-                >
-                  +
+                      quantity -= 1;
+                    }}
+                  >
+                    -
+                  </button>
+                  <Controller
+                    control={form.control}
+                    name={`items.${idx}.quantity`}
+                    render={({ field }) => (
+                      <Input
+                        type="number"
+                        value={field.value?.toString() || '1'}
+                        className="w-[90px]"
+                        onChange={(e) => {
+                          field.onChange(Number(e));
+                        }}
+                      />
+                    )}
+                  />
+                  <button
+                    className="text-lg cursor-pointer"
+                    onClick={() => {
+                      form.setValue(
+                        `items.${idx}.quantity`,
+                        (form.watch(`items.${idx}.quantity`) || 1) + 1,
+                      );
+                      context.addCartItem(item);
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </Show>
+            </div>
+            <Show when={!isCheckout}>
+              <div className="flex flex-col justify-between items-center ml-auto">
+                <p className="text-paragraph-xl text-gray-600 font-bold text-carbon-25-value">
+                  ₱
+                  {Number(item.price) *
+                    (form.watch(`items.${idx}.quantity`) || 1)}
+                </p>
+                <button className="text-sm text-red-600 font-semibold flex items-center gap-1 text-error-500-value">
+                  <TbTrash />
+                  Remove
                 </button>
               </div>
-            </div>
-            <div className="flex flex-col justify-between items-center ml-auto">
-              <p className="text-paragraph-xl text-gray-600 font-bold text-carbon-25-value">
-                ₱
-                {Number(item.price) *
-                  (form.watch(`items.${idx}.quantity`) || 1)}
-              </p>
-              <button className="text-sm text-red-600 font-semibold flex items-center gap-1 text-error-500-value">
-                <TbTrash />
-                Remove
-              </button>
-            </div>
+            </Show>
           </div>
         );
       })}

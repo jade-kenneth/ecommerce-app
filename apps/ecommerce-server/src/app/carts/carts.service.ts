@@ -64,7 +64,7 @@ export class CartsService {
 
     if (!cart?.items.length) return;
 
-    let item = cart.items.find((item) =>
+    const item = cart.items.find((item) =>
       item.productId.equals(params.productId)
     );
 

@@ -14,11 +14,11 @@ import { Layout } from '../libs/features/portal/layout/Layout';
 
 const ClientOnlyNavbar = dynamic(
   () => import('~/features/portal').then((mod) => mod.Navbar),
-  { ssr: false }
+  { ssr: false },
 );
 const ClientOnlyCategories = dynamic(
   () => import('~/features/portal').then((mod) => mod.Categories),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function Index() {

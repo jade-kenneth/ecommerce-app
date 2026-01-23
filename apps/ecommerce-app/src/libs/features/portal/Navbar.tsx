@@ -13,6 +13,7 @@ import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { CartIcon } from '~/icons/CartIcon';
 import { SearchIcon } from '~/icons/SearchIcon';
 import { UserIcon } from '~/icons/UserIcon';
+import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { AuthForm } from './AuthForm';
 import { useCartContext } from './Cart/CartContext';
 interface NavbarProps {
@@ -21,12 +22,14 @@ interface NavbarProps {
 
 export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   const globalStore = useGlobalStore((state) => state);
+  const licenseContext = useLicenseContext();
   const { data } = useSelfQuery({
-    skip: !globalStore.authenticate.isAuthenticated,
+    skip:
+      !globalStore.authenticate.isAuthenticated || !licenseContext.isLicensed,
   });
   const router = useRouter();
 
-  const context = useCartContext();
+  const cartContext = useCartContext();
   return (
     <Flex
       className="max-w-screen"
@@ -110,7 +113,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                   'w-[20px] text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-5 h-[20px] rounded-full bg-[red]'
                 )}
               >
-                {context.state.itemsCount}
+                {cartContext.state.itemsCount}
               </p>
               <CartIcon />
 

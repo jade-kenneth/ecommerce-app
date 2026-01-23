@@ -1,15 +1,14 @@
 'use client';
-import { isAfter } from 'date-fns';
-import { isEmpty } from 'lodash';
+import { format, isAfter } from 'date-fns';
 import { useEffect, useReducer } from 'react';
 import { store } from '~/store';
-import { __validateLicense } from './service';
+import { getLicense } from './service';
 interface UseLicenseOptions {
   excludePaths?: string[];
 }
 
 interface LicenseState {
-  isLicensed: boolean;
+  isLicensed?: boolean;
 
   loading?: boolean;
 }
@@ -18,50 +17,43 @@ export const useLicense = (options: UseLicenseOptions) => {
   const [state, setState] = useReducer(
     (prev: LicenseState, next: Partial<LicenseState>) => ({ ...prev, ...next }),
     {
-      isLicensed: false,
-      loading: false,
+      isLicensed: true,
+      loading: true,
     }
   );
-  const validateLicense = async (code?: string): Promise<boolean> => {
-    const { licenseCode } = await store.get();
 
-    const currentLicenseCode = code || licenseCode || '';
-
-    setState({
-      isLicensed: false,
-      loading: true,
-    });
-
+  async function validateLicense() {
     try {
-      const license = await __validateLicense(currentLicenseCode);
-
-      if (!isEmpty(license.expirationDate)) {
+      const { licenseCode } = await store.get();
+      const data = await getLicense(licenseCode || '');
+      console.log(
+        'valid',
+        format(new Date(data.expirationDate), 'yyyy-MM-dd HH:mm:ss')
+      );
+      if (isAfter(new Date(data.expirationDate), new Date())) {
         setState({
-          isLicensed: isAfter(new Date(), new Date(license.expirationDate)),
+          isLicensed: true,
           loading: false,
         });
-        return true;
       } else {
         setState({
           isLicensed: false,
           loading: false,
         });
-        return false;
       }
     } catch (err) {
       setState({
         isLicensed: false,
         loading: false,
       });
-      return false;
     }
-  };
+  }
   useEffect(() => {
     validateLicense();
-    document.addEventListener('visibilitychange', () => validateLicense);
+    document.addEventListener('visibilitychange', validateLicense);
 
     return () => {
-      document.removeEventListener('visibilitychange', () => validateLicense);
+      document.removeEventListener('visibilitychange', validateLicense);
     };
   }, []);
 
@@ -71,6 +63,7 @@ export const useLicense = (options: UseLicenseOptions) => {
       loading: false,
     });
   };
+  console.log('License is valid until:', state.isLicensed);
 
   return {
     isLicensed: state.isLicensed,

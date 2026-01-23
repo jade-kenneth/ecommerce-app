@@ -4,15 +4,19 @@ import { Button } from '~/components/Button';
 import { Dialog } from '~/components/Dialog';
 import { OtpField } from '~/components/OtpField';
 import { useLicenseContext } from './LicenseContext';
+import { getLicense } from './service';
 
 export const LicenseDialog = (props: PropsWithChildren) => {
   const context = useLicenseContext();
   const [error, setError] = useState<string | null>(null);
 
   const handleActivate = async (value: string) => {
-    const res = await context.validateLicense(value);
-    if (res) context.setLicense({ isLicensed: true });
-    else setError('License activation failed');
+    try {
+      const res = await getLicense(value);
+      if (res) context.setLicense({ isLicensed: true });
+    } catch (err) {
+      setError('License activation failed');
+    }
   };
 
   return (

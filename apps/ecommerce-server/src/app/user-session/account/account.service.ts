@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountType } from 'apps/ecommerce-server/src/types/common';
 import bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
+import { AccountType } from '~/types/common';
 import { Filter } from '../../../libs/repository';
 import { Tokens } from '../../../types/tokens';
 import { Account, AccountRepository } from './repositories/account.repository';

@@ -7,7 +7,7 @@ import { Session } from './type';
 export async function getSession(): Promise<Session> {
   const { accessToken, refreshToken, role } = await store.get();
   if (!role) {
-    await store.clear();
+    await store.clearSession();
     return { status: 'unauthenticated' };
   }
   if (!accessToken) {

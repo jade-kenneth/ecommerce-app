@@ -1,9 +1,7 @@
-import { MongooseRepository } from 'apps/ecommerce-server/src/libs/mongoose-repository';
-
-import { Repository } from 'apps/ecommerce-server/src/libs/repository';
-
-import { AccountType } from 'apps/ecommerce-server/src/types/common';
 import { Connection, Types } from 'mongoose';
+import { MongooseRepository } from '~/mongoose-repository';
+import { Repository } from '~/repository';
+import { AccountType } from '~/types/common';
 
 export type Account = {
   _id: Types.ObjectId;

@@ -14,6 +14,7 @@ export enum ObjectType {
   Product = 'Product',
   Account = 'Account',
   Cart = 'Cart',
+  License = 'License',
 }
 export enum AccountType {
   Admin = 'ADMIN',

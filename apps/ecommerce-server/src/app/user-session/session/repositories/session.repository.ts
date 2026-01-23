@@ -1,7 +1,6 @@
-import { MongooseRepository } from 'apps/ecommerce-server/src/libs/mongoose-repository';
-
-import { Repository } from 'apps/ecommerce-server/src/libs/repository';
 import { Connection, Types } from 'mongoose';
+import { MongooseRepository } from '~/mongoose-repository';
+import { Repository } from '~/repository';
 
 export enum SessionStatus {
   PENDING = 'PENDING',

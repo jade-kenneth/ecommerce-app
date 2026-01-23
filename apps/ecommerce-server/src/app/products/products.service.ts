@@ -47,7 +47,6 @@ export class ProductsService {
         cursor: generateCursor(new Date(), new Types.ObjectId()),
       })
       .catch(async (err) => {
-        console.log(err, 'error');
         return;
       });
   }
@@ -60,7 +59,6 @@ export class ProductsService {
         ...updateData,
       })
       .catch(async (err) => {
-        console.log(err, 'error');
         return;
       });
   }

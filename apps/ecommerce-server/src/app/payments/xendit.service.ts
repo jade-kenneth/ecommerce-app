@@ -24,9 +24,7 @@ export class XenditService {
     try {
       const res = await this.client().post(path, data);
       return res.data;
-    } catch (error) {
-      console.log(error, 'erorooror');
-    }
+    } catch (error) {}
   }
 
   async get(path: string) {

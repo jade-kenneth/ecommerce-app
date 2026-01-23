@@ -28,6 +28,8 @@ import { NodeResolver } from './resolver/node.resolver';
 import { UploadModule } from './upload/upload/upload.module';
 import { AccountModule } from './user-session/account/account.module';
 import { JwtModule } from './user-session/jwt/jwt.module';
+import { LicenseController } from './user-session/license/license.controller';
+import { LicenseModule } from './user-session/license/license.module';
 import { SessionController } from './user-session/session/session.controller';
 import { SessionModule } from './user-session/session/session.module';
 @Module({
@@ -82,16 +84,17 @@ import { SessionModule } from './user-session/session/session.module';
     SessionModule,
     CartsModule,
     PaymentsModule,
+    LicenseModule,
   ],
 
   providers: [AppService],
-  controllers: [SessionController],
+  controllers: [SessionController, LicenseController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(graphqlUploadExpress(), AuthMiddleware)
-      .exclude()
+
       .forRoutes({ path: '*', method: RequestMethod.ALL }); //apply auth and permission middleware later
   }
 }

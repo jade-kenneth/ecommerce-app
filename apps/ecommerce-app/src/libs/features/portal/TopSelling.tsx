@@ -2,9 +2,13 @@ import { Flex } from '@chakra-ui/react';
 import { Cards } from '~/components/Cards';
 import { Container } from '~/components/Container';
 import { useProductsQuery } from '~/graphql/generated';
+import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 
 export const TopSelling = () => {
-  const { data } = useProductsQuery();
+  const context = useLicenseContext();
+  const { data } = useProductsQuery({
+    skip: !context.isLicensed,
+  });
 
   return (
     <Container title="Top Selling Products">

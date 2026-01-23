@@ -27,8 +27,6 @@ export class PaymentsService {
         },
         description: input.description ?? 'GCash payment',
       });
-    } catch (error) {
-      console.log(error, 'error');
-    }
+    } catch (error) {}
   }
 }

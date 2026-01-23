@@ -161,7 +161,6 @@ export class SessionController {
         refreshToken,
       };
     } catch (error) {
-      console.log('Error refreshing session:', error);
       throw new InternalServerErrorException();
     }
   }

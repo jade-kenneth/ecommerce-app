@@ -1,15 +1,18 @@
+import { LicenseInput } from 'src/libs/global/src/graphql/generated';
 import { store } from '~/store';
 import * as service from './service.core';
-export const __validateLicense = async (code: string) => {
+
+export type License = LicenseInput;
+export const getLicense = async (code: string): Promise<License> => {
   try {
-    const license = await service.validateLicense(code);
+    const { data } = await service.validateLicense(code);
 
     await store.set({
       licenseCode: code,
     });
 
-    return license;
+    return data;
   } catch (error) {
-    return { expirationDate: '' };
+    throw new Error('Invalid license');
   }
 };

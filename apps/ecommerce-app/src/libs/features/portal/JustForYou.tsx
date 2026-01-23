@@ -6,11 +6,15 @@ import { Button } from '~/components/Button';
 import { Cards } from '~/components/Cards';
 import { Container } from '~/components/Container';
 import { useProductsQuery } from '~/graphql/generated';
+import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 
 interface JustForYouProps {}
 
 export const JustForYou: FunctionComponent<JustForYouProps> = () => {
-  const { data } = useProductsQuery();
+  const context = useLicenseContext();
+  const { data } = useProductsQuery({
+    skip: !context.isLicensed,
+  });
   return (
     <Container title="Just For You">
       <Flex flexWrap={'wrap'} gap="18px">

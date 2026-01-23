@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Tokens } from 'apps/ecommerce-server/src/types/tokens';
+
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
+import { Tokens } from '~/types/tokens';
 
 export type JwtServiceOptions = {
   secret: string;

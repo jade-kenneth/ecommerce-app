@@ -108,8 +108,14 @@ export interface UpdateConfigInput {
     carouselItems: string[];
 }
 
+export interface LicenseInput {
+    _id: ObjectId;
+    code: string;
+    expirationDate: string;
+}
+
 export interface CreateGcashPaymentInput {
-    amount: number;
+    amount: Decimal;
     referenceId?: Nullable<string>;
     successUrl: string;
     failureUrl: string;
@@ -231,7 +237,8 @@ export interface IMutation {
     createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateConfig(input: UpdateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
-    createGcashPayment(input?: Nullable<CreateGcashPaymentInput>): Nullable<CheckoutUrl> | Promise<Nullable<CheckoutUrl>>;
+    createLicense(input: LicenseInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    createGcashPayment(input?: Nullable<CreateGcashPaymentInput>): Nullable<PaymentRequestResponse> | Promise<Nullable<PaymentRequestResponse>>;
     createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     deleteProduct(input: DeleteProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -347,8 +354,43 @@ export interface FileNameTooLongError extends Error {
     message: string;
 }
 
+export interface License {
+    _id: ObjectId;
+    code: string;
+    expirationDate: string;
+}
+
 export interface CheckoutUrl {
     checkout_url?: Nullable<string>;
+}
+
+export interface ChannelProperties {
+    success_return_url?: Nullable<string>;
+    failure_return_url?: Nullable<string>;
+}
+
+export interface PaymentAction {
+    type?: Nullable<string>;
+    descriptor?: Nullable<string>;
+    value?: Nullable<string>;
+}
+
+export interface PaymentRequestResponse {
+    payment_request_id?: Nullable<string>;
+    country?: Nullable<string>;
+    currency?: Nullable<string>;
+    business_id?: Nullable<string>;
+    reference_id?: Nullable<string>;
+    description?: Nullable<string>;
+    created?: Nullable<string>;
+    updated?: Nullable<string>;
+    status?: Nullable<string>;
+    capture_method?: Nullable<string>;
+    channel_code?: Nullable<string>;
+    request_amount?: Nullable<Decimal>;
+    channel_properties?: Nullable<ChannelProperties>;
+    type?: Nullable<string>;
+    actions?: Nullable<Nullable<PaymentAction>[]>;
 }
 
 export interface Product extends Node {

@@ -1,0 +1,13 @@
+input LicenseInput {
+  _id: ObjectId!
+  code: String!
+  expirationDate: String!
+}
+type License {
+  _id: ObjectId!
+  code: String!
+  expirationDate: String!
+}
+type Mutation {
+  createLicense(input: LicenseInput!): Boolean
+}

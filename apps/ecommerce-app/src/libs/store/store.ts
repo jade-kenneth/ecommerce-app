@@ -57,7 +57,7 @@ type Store = {
     ): Promise<void>;
   };
   del?: (...keys: [StoreKey, ...StoreKey[]]) => Promise<void>;
-  clear: () => Promise<void>;
+  clearSession: () => Promise<void>;
 };
 
 function set(key: string, value: string | boolean | null | undefined) {
@@ -199,9 +199,9 @@ const createStore = (): Store => {
         resolve();
       });
     },
-    clear() {
+    clearSession() {
       return new Promise((resolve) => {
-        del($('role'), $('accessToken'), $('refreshToken'), $('licenseCode'));
+        del($('role'), $('accessToken'), $('refreshToken'));
         resolve();
       });
     },

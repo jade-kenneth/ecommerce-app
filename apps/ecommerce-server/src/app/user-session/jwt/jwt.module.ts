@@ -1,5 +1,6 @@
 import { DynamicModule, Module, ModuleMetadata } from '@nestjs/common';
-import { Tokens } from 'apps/ecommerce-server/src/types/tokens';
+
+import { Tokens } from '~/types/tokens';
 import { JwtService, JwtServiceOptions } from './jwt.service';
 
 export type JwtModuleOptions = JwtServiceOptions;

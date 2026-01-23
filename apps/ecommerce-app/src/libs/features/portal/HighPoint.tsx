@@ -4,11 +4,15 @@ import { FunctionComponent } from 'react';
 import { Cards } from '~/components/Cards';
 import { Container } from '~/components/Container';
 import { useHighPointProductsQuery } from '~/graphql/generated';
+import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 
 interface HighPointProps {}
 
 export const HighPoint: FunctionComponent<HighPointProps> = () => {
-  const { data } = useHighPointProductsQuery();
+  const context = useLicenseContext();
+  const { data } = useHighPointProductsQuery({
+    skip: !context.isLicensed,
+  });
   return (
     <Container
       title="High-Point Products"

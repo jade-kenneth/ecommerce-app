@@ -1,0 +1,3 @@
+mutation License($input: LicenseInput!) {
+  createLicense(input: $input)
+}

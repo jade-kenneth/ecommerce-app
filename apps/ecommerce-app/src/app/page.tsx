@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { Sticky } from '~/components/Sticky';
 import {
   Carousel,
   Footer,
@@ -24,10 +25,10 @@ const ClientOnlyCategories = dynamic(
 export default function Index() {
   return (
     <Layout>
-      <div className="sticky top-0 z-50 bg-white border-b border-[#EAEAEA]">
+      <Sticky>
         <Highlight />
         <ClientOnlyNavbar />
-      </div>
+      </Sticky>
       <FrequentlySearched />
       <Carousel />
       <ClientOnlyCategories />

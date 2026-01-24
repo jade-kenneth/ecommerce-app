@@ -22,10 +22,7 @@ export const Cart = () => {
           {/* <PaymentMethod /> */}
         </div>
         <div className="flex flex-1 flex-col gap-5">
-          {/* <ShippingOptions /> */}
-          <div className="relative h-[600px]">
-            <OrderSummary />
-          </div>
+          <OrderSummary />
         </div>
       </div>
     </div>

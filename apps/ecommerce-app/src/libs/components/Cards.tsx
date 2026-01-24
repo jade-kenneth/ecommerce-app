@@ -18,7 +18,7 @@ interface CardsProps extends ProductCoreDataFragment {
 }
 export const Cards = (props: CardsProps) => {
   const discount = parseFloat(
-    (props.price * (props.discount / 100)).toFixed(2)
+    (props.price * (props.discount / 100)).toFixed(2),
   );
   const [mutate] = useAddToCartMutation();
   const globalStore = useGlobalStore((state) => state);
@@ -47,8 +47,8 @@ export const Cards = (props: CardsProps) => {
         <Image
           src={props.thumbnail}
           alt="item"
-          layout="fill"
           className="max-w-full aspect-[1/1]  object-cover"
+          layout="fill"
         />
 
         <Flex
@@ -252,6 +252,8 @@ export const Cards = (props: CardsProps) => {
                 productId: props._id,
                 quantity: 1,
                 thumbnail: props.thumbnail,
+                discount: props.discount,
+                categories: props.category,
               });
             } catch (error) {
               /* empty */

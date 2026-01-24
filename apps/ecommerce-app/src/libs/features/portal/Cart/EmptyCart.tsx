@@ -17,7 +17,7 @@ export const EmptyCart = () => {
 
       <button
         onClick={() => router.push('/')}
-        className="w-fit p-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
+        className="w-fit p-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
       >
         Continue Shopping
       </button>

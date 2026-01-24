@@ -1,4 +1,3 @@
-const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
 const { join } = require('path');
 import defaultTheme from 'tailwindcss/defaultTheme';
 /** @type {import('tailwindcss').Config} */
@@ -19,20 +18,6 @@ module.exports = {
       current: 'currentColor',
       transparent: 'transparent',
 
-      carbon: {
-        50: { value: '#1D1D1D' },
-        25: { value: '#151515' },
-        100: { value: '#242424' },
-        200: { value: '#2A2A2A ' },
-        300: { value: '#2F2F2F ' },
-        400: { value: '#333333' },
-        500: { value: '#727272' },
-        600: { value: '#999999' },
-        700: { value: '#B8B8B8 ' },
-        800: { value: '#D2D2D2 ' },
-        900: { value: '#EAEAEA' },
-        950: { value: '#F2F2F2' },
-      },
       //cyan
       carbon: {
         50: '#1D1D1D',

@@ -4,6 +4,7 @@ import { omit } from 'es-toolkit';
 import { useEffect, useReducer } from 'react';
 import {
   CartStatus,
+  CategoryType,
   PaymentMethodType,
   ShippingType,
   useCartQuery,
@@ -17,6 +18,8 @@ export interface Item {
   price: number;
   productId: string;
   quantity: number;
+  discount: number;
+  categories?: CategoryType[] | null;
 }
 
 export type CartItem = {
@@ -51,7 +54,7 @@ export const useCart = () => {
         },
       },
       itemsCount: 0,
-    }
+    },
   );
 
   const { cart, itemsCount } = state;
@@ -76,13 +79,12 @@ export const useCart = () => {
 
   function addCartItem(newItem: Item) {
     const existingIndex = cart.items.findIndex(
-      (i) => i.productId === newItem.productId
+      (i) => i.productId === newItem.productId,
     );
 
-    let updatedItems: Item[];
+    let updatedItems: Item[] = [...cart.items];
 
     if (existingIndex !== -1) {
-      updatedItems = [...cart.items];
       updatedItems[existingIndex] = {
         ...updatedItems[existingIndex],
         quantity: updatedItems[existingIndex].quantity + 1,
@@ -97,6 +99,30 @@ export const useCart = () => {
     });
   }
 
+  function setQuantity(id: string, quantity: number) {
+    const existingIndex = cart.items.findIndex((i) => i.productId === id);
+
+    let updatedItems: Item[] = [...cart.items];
+
+    updatedItems[existingIndex] = {
+      ...updatedItems[existingIndex],
+      quantity,
+    };
+
+    setState({
+      cart: { ...cart, items: updatedItems },
+      itemsCount: updatedItems.reduce((sum, curr) => sum + curr.quantity, 0),
+    });
+  }
+
+  function removeCartItem(id: string) {
+    const updatedItems = cart.items.filter((i) => i.productId !== id);
+
+    setState({
+      cart: { ...cart, items: updatedItems },
+      itemsCount: updatedItems.reduce((sum, curr) => sum + curr.quantity, 0),
+    });
+  }
   useEffect(() => {
     if (!productsData?.products.edges.length || !cartData?.cart) return;
 
@@ -107,8 +133,10 @@ export const useCart = () => {
           thumbnail: p.node.thumbnail,
           name: p.node.name,
           price: p.node.price,
+          discount: p.node.discount,
+          categories: p.node.category,
         },
-      ])
+      ]),
     );
 
     const MERGED_ITEMS = cartData.cart.items.map((item) => ({
@@ -126,7 +154,7 @@ export const useCart = () => {
       cart: nextCart,
       itemsCount: nextCart.items.reduce(
         (sum, curr) => sum + (curr.quantity ?? 0),
-        0
+        0,
       ),
     });
   }, [productsData, cartData]);
@@ -134,7 +162,9 @@ export const useCart = () => {
   return {
     state,
     itemsCount,
+    setQuantity,
     addCartItem,
+    removeCartItem,
     setState,
   };
 };

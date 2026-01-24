@@ -34,6 +34,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
     <Flex
       className="max-w-screen"
       py="36px"
+      width="full"
       justify={'space-between'}
       flexWrap={'wrap'}
       alignItems={'center'}

@@ -21,6 +21,7 @@ export const Highlight = ({
   return (
     <Flex
       height={'44px'}
+      width="full"
       py="12px"
       w="full"
       bg="colors.primary.700"

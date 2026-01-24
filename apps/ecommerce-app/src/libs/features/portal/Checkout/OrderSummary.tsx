@@ -21,7 +21,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
 
   const [mutate] = useCreateGcashPaymentMutation();
   return (
-    <div className="sticky top-0">
+    <div>
       <div className="  bg-white rounded-2xl shadow-lg p-6 space-y-6">
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-semibold text-gray-800">Order Summary</h2>
@@ -112,7 +112,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           when={!isCheckout}
           fallback={
             <button
-              className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
+              className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
               onClick={async () => {
                 const res = await mutate({
                   variables: {
@@ -142,7 +142,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           }
         >
           <button
-            className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
+            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
             onClick={async () => {
               router.replace('/cart/checkout');
             }}

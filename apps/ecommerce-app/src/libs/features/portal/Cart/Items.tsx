@@ -1,9 +1,10 @@
+import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
-import { Controller, useForm } from 'react-hook-form';
-import { TbTrash } from 'react-icons/tb';
 import { Input } from '~/components/Input';
 import { Show } from '~/components/Show';
+import { capitalize } from '~/utils/capitalize';
 import { useCartContext } from './CartContext';
+import { ConfirmRemoveItem } from './ConfirmRemoveItem';
 import { EmptyCart } from './EmptyCart';
 
 interface ItemsProps {
@@ -11,101 +12,121 @@ interface ItemsProps {
 }
 export const Items = ({ isCheckout = false }: ItemsProps) => {
   const context = useCartContext();
-
-  const form = useForm({
-    defaultValues: {
-      items: context.state.cart.items,
-    },
-  });
-
+  console.log(context, 'comtext');
   return (
     <div className="flex flex-col gap-5 mt-5">
       {!context.state.cart.items.length && <EmptyCart />}
-      {context.state.cart.items?.map((item, idx) => {
-        let quantity = form.getValues(`items.${idx}.quantity`) || 1;
+      {context.state.cart.items.map((item, idx) => {
+        let quantity = item.quantity;
         return (
           <div
             key={item.productId}
-            className="flex gap-4 w-full  p-5 rounded-md shadow-lg border-[1px] border-[#f2efef] hover:shadow-lg"
+            data-is-checkout={isCheckout}
+            className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-md data-[is-checkout='true']:hover:shadow-none transition-shadow duration-200"
           >
-            <Image
-              src={item.thumbnail || ''}
-              alt="Product Image"
-              width={100}
-              height={100}
-              className="w-[120px] h-[120px] bg-black rounded-lg"
-            />
-            <div className="flex my-auto flex-col gap-2">
-              <h3 className="text-heading-6 font-semibold">{item.name}</h3>
-              <p className="text-paragraph-sm text-cyan-700 font-bold text-gray-600">
-                ₱{item.price}
-              </p>
-              <Show
-                when={!isCheckout}
-                fallback={
-                  <p className="text-paragraph-sm text-gray-600">
-                    Quantity: {quantity}
-                  </p>
-                }
-              >
-                <div className="flex items-center gap-2 w-fit text-paragraph-sm text-gray-600">
-                  <button
-                    className="text-lg cursor-pointer"
-                    onClick={() => {
-                      if (quantity <= 1) return;
-
-                      form.setValue(
-                        `items.${idx}.quantity`,
-                        (form.getValues(`items.${idx}.quantity`) || 1) - 1,
-                      );
-
-                      quantity -= 1;
-                    }}
-                  >
-                    -
-                  </button>
-                  <Controller
-                    control={form.control}
-                    name={`items.${idx}.quantity`}
-                    render={({ field }) => (
-                      <Input
-                        type="number"
-                        value={field.value?.toString() || '1'}
-                        className="w-[90px]"
-                        onChange={(e) => {
-                          field.onChange(Number(e));
-                        }}
-                      />
-                    )}
-                  />
-                  <button
-                    className="text-lg cursor-pointer"
-                    onClick={() => {
-                      form.setValue(
-                        `items.${idx}.quantity`,
-                        (form.watch(`items.${idx}.quantity`) || 1) + 1,
-                      );
-                      context.addCartItem(item);
-                    }}
-                  >
-                    +
-                  </button>
-                </div>
-              </Show>
-            </div>
-            <Show when={!isCheckout}>
-              <div className="flex flex-col justify-between items-center ml-auto">
-                <p className="text-paragraph-xl text-gray-600 font-bold text-carbon-25">
-                  ₱
-                  {Number(item.price) *
-                    (form.watch(`items.${idx}.quantity`) || 1)}
-                </p>
-                <button className="text-sm text-red-600 font-semibold flex items-center gap-1 text-error-500">
-                  <TbTrash />
-                  Remove
-                </button>
+            <div className="flex gap-6 p-6">
+              {/* Image */}
+              <div className="flex-shrink-0">
+                <Image
+                  src={item.thumbnail || ''}
+                  alt="Product Image"
+                  width={100}
+                  height={100}
+                  className="w-32 h-32 object-cover rounded-lg"
+                />
               </div>
-            </Show>
+
+              {/* Details */}
+              <div className="flex-grow flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    {item.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Categories:{' '}
+                    {item.categories?.map((v) =>
+                      capitalize(v, {
+                        delimiter: capitalize.delimiters.UNDERSCORE,
+                      }),
+                    )}
+                  </p>
+                </div>
+
+                {/* Price */}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-lg line-through font-bold text-gray-500 dark:text-white">
+                    ₱{(item.price * item.quantity).toLocaleString('en-PH')}
+                  </span>
+
+                  <span className="text-2xl  font-bold text-gray-900 dark:text-white">
+                    ₱
+                    {(
+                      item.price *
+                      item.quantity *
+                      (1 - item.discount / 100)
+                    ).toLocaleString('en-PH')}
+                  </span>
+
+                  <span className="text-md text-error-500 font-semibold ">
+                    {item.discount}% OFF
+                  </span>
+                </div>
+              </div>
+
+              {/* Quantity and Remove */}
+              <div className="flex flex-col items-end justify-center gap-5">
+                {/* Quantity Selector */}
+                <Show when={!isCheckout}>
+                  <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-gray-50 dark:bg-slate-800">
+                    <button
+                      onClick={() => {
+                        if (quantity <= 1) return;
+                        context.setQuantity(item.productId, item.quantity - 1);
+                        quantity -= 1;
+                      }}
+                      className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+
+                    <Input
+                      type="text"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== 'Backspace' &&
+                          e.key !== 'Delete' &&
+                          e.key !== 'ArrowLeft' &&
+                          e.key !== 'ArrowRight' &&
+                          e.key !== 'Tab'
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                      value={item.quantity.toString()}
+                      className="w-12 text-center border-0 bg-transparent text-gray-900 dark:text-white font-semibold focus:outline-none"
+                      onChange={(e) => {
+                        context.setQuantity(item.productId, Number(e));
+                      }}
+                    />
+
+                    <button
+                      onClick={() => {
+                        context.setQuantity(item.productId, item.quantity + 1);
+                      }}
+                      className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </Show>
+
+                {/* Remove Button */}
+                <Show when={!isCheckout}>
+                  <ConfirmRemoveItem item={item} />
+                </Show>
+              </div>
+            </div>
           </div>
         );
       })}

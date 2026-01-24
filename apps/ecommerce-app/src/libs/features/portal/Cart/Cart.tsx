@@ -7,7 +7,7 @@ export const Cart = () => {
   return (
     <div className="max-w-screen mt-10">
       <button
-        className="flex gap-3 font-semibold items-center text-primary-700-value"
+        className="flex gap-3 font-semibold items-center text-cyan-700"
         onClick={() => router.push('/')}
       >
         <LuMoveLeft />

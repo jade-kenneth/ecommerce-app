@@ -132,7 +132,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
 
       <Button
         w={'full'}
-        className="bg-primary-700-value"
+        className="bg-cyan-700"
         borderRadius={'50px'}
         mt={6}
         type="submit"
@@ -143,7 +143,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       <p className="w-fit mx-auto mt-4">
         Don&apos;t have an account yet?{' '}
         <span
-          className="text-primary-700-value text-paragraph-sm font-semibold cursor-pointer"
+          className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
           onClick={() => onToggleToSignup?.()}
         >
           Register here

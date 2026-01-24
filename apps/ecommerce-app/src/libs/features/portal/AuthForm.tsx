@@ -87,7 +87,7 @@ export function AuthForm() {
             <Dialog.CloseTrigger
               onClick={() => globalStore.signIn.setIsSignIn(false)}
             >
-              <IoMdClose className="bg-primary-500-value p-1 size-6 absolute -top-9 -right-9 cursor-pointer text-white rounded-md" />
+              <IoMdClose className="bg-cyan-500 p-1 size-6 absolute -top-9 -right-9 cursor-pointer text-white rounded-md" />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>

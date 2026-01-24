@@ -297,7 +297,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
           <Button
             w={'full'}
-            className="bg-primary-700-value"
+            className="bg-cyan-700"
             borderRadius={'50px'}
             type="submit"
             loading={loading}
@@ -314,7 +314,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
               className="inline-flex gap-[var(--3-spacing-spacing-sm)] items-center justify-center relative flex-[0_0_auto] rounded-[32px] overflow-hidden"
               onClick={() => onToggleToLogin?.()}
             >
-              <span className="text-primary-700-value text-paragraph-sm font-semibold relative w-fit mt-[-1.00px] font-paragraph-sm-semibold  text-brand-cyan-green700 text-[length:var(--paragraph-sm-semibold-font-size)] tracking-[var(--paragraph-sm-semibold-letter-spacing)] leading-[var(--paragraph-sm-semibold-line-height)] whitespace-nowrap [font-style:var(--paragraph-sm-semibold-font-style)]">
+              <span className="text-cyan-700 text-paragraph-sm font-semibold relative w-fit mt-[-1.00px] font-paragraph-sm-semibold  text-brand-cyan-green700 text-[length:var(--paragraph-sm-semibold-font-size)] tracking-[var(--paragraph-sm-semibold-letter-spacing)] leading-[var(--paragraph-sm-semibold-line-height)] whitespace-nowrap [font-style:var(--paragraph-sm-semibold-font-style)]">
                 Sign In here
               </span>
             </a>

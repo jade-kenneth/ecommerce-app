@@ -44,7 +44,7 @@ export function UploadFile(props: UploadFileProps) {
         <FileUpload.Dropzone hidden={value.length > 0}>
           <IoCloudUploadOutline />
           <FileUpload.Trigger ref={ref}>
-            <p className="text-primary-700-value font-medium text-sm">
+            <p className="text-cyan-700 font-medium text-sm">
               Click to upload image
             </p>
           </FileUpload.Trigger>

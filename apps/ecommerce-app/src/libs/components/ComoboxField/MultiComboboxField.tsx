@@ -45,7 +45,7 @@ export const MultiComboboxField = ({
         itemToValue: (item) => item.value,
       }),
 
-    [items]
+    [items],
   );
 
   const getOptions = useMemo(() => {
@@ -148,7 +148,7 @@ function SelectedValue({
       {selected?.map((select) => (
         <span
           key={select.label}
-          className="bg-primary-400-value text-white px-2 py-1 rounded-full text-sm flex items-center gap-1"
+          className="bg-cyan-400 text-white px-2 py-1 rounded-full text-sm flex items-center gap-1"
         >
           {select?.label}
           <button

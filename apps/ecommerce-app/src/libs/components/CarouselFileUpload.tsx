@@ -48,7 +48,7 @@ export function CarouselFileUpload({
         <FileUpload.Dropzone>
           <IoCloudUploadOutline />
           <FileUpload.Trigger ref={ref}>
-            <p className="text-primary-700-value font-medium text-sm">
+            <p className="text-cyan-700 font-medium text-sm">
               Click to upload image
             </p>
           </FileUpload.Trigger>

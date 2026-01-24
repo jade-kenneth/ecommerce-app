@@ -29,8 +29,8 @@ export const checkboxRecipe = tv({
     variant: {
       solid: {
         control:
-          'border border-[#D0D5DD] ui-checked:border-primary-700-value ui-checked:bg-primary-700-value dark:border-[#3F3F46]',
-        indicator: 'text-primary-400-value',
+          'border border-[#D0D5DD] ui-checked:border-cyan-700 ui-checked:bg-cyan-700 dark:border-[#3F3F46]',
+        indicator: 'text-cyan-400',
       },
     },
   },

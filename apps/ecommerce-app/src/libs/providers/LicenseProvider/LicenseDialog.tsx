@@ -26,10 +26,10 @@ export const LicenseDialog = (props: PropsWithChildren) => {
         <Dialog.Content className="flex justify-center  items-center">
           <div className="  max-w-[550px] rounded-3xl shadow-lg px-12 py-3">
             <div className="flex flex-col items-center mb-8">
-              <div className="w-20 h-20 bg-primary-100-value rounded-full flex items-center justify-center mb-6">
+              <div className="w-20 h-20 bg-cyan-100 rounded-full flex items-center justify-center mb-6">
                 <ShieldCheck
                   size={40}
-                  className="text-primary-600-value"
+                  className="text-cyan-600"
                   strokeWidth={1.5}
                 />
               </div>
@@ -50,9 +50,7 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                     }
                   }}
                 />
-                <p className="text-error-600-value  font-semibold mt-2">
-                  {error}
-                </p>
+                <p className="text-error-600  font-semibold mt-2">{error}</p>
               </div>
               <Button
                 disabled={context.loading}
@@ -68,7 +66,7 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                 <a
                   href="https://www.facebook.com/jeidosenpaitsx/"
                   target="_blank"
-                  className="text-primary-600-value hover:text-primary-700-value font-medium"
+                  className="text-cyan-600 hover:text-cyan-700 font-medium"
                 >
                   Contact admin
                 </a>

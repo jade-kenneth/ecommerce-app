@@ -112,7 +112,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           when={!isCheckout}
           fallback={
             <button
-              className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-primary-700-value transition"
+              className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
               onClick={async () => {
                 const res = await mutate({
                   variables: {
@@ -142,7 +142,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           }
         >
           <button
-            className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-primary-700-value transition"
+            className="w-full py-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
             onClick={async () => {
               router.replace('/cart/checkout');
             }}
@@ -153,7 +153,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
         <Show when={!isCheckout}>
           <button
             onClick={() => router.push('/')}
-            className="w-full bg-carbon-950-value py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition"
+            className="w-full bg-carbon-950 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition"
           >
             Continue Shopping
           </button>

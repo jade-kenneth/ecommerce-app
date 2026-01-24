@@ -6,7 +6,7 @@ import { anatomyToRecipeSlots } from '../../../utils';
 export const fieldRecipe = tv({
   slots: anatomyToRecipeSlots(fieldAnatomy, {
     input:
-      'rounded-[32px] border-[1px] border-[#EAEAEA] outline-none placeholder:text-carbon-700-value py-2 px-3 ui-invalid:border-[#D92D20] ui-readonly:cursor-default ui-readonly:opacity-60 dark:border-[#26272B] dark:bg-[#0A1117] dark:placeholder:text-[#85888E] dark:ui-invalid:border-[#D92D20]',
+      'rounded-[32px] border-[1px] border-[#EAEAEA] outline-none placeholder:text-carbon-700 py-2 px-3 ui-invalid:border-[#D92D20] ui-readonly:cursor-default ui-readonly:opacity-60 dark:border-[#26272B] dark:bg-[#0A1117] dark:placeholder:text-[#85888E] dark:ui-invalid:border-[#D92D20]',
     select:
       'block w-full rounded-lg border border-[#EAECF0] bg-white outline-none placeholder:text-[#667085] ui-invalid:border-[#D92D20] ui-readonly:cursor-default ui-readonly:opacity-60 dark:border-[#26272B] dark:bg-[#0A1117] dark:placeholder:text-[#85888E] dark:ui-invalid:border-[#D92D20]',
     textarea:

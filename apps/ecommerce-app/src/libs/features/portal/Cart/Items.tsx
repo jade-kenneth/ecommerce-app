@@ -37,7 +37,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
             />
             <div className="flex my-auto flex-col gap-2">
               <h3 className="text-heading-6 font-semibold">{item.name}</h3>
-              <p className="text-paragraph-sm text-primary-700-value font-bold text-gray-600">
+              <p className="text-paragraph-sm text-cyan-700 font-bold text-gray-600">
                 ₱{item.price}
               </p>
               <Show
@@ -95,12 +95,12 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
             </div>
             <Show when={!isCheckout}>
               <div className="flex flex-col justify-between items-center ml-auto">
-                <p className="text-paragraph-xl text-gray-600 font-bold text-carbon-25-value">
+                <p className="text-paragraph-xl text-gray-600 font-bold text-carbon-25">
                   ₱
                   {Number(item.price) *
                     (form.watch(`items.${idx}.quantity`) || 1)}
                 </p>
-                <button className="text-sm text-red-600 font-semibold flex items-center gap-1 text-error-500-value">
+                <button className="text-sm text-red-600 font-semibold flex items-center gap-1 text-error-500">
                   <TbTrash />
                   Remove
                 </button>

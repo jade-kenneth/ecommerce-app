@@ -26,8 +26,8 @@ export function PaymentOptionCard({
       className={twMerge(
         'text-left w-full rounded-xl p-5 border transition',
         selected
-          ? 'bg-primary-50-value border-primary-300-value shadow-sm'
-          : 'border-carbon-200-value hover:border-primary-400-value',
+          ? 'bg-cyan-50 border-cyan-300 shadow-sm'
+          : 'border-carbon-200 hover:border-cyan-400',
       )}
     >
       <div className="flex items-start gap-3">
@@ -35,16 +35,16 @@ export function PaymentOptionCard({
           className={twMerge(
             'p-3 rounded-lg',
             selected
-              ? 'bg-primary-600-value text-white'
-              : 'bg-carbon-900-value text-carbon-100-value',
+              ? 'bg-cyan-600 text-white'
+              : 'bg-carbon-900 text-carbon-100',
           )}
         >
           {icon}
         </div>
 
         <div>
-          <p className="text-lg font-semibold text-carbon-25-value">{title}</p>
-          <p className="text-sm text-carbon-500-value">{description}</p>
+          <p className="text-lg font-semibold text-carbon-25">{title}</p>
+          <p className="text-sm text-carbon-500">{description}</p>
         </div>
       </div>
     </button>

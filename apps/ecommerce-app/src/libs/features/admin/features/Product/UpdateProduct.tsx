@@ -122,7 +122,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                               delimiter: capitalize.delimiters.UNDERSCORE,
                             }),
                             value: category,
-                          })
+                          }),
                         )}
                         value={field.value}
                         onChange={(value) => {
@@ -185,10 +185,10 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                     const discountedPrice =
                       price -
                       parseFloat(
-                        (price * ((field.value || 0) / 100)).toFixed(2)
+                        (price * ((field.value || 0) / 100)).toFixed(2),
                       );
                     return (
-                      <div className="flex bg-carbon-950-value  gap-6 p-4 rounded-xl flex-col w-full">
+                      <div className="flex bg-carbon-950  gap-6 p-4 rounded-xl flex-col w-full">
                         <NumberInputField
                           value={field.value?.toString()}
                           onChange={(value) => {
@@ -205,7 +205,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                           value={`₱ ${
                             isNaN(discountedPrice) ? '0.00' : discountedPrice
                           }`}
-                          className="w-full text-carbon-300-value "
+                          className="w-full text-carbon-300 "
                         />
                       </div>
                     );
@@ -271,7 +271,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
             <Dialog.Footer className="flex justify-end">
               <div className="flex gap-2 items-center">
                 <button
-                  className="bg-primary-700-value p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
+                  className="bg-cyan-700 p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
                   onClick={form.handleSubmit(async (data) => {
                     try {
                       await updateProduct({

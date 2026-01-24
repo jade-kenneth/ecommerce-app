@@ -42,9 +42,9 @@ export function ShippingOptionCard({ option, selected, onSelect }: Props) {
       onClick={onSelect}
       className="
         mt-3 p-6 rounded-lg cursor-pointer border-[2px]
-        border-carbon-700-value hover:border-primary-700-value
-        data-[selected-shipping=true]:border-primary-700-value
-        data-[selected-shipping=true]:bg-primary-200-value
+        border-carbon-700 hover:border-cyan-700
+        data-[selected-shipping=true]:border-cyan-700
+        data-[selected-shipping=true]:bg-cyan-200
       "
     >
       {/* Hidden Radio */}
@@ -59,8 +59,8 @@ export function ShippingOptionCard({ option, selected, onSelect }: Props) {
         <MdLocalShipping
           data-selected-shipping={selected}
           className="
-            h-10 w-10 p-2 rounded-md text-primary-900-value bg-carbon-950-value
-            data-[selected-shipping=true]:bg-primary-700-value
+            h-10 w-10 p-2 rounded-md text-cyan-900 bg-carbon-950
+            data-[selected-shipping=true]:bg-cyan-700
             data-[selected-shipping=true]:text-white
           "
         />
@@ -75,7 +75,7 @@ export function ShippingOptionCard({ option, selected, onSelect }: Props) {
         </p>
       </div>
 
-      <p className="text-carbon-400-value text-sm mt-1">{option.description}</p>
+      <p className="text-carbon-400 text-sm mt-1">{option.description}</p>
     </div>
   );
 }
@@ -84,9 +84,8 @@ export const ShippingOptions = () => {
   const context = useCartContext();
   return (
     <div>
-      <p className="text-carbon-25-value flex gap-3 items-center text-lg font-bold">
-        <MdLocalShipping className="text-primary-900-value h-11 w-11" />{' '}
-        Shipping Method
+      <p className="text-carbon-25 flex gap-3 items-center text-lg font-bold">
+        <MdLocalShipping className="text-cyan-900 h-11 w-11" /> Shipping Method
       </p>
       {shippingMethods.map((method) => (
         <ShippingOptionCard

@@ -3,7 +3,7 @@ import { CartIcon } from '~/icons/CartIcon';
 export const EmptyCart = () => {
   const router = useRouter();
   return (
-    <div className="flex border-[1px] rounded-md border-carbon-900-value flex-col items-center justify-center py-16 px-4">
+    <div className="flex border-[1px] rounded-md border-carbon-900 flex-col items-center justify-center py-16 px-4">
       <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
         <CartIcon />
       </div>
@@ -17,7 +17,7 @@ export const EmptyCart = () => {
 
       <button
         onClick={() => router.push('/')}
-        className="w-fit p-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-primary-700-value transition"
+        className="w-fit p-3 bg-green-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
       >
         Continue Shopping
       </button>

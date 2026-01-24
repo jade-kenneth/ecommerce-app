@@ -38,7 +38,7 @@ export function Settings() {
         topSoldThreshold: config?.topSoldThreshold?.toString() || '0',
         carouselItems: config?.carouselItems ?? [],
       }),
-    [data]
+    [data],
   );
 
   return (

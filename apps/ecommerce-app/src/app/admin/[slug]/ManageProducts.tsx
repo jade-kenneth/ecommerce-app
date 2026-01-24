@@ -2,8 +2,6 @@
 
 import { createListCollection } from '@ark-ui/react';
 
-import { Flex } from '@chakra-ui/react';
-
 import Image from 'next/image';
 import { Reducer, useReducer } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
@@ -30,13 +28,13 @@ interface PageState {
   page: number;
   pageSize: number;
 }
-export default function ManageProducts() {
+export const ManageProducts = () => {
   const [state, setState] = useReducer<Reducer<PageState, Partial<PageState>>>(
     (prev, next) => ({
       ...prev,
       ...next,
     }),
-    { page: 1, pageSize: 10 }
+    { page: 1, pageSize: 10 },
   );
   const query = useProductsQuery({
     fetchPolicy: 'network-only',
@@ -52,7 +50,7 @@ export default function ManageProducts() {
   }, state);
 
   return (
-    <Flex direction={'column'} gap={4} p={7}>
+    <div className="flex flex-col">
       <CreateProduct
         onAddProduct={(data) => {
           const cacheResponse = apolloClient.readQuery<
@@ -93,6 +91,7 @@ export default function ManageProducts() {
           itemToValue: (item) => item._id,
           itemToString: (item) => item.name,
         })}
+        loading={query.loading}
         columns={[
           {
             heading: 'Image',
@@ -271,6 +270,6 @@ export default function ManageProducts() {
           },
         }}
       />
-    </Flex>
+    </div>
   );
-}
+};

@@ -56,7 +56,7 @@ export const DeleteProduct = () => {
             <Dialog.Footer className="flex justify-end">
               <div className="flex gap-2 items-center">
                 <button
-                  className="bg-primary-700-value p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
+                  className="bg-cyan-700 p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
                   onClick={async () => {
                     await deleteProduct({
                       variables: {

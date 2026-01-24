@@ -13,7 +13,7 @@ export default function Index() {
         <Navbar />
       </div>
       <button
-        className="flex mt-5 gap-3 max-w-screen font-semibold items-center text-primary-700-value"
+        className="flex mt-5 gap-3 max-w-screen font-semibold items-center text-cyan-700"
         onClick={() => router.push('/cart')}
       >
         <LuMoveLeft />

@@ -124,7 +124,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
 
           {/* <ColorModeButton /> */}
         </Flex>
-        <CiSettings className="text-primary-700-value size-5" />
+        <CiSettings className="text-cyan-700 size-5" />
       </div>
     </Flex>
   );

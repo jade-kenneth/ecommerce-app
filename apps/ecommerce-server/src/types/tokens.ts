@@ -7,4 +7,5 @@ export const Tokens = {
   JwtServiceOptions: Symbol('JwtServiceOptions'),
   CartsToken: Symbol('CartsRepositoryToken'),
   LicenseRepository: Symbol('LicenseRepository'),
+  MailService: Symbol('MailService'),
 };

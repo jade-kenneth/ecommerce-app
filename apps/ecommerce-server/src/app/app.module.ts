@@ -17,11 +17,13 @@ import {
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
+import { AsyncEventModule } from '~/async-event-module/async-event-module';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
 import { CartsModule } from './carts/carts.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { MailModule } from './mail/mail.module';
 import { PaymentsModule } from './payments/payment.module';
 import { ProductsModule } from './products/products.module';
 import { NodeResolver } from './resolver/node.resolver';
@@ -85,6 +87,27 @@ import { SessionModule } from './user-session/session/session.module';
     CartsModule,
     PaymentsModule,
     LicenseModule,
+    MailModule,
+    AsyncEventModule.forRootAsync({
+      useFactory: () => ({
+        context: 'account',
+        kafka: {
+          brokers: [process.env.KAFKA_BROKER],
+          ssl: process.env.KAFKA_SSL === 'true',
+          sasl: {
+            mechanism: process.env.KAFKA_MECHANISM as any, // "plain"
+            username: process.env.KAFKA_USERNAME,
+            password: process.env.KAFKA_PASSWORD,
+          },
+        },
+        redis: {
+          host: process.env.REDIS_HOST,
+          port: Number(process.env.REDIS_PORT),
+          password: process.env.REDIS_PASSWORD,
+        },
+        concurrency: 5,
+      }),
+    }),
   ],
 
   providers: [AppService],

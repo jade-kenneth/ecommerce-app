@@ -129,18 +129,18 @@ export const paymentMethods: PaymentOption[] = [
     type: PaymentMethodType.Gcash,
     icon: <WalletIcon />,
   },
-  {
-    title: 'Credit/Debit Card',
-    description: 'Visa, Mastercard, AmEx',
-    type: PaymentMethodType.Card,
-    icon: <CardIcon />,
-  },
-  {
-    title: 'Bank Transfer',
-    description: 'Direct bank transfer',
-    type: PaymentMethodType.BankTransfer,
-    icon: <BankIcon />,
-  },
+  // {
+  //   title: 'Credit/Debit Card',
+  //   description: 'Visa, Mastercard, AmEx',
+  //   type: PaymentMethodType.Card,
+  //   icon: <CardIcon />,
+  // },
+  // {
+  //   title: 'Bank Transfer',
+  //   description: 'Direct bank transfer',
+  //   type: PaymentMethodType.BankTransfer,
+  //   icon: <BankIcon />,
+  // },
   {
     title: 'Cash on Delivery',
     description: 'Pay when you receive',

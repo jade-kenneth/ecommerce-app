@@ -10,7 +10,10 @@
     "paths": {
       "~/mongoose-repository": ["./src/libs/mongoose-repository"],
       "~/repository": ["./src/libs/repository"],
-      "~/types/*": ["./src/types/*"]
+      "~/types/*": ["./src/types/*"],
+      "~/async-event-module/*": ["./src/libs/async-event-module/*"],
+
+      "~/async-event-service/*": ["./src/libs/async-event-service/*"]
     }
   },
   "include": ["src/**/*.ts"],

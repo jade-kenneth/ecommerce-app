@@ -29,7 +29,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
 
         <div className="space-y-3">
           <div className="flex justify-between text-gray-700">
-            <span>Subtotal (6 items)</span>
+            <span>Subtotal ({context.state.cart.items.length} items)</span>
             <span className="font-medium">
               ₱{numberFormatter.format(totalAmount)}
             </span>

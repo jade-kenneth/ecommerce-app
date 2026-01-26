@@ -98,7 +98,7 @@ import { SessionModule } from './user-session/session/session.module';
 
         console.log('REDISPORT:', process.env.REDISPORT);
         console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
-        console.log('rebuild');
+        console.log('rebuild1x');
         return {
           context: 'account',
           kafka: {

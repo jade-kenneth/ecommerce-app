@@ -102,12 +102,19 @@ import { SessionModule } from './user-session/session/session.module';
         return {
           context: 'account',
           kafka: {
-            brokers: [process.env.KAFKA_BROKER],
-            ssl: false, // Railway uses SASL_PLAINTEXT
-            sasl: undefined, // <--- REMOVE SASL
+            brokers: [process.env.KAFKA_URL.replace('SASL_SSL://', '')],
+
+            ssl: {
+              rejectUnauthorized: false,
+            },
+
+            sasl: {
+              mechanism: 'plain',
+              username: 'user', // Railway default for Confluent
+              password: process.env.KAFKA_PASSWORD,
+            },
+
             clientId: 'account-service',
-            connectionTimeout: 5000,
-            requestTimeout: 30000,
           },
           redis: {
             host: process.env.REDISHOST,

@@ -104,11 +104,7 @@ import { SessionModule } from './user-session/session/session.module';
           kafka: {
             brokers: [process.env.KAFKA_BROKER],
             ssl: false, // Railway uses SASL_PLAINTEXT
-            sasl: {
-              mechanism: 'plain',
-              username: 'kafka',
-              password: process.env.KAFKA_PASSWORD,
-            },
+            sasl: undefined, // <--- REMOVE SASL
           },
           redis: {
             host: process.env.REDISHOST,

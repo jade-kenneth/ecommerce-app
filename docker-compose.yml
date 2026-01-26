@@ -1,52 +1,36 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  redpanda:
-    image: docker.redpanda.com/redpandadata/redpanda:latest
-    container_name: redpanda
-    ports:
-      - '9092:9092'
-      - '9644:9644'
-    command:
-      - redpanda
-      - start
-      - --overprovisioned
-      - --smp=1
-      - --memory=1G
-      - --reserve-memory=0M
-      - --node-id=0
-      - --check=false
-      - --set redpanda.enable_transactions=false
-      - --set redpanda.enable_idempotence=false
-
-      # 👇 THE MISSING PART (required for external clients)
-      - --advertise-kafka-addr=PLAINTEXT://localhost:9092
-
-    volumes:
-      - redpanda-data:/var/lib/redpanda/data
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    ports:
-      - '8080:8080'
-    depends_on:
-      - redpanda
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
     environment:
-      KAFKA_CLUSTERS_0_NAME: redpanda
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: redpanda:9092
-      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: PLAINTEXT
-      DYNAMIC_CONFIG_ENABLED: 'true'
-
-  redis:
-    image: redis:7-alpine
-    container_name: redis
+      # broker / controller in one
+      KAFKA_NODE_ID: '1'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      # internal listeners
+      KAFKA_LISTENERS: 'PLAINTEXT://:9092,PLAINTEXT_HOST://:29092,CONTROLLER://:9093'
+      # advertised listeners (host machine mapping)
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: '1'
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: '1'
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: '0'
+      KAFKA_NUM_PARTITIONS: '3'
     ports:
-      - '6379:6379'
-    command: ['redis-server', '--appendonly', 'yes']
-    volumes:
-      - redis-data:/data
-
-volumes:
-  redpanda-data:
-  redis-data:
+      - '9092:9092' # standard Kafka broker
+      - '29092:29092' # host access via alternate listener
+      - '9093:9093' # controller port (internal)
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'kafka-broker-api-versions',
+          '--bootstrap-server',
+          'localhost:9092',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

@@ -98,12 +98,17 @@ import { SessionModule } from './user-session/session/session.module';
 
         console.log('REDISPORT:', process.env.REDISPORT);
         console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
-        console.log('rebuild1x');
+        console.log('rebuild2x');
         return {
           context: 'account',
           kafka: {
             brokers: [process.env.KAFKA_BROKER],
-            ssl: false,
+            ssl: false, // Railway uses SASL_PLAINTEXT
+            sasl: {
+              mechanism: 'plain',
+              username: 'kafka',
+              password: process.env.KAFKA_PASSWORD,
+            },
           },
           redis: {
             host: process.env.REDISHOST,

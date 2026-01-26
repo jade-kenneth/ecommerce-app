@@ -105,6 +105,9 @@ import { SessionModule } from './user-session/session/session.module';
             brokers: [process.env.KAFKA_BROKER],
             ssl: false, // Railway uses SASL_PLAINTEXT
             sasl: undefined, // <--- REMOVE SASL
+            clientId: 'account-service',
+            connectionTimeout: 5000,
+            requestTimeout: 30000,
           },
           redis: {
             host: process.env.REDISHOST,

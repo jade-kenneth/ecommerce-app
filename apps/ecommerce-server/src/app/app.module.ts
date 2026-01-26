@@ -89,24 +89,32 @@ import { SessionModule } from './user-session/session/session.module';
     LicenseModule,
     MailModule,
     AsyncEventModule.forRootAsync({
-      useFactory: () => ({
-        context: 'account',
-        kafka: {
-          brokers: [process.env.KAFKA_BROKER],
-          ssl: true,
-          sasl: {
-            mechanism: 'plain', // "plain"
-            username: 'token',
-            password: process.env.KAFKA_PASSWORD,
+      useFactory: () => {
+        console.log('KAFKA_BROKER:', process.env.KAFKA_BROKER);
+        console.log('KAFKA_PASSWORD exists:', !!process.env.KAFKA_PASSWORD);
+
+        console.log('REDISHOST:', process.env.REDISHOST);
+        console.log('REDISPORT:', process.env.REDISPORT);
+        console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
+        return {
+          context: 'account',
+          kafka: {
+            brokers: [process.env.KAFKA_BROKER],
+            ssl: true,
+            sasl: {
+              mechanism: 'plain', // "plain"
+              username: 'token',
+              password: process.env.KAFKA_PASSWORD,
+            },
           },
-        },
-        redis: {
-          host: process.env.REDISHOST,
-          port: Number(process.env.REDISPORT),
-          password: process.env.REDISPASSWORD,
-        },
-        concurrency: 5,
-      }),
+          redis: {
+            host: process.env.REDISHOST,
+            port: Number(process.env.REDISPORT),
+            password: process.env.REDISPASSWORD,
+          },
+          concurrency: 5,
+        };
+      },
     }),
   ],
 

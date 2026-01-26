@@ -92,8 +92,10 @@ import { SessionModule } from './user-session/session/session.module';
       useFactory: () => {
         console.log('KAFKA_BROKER:', process.env.KAFKA_BROKER);
         console.log('KAFKA_PASSWORD exists:', !!process.env.KAFKA_PASSWORD);
+        console.log('KAFKA_USERNAME exists:', !!process.env.KAFKA_USERNAME);
 
         console.log('REDISHOST:', process.env.REDISHOST);
+
         console.log('REDISPORT:', process.env.REDISPORT);
         console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
         return {

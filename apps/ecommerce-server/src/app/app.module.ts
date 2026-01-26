@@ -101,9 +101,9 @@ import { SessionModule } from './user-session/session/session.module';
           },
         },
         redis: {
-          host: process.env.REDIS_HOST,
-          port: Number(process.env.REDIS_PORT),
-          password: process.env.REDIS_PASSWORD,
+          host: process.env.REDISHOST,
+          port: Number(process.env.REDISPORT),
+          password: process.env.REDISPASSWORD,
         },
         concurrency: 5,
       }),

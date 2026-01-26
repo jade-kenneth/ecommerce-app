@@ -100,6 +100,12 @@ import { SessionModule } from './user-session/session/session.module';
           context: 'account',
           kafka: {
             brokers: [process.env.KAFKA_BROKER],
+            ssl: true,
+            sasl: {
+              mechanism: 'PLAIN', // "plain"
+              username: process.env.KAFKA_USERNAME,
+              password: process.env.KAFKA_PASSWORD,
+            },
           },
           redis: {
             host: process.env.REDISHOST,

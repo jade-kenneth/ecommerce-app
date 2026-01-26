@@ -93,10 +93,10 @@ import { SessionModule } from './user-session/session/session.module';
         context: 'account',
         kafka: {
           brokers: [process.env.KAFKA_BROKER],
-          ssl: process.env.KAFKA_SSL === 'true',
+          ssl: true,
           sasl: {
-            mechanism: process.env.KAFKA_MECHANISM as any, // "plain"
-            username: process.env.KAFKA_USERNAME,
+            mechanism: 'plain', // "plain"
+            username: 'token',
             password: process.env.KAFKA_PASSWORD,
           },
         },

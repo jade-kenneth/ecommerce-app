@@ -69,8 +69,17 @@ export class AsyncEventModule {
 
         {
           provide: AsyncEventTokens.Redis,
-          useFactory: (opts: AsyncEventModuleOptions) =>
-            opts.redis ? new Redis(opts.redis.port, opts.redis.host) : null,
+          useFactory: (opts: AsyncEventModuleOptions) => {
+            if (!opts.redis) return null;
+
+            return new Redis({
+              host: opts.redis.host,
+              port: opts.redis.port,
+              password: process.env.REDISPASSWORD,
+              tls: {}, // required on Railway
+            });
+          },
+
           inject: [AsyncEventTokens.Options],
         },
 

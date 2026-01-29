@@ -1,5 +1,5 @@
 /**
- * build 1x
+ * build 2x
  */
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import {

@@ -41,11 +41,6 @@ export class AsyncEventModule {
               ssl: {
                 rejectUnauthorized: false,
               },
-              sasl: {
-                mechanism: 'plain',
-                username: process.env.KAFKA_USERNAME,
-                password: process.env.KAFKA_PASSWORD,
-              },
             }),
           inject: [AsyncEventTokens.Options],
         },

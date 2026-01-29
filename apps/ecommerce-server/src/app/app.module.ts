@@ -17,6 +17,7 @@ import {
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
+import { AsyncEventModule } from '~/async-event-module/async-event-module';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
 import { CartsModule } from './carts/carts.module';
@@ -87,6 +88,30 @@ import { SessionModule } from './user-session/session/session.module';
     PaymentsModule,
     LicenseModule,
     MailModule,
+    AsyncEventModule.forRootAsync({
+      useFactory: () => {
+        console.log('KAFKA_BROKER:', process.env.KAFKA_BROKER);
+        console.log('KAFKA_PASSWORD exists:', !!process.env.KAFKA_PASSWORD);
+        console.log('KAFKA_USERNAME exists:', process.env.KAFKA_USERNAME);
+        console.log('REDISHOST:', process.env.REDISHOST);
+        console.log('REDISPORT:', process.env.REDISPORT);
+        console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
+        console.log('rebuild2x');
+        return {
+          context: 'ecommerce',
+          kafka: {
+            brokers: [process.env.KAFKA_URL], // e.g. "xxx.upstash.io:9092"
+            clientId: 'ecommerce-server',
+          },
+          redis: {
+            host: process.env.REDIS_HOST,
+            port: Number(process.env.REDIS_PORT),
+            password: process.env.REDIS_PASSWORD,
+          },
+          concurrency: 5,
+        };
+      },
+    }),
   ],
 
   providers: [AppService],

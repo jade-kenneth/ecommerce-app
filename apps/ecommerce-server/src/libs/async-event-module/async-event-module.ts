@@ -18,9 +18,9 @@ import { AsyncEventModuleOptions } from './types';
 export class AsyncEventModule {
   static forRootAsync(options: {
     useFactory: (
-      ...args: any[]
+      ...args: unknown[]
     ) => AsyncEventModuleOptions | Promise<AsyncEventModuleOptions>;
-    inject?: any[];
+    inject?: unknown[];
   }): DynamicModule {
     return {
       module: AsyncEventModule,
@@ -29,7 +29,7 @@ export class AsyncEventModule {
         {
           provide: AsyncEventTokens.Options,
           useFactory: options.useFactory,
-          inject: options.inject || [],
+          inject: <never>options.inject || [],
         },
 
         {
@@ -38,6 +38,14 @@ export class AsyncEventModule {
             new Kafka({
               brokers: opts.kafka.brokers,
               clientId: opts.kafka.clientId ?? opts.context,
+              ssl: {
+                rejectUnauthorized: false,
+              },
+              sasl: {
+                mechanism: 'plain',
+                username: process.env.KAFKA_USERNAME,
+                password: process.env.KAFKA_PASSWORD,
+              },
             }),
           inject: [AsyncEventTokens.Options],
         },

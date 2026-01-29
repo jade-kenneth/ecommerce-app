@@ -22,11 +22,6 @@ export class AsyncEventModule {
     ) => AsyncEventModuleOptions | Promise<AsyncEventModuleOptions>;
     inject?: unknown[];
   }): DynamicModule {
-    const kafkaUrl = process.env.KAFKA_URL!;
-    const [host, query] = kafkaUrl.split('?');
-    const brokers = [host];
-
-    console.log('Configured Kafka brokers:', brokers);
     return {
       module: AsyncEventModule,
       global: true,
@@ -41,10 +36,11 @@ export class AsyncEventModule {
           provide: AsyncEventTokens.Kafka,
           useFactory: (opts: AsyncEventModuleOptions) =>
             new Kafka({
-              brokers,
+              brokers: opts.kafka.brokers,
               clientId: opts.kafka.clientId ?? opts.context,
               ssl: {
                 rejectUnauthorized: false,
+                servername: process.env.KAFKA_URL.split(':')[0],
               },
               sasl: {
                 mechanism: 'plain',
@@ -80,7 +76,7 @@ export class AsyncEventModule {
             return new Redis({
               host: opts.redis.host,
               port: opts.redis.port,
-              password: process.env.REDISPASSWORD,
+              password: process.env.REDIS_PASSWORD,
               tls: {}, // required on Railway
             });
           },

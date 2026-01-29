@@ -1,82 +1,38 @@
+version: '3.8'
+
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.3
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - '2181:2181'
+
   kafka:
-    image: confluentinc/cp-kafka:7.6.1
+    image: confluentinc/cp-kafka:7.5.3
     container_name: kafka
+    depends_on:
+      - zookeeper
     ports:
       - '9092:9092'
-
     environment:
-      # KRaft mode (NO ZOOKEEPER)
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-      KAFKA_NODE_ID: 1
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:9093'
-      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      KAFKA_INTER_BROKER_LISTENER_NAME: 'SASL_SSL'
-
-      # REQUIRED FOR KRAFT
-      CLUSTER_ID: '_TvVbDZMTFq9rczxaP_onw' # <-- UPDATE THIS
-
-      # LISTENERS
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'SASL_SSL:SASL_SSL,CONTROLLER:PLAINTEXT'
-      KAFKA_LISTENERS: 'SASL_SSL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093'
-      KAFKA_ADVERTISED_LISTENERS: 'SASL_SSL://localhost:9092'
-
-      # Required metadata settings
-      KAFKA_METADATA_LOG_DIR: '/var/lib/kafka/data'
+      KAFKA_ENABLE_KRAFT: 'false'
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
 
-      ##########################
-      # SSL CONFIG
-      ##########################
-
-      KAFKA_SSL_KEYSTORE_LOCATION: '/etc/kafka/secrets/kafka.keystore.jks'
-      KAFKA_SSL_KEYSTORE_PASSWORD: 'password'
-      KAFKA_SSL_KEY_PASSWORD: 'password'
-
-      KAFKA_SSL_TRUSTSTORE_LOCATION: '/etc/kafka/secrets/kafka.truststore.jks'
-      KAFKA_SSL_TRUSTSTORE_PASSWORD: 'password'
-
-      KAFKA_SSL_KEYSTORE_TYPE: 'JKS'
-      KAFKA_SSL_TRUSTSTORE_TYPE: 'JKS'
-      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ''
-
-      # REQUIRED filenames
-      KAFKA_SSL_KEYSTORE_FILENAME: 'kafka.keystore.jks'
-      KAFKA_SSL_TRUSTSTORE_FILENAME: 'kafka.truststore.jks'
-
-      # REQUIRED credential files
-      KAFKA_SSL_KEYSTORE_CREDENTIALS: 'keystore-creds'
-      KAFKA_SSL_KEY_CREDENTIALS: 'key-creds'
-      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: 'truststore-creds'
-
-      ##########################
-      # SASL CONFIG
-      ##########################
-
-      KAFKA_SASL_ENABLED_MECHANISMS: 'PLAIN'
-      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: 'PLAIN'
-
-      # SASL JAAS for Kafka server
-      KAFKA_OPTS: '-Djava.security.auth.login.config=/etc/kafka/secrets/kafka_server_jaas.conf'
-
-    volumes:
-      - ./certs:/etc/kafka/secrets
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    depends_on:
-      - kafka
+  redis:
+    image: redis:7-alpine
+    container_name: redis
     ports:
-      - '8080:8080'
-    environment:
-      KAFKA_CLUSTERS_0_NAME: 'local'
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'kafka:9092'
-      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: 'SASL_SSL'
-      KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM: 'PLAIN'
-      KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG: >
-        org.apache.kafka.common.security.plain.PlainLoginModule required 
-        username="user" 
-        password="password';
+      - '6379:6379'
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

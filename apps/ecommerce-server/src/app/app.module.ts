@@ -87,50 +87,6 @@ import { SessionModule } from './user-session/session/session.module';
     PaymentsModule,
     LicenseModule,
     MailModule,
-    // AsyncEventModule.forRootAsync({
-    //   useFactory: () => {
-    //     console.log('KAFKA_BROKER:', process.env.KAFKA_BROKER);
-    //     console.log('KAFKA_PASSWORD exists:', !!process.env.KAFKA_PASSWORD);
-    //     console.log('KAFKA_USERNAME exists:', process.env.KAFKA_USERNAME);
-    //     console.log('REDISHOST:', process.env.REDISHOST);
-    //     console.log('REDISPORT:', process.env.REDISPORT);
-    //     console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
-    //     console.log('rebuild2x');
-    //     return {
-    //       context: 'account',
-    //       kafka: {
-    //         brokers: [process.env.KAFKA_URL], // e.g. "xxx.upstash.io:9092"
-
-    //         ssl: {
-    //           enabled: true,
-    //           rejectUnauthorized: false, // allow self-signed certs (Railway/Upstash)
-    //           ca: process.env.KAFKA_CA ? [process.env.KAFKA_CA] : undefined,
-    //         },
-
-    //         sasl: {
-    //           mechanism: 'plain',
-    //           username: 'kafka',
-    //           password: 'password',
-    //         },
-
-    //         connectionTimeout: 30000,
-    //         requestTimeout: 30000,
-
-    //         // Optional but recommended
-    //         retry: {
-    //           initialRetryTime: 300,
-    //           retries: 10,
-    //         },
-    //       },
-    //       redis: {
-    //         host: process.env.REDISHOST,
-    //         port: Number(process.env.REDISPORT),
-    //         password: process.env.REDISPASSWORD,
-    //       },
-    //       concurrency: 5,
-    //     };
-    //   },
-    // }),
   ],
 
   providers: [AppService],

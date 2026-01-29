@@ -22,6 +22,11 @@ export class AsyncEventModule {
     ) => AsyncEventModuleOptions | Promise<AsyncEventModuleOptions>;
     inject?: unknown[];
   }): DynamicModule {
+    const kafkaUrl = process.env.KAFKA_URL!;
+    const [host, query] = kafkaUrl.split('?');
+    const brokers = [host];
+
+    console.log('Configured Kafka brokers:', brokers);
     return {
       module: AsyncEventModule,
       global: true,
@@ -36,10 +41,15 @@ export class AsyncEventModule {
           provide: AsyncEventTokens.Kafka,
           useFactory: (opts: AsyncEventModuleOptions) =>
             new Kafka({
-              brokers: opts.kafka.brokers,
+              brokers,
               clientId: opts.kafka.clientId ?? opts.context,
               ssl: {
                 rejectUnauthorized: false,
+              },
+              sasl: {
+                mechanism: 'plain',
+                username: process.env.KAFKA_USERNAME,
+                password: process.env.KAFKA_PASSWORD,
               },
             }),
           inject: [AsyncEventTokens.Options],

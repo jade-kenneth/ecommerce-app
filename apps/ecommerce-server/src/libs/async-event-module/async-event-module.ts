@@ -38,6 +38,8 @@ export class AsyncEventModule {
             new Kafka({
               brokers: opts.kafka.brokers,
               clientId: opts.kafka.clientId ?? opts.context,
+              ssl: false,
+              sasl: undefined,
             }),
           inject: [AsyncEventTokens.Options],
         },

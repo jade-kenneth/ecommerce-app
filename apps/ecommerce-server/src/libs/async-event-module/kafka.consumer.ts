@@ -24,6 +24,7 @@ export class KafkaEventConsumer implements OnModuleInit {
     await this.discoverHandlers();
 
     await this.consumer.run({
+      partitionsConsumedConcurrently: 5,
       eachMessage: async ({ message }) => {
         //from kafka producer this fires getting
         /** if console log message results to:

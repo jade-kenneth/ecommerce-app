@@ -19,6 +19,7 @@ export class KafkaEventProducer {
   }
 
   async emit(event: AsyncEvent) {
+    console.log(event, 'kafka producer emit event');
     await this.producer.send({
       topic: `async-event-${this.options.context}`,
       messages: [

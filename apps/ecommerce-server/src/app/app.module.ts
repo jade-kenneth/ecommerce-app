@@ -103,8 +103,7 @@ import { SessionModule } from './user-session/session/session.module';
         return {
           context: 'ecommerce',
           kafka: {
-            brokers: [process.env.KAFKA_URL], // e.g. "xxx.upstash.io:9092"
-            clientId: 'ecommerce-server',
+            brokers: [process.env.KAFKA_URL.replace('INTERNAL://', '')], // e.g. "xxx.upstash.io:9092"
           },
           redis: {
             host: process.env.REDISHOST,

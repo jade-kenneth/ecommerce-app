@@ -19,7 +19,7 @@ export class LicenseController {
     try {
       const data = await this.license.findLicense({ code: request.code });
 
-      const isExpired = !isAfter(data.expirationDate, new Date());
+      const isExpired = !isAfter(data?.expirationDate, new Date());
 
       if (isExpired) {
         throw new BadRequestException('License is expired');

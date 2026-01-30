@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
+import { EmailHandler } from '~/async-event-service/email-async-event.service';
 import { MailController } from './mail.controller';
 import { MailService } from './mail.service';
 
 @Module({
-  providers: [MailService], // temp remove EmailHandler, will add back if async event implemented
+  providers: [MailService, EmailHandler],
   controllers: [MailController],
   exports: [MailService],
 })

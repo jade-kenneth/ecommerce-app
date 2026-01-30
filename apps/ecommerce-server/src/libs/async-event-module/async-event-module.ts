@@ -74,7 +74,7 @@ export class AsyncEventModule {
               host: opts.redis.host,
               port: opts.redis.port,
               password: process.env.REDISPASSWORD,
-              tls: {}, // required on Railway
+              tls: undefined, // required on Railway
             });
           },
 

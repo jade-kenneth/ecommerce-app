@@ -111,7 +111,7 @@ import { SessionModule } from './user-session/session/session.module';
             port: Number(process.env.REDISPORT),
             password: process.env.REDISPASSWORD,
           },
-          concurrency: 5,
+          concurrency: 8,
         };
       },
     }),

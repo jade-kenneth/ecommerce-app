@@ -44,6 +44,12 @@ export class AsyncEventModule {
                 password: process.env.KAFKA_PASSWORD,
               },
               ssl: false,
+              connectionTimeout: 3000,
+              requestTimeout: 30000,
+              retry: {
+                initialRetryTime: 300,
+                retries: 10,
+              },
             }),
           inject: [AsyncEventTokens.Options],
         },

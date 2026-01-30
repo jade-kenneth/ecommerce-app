@@ -73,7 +73,7 @@ export class AsyncEventModule {
             return new Redis({
               host: opts.redis.host,
               port: opts.redis.port,
-              password: process.env.REDIS_PASSWORD,
+              password: process.env.REDISPASSWORD,
               tls: {}, // required on Railway
             });
           },

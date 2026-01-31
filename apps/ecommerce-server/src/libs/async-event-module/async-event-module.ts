@@ -38,19 +38,17 @@ export class AsyncEventModule {
             new Kafka({
               brokers: opts.kafka.brokers,
               clientId: opts.kafka.clientId ?? opts.context,
-              sasl: process.env.KAFKA_USERNAME
-                ? {
-                    mechanism: 'plain',
-                    username: process.env.KAFKA_USERNAME,
-                    password: process.env.KAFKA_PASSWORD,
-                  }
-                : undefined,
-              ssl: true,
               connectionTimeout: 3000,
               requestTimeout: 30000,
               retry: {
                 initialRetryTime: 300,
                 retries: 10,
+              },
+              ssl: {},
+              sasl: {
+                mechanism: 'scram-sha-256',
+                username: process.env.KAFKA_USERNAME,
+                password: process.env.KAFKA_PASSWORD,
               },
             }),
           inject: [AsyncEventTokens.Options],

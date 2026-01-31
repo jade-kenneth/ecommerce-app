@@ -28,7 +28,7 @@ export function OtpField(props: OtpFieldProps) {
 
   return (
     <PinInput.Root
-      type="alphabetic"
+      type="alphanumeric"
       otp
       count={9}
       value={arrayValue}

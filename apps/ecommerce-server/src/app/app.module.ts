@@ -1,5 +1,5 @@
 /**
- * build 2x
+ * build 3x
  */
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import {
@@ -103,7 +103,7 @@ import { SessionModule } from './user-session/session/session.module';
         return {
           context: 'ecommerce',
           kafka: {
-            brokers: [process.env.KAFKA_URL], // e.g. "xxx.upstash.io:9092"
+            brokers: [process.env.KAFKA_URL],
           },
           redis: {
             host: process.env.REDISHOST,

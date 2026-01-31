@@ -22,13 +22,13 @@ export function OtpField(props: OtpFieldProps) {
 
   const arrayValue = useMemo(() => {
     return Array.from({ length: 9 }, () => '').map(
-      (v, idx) => value.charAt(idx) || v
+      (v, idx) => value.charAt(idx) || v,
     );
   }, [value]);
 
   return (
     <PinInput.Root
-      type="alphanumeric"
+      type="alphabetic"
       otp
       count={9}
       value={arrayValue}

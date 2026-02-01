@@ -5,16 +5,16 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
-import { Button } from '../../../ui/components/Button';
-import { Input } from '../../../ui/components/Input';
-import { toaster } from '../../../ui/components/ToastContainer';
-import { Field } from '../../../ui/components/ui/Field';
 import {
   AccountType,
   useCreateMemberAccountMutation,
 } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { create_session } from '~/providers/AuthProvider';
+import { Button } from '../../../ui/components/Button';
+import { Input } from '../../../ui/components/Input';
+import { toaster } from '../../../ui/components/ToastContainer';
+import { Field } from '../../../ui/components/ui/Field';
 
 interface SignupFormProps {
   onToggleToLogin?: () => void;

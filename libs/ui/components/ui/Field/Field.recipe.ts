@@ -65,8 +65,7 @@ export const fieldRecipe = tv({
       'mb-1.5 flex items-center gap-1.5 text-sm font-medium text-fg-secondary-700 light:text-[#101828]',
     helperText: 'mt-1.5 text-sm leading-none opacity-60',
     requiredIndicator: 'text-sm text-[#CECFD2]',
-    errorText:
-      'mt-1.5 text-sm leading-none text-fg-error-primary-600 light:text-[#D92D20]',
+    errorText: 'mt-1.5 text-sm leading-none text-error-600 ',
   }),
   variants: {
     size: {

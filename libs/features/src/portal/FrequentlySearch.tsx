@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { Badge } from '../../../ui/components/ui/Badge';
+import { Badge } from '~/components/ui/Badge';
 
 interface FrequentlySearchedProps {}
 

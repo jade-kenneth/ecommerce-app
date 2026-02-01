@@ -4,14 +4,14 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
+import { AccountType } from '~/graphql/generated';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { authenticate } from '~/providers/AuthProvider';
 import { Button } from '../../../ui/components/Button';
 import { Input } from '../../../ui/components/Input';
 import { toaster } from '../../../ui/components/ToastContainer';
 import { Checkbox } from '../../../ui/components/ui/Checkbox';
 import { Field } from '../../../ui/components/ui/Field';
-import { AccountType } from '~/graphql/generated';
-import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { authenticate } from '~/providers/AuthProvider';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;
@@ -64,7 +64,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           control={form.control}
           name="emailAddress"
           render={({ field, fieldState }) => (
-            <Field.Root invalid={!!fieldState.invalid}>
+            <Field.Root invalid={fieldState.invalid}>
               <Input
                 inputProps={{
                   type: 'email',
@@ -84,7 +84,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           control={form.control}
           name="password"
           render={({ field, fieldState }) => (
-            <Field.Root invalid={!!fieldState.invalid}>
+            <Field.Root invalid={fieldState.invalid}>
               {(() => {
                 const [showPassword, setShowPassword] = React.useState(false);
                 return (

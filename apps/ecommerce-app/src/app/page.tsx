@@ -11,7 +11,7 @@ import {
   JustForYou,
   TopSelling,
 } from '~/features/portal';
-import { Layout } from '../libs/features/portal/layout/Layout';
+import { Layout } from '~/features/portal/layout/Layout';
 
 const ClientOnlyNavbar = dynamic(
   () => import('~/features/portal').then((mod) => mod.Navbar),

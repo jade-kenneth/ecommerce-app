@@ -3,7 +3,11 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
-  content: [join(__dirname, 'src/**/*.{js,jsx,ts,tsx}')],
+  content: [
+    join(__dirname, 'src/**/*.{js,jsx,ts,tsx}'),
+    join(__dirname, '/**/*.{js,jsx,ts,tsx}'),
+    join(__dirname, '../../libs/**/*.{js,jsx,ts,tsx}'), // Root libs folder
+  ],
   theme: {
     fontFamily: {
       sans: ["'Inter'", ...defaultTheme.fontFamily.sans],

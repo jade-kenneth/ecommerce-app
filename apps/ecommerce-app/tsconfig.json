@@ -19,19 +19,23 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "~/components/*": ["./src/libs/components/*"],
-      "~/constants": ["./src/libs/constant.ts"],
-      "~/contexts/*": ["./src/libs/contexts/*"],
-      "~/config/*": ["./src/libs/config/*"],
-      "~/providers/*": ["./src/libs/providers/*"],
-      "~/features/*": ["./src/libs/features/*"],
-      "~/graphql/*": ["./src/libs/graphql/*"],
-      "~/theme/*": ["./src/libs/theme/*"],
-      "~/utils/*": ["./src/libs/utils/*"],
-      "~/icons/*": ["./src/libs/icons/*"],
-      "~/hooks/*": ["./src/libs/hooks/*"],
-
-      "~/store": ["./src/libs/store/store.ts"]
+      "~/components": ["../../libs/ui/src/components/index.ts"],
+      "~/components/*": ["../../libs/ui/src/components/*"],
+      "~/constants": ["../../libs/utils/src/constant.ts"],
+      "~/config": ["../../libs/config/src/index.ts"],
+      "~/config/*": ["../../libs/config/src/*"],
+      "~/providers": ["../../libs/providers/src/index.ts"],
+      "~/providers/*": ["../../libs/providers/src/*"],
+      "~/features/*": ["../../libs/features/src/*"],
+      "~/graphql/*": ["../../libs/graphql/src/*"],
+      "~/theme": ["../../libs/theme/src/index.ts"],
+      "~/theme/*": ["../../libs/theme/src/*"],
+      "~/utils": ["../../libs/utils/src/index.ts"],
+      "~/utils/*": ["../../libs/utils/src/*"],
+      "~/icons": ["../../libs/ui/src/icons/index.ts"],
+      "~/icons/*": ["../../libs/ui/src/icons/*"],
+      "~/hooks/*": ["../../libs/utils/src/hooks/*"],
+      "~/store": ["../../libs/data-access/src/store/store.ts"]
     }
   },
   "include": [
@@ -39,6 +43,8 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
+    "../../libs/**/*.ts",
+    "../../libs/**/*.tsx",
 
     "../../apps/ecommerce-app/.next/types/**/*.ts",
     "../../dist/apps/ecommerce-app/.next/types/**/*.ts",

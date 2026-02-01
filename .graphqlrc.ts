@@ -35,6 +35,7 @@ function createAdminConfig(
     extensions: {
       codegen: {
         debug: true,
+        concurrency: 1,
         overwrite: true,
         ignoreNoDocuments: true,
         hooks: {
@@ -79,8 +80,8 @@ function createAdminConfig(
 const projects = {
   'ecommerce-app.admin': createAdminConfig(
     NEXT_PUBLIC_PORTAL_API,
-    './apps/ecommerce-app/src/libs/global/src/graphql/**/*.gql',
-    './apps/ecommerce-app/src/libs/global/src/graphql/generated.tsx'
+    './libs/graphql/src/**/*.gql',
+    './libs/graphql/src/generated.tsx'
   ),
 };
 

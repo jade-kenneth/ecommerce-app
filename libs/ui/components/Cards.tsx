@@ -1,5 +1,3 @@
-import { Flex, Text } from '@chakra-ui/react';
-
 import Image from 'next/image';
 import { FaHeart, FaStar } from 'react-icons/fa';
 import { TbShoppingCartPlus } from 'react-icons/tb';
@@ -25,25 +23,8 @@ export const Cards = (props: CardsProps) => {
 
   const context = useCartContext();
   return (
-    <Flex
-      w="220.8px"
-      bg="white"
-      borderColor="colors.carbon.900"
-      borderWidth={'1px'}
-      borderRadius={'12px'}
-      direction={'column'}
-      h="auto"
-    >
-      <Flex
-        height={'194px'}
-        align={'center'}
-        bg="colors.carbon.950"
-        borderTopLeftRadius={'12px'}
-        borderTopRightRadius={'12px'}
-        justify={'center'}
-        position={'relative'}
-        overflow={'hidden'}
-      >
+    <div className="w-[220.8px] bg-white border border-carbon-900 rounded-[12px] flex flex-col h-auto">
+      <div className="h-[194px] flex items-center justify-center bg-carbon-950 rounded-t-[12px] relative overflow-hidden">
         <Image
           src={props.thumbnail}
           alt="item"
@@ -51,101 +32,40 @@ export const Cards = (props: CardsProps) => {
           layout="fill"
         />
 
-        <Flex
-          direction={'column'}
-          gap="5px"
-          position={'absolute'}
-          top={3}
-          left={3}
-        >
+        <div className="flex flex-col gap-[5px] absolute top-3 left-3">
           {props.isTopSold && (
-            <Flex
-              bg="colors.error.600"
-              width={'62px'}
-              height={'26px'}
-              borderRadius={'12px'}
-              alignItems={'center'}
-              justify={'center'}
-              fontWeight={600}
-              color="white"
-              gap="4px"
-            >
+            <div className="bg-error-600 w-[62px] h-[26px] rounded-[12px] flex items-center justify-center font-semibold text-white gap-1">
               <FaHeart size={12} />
-              <Text sizes={'paragraph-xs'}>TOP</Text>
-            </Flex>
+              <p className="text-paragraph-xs">TOP</p>
+            </div>
           )}
           {props.isHighPoint && (
-            <Flex
-              bg="colors.success.700"
-              height={'26px'}
-              px="8px"
-              borderRadius={'12px'}
-              alignItems={'center'}
-              justify={'center'}
-              fontWeight={600}
-              color="white"
-              gap="4px"
-            >
+            <div className="bg-success-700 h-[26px] px-2 rounded-[12px] flex items-center justify-center font-semibold text-white gap-1">
               <Image src={'/medal.svg'} width={18} height={18} alt="medal" />
-              <Text sizes={'paragraph-xs'}>HIGH-POINT</Text>
-            </Flex>
+              <p className="text-paragraph-xs">HIGH-POINT</p>
+            </div>
           )}
-        </Flex>
+        </div>
         {props.discount > 0 && (
-          <Flex
-            position={'absolute'}
-            bg={'colors.primary.700'}
-            width={'50.95px'}
-            height={'53px'}
-            borderTopRightRadius={'12px'}
-            borderBottomLeftRadius={'12px'}
-            color="white"
-            top={0}
-            right={0}
-            justifyContent={'center'}
-            alignItems={'center'}
-            direction={'column'}
-          >
-            <Text sizes="paragraph-xs">{props.discount}%</Text>
-            <Text sizes="paragraph-xs">OFF</Text>
-          </Flex>
+          <div className="absolute bg-cyan-700 w-[50.95px] h-[53px] rounded-tr-[12px] rounded-bl-[12px] text-white top-0 right-0 flex flex-col items-center justify-center">
+            <p className="text-paragraph-xs">{props.discount}%</p>
+            <p className="text-paragraph-xs">OFF</p>
+          </div>
         )}
-        <Flex
-          bottom={0}
-          left={0}
-          position={'absolute'}
-          className="flex items-center w-full"
-        >
+        <div className="absolute bottom-0 left-0 flex items-center w-full">
           {+props.points > 0 && (
-            <Flex
-              bg={'colors.warning.500'}
-              width={'75px'}
-              height={'34px'}
-              color="white"
-              justifyContent={'center'}
-              alignItems={'center'}
-              direction={'column'}
-            >
-              <Text sizes="paragraph-xs" fontWeight={600}>
+            <div className="bg-warning-500 w-[75px] h-[34px] text-white flex justify-center items-center flex-col">
+              <p className="text-paragraph-xs font-semibold">
                 {props.points} points
-              </Text>
-            </Flex>
+              </p>
+            </div>
           )}
           {props.discount > 0 && (
-            <Flex
-              bg={'#FF6666'}
-              width={'94px'}
-              height={'34px'}
-              color="white"
-              justifyContent={'center'}
-              borderTopRightRadius={'12px'}
-              alignItems={'center'}
-              direction={'column'}
-            >
+            <div className="bg-[#FF6666] w-[94px] h-[34px] text-white flex justify-center items-center flex-col rounded-tr-[12px]">
               {(() => {
                 const discountThreshold = 100000;
                 return (
-                  <Text sizes="paragraph-xs" className="!text-[10px]">
+                  <p className="text-paragraph-xs !text-[10px]">
                     Save -{' '}
                     {discount.toLocaleString('en-US', {
                       currency: 'PHP',
@@ -156,28 +76,17 @@ export const Cards = (props: CardsProps) => {
                         compactDisplay: 'short',
                       }),
                     })}
-                  </Text>
+                  </p>
                 );
               })()}
-            </Flex>
+            </div>
           )}
-        </Flex>
-      </Flex>
-      <Flex direction={'column'} p="12px">
-        <Text color="colors.carbon.25" sizes={'paragraph-sm'}>
-          {props.name}
-        </Text>
-        <Flex
-          gap={'4px'}
-          borderBottomColor={'colors.carbon.900'}
-          borderBottomWidth={'1px'}
-        >
-          <Text
-            color="colors.carbon.25"
-            fontWeight={700}
-            sizes={'paragraph-lg'}
-            mb="6px"
-          >
+        </div>
+      </div>
+      <div className="flex flex-col p-3">
+        <p className="text-carbon-25 text-paragraph-sm">{props.name}</p>
+        <div className="flex gap-1 border-b border-carbon-900">
+          <p className="text-carbon-25 font-bold text-paragraph-lg mb-[6px]">
             {(() => {
               const amount = props.price - discount;
               const useCompact = amount >= 1000000;
@@ -192,25 +101,19 @@ export const Cards = (props: CardsProps) => {
                 }),
               }).format(amount);
             })()}
-          </Text>
+          </p>
           {props.discount > 0 && (
-            <Text
-              color="colors.carbon.25"
-              textDecoration={'line-through'}
-              sizes={'paragraph-sm'}
-              position={'relative'}
-              top={0}
-            >
+            <p className="text-carbon-25 line-through text-paragraph-sm relative top-0">
               {(+props.price).toLocaleString('en-US', {
                 currency: 'PHP',
                 style: 'currency',
                 maximumFractionDigits: 2,
               })}
-            </Text>
+            </p>
           )}
-        </Flex>
-        <Flex justifyContent={'space-between'} mt="12px" alignItems={'center'}>
-          <Flex gap={'2px'}>
+        </div>
+        <div className="flex justify-between mt-3 items-center">
+          <div className="flex gap-[2px]">
             {Array.from({ length: 5 }).map((_, idx) => {
               return (
                 <FaStar
@@ -221,15 +124,15 @@ export const Cards = (props: CardsProps) => {
                 />
               );
             })}
-          </Flex>
-          <Text color={'colors.carbon.500'} sizes={'paragraph-xs'}>
+          </div>
+          <p className="text-carbon-500 text-paragraph-xs">
             {(100).toLocaleString('en-US', {
               notation: 'compact',
               compactDisplay: 'short',
             })}{' '}
             sold
-          </Text>
-        </Flex>
+          </p>
+        </div>
         <Button
           className="text-white items-center justify-center h-[40px] mt-3 flex gap-2  cursor-pointer"
           onClick={async () => {
@@ -263,7 +166,7 @@ export const Cards = (props: CardsProps) => {
           <TbShoppingCartPlus className="size-5 stroke-3" />{' '}
           <p className="text-base font-medium">Add to Cart</p>
         </Button>
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };

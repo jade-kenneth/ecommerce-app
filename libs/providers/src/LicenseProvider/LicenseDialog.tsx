@@ -1,8 +1,8 @@
 import { Key, ShieldCheck } from 'lucide-react';
 import { PropsWithChildren, useState } from 'react';
-import { Button } from '~/components/Button';
-import { Dialog } from '~/components/Dialog';
-import { OtpField } from '~/components/OtpField';
+import { Button } from '../../../ui/components/Button';
+import { Dialog } from '../../../ui/components/Dialog';
+import { OtpField } from '../../../ui/components/OtpField';
 import { useLicenseContext } from './LicenseContext';
 import { getLicense } from './service';
 

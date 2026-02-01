@@ -1,6 +1,6 @@
 import { CSSProperties, FunctionComponent } from 'react';
 // Import Swiper React components
-import { Box } from '@chakra-ui/react';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
@@ -29,7 +29,7 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
   ],
 }) => {
   return (
-    <Box className="max-w-screen" mt="40px">
+    <div className="max-w-screen mt-[40px]">
       <Swiper
         pagination={true}
         modules={[Autoplay, Pagination]}
@@ -54,6 +54,6 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
           );
         })}
       </Swiper>
-    </Box>
+    </div>
   );
 };

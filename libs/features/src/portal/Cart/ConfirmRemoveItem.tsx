@@ -1,7 +1,7 @@
-import { useDisclosure } from '@chakra-ui/react';
 import { Trash } from 'lucide-react';
 import Image from 'next/image';
-import { AlertDialog } from '~/components/ui/AlertDialog';
+import { AlertDialog } from '../../../../ui/components/ui/AlertDialog';
+import { useDisclosure } from '~/utils/useDisclosure';
 import { useCartContext } from './CartContext';
 import { Item } from './useCart';
 

@@ -11,7 +11,6 @@ const nextConfig = {
   nx: {},
   experimental: {
     externalDir: true,
-    optimizePackageImports: ['@chakra-ui/react'],
   },
 
   images: {

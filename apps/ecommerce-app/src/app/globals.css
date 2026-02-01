@@ -1,1 +1,52 @@
 @tailwind utilities;
+@tailwind base;
+.max-w-screen {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@screen sm {
+  .max-w-screen {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@screen md {
+  .max-w-screen {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@screen lg {
+  .max-w-screen {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+.custom-swiper .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 0.7;
+  transition: transform 0.3s ease !important;
+}
+
+/* Customize active bullet styles */
+.custom-swiper .swiper-pagination-bullet-active {
+  background-color: white !important;
+  width: 36px !important;
+  height: 12px !important;
+  border-radius: 10.5px !important;
+}
+
+.custom-swiper .swiper-pagination-bullet[data-selected='true'] {
+  background: #0f172a; /* Replace with your primary.900 color */
+  color: #f1f5f9; /* Replace with your primary.100 color */
+  box-shadow: 0 0 0 4px rgba(147, 215, 215, 1);
+}

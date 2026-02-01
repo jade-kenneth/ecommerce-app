@@ -1,10 +1,8 @@
-import { Flex, Text } from '@chakra-ui/react';
-
+import { ArrowDown } from 'lucide-react';
 import { FunctionComponent } from 'react';
-import { LuArrowDown } from 'react-icons/lu';
-import { Button } from '~/components/Button';
-import { Cards } from '~/components/Cards';
-import { Container } from '~/components/Container';
+import { Button } from '../../../ui/components/Button';
+import { Cards } from '../../../ui/components/Cards';
+import { Container } from '../../../ui/components/Container';
 import { useProductsQuery } from '~/graphql/generated';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 
@@ -17,21 +15,21 @@ export const JustForYou: FunctionComponent<JustForYouProps> = () => {
   });
   return (
     <Container title="Just For You">
-      <Flex flexWrap={'wrap'} gap="18px">
+      <div className="flex flex-wrap gap-4.5">
         {data?.products.edges.map((d, idx) => {
           return <Cards key={idx} {...d.node} />;
         })}
-      </Flex>
+      </div>
 
-      <Flex w="full" justify={'center'} mt="40px" alignItems={'center'}>
+      <div className="w-full flex justify-center mt-10 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-3 font-semibold text-cyan-700 hover:text-cyan-600"
         >
-          <Text sizes={'paragraph-lg'}> See More</Text>
-          <LuArrowDown />
+          <span className="text-lg">See More</span>
+          <ArrowDown />
         </Button>
-      </Flex>
+      </div>
     </Container>
   );
 };

@@ -1,9 +1,6 @@
-import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import Image, { StaticImageData } from 'next/image';
 import { FunctionComponent } from 'react';
-import { Container } from '~/components/Container';
-
-//TODO
+import { Container } from '../../../ui/components/Container';
 
 interface CategoriesProps {}
 
@@ -25,21 +22,15 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
 
   return (
     <Container>
-      <Grid
-        gridRowGap={'58px'}
-        gridColumnGap={'18px'}
-        flexWrap={'wrap'}
-        templateColumns="repeat(auto-fit,  minmax(181px, 1fr))"
-        autoRows={'220px'}
-      >
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(181px,1fr))] auto-rows-[220px] gap-x-[18px] gap-y-[58px] flex-wrap">
         {items.map(({ name, src, size }) => {
           return (
-            <GridItem key={name} display={'flex'} alignItems={'center'}>
+            <div key={name} className="flex items-center">
               <Card name={name} imgSrc={src} size={size} />
-            </GridItem>
+            </div>
           );
         })}
-      </Grid>
+      </div>
     </Container>
   );
 };
@@ -49,48 +40,23 @@ interface CardProps {
   imgSrc?: string | StaticImageData;
   size?: number;
 }
+
 export const Card = ({ imgSrc, name, size }: CardProps) => {
   return (
-    <Flex
-      w="11.3125rem"
-      h="full"
-      align={'center'}
-      justify={'center'}
-      gap="6px"
-      direction={'column'}
-      position={'relative'}
-      _before={{
-        content: '""',
-        position: 'absolute',
-        top: '50px',
-        width: '181px',
-        height: '189px',
-        backgroundColor: 'white',
-        borderColor: 'colors.carbon.950',
-        borderWidth: '1px',
-        zIndex: 1,
-        borderRadius: '16px',
-        boxShadow: 'md',
-      }}
-    >
-      <Flex zIndex={2} flex={0.8} w="full" align={'center'} justify={'center'}>
+    <div className="w-[11.3125rem] h-full flex items-center justify-center gap-1.5 flex-col relative before:content-[''] before:absolute before:top-[50px] before:w-[181px] before:h-[189px] before:bg-white before:border before:border-carbon-950 before:z-[1] before:rounded-2xl before:shadow-md">
+      <div className="z-[2] flex-[0.8] w-full flex items-center justify-center">
         <Image
           src={imgSrc as string}
           alt="carousel-image"
           width={size}
           height={size}
         />
-      </Flex>
+      </div>
 
-      <Text
-        flex={0.2}
-        zIndex={2}
-        sizes={'paragraph-xl'}
-        color={'colors.carbon.100'}
-        textAlign={'center'}
-        fontWeight={500}
+      <span
+        className="flex-[0.2] z-[2] text-xl text-carbon-100 text-center font-medium"
         dangerouslySetInnerHTML={{ __html: name }}
       />
-    </Flex>
+    </div>
   );
 };

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { Sticky } from '~/components/Sticky';
+
 import {
   Carousel,
   Footer,

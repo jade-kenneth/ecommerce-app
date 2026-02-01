@@ -3,8 +3,6 @@ export * from './Button';
 
 export * from './CarouselFileUpload';
 
-export * from './chakra__prebuilts';
-
 export * from './DebounceInput';
 export * from './FieldInput';
 export * from './FileUpload';

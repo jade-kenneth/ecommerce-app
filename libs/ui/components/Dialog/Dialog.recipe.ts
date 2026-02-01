@@ -7,7 +7,7 @@ const anatomy = dialogAnatomy.extendWith('header', 'body', 'footer');
 export const dialogRecipe = tv({
   slots: anatomyToRecipeSlots(anatomy, {
     backdrop:
-      'fixed inset-0 z-dropdown bg-white/90 backdrop-blur-sm ui-open:animate-backdrop-in ui-closed:animate-backdrop-out',
+      'fixed inset-0 z-dropdown bg-black/50 backdrop-blur-sm ui-open:animate-backdrop-in ui-closed:animate-backdrop-out',
     positioner: 'fixed inset-0 z-dialog overflow-y-auto px-8 py-16',
     content: [
       'z-dia',

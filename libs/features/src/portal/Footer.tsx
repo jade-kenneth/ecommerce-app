@@ -1,110 +1,76 @@
-import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 
 export const Footer = () => {
   return (
-    <Flex
-      p="80px"
-      mt="100px"
-      direction={'column'}
-      color="white"
-      bg="colors.primary.700"
-    >
-      <Flex
-        mb="40px"
-        className="max-w-screen"
-        justify={'space-between'}
-        w="full"
-      >
-        <Flex direction={'column'}>
+    <footer className="flex flex-col p-20 mt-24 text-white bg-cyan-700">
+      <div className="flex mb-10 max-w-screen justify-between w-full">
+        <div className="flex flex-col">
           <Image src={'/LogoWhite.png'} alt="logo" width={150} height={150} />
 
-          <Text mt="34px" fontWeight={700} mb="20px" sizes={'paragraph-xl'}>
-            Contact Us
-          </Text>
-          <Flex align={'start'} fontWeight={600} mb="20px" gap="11px">
+          <p className="mt-8 font-bold mb-5 text-xl">Contact Us</p>
+          <div className="flex items-start font-semibold mb-5 gap-3">
             <Image src={'/fb.svg'} alt="logo" width={20} height={20} />
-            <Flex direction={'column'}>
-              <Text sizes={'paragraph-md'}>Facebook App</Text>
-              <Text sizes={'paragraph-md'}>Kenneth Mejia Jumawan</Text>
-            </Flex>
-          </Flex>
-          <Flex align={'start'} fontWeight={600} gap="11px">
+            <div className="flex flex-col">
+              <p className="text-base">Facebook App</p>
+              <p className="text-base">Kenneth Mejia Jumawan</p>
+            </div>
+          </div>
+          <div className="flex items-start font-semibold gap-3">
             <Image src={'/phone.svg'} alt="logo" width={20} height={20} />
-            <Flex direction={'column'}>
-              <Text sizes={'paragraph-md'}>Call Us</Text>
-              <Text sizes={'paragraph-md'}>+639 52 480 3589</Text>
-            </Flex>
-          </Flex>
-        </Flex>
+            <div className="flex flex-col">
+              <p className="text-base">Call Us</p>
+              <p className="text-base">+639 52 480 3589</p>
+            </div>
+          </div>
+        </div>
 
-        <Box>
-          <Text mb="16px" sizes={'paragraph-xl'}>
-            Most Popular Categories
-          </Text>
+        <div>
+          <p className="mb-4 text-xl">Most Popular Categories</p>
 
-          <HStack
-            py="20px"
-            borderTopColor={'colors.primary.400'}
-            borderTopWidth={'3px'}
-            gap={'20px'}
-          >
-            <Box as={'ul'} listStyle={'inside'}>
+          <div className="flex py-5 border-t-[3px] border-cyan-400 gap-5">
+            <ul className="list-inside list-disc">
               <li>Snacks</li>
               <li>Beverages</li>
               <li>Canned Goods</li>
               <li>Instant Food</li>
               <li>Rice</li>
               <li>Cooking Essentials</li>
-            </Box>
-            <Box as={'ul'} listStyle={'inside'}>
+            </ul>
+            <ul className="list-inside list-disc">
               <li>Fresh Produce</li>
               <li>Personal Care</li>
               <li>Household Items</li>
               <li>Sweets & Candies</li>
               <li>Health & Wellness</li>
               <li>Daily Dishes</li>
-            </Box>
-          </HStack>
-        </Box>
-        <Box>
-          <Text mb="16px" sizes={'paragraph-xl'}>
-            Customer Service
-          </Text>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <p className="mb-4 text-xl">Customer Service</p>
 
-          <HStack
-            py="20px"
-            borderTopColor={'colors.primary.400'}
-            borderTopWidth={'3px'}
-            gap={'20px'}
-          >
-            <Box as={'ul'} listStyle={'inside'}>
+          <div className="flex py-5 border-t-[3px] border-cyan-400 gap-5">
+            <ul className="list-inside list-disc">
               <li>About Us</li>
               <li>Terms & Conditions</li>
               <li>FAQ</li>
               <li>Privacy Policy</li>
-            </Box>
-          </HStack>
-        </Box>
+            </ul>
+          </div>
+        </div>
 
-        <Flex direction={'column'} gap={'20px'}>
-          <Text sizes={'paragraph-xl'}>Payment Method</Text>
+        <div className="flex flex-col gap-5">
+          <p className="text-xl">Payment Method</p>
           <Image src={'/gcash.png'} width={180} height={180} alt="payment-1" />
           <Image src={'/cash.png'} width={180} height={180} alt="payment-2" />
-        </Flex>
-      </Flex>
+        </div>
+      </div>
 
-      <Flex
-        align={'center'}
-        className="max-w-screen"
-        borderTopColor={'rgba(255, 255, 255, 0.2)'}
-        borderTopWidth={'1px'}
-        justify={'center'}
-      >
-        <Text mt="32px">
+      <div className="flex items-center max-w-screen border-t border-white/20 justify-center">
+        <p className="mt-8">
           © {new Date().getFullYear()} AmyStore. All rights reserved.
-        </Text>
-      </Flex>
-    </Flex>
+        </p>
+      </div>
+    </footer>
   );
 };

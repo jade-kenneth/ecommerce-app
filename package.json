@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:app": "npx @chakra-ui/cli typegen ./libs/theme/src/index.ts && npx nx run ecommerce-app:build",
+    "build:app": " npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
     "server": "JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 nx serve ecommerce-server",
     "app": "nx run ecommerce-app:dev --port=4201 ",
-    "typegen:watch": "npx @chakra-ui/cli typegen ./libs/theme/src/index.ts --watch",
     "dev": "concurrently \"npm run app\" \"JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 npm run server\"",
     "general:graphql-codegen": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin"
   },
@@ -17,8 +16,6 @@
     "@apollo/server": "^4.11.3",
     "@ark-ui/anatomy": "^3.5.0",
     "@ark-ui/react": "^5.11.0",
-    "@chakra-ui/react": "^3.17.0",
-    "@emotion/react": "11.14.0",
     "@getbrevo/brevo": "^3.0.1",
     "@hookform/resolvers": "^5.2.2",
     "@nestjs/apollo": "^12.2.1",

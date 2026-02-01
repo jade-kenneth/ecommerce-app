@@ -1,7 +1,7 @@
 import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
-import { Input } from '~/components/Input';
-import { Show } from '~/components/Show';
+import { Input } from '../../../../ui/components/Input';
+import { Show } from '../../../../ui/components/Show';
 import { capitalize } from '~/utils/capitalize';
 import { useCartContext } from './CartContext';
 import { ConfirmRemoveItem } from './ConfirmRemoveItem';
@@ -12,11 +12,11 @@ interface ItemsProps {
 }
 export const Items = ({ isCheckout = false }: ItemsProps) => {
   const context = useCartContext();
-  console.log(context, 'comtext');
+
   return (
     <div className="flex flex-col gap-5 mt-5">
       {!context.state.cart.items.length && <EmptyCart />}
-      {context.state.cart.items.map((item, idx) => {
+      {context.state.cart.items.map((item) => {
         let quantity = item.quantity;
         return (
           <div
@@ -90,7 +90,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                     </button>
 
                     <Input
-                      type="text"
+                      inputProps={{ type: 'text' }}
                       onKeyDown={(e) => {
                         if (
                           !/[0-9]/.test(e.key) &&

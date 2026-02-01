@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Field } from '~/components/ui';
+import { Field } from '../../../../../../libs/ui/components/ui';
 import {
   useConfigQuery,
   useCreateConfigMutation,
@@ -9,10 +9,10 @@ import {
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '~/components/Button';
-import { CarouselFileUpload } from '~/components/CarouselFileUpload';
-import { FieldInput } from '~/components/FieldInput';
-import { toaster } from '~/components/ToastContainer';
+import { Button } from '../../../../../../libs/ui/components/Button';
+import { CarouselFileUpload } from '../../../../../../libs/ui/components/CarouselFileUpload';
+import { FieldInput } from '../../../../../../libs/ui/components/FieldInput';
+import { toaster } from '../../../../../../libs/ui/components/ToastContainer';
 
 const Definition = z.object({
   highPointsThreshold: z.string().min(0).default('0'),

@@ -19,8 +19,8 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "~/components": ["../../libs/ui/src/components/index.ts"],
-      "~/components/*": ["../../libs/ui/src/components/*"],
+      "~/components": ["../../libs/ui/components/index.ts"],
+      "~/components/*": ["../../libs/ui/components/*"],
       "~/constants": ["../../libs/utils/src/constant.ts"],
       "~/config": ["../../libs/config/src/index.ts"],
       "~/config/*": ["../../libs/config/src/*"],
@@ -32,8 +32,8 @@
       "~/theme/*": ["../../libs/theme/src/*"],
       "~/utils": ["../../libs/utils/src/index.ts"],
       "~/utils/*": ["../../libs/utils/src/*"],
-      "~/icons": ["../../libs/ui/src/icons/index.ts"],
-      "~/icons/*": ["../../libs/ui/src/icons/*"],
+      "~/icons": ["../../libs/ui/icons/index.ts"],
+      "~/icons/*": ["../../libs/ui/icons/*"],
       "~/hooks/*": ["../../libs/utils/src/hooks/*"],
       "~/store": ["../../libs/data-access/src/store/store.ts"]
     }

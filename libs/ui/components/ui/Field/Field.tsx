@@ -24,7 +24,7 @@ export const Input = withContext(Field.Input, 'input');
 export const Label = withContext(Field.Label, 'label');
 export const RequiredIndicator = withContext(
   Field.RequiredIndicator,
-  'requiredIndicator'
+  'requiredIndicator',
 );
 export const Select = withContext(Field.Select, 'select');
 export const Textarea = withContext(Field.Textarea, 'textarea');

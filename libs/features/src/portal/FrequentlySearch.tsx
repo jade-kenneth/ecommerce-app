@@ -1,5 +1,5 @@
-import { Badge, Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
+import { Badge } from '../../../ui/components/ui/Badge';
 
 interface FrequentlySearchedProps {}
 
@@ -7,16 +7,9 @@ export const FrequentlySearched: FunctionComponent<
   FrequentlySearchedProps
 > = () => {
   return (
-    <Flex py="16px" borderBottom={'1px solid #EAEAEA'}>
-      <Flex
-        className="max-w-screen"
-        align={'center'}
-        flexWrap={'wrap'}
-        gap="16px"
-      >
-        <Text sizes={'paragraph-sm'} color="colors.carbon.500">
-          Frequently searched:{' '}
-        </Text>
+    <div className="flex py-4 border-b border-[#EAEAEA]">
+      <div className="max-w-screen flex items-center flex-wrap gap-4">
+        <span className="text-sm text-gray-500">Frequently searched: </span>
         {[
           'Snacks',
           'Soft drinks',
@@ -28,20 +21,15 @@ export const FrequentlySearched: FunctionComponent<
           'Coffee and powdered milk',
         ].map((searched) => {
           return (
-            <Badge
+            <Badge.Root
               key={searched}
-              variant="plain"
-              py="8px"
-              px="14px"
-              bg="colors.primary.50"
-              color={'colors.primary.700'}
-              rounded={'32px'}
+              className="rounded-full bg-cyan-50 border text-cyan-700"
             >
-              {searched}
-            </Badge>
+              <Badge.Label>{searched}</Badge.Label>
+            </Badge.Root>
           );
         })}
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };

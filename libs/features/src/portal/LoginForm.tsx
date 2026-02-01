@@ -1,14 +1,14 @@
-import { Flex, Text } from '@chakra-ui/react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeClosed } from 'lucide-react';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FaFacebook, FaGoogle, FaRegEyeSlash } from 'react-icons/fa';
+import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
-import { Button } from '~/components/Button';
-import { Input } from '~/components/Input';
-import { toaster } from '~/components/ToastContainer';
-import { Checkbox } from '~/components/ui/Checkbox';
-import { Field } from '~/components/ui/Field';
+import { Button } from '../../../ui/components/Button';
+import { Input } from '../../../ui/components/Input';
+import { toaster } from '../../../ui/components/ToastContainer';
+import { Checkbox } from '../../../ui/components/ui/Checkbox';
+import { Field } from '../../../ui/components/ui/Field';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { authenticate } from '~/providers/AuthProvider';
@@ -25,11 +25,11 @@ const definition = z.object({
 export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const socialButtons = [
     {
-      icon: <FaFacebook className="!relative !w-5 !h-5" />,
+      icon: <FaFacebook className="relative w-5 h-5" />,
       label: 'Facebook',
     },
     {
-      icon: <FaGoogle className="!relative !w-5 !h-5" />,
+      icon: <FaGoogle className="relative w-5 h-5" />,
       label: 'Google',
     },
   ];
@@ -51,86 +51,87 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       toaster.error({ description: 'Failed to log in. Please try again.' });
     }
   });
+
   return (
     <form onSubmit={onSubmit}>
       <Field.Root>
         <Field.Label>
-          <Text
-            sizes="paragraph-sm"
-            color={'colors.carbon.100'}
-            fontWeight={700}
-          >
+          <span className="text-sm font-bold text-carbon-100">
             Email Address
-          </Text>
+          </span>
         </Field.Label>
-
         <Controller
           control={form.control}
           name="emailAddress"
-          render={({ field, fieldState }) => {
-            return (
-              <Field.Root invalid={!!fieldState.invalid}>
-                <Input
-                  placeholder="Enter your email"
-                  rounded="32px"
-                  {...field}
-                />
-                <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
-              </Field.Root>
-            );
-          }}
+          render={({ field, fieldState }) => (
+            <Field.Root invalid={!!fieldState.invalid}>
+              <Input
+                inputProps={{
+                  type: 'email',
+                  placeholder: 'Enter your email address',
+                }}
+                className="rounded-[32px]"
+                {...field}
+              />
+              <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
+            </Field.Root>
+          )}
         />
       </Field.Root>
       <Field.Root className="mt-6">
-        <Text sizes="paragraph-sm" color={'colors.carbon.100'} fontWeight={700}>
-          Password
-        </Text>
+        <span className="text-sm font-bold text-carbon-100">Password</span>
         <Controller
           control={form.control}
           name="password"
-          render={({ field, fieldState }) => {
-            return (
-              <Field.Root invalid={!!fieldState.invalid}>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  rounded="32px"
-                  inputGroupProps={{
-                    endElement: (
-                      <FaRegEyeSlash
-                        cursor={'pointer'}
-                        style={{
-                          height: '20px',
-                          width: '20px',
-                        }}
-                      />
-                    ),
-                  }}
-                  {...field}
-                />
-
-                <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
-              </Field.Root>
-            );
-          }}
+          render={({ field, fieldState }) => (
+            <Field.Root invalid={!!fieldState.invalid}>
+              {(() => {
+                const [showPassword, setShowPassword] = React.useState(false);
+                return (
+                  <>
+                    <Input
+                      className="rounded-[32px]"
+                      inputProps={{
+                        type: showPassword ? 'text' : 'password',
+                        placeholder: 'Enter your password',
+                      }}
+                      rightAddon={
+                        showPassword ? (
+                          <EyeClosed
+                            className="w-5 h-5 cursor-pointer"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                        ) : (
+                          <Eye
+                            className="w-5 h-5 cursor-pointer"
+                            onClick={() => setShowPassword(!showPassword)}
+                          />
+                        )
+                      }
+                      {...field}
+                    />
+                    <Field.ErrorText>
+                      {fieldState.error?.message}
+                    </Field.ErrorText>
+                  </>
+                );
+              })()}
+            </Field.Root>
+          )}
         />
       </Field.Root>
-      <Flex justifyContent={'space-between'} mt="20px">
+      <div className="flex justify-between mt-5">
         <Checkbox.Root>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
           <Checkbox.Label>Remember me</Checkbox.Label>
         </Checkbox.Root>
-        <Text
-          color={'colors.primary.700'}
-          sizes="paragraph-sm"
-          fontWeight={600}
-        >
+        <span className="text-primary-700 text-sm font-semibold cursor-pointer">
           Forgot your Password?
-        </Text>
-      </Flex>
+        </span>
+      </div>
 
-      <Button type="submit" className="w-full rounded-[50px]  text-white mt-6">
+      <Button type="submit" className="w-full rounded-[50px] text-white mt-6">
         Sign in
       </Button>
 
@@ -144,17 +145,17 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         </span>
       </p>
       <p className="mx-auto w-fit mt-4">Or sign in using</p>
-      <div className="flex w-[296px] mx-auto mt-4 items-start gap-3 relative ">
+      <div className="flex w-[296px] mx-auto mt-4 items-start gap-3 relative">
         {socialButtons.map((button, index) => (
           <button
             key={index}
             type="button"
-            className="flex gap-3 items-center justify-center  px-3.5 py-2.5 relative flex-1 grow bg-white-25 rounded-[32px] overflow-hidden border border-solid border-carbon-800 shadow-shadows-shadow-xs cursor-pointer"
+            className="flex gap-3 items-center justify-center px-3.5 py-2.5 relative flex-1 grow bg-white-25 rounded-[32px] overflow-hidden border border-solid border-carbon-800 shadow-xs cursor-pointer"
             aria-label={`Sign up with ${button.label}`}
           >
             {button.icon}
-            <span className="inline-flex items-center justify-center pr-[var(--3-spacing-spacing-xxs)] pl-[var(--3-spacing-spacing-xxs)] py-0 relative flex-[0_0_auto]">
-              <span className="relative w-fit mt-[-1.00px] font-paragraph-sm-semibold font-[number:var(--paragraph-sm-semibold-font-weight)] text-carbon-400 text-[length:var(--paragraph-sm-semibold-font-size)] tracking-[var(--paragraph-sm-semibold-letter-spacing)] leading-[var(--paragraph-sm-semibold-line-height)] whitespace-nowrap [font-style:var(--paragraph-sm-semibold-font-style)]">
+            <span className="inline-flex items-center justify-center px-2 py-0 relative flex-[0_0_auto]">
+              <span className="relative w-fit font-semibold text-carbon-400 text-sm whitespace-nowrap">
                 {button.label}
               </span>
             </span>

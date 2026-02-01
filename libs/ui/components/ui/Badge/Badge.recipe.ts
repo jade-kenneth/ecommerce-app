@@ -11,7 +11,7 @@ export const badgeRecipe = tv(
     variants: {
       variant: {
         subtle: {
-          root: 'inline-flex items-center gap-1 rounded-full border font-medium',
+          root: 'inline-flex items-center gap-1 rounded-full border font-medium ',
           indicator: 'size-3.5',
         },
       },
@@ -90,7 +90,7 @@ export const badgeRecipe = tv(
   },
   {
     twMerge: true,
-  }
+  },
 );
 
 export type BadgeRecipeProps = VariantProps<typeof badgeRecipe>;

@@ -5,8 +5,8 @@ import { createListCollection } from '@ark-ui/react';
 import Image from 'next/image';
 import { Reducer, useReducer } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
-import { DataTable } from '~/components/DataTable';
-import { Badge, Menu } from '~/components/ui';
+import { DataTable } from '../../../../../../libs/ui/components/DataTable';
+import { Badge, Menu } from '../../../../../../libs/ui/components/ui';
 import { apolloClient } from '~/config/client';
 import {
   CreateProduct,
@@ -50,7 +50,7 @@ export const ManageProducts = () => {
   }, state);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-3">
       <CreateProduct
         onAddProduct={(data) => {
           const cacheResponse = apolloClient.readQuery<

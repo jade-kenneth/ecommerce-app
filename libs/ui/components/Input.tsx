@@ -39,7 +39,7 @@ export const Input = ({
   return (
     <Field.Root
       className={twMerge(
-        'flex items-center border-carbon-950 rounded-full border-[1px]',
+        'flex items-center border-carbon-950 rounded-full border-[1px] overflow-hidden',
         props.className,
       )}
     >

@@ -5,14 +5,14 @@ import { CiSettings } from 'react-icons/ci';
 import { twMerge } from 'tailwind-merge';
 
 import { Search } from 'lucide-react';
-import { Button } from '../../../ui/components/Button';
-import { DebounceInput } from '../../../ui/components/DebounceInput';
-import { Show } from '../../../ui/components/Show';
 import { useSelfQuery } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { CartIcon } from '~/icons/CartIcon';
 import { UserIcon } from '~/icons/UserIcon';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
+import { Button } from '../../../ui/components/Button';
+import { DebounceInput } from '../../../ui/components/DebounceInput';
+import { Show } from '../../../ui/components/Show';
 import { AuthForm } from './AuthForm';
 import { useCartContext } from './Cart/CartContext';
 
@@ -69,7 +69,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
               <p className="px-5 flex items-center">{`Hi, ${data?.self?.emailAddress}!`}</p>
             }
           >
-            <div className="flex flex-row items-center cursor-pointer px-5">
+            <div className="flex flex-row items-center cursor-pointer gap-3 px-5">
               <UserIcon />
               <AuthForm />
             </div>
@@ -91,7 +91,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
             </button>
           </div>
         </div>
-        <CiSettings className="text-cyan-700 w-5 h-5" />
+        <CiSettings className="text-cyan-700 w-6 h-6" />
       </div>
     </div>
   );

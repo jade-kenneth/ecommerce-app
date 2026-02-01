@@ -5,13 +5,13 @@ import { FunctionComponent } from 'react';
 import { CiSettings } from 'react-icons/ci';
 import { twMerge } from 'tailwind-merge';
 
+import { Search } from 'lucide-react';
 import { Button } from '~/components/Button';
 import { DebounceInput } from '~/components/DebounceInput';
 import { Show } from '~/components/Show';
 import { useSelfQuery } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { CartIcon } from '~/icons/CartIcon';
-import { SearchIcon } from '~/icons/SearchIcon';
 import { UserIcon } from '~/icons/UserIcon';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { AuthForm } from './AuthForm';
@@ -68,18 +68,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
             p: 'unset',
           },
           endElement: (
-            <Button
-              display={'flex'}
-              alignItems={'center'}
-              w="96px"
-              gap="5px"
-              m="6px"
-              btnSize={'sm'}
-              bg="colors.primary.700"
-              rounded="32px"
-            >
-              <SearchIcon />
-              <Text fontWeight={600} sizes="paragraph-sm">
+            <Button className="flex items-center  w-auto h-[80%] mr-2 gap-[5px] rounded-[32px]">
+              <Search className="w-4 h-4" />
+              <Text className="font-semibold" sizes="paragraph-sm">
                 Search
               </Text>
             </Button>

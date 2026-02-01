@@ -25,11 +25,8 @@ export const JustForYou: FunctionComponent<JustForYouProps> = () => {
 
       <Flex w="full" justify={'center'} mt="40px" alignItems={'center'}>
         <Button
-          visual={'ghost'}
-          display={'flex'}
-          alignItems={'center'}
-          gap="12px"
-          fontWeight={600}
+          variant="ghost"
+          className="flex items-center gap-3 font-semibold text-cyan-700 hover:text-cyan-600"
         >
           <Text sizes={'paragraph-lg'}> See More</Text>
           <LuArrowDown />

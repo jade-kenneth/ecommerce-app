@@ -61,14 +61,8 @@ export const CreateProduct = (props: AddProductButtonProps) => {
         <p className="text-heading-5 font-medium">Manage Products</p>
         <Dialog.Trigger>
           <Button
-            display={'flex'}
-            alignItems={'center'}
-            rounded={'32px'}
-            bg="colors.primary.700"
-            gap={2}
-            h="36px"
-            cursor={'pointer'}
-            w="fit-content"
+            type="button"
+            className="flex items-center gap-2 rounded-[32px] bg-cyan-700 px-4 h-9 text-white hover:bg-cyan-600 transition-colors w-fit"
             onClick={() => disclosure.onOpen()}
           >
             <FaPlusCircle />

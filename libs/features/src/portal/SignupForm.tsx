@@ -295,13 +295,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
           </Field.Root>
         </div>
         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-          <Button
-            w={'full'}
-            className="bg-cyan-700"
-            borderRadius={'50px'}
-            type="submit"
-            loading={loading}
-          >
+          <Button className="w-full bg-cyan-700 rounded-[50px] " type="submit">
             Create Account
           </Button>
 

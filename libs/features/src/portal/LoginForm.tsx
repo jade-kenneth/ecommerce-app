@@ -130,13 +130,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         </Text>
       </Flex>
 
-      <Button
-        w={'full'}
-        className="bg-cyan-700"
-        borderRadius={'50px'}
-        mt={6}
-        type="submit"
-      >
+      <Button type="submit" className="w-full rounded-[50px]  text-white mt-6">
         Sign in
       </Button>
 

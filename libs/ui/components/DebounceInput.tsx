@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useDebounceCallback } from 'usehooks-ts';
 
 import { twMerge } from 'tailwind-merge';
-import { useControllableState } from '~/utils/hooks/useControllableState';
+import { useControllableState } from '../../hooks/useControllableState';
 import { Field } from './ui/Field';
 
 /**

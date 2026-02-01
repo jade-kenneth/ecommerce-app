@@ -1,3 +1,5 @@
+'use client';
+
 import { Items } from '../Cart/Items';
 import { Footer } from '../Footer';
 import { OrderSummary } from './OrderSummary';

@@ -1,3 +1,5 @@
+'use client';
+
 import { twMerge } from 'tailwind-merge';
 import { PaymentMethodType } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';

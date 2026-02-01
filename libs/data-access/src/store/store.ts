@@ -9,7 +9,7 @@ import {
   AUTH_ACCESS_TOKEN_LOCAL_STORAGE_KEY,
   AUTH_REFRESH_TOKEN_LOCAL_STORAGE_KEY,
   LICENSE_CODE_LOCAL_STORAGE_KEY,
-} from '~/constants';
+} from '~/utils/constant';
 
 type License = {
   licenseCode: string;
@@ -18,10 +18,9 @@ type License = {
 type AuthId = keyof Omit<Session__Authenticated, 'status'>;
 type LicenseId = keyof License;
 
-type StoreValue =
-  | { [K in AuthId]?: Session__Authenticated[K] | null } & {
-      [X in LicenseId]?: License[X] | null;
-    };
+type StoreValue = { [K in AuthId]?: Session__Authenticated[K] | null } & {
+  [X in LicenseId]?: License[X] | null;
+};
 
 type AuthIdWithExpiration = Extract<AuthId, 'accessToken' | 'refreshToken'>;
 type AuthIdWithoutExpiration = Exclude<AuthId, AuthIdWithExpiration>;
@@ -48,12 +47,12 @@ type Store = {
     (value: StoreValue): Promise<void>;
     <T extends AuthIdWithoutExpiration>(
       key: T,
-      value: StoreValue[T]
+      value: StoreValue[T],
     ): Promise<void>;
     <T extends AuthIdWithExpiration & LicenseId>(
       key: T,
       value: StoreValue[T],
-      expires: number
+      expires: number,
     ): Promise<void>;
   };
   del?: (...keys: [StoreKey, ...StoreKey[]]) => Promise<void>;
@@ -83,7 +82,7 @@ function set(key: string, value: string | boolean | null | undefined) {
 function setexp(
   key: string,
   val: string | boolean | null | undefined,
-  exp: number
+  exp: number,
 ) {
   if (isUndefined(val)) return;
 
@@ -98,7 +97,7 @@ function setexp(
         JSON.stringify({
           __v: 'true',
           __t: exp,
-        })
+        }),
       );
     } else {
       localStorage.removeItem(key);
@@ -112,7 +111,7 @@ function setexp(
     JSON.stringify({
       __v: val,
       __t: exp,
-    })
+    }),
   );
 }
 
@@ -165,24 +164,24 @@ const createStore = (): Store => {
     set<T extends StoreKey>(
       arg0: StoreValue | T,
       arg1?: StoreValue[T],
-      arg2?: number
+      arg2?: number,
     ): Promise<void> {
       if (isPlainObject(arg0)) {
         return new Promise<void>((resolve) => {
           setexp(
             $('accessToken'),
             arg0.accessToken,
-            addMinutes(new Date(), 7.5).getTime()
+            addMinutes(new Date(), 7.5).getTime(),
           );
           setexp(
             $('refreshToken'),
             arg0.refreshToken,
-            addDays(new Date(), 30).getTime()
+            addDays(new Date(), 30).getTime(),
           );
           setexp(
             $('licenseCode'),
             arg0.licenseCode,
-            addMinutes(new Date(), 30).getTime()
+            addMinutes(new Date(), 30).getTime(),
           );
           set($('role'), arg0.role);
           resolve();

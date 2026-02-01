@@ -1,7 +1,9 @@
+'use client';
+
 import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
-import { Input } from '../../../../ui/components/Input';
-import { Show } from '../../../../ui/components/Show';
+import { Input } from '~/components/Input';
+import { Show } from '~/components/Show';
 import { capitalize } from '~/utils/capitalize';
 import { useCartContext } from './CartContext';
 import { ConfirmRemoveItem } from './ConfirmRemoveItem';
@@ -90,7 +92,10 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                     </button>
 
                     <Input
-                      inputProps={{ type: 'text' }}
+                      inputProps={{
+                        type: 'text',
+                        style: { background: 'none' },
+                      }}
                       onKeyDown={(e) => {
                         if (
                           !/[0-9]/.test(e.key) &&
@@ -104,7 +109,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                         }
                       }}
                       value={item.quantity.toString()}
-                      className="w-12 text-center border-0 bg-transparent text-gray-900 dark:text-white font-semibold focus:outline-none"
+                      className="w-[70px] text-center border-0 bg-transparent text-gray-900 dark:text-white font-semibold focus:outline-none"
                       onChange={(e) => {
                         context.setQuantity(item.productId, Number(e));
                       }}

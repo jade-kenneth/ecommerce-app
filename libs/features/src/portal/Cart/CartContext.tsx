@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode } from 'react';
 import { createContext } from '~/utils/createContext';
 import { useCart } from './useCart';

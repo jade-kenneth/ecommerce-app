@@ -1,4 +1,7 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
 import { useCreateGcashPaymentMutation } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
@@ -22,7 +25,9 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const [mutate] = useCreateGcashPaymentMutation();
   return (
     <div>
-      <div className="  bg-white rounded-2xl shadow-lg p-6 space-y-6">
+      <div
+        className={twMerge('  bg-white rounded-2xl shadow-lg p-6 space-y-6')}
+      >
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-semibold text-gray-800">Order Summary</h2>
         </div>

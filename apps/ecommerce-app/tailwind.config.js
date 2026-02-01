@@ -271,29 +271,5 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require('tailwindcss-plugin-zag'),
-    function ({ addComponents }) {
-      addComponents({
-        '.max-w-screen': {
-          maxWidth: '1440px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          width: '100%',
-          paddingLeft: '1.5rem',
-          paddingRight: '1.5rem',
-          '@screen tablet': {
-            paddingLeft: '2.5rem',
-            paddingRight: '2.5rem',
-          },
-          '@screen desktop': {
-            paddingLeft: '3rem',
-            paddingRight: '3rem',
-          },
-          '@screen wide': {
-            paddingLeft: '5rem',
-            paddingRight: '5rem',
-          },
-        },
-      });
-    },
   ],
 };

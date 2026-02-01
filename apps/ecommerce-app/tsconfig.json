@@ -30,11 +30,11 @@
       "~/graphql/*": ["../../libs/graphql/src/*"],
       "~/theme": ["../../libs/theme/src/index.ts"],
       "~/theme/*": ["../../libs/theme/src/*"],
-      "~/utils": ["../../libs/utils/src/index.ts"],
-      "~/utils/*": ["../../libs/utils/src/*"],
+      "~/utils": ["../../libs/utils/index.ts"],
+      "~/utils/*": ["../../libs/utils/*"],
       "~/icons": ["../../libs/ui/icons/index.ts"],
       "~/icons/*": ["../../libs/ui/icons/*"],
-      "~/hooks/*": ["../../libs/utils/src/hooks/*"],
+      "~/hooks/*": ["../../libs/hooks/*"],
       "~/store": ["../../libs/data-access/src/store/store.ts"]
     }
   },

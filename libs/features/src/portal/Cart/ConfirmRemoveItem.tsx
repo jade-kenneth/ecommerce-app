@@ -1,6 +1,8 @@
+'use client';
+
 import { Trash } from 'lucide-react';
 import Image from 'next/image';
-import { AlertDialog } from '../../../../ui/components/ui/AlertDialog';
+import { AlertDialog } from '~/components/ui/AlertDialog';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { useCartContext } from './CartContext';
 import { Item } from './useCart';

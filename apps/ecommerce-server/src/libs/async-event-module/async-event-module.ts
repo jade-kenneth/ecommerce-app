@@ -48,6 +48,7 @@ export class AsyncEventModule {
               ssl: {}, // required on redpanda cloud remove when using local dev
               sasl: {
                 // required on redpanda cloud remove when using local dev
+                // remove sasl when using local dev
                 mechanism: 'scram-sha-256',
                 username: process.env.KAFKA_USERNAME,
                 password: process.env.KAFKA_PASSWORD,

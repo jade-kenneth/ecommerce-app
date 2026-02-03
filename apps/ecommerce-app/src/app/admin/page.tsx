@@ -1,7 +1,7 @@
 'use client';
 
 import { use } from 'react';
-import { TEMPORARY_SITE_PASSWORD } from '~/constants';
+import { TEMPORARY_SITE_PASSWORD } from '~/utils/constant';
 import { ManageProducts } from './[slug]/ManageProducts';
 
 export default async function Index(props: {

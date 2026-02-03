@@ -2,7 +2,7 @@
 import { useParams } from 'next/navigation';
 
 import { use } from 'react';
-import { TEMPORARY_SITE_PASSWORD } from '~/constants';
+import { TEMPORARY_SITE_PASSWORD } from '~/utils/constant';
 import { Dashboard } from './Dashboard';
 import { ManageProducts } from './ManageProducts';
 import { Settings } from './Settings';

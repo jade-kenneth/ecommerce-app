@@ -1,6 +1,19 @@
-export interface AsyncEvent {
-  type: string;
-  data: any;
+export interface AsyncEventPayloads {
+  SuccessfulSignup: {
+    emailAddress: string;
+    firstName: string;
+  };
+  PasswordResetRequested: {
+    emailAddress: string;
+    resetToken: string;
+  };
+}
+
+export type AsyncEventType = keyof AsyncEventPayloads;
+
+export interface AsyncEvent<TType extends AsyncEventType = AsyncEventType> {
+  type: TType;
+  data: AsyncEventPayloads[TType];
   id: string;
 }
 export interface AsyncEventModuleOptions {

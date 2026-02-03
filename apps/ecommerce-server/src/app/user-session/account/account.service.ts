@@ -1,9 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import bcrypt from 'bcrypt';
-import { randomUUID } from 'crypto';
 import { Types } from 'mongoose';
-import { KafkaEventProducer } from '~/async-event-module/kafka.producer';
+import { AsyncEventDispatcher } from '~/async-event-module/async-event-dispatcher';
 import { AccountType } from '~/types/common';
 import { Filter } from '../../../libs/repository';
 import { Tokens } from '../../../types/tokens';
@@ -14,7 +13,7 @@ export class AccountService {
   constructor(
     @Inject(Tokens.AccountRepository)
     private accounts: AccountRepository,
-    private readonly events: KafkaEventProducer,
+    private readonly events: AsyncEventDispatcher,
   ) {}
 
   async createMemberAccount(data: Account) {
@@ -25,13 +24,9 @@ export class AccountService {
       role: AccountType.Member,
     });
 
-    await this.events.emit({
-      type: 'SuccessfulSignup',
-      id: randomUUID(),
-      data: {
-        emailAddress: data.emailAddress,
-        firstName: data.emailAddress.split('@')[0],
-      },
+    await this.events.dispatch('SuccessfulSignup', {
+      emailAddress: data.emailAddress,
+      firstName: data.emailAddress.split('@')[0],
     });
   }
 

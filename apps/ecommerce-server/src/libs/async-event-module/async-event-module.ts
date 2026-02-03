@@ -7,6 +7,7 @@ import {
 } from '@nestjs/core';
 import Redis from 'ioredis';
 import { Kafka } from 'kafkajs';
+import { AsyncEventDispatcher } from './async-event-dispatcher';
 import { KafkaEventConsumer } from './kafka.consumer';
 import { KafkaEventProducer } from './kafka.producer';
 import { AsyncEventTokens } from './tokens';
@@ -44,8 +45,9 @@ export class AsyncEventModule {
                 initialRetryTime: 300,
                 retries: 10,
               },
-              ssl: {},
+              ssl: {}, // required on redpanda cloud remove when using local dev
               sasl: {
+                // required on redpanda cloud remove when using local dev
                 mechanism: 'scram-sha-256',
                 username: process.env.KAFKA_USERNAME,
                 password: process.env.KAFKA_PASSWORD,
@@ -95,11 +97,12 @@ export class AsyncEventModule {
         DiscoveryService,
         MetadataScanner,
         Reflector,
+        AsyncEventDispatcher,
         KafkaEventProducer,
         KafkaEventConsumer,
       ],
 
-      exports: [KafkaEventProducer],
+      exports: [AsyncEventDispatcher, KafkaEventProducer],
     };
   }
 }

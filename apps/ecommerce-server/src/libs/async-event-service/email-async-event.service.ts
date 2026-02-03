@@ -8,7 +8,7 @@ export class EmailHandler {
   constructor(private readonly mail: MailService) {}
 
   @AsyncEventHandler('SuccessfulSignup')
-  async handle(event: AsyncEvent) {
+  async handle(event: AsyncEvent<'SuccessfulSignup'>) {
     await this.mail.sendEmail(
       event.data.emailAddress,
       'Welcome!',

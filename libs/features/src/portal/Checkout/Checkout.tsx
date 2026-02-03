@@ -9,8 +9,8 @@ import { ShippingOptions } from './ShippingOptions';
 export const Checkout = () => {
   return (
     <>
-      <div className="max-w-screen flex gap-10 mb-5">
-        <div className="flex-[1.4]">
+      <div className="max-w-screen flex flex-col lg:flex-row gap-8 lg:gap-10 mb-5">
+        <div className="flex-1">
           <Items isCheckout />
         </div>
         <div className="flex-1">

@@ -15,18 +15,18 @@ export const JustForYou: FunctionComponent<JustForYouProps> = () => {
   });
   return (
     <Container title="Just For You">
-      <div className="flex flex-wrap gap-4.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
         {data?.products.edges.map((d, idx) => {
           return <Cards key={idx} {...d.node} />;
         })}
       </div>
 
-      <div className="w-full flex justify-center mt-10 items-center">
+      <div className="w-full flex justify-center mt-8 sm:mt-10 items-center">
         <Button
           variant="ghost"
-          className="flex items-center gap-3 font-semibold text-cyan-700 hover:text-cyan-600"
+          className="flex items-center gap-3 font-semibold text-cyan-700 hover:text-cyan-600 text-sm sm:text-base"
         >
-          <span className="text-lg">See More</span>
+          <span className="text-base sm:text-lg">See More</span>
           <ArrowDown />
         </Button>
       </div>

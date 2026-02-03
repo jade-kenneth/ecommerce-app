@@ -16,7 +16,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
   const context = useCartContext();
 
   return (
-    <div className="flex flex-col gap-5 mt-5">
+    <div className="flex flex-col gap-5 mt-4 sm:mt-5">
       {!context.state.cart.items.length && <EmptyCart />}
       {context.state.cart.items.map((item) => {
         let quantity = item.quantity;
@@ -26,7 +26,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
             data-is-checkout={isCheckout}
             className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-md data-[is-checkout='true']:hover:shadow-none transition-shadow duration-200"
           >
-            <div className="flex gap-6 p-6">
+            <div className="flex flex-col md:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
               {/* Image */}
               <div className="flex-shrink-0">
                 <Image
@@ -34,17 +34,17 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                   alt="Product Image"
                   width={100}
                   height={100}
-                  className="w-32 h-32 object-cover rounded-lg"
+                  className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-lg"
                 />
               </div>
 
               {/* Details */}
-              <div className="flex-grow flex flex-col justify-between">
+              <div className="flex-grow flex flex-col justify-between gap-3">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                     {item.name}
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                     Categories:{' '}
                     {item.categories?.map((v) =>
                       capitalize(v, {
@@ -55,12 +55,12 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                 </div>
 
                 {/* Price */}
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-lg line-through font-bold text-gray-500 dark:text-white">
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  <span className="text-sm sm:text-lg line-through font-bold text-gray-500 dark:text-white">
                     ₱{(item.price * item.quantity).toLocaleString('en-PH')}
                   </span>
 
-                  <span className="text-2xl  font-bold text-gray-900 dark:text-white">
+                  <span className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
                     ₱
                     {(
                       item.price *
@@ -69,14 +69,14 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                     ).toLocaleString('en-PH')}
                   </span>
 
-                  <span className="text-md text-error-500 font-semibold ">
+                  <span className="text-xs sm:text-md text-error-500 font-semibold">
                     {item.discount}% OFF
                   </span>
                 </div>
               </div>
 
               {/* Quantity and Remove */}
-              <div className="flex flex-col items-end justify-center gap-5">
+              <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3 md:gap-5">
                 {/* Quantity Selector */}
                 <Show when={!isCheckout}>
                   <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-gray-50 dark:bg-slate-800">
@@ -109,7 +109,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                         }
                       }}
                       value={item.quantity.toString()}
-                      className="w-[70px] text-center border-0 bg-transparent text-gray-900 dark:text-white font-semibold focus:outline-none"
+                      className="w-12 sm:w-[70px] text-center border-0 bg-transparent text-gray-900 dark:text-white font-semibold focus:outline-none"
                       onChange={(e) => {
                         context.setQuantity(item.productId, Number(e));
                       }}

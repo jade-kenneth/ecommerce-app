@@ -17,8 +17,8 @@ interface CarouselProps {
 
 export const Carousel: FunctionComponent<CarouselProps> = ({
   style = {
-    height: '426px',
-    borderRadius: '26px',
+    height: 'clamp(220px, 45vw, 426px)',
+    borderRadius: 'clamp(16px, 2.5vw, 26px)',
   },
   items = [
     'https://media.istockphoto.com/id/2178465490/photo/buldak-is-korean-fire-chicken-with-cheese.jpg?s=2048x2048&w=is&k=20&c=eOwCJRoRGQziKTPsdLDCe5eKNlkxkBDM2hoiOatOOrM=',
@@ -29,7 +29,7 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
   ],
 }) => {
   return (
-    <div className="max-w-screen mt-[40px]">
+    <div className="max-w-screen mt-6 sm:mt-10">
       <Swiper
         pagination={true}
         modules={[Autoplay, Pagination]}
@@ -40,14 +40,15 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
           disableOnInteraction: false,
         }}
       >
-        {items.map((item) => {
+        {items.map((item, index) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={`${item}-${index}`}>
               <Image
                 src={item}
                 alt="carousel-image"
                 width={1280}
                 height={1000}
+                className="h-full w-full object-cover"
                 objectPosition="center"
               />
             </SwiperSlide>

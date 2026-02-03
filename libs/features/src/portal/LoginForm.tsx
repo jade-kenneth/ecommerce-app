@@ -4,14 +4,14 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
+import { AccountType } from '~/graphql/generated';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { authenticate } from '~/providers/AuthProvider';
 import { Button } from '../../../ui/components/Button';
 import { Input } from '../../../ui/components/Input';
 import { toaster } from '../../../ui/components/ToastContainer';
 import { Checkbox } from '../../../ui/components/ui/Checkbox';
 import { Field } from '../../../ui/components/ui/Field';
-import { AccountType } from '~/graphql/generated';
-import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { authenticate } from '~/providers/AuthProvider';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;
@@ -53,7 +53,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   });
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="p-1 sm:p-2">
       <Field.Root>
         <Field.Label>
           <span className="text-sm font-bold text-carbon-100">
@@ -78,7 +78,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           )}
         />
       </Field.Root>
-      <Field.Root className="mt-6">
+      <Field.Root className="mt-4 sm:mt-6">
         <span className="text-sm font-bold text-carbon-100">Password</span>
         <Controller
           control={form.control}
@@ -120,7 +120,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           )}
         />
       </Field.Root>
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-between mt-4 sm:mt-5">
         <Checkbox.Root>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
@@ -131,11 +131,14 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         </span>
       </div>
 
-      <Button type="submit" className="w-full rounded-[50px] text-white mt-6">
+      <Button
+        type="submit"
+        className="w-full rounded-[50px] text-white mt-5 sm:mt-6"
+      >
         Sign in
       </Button>
 
-      <p className="w-fit mx-auto mt-4">
+      <p className="w-fit mx-auto mt-3 sm:mt-4">
         Don&apos;t have an account yet?{' '}
         <span
           className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
@@ -144,8 +147,8 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           Register here
         </span>
       </p>
-      <p className="mx-auto w-fit mt-4">Or sign in using</p>
-      <div className="flex w-[296px] mx-auto mt-4 items-start gap-3 relative">
+      <p className="mx-auto w-fit mt-3 sm:mt-4">Or sign in using</p>
+      <div className="flex w-full max-w-[296px] mx-auto mt-3 sm:mt-4 items-start gap-3 relative">
         {socialButtons.map((button, index) => (
           <button
             key={index}

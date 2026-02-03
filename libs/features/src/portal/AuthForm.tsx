@@ -3,12 +3,12 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
-import { Show } from '../../../ui/components/Show';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { Show } from '../../../ui/components/Show';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
 
-import { Dialog } from '../../../ui/components/Dialog'; // Adjust the import path as needed
+import { Dialog } from '../../../ui/components/Dialog';
 
 export function AuthForm() {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
@@ -26,22 +26,26 @@ export function AuthForm() {
       </Dialog.Trigger>
 
       <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content className="rounded-xl p-7 border border-gray-200 bg-white relative">
-          <Dialog.Header className="flex flex-col items-center mt-5">
+      <Dialog.Positioner className="px-8 py-6 sm:px-8 sm:py-12 flex items-center justify-center ">
+        <Dialog.Content className="rounded-xl p-4 sm:p-7 border border-gray-200 bg-white relative w-[92vw] max-w-[520px] min-w-0 ">
+          <IoMdClose
+            onClick={() => globalStore.signIn.setIsSignIn(false)}
+            className="bg-cyan-500 p-1 lg:size-6 size-7  cursor-pointer text-white rounded-md absolute -top-7 -right-7 "
+          />
+          <Dialog.Header className="flex flex-col items-center ">
             <Image
               src={'/LogoBlack.png'}
               alt="logo"
-              className="mx-auto w-[200px] h-12"
+              className="mx-auto w-[160px] sm:w-[200px] h-12 "
               width={200}
               height={48}
             />
-            <span className="text-2xl font-semibold text-gray-900 mt-5 mb-3">
+            <span className="text-lg sm:text-2xl font-semibold text-gray-900    text-center">
               <Show when={authMode === 'login'} fallback="Create Your Account">
                 Sign In to Your Account
               </Show>
             </span>
-            <span className="text-center text-gray-500 text-lg">
+            <span className="text-center text-gray-500 text-sm sm:text-base">
               <Show
                 when={authMode === 'login'}
                 fallback="Welcome to AmyStore! Join now for easy checkout and special offers!"
@@ -59,11 +63,6 @@ export function AuthForm() {
               <SignupForm onToggleToLogin={() => setAuthMode('login')} />
             )}
           </Dialog.Body>
-          <Dialog.CloseTrigger
-            onClick={() => globalStore.signIn.setIsSignIn(false)}
-          >
-            <IoMdClose className="bg-cyan-500 p-1 size-6 absolute -top-9 -right-9 cursor-pointer text-white rounded-md" />
-          </Dialog.CloseTrigger>
         </Dialog.Content>
       </Dialog.Positioner>
     </Dialog.Root>

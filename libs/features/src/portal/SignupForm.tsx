@@ -5,16 +5,16 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
-import { Button } from '../../../ui/components/Button';
-import { Input } from '../../../ui/components/Input';
-import { toaster } from '../../../ui/components/ToastContainer';
-import { Field } from '../../../ui/components/ui/Field';
 import {
   AccountType,
   useCreateMemberAccountMutation,
 } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { create_session } from '~/providers/AuthProvider';
+import { Button } from '../../../ui/components/Button';
+import { Input } from '../../../ui/components/Input';
+import { toaster } from '../../../ui/components/ToastContainer';
+import { Field } from '../../../ui/components/ui/Field';
 
 interface SignupFormProps {
   onToggleToLogin?: () => void;
@@ -100,7 +100,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
     <div className="flex items-center gap-2.5 relative bg-white-25 rounded-xl">
       <form
         onSubmit={onSubmit}
-        className="flex-col items-start gap-6 flex relative  w-full"
+        className="flex-col items-start gap-6 flex relative w-full"
       >
         <div className="flex flex-col gap-6 relative  w-full">
           <Field.Root invalid={!!form.formState.errors.emailAddress}>
@@ -289,7 +289,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
           <p className="relative w-fit text-carbon-400 text-sm text-center tracking-wide leading-5 whitespace-nowrap">
             Or create an account using
           </p>
-          <div className="flex w-[296px] items-start gap-3 relative flex-[0_0_auto]">
+          <div className="flex w-full max-w-[296px] items-start gap-3 relative flex-[0_0_auto]">
             {socialButtons.map((button, index) => (
               <button
                 key={index}

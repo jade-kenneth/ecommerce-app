@@ -14,7 +14,7 @@ export default function Index() {
         <Navbar />
       </Sticky>
       <button
-        className="flex mt-5 gap-3 max-w-screen font-semibold items-center text-cyan-700"
+        className="flex mt-5 gap-3 max-w-screen font-semibold items-center text-cyan-700 text-sm sm:text-base"
         onClick={() => router.push('/cart')}
       >
         <LuMoveLeft />

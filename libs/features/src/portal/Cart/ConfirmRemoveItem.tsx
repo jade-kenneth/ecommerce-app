@@ -25,7 +25,7 @@ export const ConfirmRemoveItem = ({ item }: ConfirmRemoveItemProps) => {
       </AlertDialog.Trigger>
       <AlertDialog.Backdrop />
       <AlertDialog.Positioner>
-        <AlertDialog.Content className="bg-white rounded-2xl shadow-xl w-[480px] py-6 space-y-4">
+        <AlertDialog.Content className="bg-white rounded-2xl shadow-xl w-[90vw] max-w-[480px] py-6 space-y-4">
           {/* Title */}
           <AlertDialog.Title className="text-2xl px-6 font-semibold">
             Wait! Don’t remove this item yet

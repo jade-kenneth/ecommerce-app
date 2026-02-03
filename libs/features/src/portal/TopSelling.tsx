@@ -11,7 +11,7 @@ export const TopSelling = () => {
 
   return (
     <Container title="Top Selling Products">
-      <div className="flex-wrap flex gap-[18px]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
         {data?.products.edges.map((d, idx) => {
           return <Cards key={idx} {...d.node} isTopSold />;
         })}

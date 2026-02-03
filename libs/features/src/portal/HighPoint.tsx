@@ -16,7 +16,7 @@ export const HighPoint: FunctionComponent<HighPointProps> = () => {
       title="High-Point Products"
       subTitle="Earn Big Points with These Products"
     >
-      <div className="flex flex-wrap gap-[18px]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
         {data?.highPointProducts.edges.map((d, idx) => {
           return <Cards key={idx} {...d.node} isHighPoint />;
         })}

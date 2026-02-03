@@ -21,7 +21,7 @@ export const LicenseDialog = (props: PropsWithChildren) => {
 
   return (
     <Dialog.Root open={true}>
-      <Dialog.Backdrop>{props.children}</Dialog.Backdrop>
+      <Dialog.Backdrop className="bg-[unset]">{props.children}</Dialog.Backdrop>
 
       <Dialog.Positioner className="bg-white/80 flex justify-center items-center">
         <Dialog.Content className="flex justify-center   max-w-[550px] min-w-[350px] py-6 items-center">

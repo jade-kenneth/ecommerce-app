@@ -12,8 +12,8 @@ import { UserIcon } from '~/icons/UserIcon';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { Button } from '../../../ui/components/Button';
-import { Dialog } from '../../../ui/components/Dialog';
 import { DebounceInput } from '../../../ui/components/DebounceInput';
+import { Dialog } from '../../../ui/components/Dialog';
 import { Show } from '../../../ui/components/Show';
 import { AuthForm } from './AuthForm';
 import { useCartContext } from './Cart/CartContext';
@@ -35,7 +35,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
 
   const cartContext = useCartContext();
   const categoryLabels = categoryItems.map((item) =>
-    item.name.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+    item.name
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim(),
   );
   return (
     <div
@@ -84,7 +87,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
               </p>
             }
           >
-            <div className="flex flex-row items-center cursor-pointer gap-2 px-2 sm:px-5">
+            <div className="flex flex-row items-center cursor-pointer gap-2 px-2 ">
               <UserIcon />
               <AuthForm />
             </div>

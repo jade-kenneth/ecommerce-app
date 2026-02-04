@@ -26,32 +26,25 @@ export function AuthForm() {
       </Dialog.Trigger>
 
       <Dialog.Backdrop />
-      <Dialog.Positioner className="px-4 py-6 sm:px-8 sm:py-12 lg:block sm:flex  sm:items-center sm:justify-center ">
-        <Dialog.Content className="rounded-xl p-4 sm:p-7 border border-gray-200 bg-white relative w-[92vw] max-w-[520px] min-w-0 ">
-          <IoMdClose
+      <Dialog.Positioner className="px-4 py-6 sm:px-8 sm:py-12 flex items-center justify-center">
+        <Dialog.Content className="rounded-xl p-4 sm:p-6 border border-gray-200 bg-white relative w-[92vw] max-w-[520px] min-w-0">
+          <Dialog.CloseTrigger
             onClick={() => globalStore.signIn.setIsSignIn(false)}
-            className="bg-cyan-500 p-1 lg:size-6 size-7  cursor-pointer text-white rounded-md absolute -top-7 -right-7 "
-          />
-          <Dialog.Header className="flex flex-col items-center ">
+            aria-label="Close dialog"
+          >
+            <IoMdClose className="p-1 size-6 sm:size-7 cursor-pointer text-cyan-500 absolute -top-2 -right-2 rounded-md" />
+          </Dialog.CloseTrigger>
+          <Dialog.Header className="flex flex-col items-center gap-2">
             <Image
               src={'/LogoBlack.png'}
               alt="logo"
-              className="mx-auto w-[160px] sm:w-[200px] h-12 "
+              className="mx-auto w-[140px] sm:w-[200px] h-10 sm:h-12"
               width={200}
               height={48}
             />
-            <span className="text-lg sm:text-2xl font-semibold text-gray-900    text-center">
+            <span className="text-base sm:text-2xl font-semibold text-gray-900 text-center">
               <Show when={authMode === 'login'} fallback="Create Your Account">
                 Sign In to Your Account
-              </Show>
-            </span>
-            <span className="text-center text-gray-500 text-sm sm:text-base">
-              <Show
-                when={authMode === 'login'}
-                fallback="Welcome to AmyStore! Join now for easy checkout and special offers!"
-              >
-                Welcome back to AmyStore! Please enter your email address and
-                password to access your account.
               </Show>
             </span>
           </Dialog.Header>

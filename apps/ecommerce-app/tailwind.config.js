@@ -9,6 +9,12 @@ module.exports = {
     join(__dirname, '../../libs/**/*.{js,jsx,ts,tsx}'),
   ],
   theme: {
+    screens: {
+      sm: '375px',
+      md: '768px',
+      lg: '1040px',
+      xl: '1280px',
+    },
     fontFamily: {
       sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
       mono: ["'Fira Code'", ...defaultTheme.fontFamily.mono],

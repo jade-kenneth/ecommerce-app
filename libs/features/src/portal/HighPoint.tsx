@@ -1,8 +1,8 @@
 import { FunctionComponent } from 'react';
-import { Cards } from '../../../ui/components/Cards';
-import { Container } from '../../../ui/components/Container';
 import { useHighPointProductsQuery } from '~/graphql/generated';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
+import { Cards } from '../../../ui/components/Cards';
+import { Container } from '../../../ui/components/Container';
 
 interface HighPointProps {}
 
@@ -16,7 +16,7 @@ export const HighPoint: FunctionComponent<HighPointProps> = () => {
       title="High-Point Products"
       subTitle="Earn Big Points with These Products"
     >
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(194px,1fr))] gap-4 sm:gap-5">
         {data?.highPointProducts.edges.map((d, idx) => {
           return <Cards key={idx} {...d.node} isHighPoint />;
         })}

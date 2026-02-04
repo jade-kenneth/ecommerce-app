@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className="mt-16 sm:mt-24 text-white bg-cyan-700">
       <div className="max-w-screen py-12 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr_0.8fr]">
+        <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-[1.2fr_1fr_1fr_0.8fr]">
           <div className="flex flex-col">
             <Image src={'/LogoWhite.png'} alt="logo" width={150} height={150} />
 

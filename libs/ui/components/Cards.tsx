@@ -23,7 +23,7 @@ export const Cards = (props: CardsProps) => {
 
   const context = useCartContext();
   return (
-    <div className="w-full min-w-0 bg-white border border-carbon-900 rounded-[12px] flex flex-col h-auto">
+    <div className="w-full min-w-[194px] bg-white border border-carbon-900 rounded-[12px] flex flex-col h-auto">
       <div className="h-[170px] sm:h-[194px] flex items-center justify-center bg-carbon-950 rounded-t-[12px] relative overflow-hidden">
         <Image
           src={props.thumbnail}

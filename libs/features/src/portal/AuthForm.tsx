@@ -26,7 +26,7 @@ export function AuthForm() {
       </Dialog.Trigger>
 
       <Dialog.Backdrop />
-      <Dialog.Positioner>
+      <Dialog.Positioner className="px-4 py-6 sm:px-8 sm:py-12 lg:block sm:flex  sm:items-center sm:justify-center ">
         <Dialog.Content className="rounded-xl p-4 sm:p-7 border border-gray-200 bg-white relative w-[92vw] max-w-[520px] min-w-0 ">
           <IoMdClose
             onClick={() => globalStore.signIn.setIsSignIn(false)}

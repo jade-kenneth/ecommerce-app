@@ -7,6 +7,13 @@ export interface AsyncEventPayloads {
     emailAddress: string;
     resetToken: string;
   };
+  OrderCreated: {
+    orderId: string;
+    accountId: string;
+    emailAddress?: string;
+    total: string;
+    itemCount: number;
+  };
 }
 
 export type AsyncEventType = keyof AsyncEventPayloads;

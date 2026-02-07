@@ -125,7 +125,7 @@ function serializeFilterField(field: any): any {
        */
       const keys = R.intersection(
         R.keys(field),
-        FILTER_CONDITION_MAP_KEYS
+        FILTER_CONDITION_MAP_KEYS,
       ) as string[];
 
       const result: Record<string, any> = {};
@@ -165,7 +165,7 @@ export function flattenObject(item: any, parentKey?: string): Partial<RawItem> {
         [newKey]: value,
       };
     }, {}),
-    R.toPairs
+    R.toPairs,
   )(item) as never;
 }
 
@@ -174,7 +174,7 @@ export type RawItem = { _id: Buffer; [key: string]: unknown };
 export class MongooseRepository<
   TEntity extends { _id: Types.ObjectId } = {
     _id: Types.ObjectId;
-  }
+  },
 > implements Repository<TEntity>
 {
   private readonly _model: Model<RawItem>;
@@ -183,7 +183,7 @@ export class MongooseRepository<
     connection: DBConnection,
     name: string,
     definition: SchemaDefinition,
-    indexes?: [IndexDefinition, IndexOptions?][]
+    indexes?: [IndexDefinition, IndexOptions?][],
   ) {
     const schema = new Schema(
       {
@@ -193,7 +193,7 @@ export class MongooseRepository<
       {
         versionKey: false,
         strict: true,
-      }
+      },
     );
 
     for (const [indexDefinition, indexOptions] of indexes || []) {
@@ -217,7 +217,7 @@ export class MongooseRepository<
   public async update(
     filter: Types.ObjectId | Filter<TEntity>,
     data: Partial<Omit<TEntity, '_id'>>,
-    opts?: WriteOptions & { upsert?: boolean }
+    opts?: WriteOptions & { upsert?: boolean },
   ): Promise<void> {
     const options = R.pick(['upsert'], opts || {});
     if (filter instanceof Types.ObjectId) {
@@ -226,7 +226,7 @@ export class MongooseRepository<
         {
           $set: data,
         },
-        options
+        options,
       );
 
       return;
@@ -237,7 +237,7 @@ export class MongooseRepository<
         {
           $set: data,
         },
-        options
+        options,
       );
 
       return;
@@ -245,13 +245,11 @@ export class MongooseRepository<
   }
   public async delete(
     filter: Types.ObjectId | Filter<TEntity>,
-    opts?: WriteOptions
+    opts?: WriteOptions,
   ): Promise<void> {
     const options = R.pick(['upsert'], opts || {});
-    if (typeof filter === 'string') {
-      await this.model.deleteOne({ _id: filter }, options);
-      return;
-    }
+    await this.model.deleteOne({ _id: filter }, options);
+    return;
   }
   async find(
     filter: Types.ObjectId | Filter<TEntity>,
@@ -259,7 +257,7 @@ export class MongooseRepository<
       collation?: CollationOptions;
       secondaryPreferred?: true;
       explain?: true;
-    }
+    },
   ): Promise<TEntity> {
     const doc = await this.model.findOne(filter, null);
     return doc ? (serializeItem(doc) as TEntity) : null;
@@ -271,7 +269,7 @@ export class MongooseRepository<
       sort?: Partial<Record<keyof TEntity, SortOrder>>;
       secondaryPreferred?: true;
       explain?: true;
-    }
+    },
   ): RepositoryIterator<TEntity> {
     const model = this.model;
     const options: Record<string, never> = {};
@@ -393,7 +391,7 @@ export class MongooseRepository<
   }
   count(
     filter?: Filter<TEntity>,
-    opts?: { secondaryPreferred?: true; explain?: true; limit?: number }
+    opts?: { secondaryPreferred?: true; explain?: true; limit?: number },
   ): Promise<number> {
     throw new Error('Method not implemented.');
   }
@@ -405,7 +403,7 @@ export class MongooseRepository<
       path: string;
       limit?: number;
       secondaryPreferred?: true;
-    }
+    },
   ): Promise<TEntity[]> {
     throw new Error('Method not implemented.');
   }
@@ -413,7 +411,7 @@ export class MongooseRepository<
     filter: Types.ObjectId | Filter<TEntity>,
     field: string,
     amount: number,
-    opts?: WriteOptions
+    opts?: WriteOptions,
   ): Promise<null | number> {
     throw new Error('Method not implemented.');
   }

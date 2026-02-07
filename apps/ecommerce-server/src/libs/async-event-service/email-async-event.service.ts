@@ -92,4 +92,62 @@ export class EmailHandler {
     `,
     );
   }
+
+  @AsyncEventHandler('OrderCreated')
+  async handleOrderCreated(event: AsyncEvent<'OrderCreated'>) {
+    if (!event.data.emailAddress) return;
+
+    await this.mail.sendEmail(
+      event.data.emailAddress,
+      `Order received: ${event.data.orderId}`,
+      `
+    <div style="
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      padding: 24px;
+      color: #1f2937;
+    ">
+      <h1 style="
+        font-size: 22px;
+        margin-bottom: 8px;
+        color: #0f172a;
+      ">
+        Thanks for your order
+      </h1>
+
+      <p style="
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 16px;
+      ">
+        We have received your order and will start processing it shortly.
+      </p>
+
+      <div style="
+        background-color: #f8fafc;
+        border-left: 4px solid #06b6d4;
+        padding: 16px;
+        margin: 24px 0;
+        border-radius: 6px;
+      ">
+        <p style="margin: 0; font-size: 15px;">
+          Order ID: <strong>${event.data.orderId}</strong><br />
+          Items: <strong>${event.data.itemCount}</strong><br />
+          Total: <strong>${event.data.total}</strong>
+        </p>
+      </div>
+
+      <p style="
+        font-size: 13px;
+        color: #6b7280;
+        line-height: 1.5;
+      ">
+        If you have questions, just reply to this email and we will help.
+      </p>
+    </div>
+    `,
+    );
+  }
 }

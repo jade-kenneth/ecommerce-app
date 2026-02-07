@@ -53,3 +53,31 @@ query ShippingOptions {
     estimatedDays
   }
 }
+
+mutation Checkout($input: CheckoutInput!) {
+  checkout(input: $input) {
+    _id
+    items {
+      productId
+      quantity
+      unitPrice
+      totalPrice
+    }
+    shippingOption {
+      type
+      label
+      description
+      estimatedDays
+      fee
+    }
+    paymentMethod {
+      type
+    }
+    subtotal
+    tax
+    shippingFee
+    total
+    status
+    createdAt
+  }
+}

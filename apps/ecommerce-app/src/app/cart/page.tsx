@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
-import { Sticky } from '../../../../../libs/ui/components/Sticky';
+import { Sticky } from '~/components/Sticky';
 
 // Add global type for window.Xendit
 declare global {

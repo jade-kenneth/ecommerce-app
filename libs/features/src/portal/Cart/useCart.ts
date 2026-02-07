@@ -102,7 +102,7 @@ export const useCart = () => {
   function setQuantity(id: string, quantity: number) {
     const existingIndex = cart.items.findIndex((i) => i.productId === id);
 
-    let updatedItems: Item[] = [...cart.items];
+    const updatedItems: Item[] = [...cart.items];
 
     updatedItems[existingIndex] = {
       ...updatedItems[existingIndex],

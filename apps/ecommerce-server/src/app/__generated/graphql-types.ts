@@ -86,8 +86,13 @@ export interface UpdateCartItemInput {
 }
 
 export interface CheckoutInput {
-    shippingOptionId: ObjectId;
-    paymentMethodId: ObjectId;
+    shippingOptionId?: Nullable<ObjectId>;
+    paymentMethodId?: Nullable<ObjectId>;
+}
+
+export interface RemoveFromCartInput {
+    productId: ObjectId;
+    quantity: number;
 }
 
 export interface ProductByIdsInput {
@@ -231,7 +236,7 @@ export interface IMutation {
     createMemberAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     addToCart(input: AddToCartInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateCartItem(input: UpdateCartItemInput): Cart | Promise<Cart>;
-    removeFromCart(productId: ObjectId): Cart | Promise<Cart>;
+    removeFromCart(input: RemoveFromCartInput): Cart | Promise<Cart>;
     clearCart(): Cart | Promise<Cart>;
     checkout(input: CheckoutInput): Order | Promise<Order>;
     createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -261,8 +266,8 @@ export interface IQuery {
 export interface CartItem {
     productId: ObjectId;
     quantity: number;
-    unitPrice: string;
-    totalPrice: string;
+    unitPrice?: Nullable<string>;
+    totalPrice?: Nullable<string>;
 }
 
 export interface PaymentMethod {

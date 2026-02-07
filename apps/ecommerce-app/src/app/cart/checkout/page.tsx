@@ -1,7 +1,8 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { LuMoveLeft } from 'react-icons/lu';
-import { Sticky } from '../../../../../../libs/ui/components/Sticky';
+import { Sticky } from '~/components/Sticky';
+
 import { Navbar } from '~/features/portal';
 import { Checkout } from '~/features/portal/Checkout/Checkout';
 import { Highlight } from '~/features/portal/Highlight';

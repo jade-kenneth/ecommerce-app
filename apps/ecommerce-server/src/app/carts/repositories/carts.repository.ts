@@ -7,10 +7,10 @@ import { CartItem, CartStatus } from '../../__generated/graphql-types';
 
 export type Cart = Node & {
   items: CartItem[];
-  subtotal: String;
-  tax: String;
-  shippingFee: String;
-  total: String;
+  subtotal?: string;
+  tax?: string;
+  shippingFee?: string;
+  total?: string;
   status: CartStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -26,12 +26,13 @@ const CartItemSchema = {
 export type CartRepository = Repository<Cart>;
 
 export async function CartRepositoryFactory(
-  connection: Connection
+  connection: Connection,
 ): Promise<CartRepository> {
   return new MongooseRepository<Cart>(
     connection,
     'Carts',
     {
+      _id: Types.ObjectId,
       items: [CartItemSchema],
       subtotal: String,
       tax: String,
@@ -41,6 +42,6 @@ export async function CartRepositoryFactory(
       createdAt: Date,
       updatedAt: Date,
     },
-    []
+    [],
   );
 }

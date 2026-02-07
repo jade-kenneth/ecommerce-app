@@ -27,8 +27,8 @@ enum OrderStatus {
 type CartItem {
   productId: ObjectId!
   quantity: Int!
-  unitPrice: String!
-  totalPrice: String!
+  unitPrice: String
+  totalPrice: String
 }
 
 type PaymentMethod {
@@ -86,8 +86,13 @@ input UpdateCartItemInput {
   quantity: Int!
 }
 input CheckoutInput {
-  shippingOptionId: ObjectId!
-  paymentMethodId: ObjectId!
+  shippingOptionId: ObjectId
+  paymentMethodId: ObjectId
+}
+
+input RemoveFromCartInput {
+  productId: ObjectId!
+  quantity: Int!
 }
 
 type Query {
@@ -107,7 +112,7 @@ type Mutation {
   # Cart actions
   addToCart(input: AddToCartInput!): Boolean
   updateCartItem(input: UpdateCartItemInput!): Cart!
-  removeFromCart(productId: ObjectId!): Cart!
+  removeFromCart(input: RemoveFromCartInput!): Cart!
   clearCart: Cart!
 
   # Checkout

@@ -77,11 +77,11 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
   update(
     filter: Types.ObjectId | Filter<T>,
     data: Partial<Omit<T, '_id'>>,
-    opts?: WriteOptions & { upsert?: boolean }
+    opts?: WriteOptions & { upsert?: boolean },
   ): Promise<void>;
   delete(
     filter: Types.ObjectId | Filter<T>,
-    opts?: WriteOptions
+    opts?: WriteOptions,
   ): Promise<void>;
   find(
     filter: Types.ObjectId | Filter<T>,
@@ -89,7 +89,7 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
       collation?: CollationOptions;
       secondaryPreferred?: true;
       explain?: true;
-    }
+    },
   ): Promise<T | null>;
   list(
     filter?: Filter<T>,
@@ -97,7 +97,7 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
       sort?: Partial<Record<keyof T, SortOrder>>;
       secondaryPreferred?: true;
       explain?: true;
-    }
+    },
   ): RepositoryIterator<T>;
   count(
     filter?: Filter<T>,
@@ -105,7 +105,7 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
       secondaryPreferred?: true;
       explain?: true;
       limit?: number;
-    }
+    },
   ): Promise<number>;
   search(
     search: string,
@@ -115,13 +115,13 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
       path: string;
       limit?: number;
       secondaryPreferred?: true;
-    }
+    },
   ): Promise<T[]>;
   increment(
     filter: Types.ObjectId | Filter<T>,
     field: string,
     amount: number,
-    opts?: WriteOptions
+    opts?: WriteOptions,
   ): Promise<null | number>;
 }
 

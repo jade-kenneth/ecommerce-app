@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Mon, 19 Jan 2026 05:15:22 GMT
+// Last modified: Thu, 05 Feb 2026 22:18:26 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -17,7 +17,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -70,8 +70,8 @@ export enum CategoryType {
 }
 
 export type CheckoutInput = {
-  paymentMethodId: Scalars['ObjectID']['input'];
-  shippingOptionId: Scalars['ObjectID']['input'];
+  paymentMethodId?: InputMaybe<Scalars['ObjectID']['input']>;
+  shippingOptionId?: InputMaybe<Scalars['ObjectID']['input']>;
 };
 
 export type CreateAccountInput = {
@@ -129,6 +129,12 @@ export type IdFilterInput = {
 export type KeyValuePairInput = {
   key: Scalars['String']['input'];
   value: Scalars['String']['input'];
+};
+
+export type LicenseInput = {
+  _id: Scalars['ObjectID']['input'];
+  code: Scalars['String']['input'];
+  expirationDate: Scalars['String']['input'];
 };
 
 export enum OrderStatus {
@@ -336,6 +342,40 @@ export type ShippingOptionsQuery = {
   }>;
 };
 
+export type CheckoutMutationVariables = Exact<{
+  input: CheckoutInput;
+}>;
+
+export type CheckoutMutation = {
+  __typename: 'Mutation';
+  checkout: {
+    __typename: 'Order';
+    _id: string;
+    subtotal: string;
+    tax: string;
+    shippingFee: string;
+    total: string;
+    status: OrderStatus;
+    createdAt: string;
+    items?: Array<{
+      __typename: 'CartItem';
+      productId: string;
+      quantity: number;
+      unitPrice: string;
+      totalPrice: string;
+    } | null> | null;
+    shippingOption: {
+      __typename: 'ShippingOption';
+      type: ShippingType;
+      label: string;
+      description?: string | null;
+      estimatedDays?: string | null;
+      fee: string;
+    };
+    paymentMethod: { __typename: 'PaymentMethod'; type: PaymentMethodType };
+  };
+};
+
 export type UploadFileMutationVariables = Exact<{
   file: Scalars['Upload']['input'];
 }>;
@@ -343,6 +383,15 @@ export type UploadFileMutationVariables = Exact<{
 export type UploadFileMutation = {
   __typename: 'Mutation';
   uploadFile?: string | null;
+};
+
+export type LicenseMutationVariables = Exact<{
+  input: LicenseInput;
+}>;
+
+export type LicenseMutation = {
+  __typename: 'Mutation';
+  createLicense?: boolean | null;
 };
 
 export type CreateGcashPaymentMutationVariables = Exact<{
@@ -529,7 +578,7 @@ export function useCreateMemberAccountMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateMemberAccountMutation,
     CreateMemberAccountMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -559,7 +608,7 @@ export function useCreateAdminAccountMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateAdminAccountMutation,
     CreateAdminAccountMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -586,33 +635,33 @@ export const SelfDocument = /*#__PURE__*/ gql`
   }
 `;
 export function useSelfQuery(
-  baseOptions?: Apollo.QueryHookOptions<SelfQuery, SelfQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<SelfQuery, SelfQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<SelfQuery, SelfQueryVariables>(SelfDocument, options);
 }
 export function useSelfLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SelfQuery, SelfQueryVariables>
+  baseOptions?: Apollo.LazyQueryHookOptions<SelfQuery, SelfQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<SelfQuery, SelfQueryVariables>(
     SelfDocument,
-    options
+    options,
   );
 }
 // @ts-ignore
 export function useSelfSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>
+  baseOptions?: Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<SelfQuery, SelfQueryVariables>;
 export function useSelfSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<SelfQuery | undefined, SelfQueryVariables>;
 export function useSelfSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -620,7 +669,7 @@ export function useSelfSuspenseQuery(
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<SelfQuery, SelfQueryVariables>(
     SelfDocument,
-    options
+    options,
   );
 }
 export type SelfQueryHookResult = ReturnType<typeof useSelfQuery>;
@@ -645,12 +694,12 @@ export function useAddToCartMutation(
   baseOptions?: Apollo.MutationHookOptions<
     AddToCartMutation,
     AddToCartMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<AddToCartMutation, AddToCartMutationVariables>(
     AddToCartDocument,
-    options
+    options,
   );
 }
 export type AddToCartMutationHookResult = ReturnType<
@@ -681,33 +730,33 @@ export const CartDocument = /*#__PURE__*/ gql`
 `;
 export function useCartQuery(
   baseOptions: Apollo.QueryHookOptions<CartQuery, CartQueryVariables> &
-    ({ variables: CartQueryVariables; skip?: boolean } | { skip: boolean })
+    ({ variables: CartQueryVariables; skip?: boolean } | { skip: boolean }),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<CartQuery, CartQueryVariables>(CartDocument, options);
 }
 export function useCartLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<CartQuery, CartQueryVariables>
+  baseOptions?: Apollo.LazyQueryHookOptions<CartQuery, CartQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<CartQuery, CartQueryVariables>(
     CartDocument,
-    options
+    options,
   );
 }
 // @ts-ignore
 export function useCartSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>
+  baseOptions?: Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<CartQuery, CartQueryVariables>;
 export function useCartSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<CartQuery | undefined, CartQueryVariables>;
 export function useCartSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -715,7 +764,7 @@ export function useCartSuspenseQuery(
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<CartQuery, CartQueryVariables>(
     CartDocument,
-    options
+    options,
   );
 }
 export type CartQueryHookResult = ReturnType<typeof useCartQuery>;
@@ -754,24 +803,24 @@ export const MyOrdersDocument = /*#__PURE__*/ gql`
   }
 `;
 export function useMyOrdersQuery(
-  baseOptions?: Apollo.QueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<MyOrdersQuery, MyOrdersQueryVariables>(
     MyOrdersDocument,
-    options
+    options,
   );
 }
 export function useMyOrdersLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     MyOrdersQuery,
     MyOrdersQueryVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<MyOrdersQuery, MyOrdersQueryVariables>(
     MyOrdersDocument,
-    options
+    options,
   );
 }
 // @ts-ignore
@@ -779,12 +828,12 @@ export function useMyOrdersSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     MyOrdersQuery,
     MyOrdersQueryVariables
-  >
+  >,
 ): Apollo.UseSuspenseQueryResult<MyOrdersQuery, MyOrdersQueryVariables>;
 export function useMyOrdersSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<
   MyOrdersQuery | undefined,
   MyOrdersQueryVariables
@@ -792,7 +841,7 @@ export function useMyOrdersSuspenseQuery(
 export function useMyOrdersSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -800,7 +849,7 @@ export function useMyOrdersSuspenseQuery(
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<MyOrdersQuery, MyOrdersQueryVariables>(
     MyOrdersDocument,
-    options
+    options,
   );
 }
 export type MyOrdersQueryHookResult = ReturnType<typeof useMyOrdersQuery>;
@@ -833,19 +882,19 @@ export function useShippingOptionsQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ShippingOptionsQuery,
     ShippingOptionsQueryVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<ShippingOptionsQuery, ShippingOptionsQueryVariables>(
     ShippingOptionsDocument,
-    options
+    options,
   );
 }
 export function useShippingOptionsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     ShippingOptionsQuery,
     ShippingOptionsQueryVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
@@ -858,7 +907,7 @@ export function useShippingOptionsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     ShippingOptionsQuery,
     ShippingOptionsQueryVariables
-  >
+  >,
 ): Apollo.UseSuspenseQueryResult<
   ShippingOptionsQuery,
   ShippingOptionsQueryVariables
@@ -869,7 +918,7 @@ export function useShippingOptionsSuspenseQuery(
     | Apollo.SuspenseQueryHookOptions<
         ShippingOptionsQuery,
         ShippingOptionsQueryVariables
-      >
+      >,
 ): Apollo.UseSuspenseQueryResult<
   ShippingOptionsQuery | undefined,
   ShippingOptionsQueryVariables
@@ -880,7 +929,7 @@ export function useShippingOptionsSuspenseQuery(
     | Apollo.SuspenseQueryHookOptions<
         ShippingOptionsQuery,
         ShippingOptionsQueryVariables
-      >
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -905,10 +954,61 @@ export type ShippingOptionsQueryResult = Apollo.QueryResult<
   ShippingOptionsQueryVariables
 >;
 export function refetchShippingOptionsQuery(
-  variables?: ShippingOptionsQueryVariables
+  variables?: ShippingOptionsQueryVariables,
 ) {
   return { query: ShippingOptionsDocument, variables: variables };
 }
+export const CheckoutDocument = /*#__PURE__*/ gql`
+  mutation Checkout($input: CheckoutInput!) {
+    checkout(input: $input) {
+      _id
+      items {
+        productId
+        quantity
+        unitPrice
+        totalPrice
+      }
+      shippingOption {
+        type
+        label
+        description
+        estimatedDays
+        fee
+      }
+      paymentMethod {
+        type
+      }
+      subtotal
+      tax
+      shippingFee
+      total
+      status
+      createdAt
+    }
+  }
+`;
+export type CheckoutMutationFn = Apollo.MutationFunction<
+  CheckoutMutation,
+  CheckoutMutationVariables
+>;
+export function useCheckoutMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CheckoutMutation,
+    CheckoutMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CheckoutMutation, CheckoutMutationVariables>(
+    CheckoutDocument,
+    options,
+  );
+}
+export type CheckoutMutationHookResult = ReturnType<typeof useCheckoutMutation>;
+export type CheckoutMutationResult = Apollo.MutationResult<CheckoutMutation>;
+export type CheckoutMutationOptions = Apollo.BaseMutationOptions<
+  CheckoutMutation,
+  CheckoutMutationVariables
+>;
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file)
@@ -922,12 +1022,12 @@ export function useUploadFileMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UploadFileMutation,
     UploadFileMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<UploadFileMutation, UploadFileMutationVariables>(
     UploadFileDocument,
-    options
+    options,
   );
 }
 export type UploadFileMutationHookResult = ReturnType<
@@ -938,6 +1038,33 @@ export type UploadFileMutationResult =
 export type UploadFileMutationOptions = Apollo.BaseMutationOptions<
   UploadFileMutation,
   UploadFileMutationVariables
+>;
+export const LicenseDocument = /*#__PURE__*/ gql`
+  mutation License($input: LicenseInput!) {
+    createLicense(input: $input)
+  }
+`;
+export type LicenseMutationFn = Apollo.MutationFunction<
+  LicenseMutation,
+  LicenseMutationVariables
+>;
+export function useLicenseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    LicenseMutation,
+    LicenseMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<LicenseMutation, LicenseMutationVariables>(
+    LicenseDocument,
+    options,
+  );
+}
+export type LicenseMutationHookResult = ReturnType<typeof useLicenseMutation>;
+export type LicenseMutationResult = Apollo.MutationResult<LicenseMutation>;
+export type LicenseMutationOptions = Apollo.BaseMutationOptions<
+  LicenseMutation,
+  LicenseMutationVariables
 >;
 export const CreateGcashPaymentDocument = /*#__PURE__*/ gql`
   mutation CreateGcashPayment($input: CreateGcashPaymentInput) {
@@ -958,7 +1085,7 @@ export function useCreateGcashPaymentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateGcashPaymentMutation,
     CreateGcashPaymentMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -994,24 +1121,24 @@ export const ProductsDocument = /*#__PURE__*/ gql`
   ${ProductCoreDataFragmentDoc}
 `;
 export function useProductsQuery(
-  baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(
     ProductsDocument,
-    options
+    options,
   );
 }
 export function useProductsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     ProductsQuery,
     ProductsQueryVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(
     ProductsDocument,
-    options
+    options,
   );
 }
 // @ts-ignore
@@ -1019,12 +1146,12 @@ export function useProductsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     ProductsQuery,
     ProductsQueryVariables
-  >
+  >,
 ): Apollo.UseSuspenseQueryResult<ProductsQuery, ProductsQueryVariables>;
 export function useProductsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<
   ProductsQuery | undefined,
   ProductsQueryVariables
@@ -1032,7 +1159,7 @@ export function useProductsSuspenseQuery(
 export function useProductsSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -1040,7 +1167,7 @@ export function useProductsSuspenseQuery(
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<ProductsQuery, ProductsQueryVariables>(
     ProductsDocument,
-    options
+    options,
   );
 }
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
@@ -1070,7 +1197,7 @@ export function useCreateProductMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateProductMutation,
     CreateProductMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -1100,7 +1227,7 @@ export function useUpdateProductMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateProductMutation,
     UpdateProductMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -1130,7 +1257,7 @@ export function useDeleteProductMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteProductMutation,
     DeleteProductMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -1158,21 +1285,21 @@ export const ConfigDocument = /*#__PURE__*/ gql`
   }
 `;
 export function useConfigQuery(
-  baseOptions?: Apollo.QueryHookOptions<ConfigQuery, ConfigQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<ConfigQuery, ConfigQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<ConfigQuery, ConfigQueryVariables>(
     ConfigDocument,
-    options
+    options,
   );
 }
 export function useConfigLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ConfigQuery, ConfigQueryVariables>
+  baseOptions?: Apollo.LazyQueryHookOptions<ConfigQuery, ConfigQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<ConfigQuery, ConfigQueryVariables>(
     ConfigDocument,
-    options
+    options,
   );
 }
 // @ts-ignore
@@ -1180,17 +1307,17 @@ export function useConfigSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     ConfigQuery,
     ConfigQueryVariables
-  >
+  >,
 ): Apollo.UseSuspenseQueryResult<ConfigQuery, ConfigQueryVariables>;
 export function useConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>,
 ): Apollo.UseSuspenseQueryResult<ConfigQuery | undefined, ConfigQueryVariables>;
 export function useConfigSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>
+    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -1198,7 +1325,7 @@ export function useConfigSuspenseQuery(
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<ConfigQuery, ConfigQueryVariables>(
     ConfigDocument,
-    options
+    options,
   );
 }
 export type ConfigQueryHookResult = ReturnType<typeof useConfigQuery>;
@@ -1226,7 +1353,7 @@ export function useCreateConfigMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateConfigMutation,
     CreateConfigMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -1256,7 +1383,7 @@ export function useUpdateConfigMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateConfigMutation,
     UpdateConfigMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
@@ -1299,7 +1426,7 @@ export function useHighPointProductsQuery(
   baseOptions?: Apollo.QueryHookOptions<
     HighPointProductsQuery,
     HighPointProductsQueryVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
@@ -1311,7 +1438,7 @@ export function useHighPointProductsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     HighPointProductsQuery,
     HighPointProductsQueryVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
@@ -1324,7 +1451,7 @@ export function useHighPointProductsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     HighPointProductsQuery,
     HighPointProductsQueryVariables
-  >
+  >,
 ): Apollo.UseSuspenseQueryResult<
   HighPointProductsQuery,
   HighPointProductsQueryVariables
@@ -1335,7 +1462,7 @@ export function useHighPointProductsSuspenseQuery(
     | Apollo.SuspenseQueryHookOptions<
         HighPointProductsQuery,
         HighPointProductsQueryVariables
-      >
+      >,
 ): Apollo.UseSuspenseQueryResult<
   HighPointProductsQuery | undefined,
   HighPointProductsQueryVariables
@@ -1346,7 +1473,7 @@ export function useHighPointProductsSuspenseQuery(
     | Apollo.SuspenseQueryHookOptions<
         HighPointProductsQuery,
         HighPointProductsQueryVariables
-      >
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
@@ -1371,7 +1498,7 @@ export type HighPointProductsQueryResult = Apollo.QueryResult<
   HighPointProductsQueryVariables
 >;
 export function refetchHighPointProductsQuery(
-  variables?: HighPointProductsQueryVariables
+  variables?: HighPointProductsQueryVariables,
 ) {
   return { query: HighPointProductsDocument, variables: variables };
 }

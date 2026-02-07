@@ -3,7 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
-import { useCreateGcashPaymentMutation } from '~/graphql/generated';
+import {
+  useCheckoutMutation,
+  useCreateGcashPaymentMutation,
+} from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from '../Cart/CartContext';
@@ -23,6 +26,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
     totalAmount * 0.12; // Assuming 12% VAT
 
   const [mutate] = useCreateGcashPaymentMutation();
+  const [order] = useCheckoutMutation();
   return (
     <div>
       <div
@@ -119,18 +123,26 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
             <button
               className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
               onClick={async () => {
+                // TODO: Replace with actual shipping option and payment method IDs
+                const orderRes = await order({
+                  variables: {
+                    input: {
+                      shippingOptionId: '000000000000000000000010',
+                      paymentMethodId: '000000000000000000000020',
+                    },
+                  },
+                });
                 const res = await mutate({
                   variables: {
                     input: {
                       amount:
                         totalAmountWithShippingAndTax as unknown as string,
-                      failureUrl:
-                        window.location.origin + '/cart/checkout?t=failure',
-                      successUrl:
-                        window.location.origin + '/cart/checkout?t=success',
+                      failureUrl: window.location.origin,
+                      successUrl: window.location.origin,
                       referenceId: `order-${Date.now()}`,
                       description:
-                        'Payment for order #' + `order-${Date.now()}`,
+                        'Payment for order #' +
+                        `order-${orderRes.data?.checkout._id}`,
                     },
                   },
                 });

@@ -5,7 +5,7 @@ import { TbShoppingCartPlus } from 'react-icons/tb';
 import { useCartContext } from '~/features/portal';
 import {
   ProductCoreDataFragment,
-  useAddToCartMutation,
+  useUpdateCartItemMutation,
 } from '~/graphql/generated';
 
 import { useGlobalStore } from '~/hooks/useGlobalStore';
@@ -18,7 +18,7 @@ export const Cards = (props: CardsProps) => {
   const discount = parseFloat(
     (props.price * (props.discount / 100)).toFixed(2),
   );
-  const [mutate] = useAddToCartMutation();
+  const [mutate] = useUpdateCartItemMutation();
   const globalStore = useGlobalStore((state) => state);
 
   const context = useCartContext();

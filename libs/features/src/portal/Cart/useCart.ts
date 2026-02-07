@@ -24,8 +24,8 @@ export interface Item {
 
 export type CartItem = {
   items: Item[];
-  subtotal?: string;
-  tax?: string;
+  subtotal?: string | null;
+  tax?: string | null;
   status?: CartStatus;
   shipping?: {
     fee?: string;

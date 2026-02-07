@@ -75,11 +75,6 @@ export interface CreateAccountInput {
     mobileNumber?: Nullable<string>;
 }
 
-export interface AddToCartInput {
-    productId: ObjectId;
-    quantity: number;
-}
-
 export interface UpdateCartItemInput {
     productId: ObjectId;
     quantity: number;
@@ -234,8 +229,7 @@ export interface Account {
 export interface IMutation {
     createAdminAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     createMemberAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
-    addToCart(input: AddToCartInput): Nullable<boolean> | Promise<Nullable<boolean>>;
-    updateCartItem(input: UpdateCartItemInput): Cart | Promise<Cart>;
+    updateCartItem(input: UpdateCartItemInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     removeFromCart(input: RemoveFromCartInput): Cart | Promise<Cart>;
     clearCart(): Cart | Promise<Cart>;
     checkout(input: CheckoutInput): Order | Promise<Order>;
@@ -290,10 +284,10 @@ export interface ShippingOption {
 export interface Cart {
     _id: ObjectId;
     items: CartItem[];
-    subtotal: string;
-    tax: string;
-    shippingFee: string;
-    total: string;
+    subtotal?: Nullable<string>;
+    tax?: Nullable<string>;
+    shippingFee?: Nullable<string>;
+    total?: Nullable<string>;
     status: CartStatus;
     createdAt: string;
     updatedAt: string;

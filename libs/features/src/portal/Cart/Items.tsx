@@ -2,8 +2,9 @@
 
 import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
-import { Input } from '~/components/Input';
 import { Show } from '~/components/Show';
+
+import { useUpdateCartItemMutation } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
 import { useCartContext } from './CartContext';
 import { ConfirmRemoveItem } from './ConfirmRemoveItem';
@@ -14,7 +15,7 @@ interface ItemsProps {
 }
 export const Items = ({ isCheckout = false }: ItemsProps) => {
   const context = useCartContext();
-
+  const [mutate] = useUpdateCartItemMutation();
   return (
     <div className="flex flex-col gap-5 mt-4 sm:mt-5">
       {!context.state.cart.items.length && <EmptyCart />}
@@ -81,8 +82,16 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                 <Show when={!isCheckout}>
                   <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-gray-50 dark:bg-slate-800">
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         if (quantity <= 1) return;
+                        await mutate({
+                          variables: {
+                            input: {
+                              productId: item.productId,
+                              quantity: -1,
+                            },
+                          },
+                        });
                         context.setQuantity(item.productId, item.quantity - 1);
                         quantity -= 1;
                       }}
@@ -91,11 +100,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                       <Minus className="w-4 h-4" />
                     </button>
 
-                    <Input
-                      inputProps={{
-                        type: 'text',
-                        style: { background: 'none' },
-                      }}
+                    {/* <DebounceInput
                       onKeyDown={(e) => {
                         if (
                           !/[0-9]/.test(e.key) &&
@@ -109,14 +114,30 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                         }
                       }}
                       value={item.quantity.toString()}
-                      className="w-12 sm:w-[70px] text-center border-0 bg-transparent text-gray-900 dark:text-white font-semibold focus:outline-none"
-                      onChange={(e) => {
+                      className="w-[55px]  !p-0 !m-0 text-center border-0 !bg-gray-50 text-gray-900 dark:text-white font-semibold focus:outline-none"
+                      onChange={async (e) => {
+                        await mutate({
+                          variables: {
+                            input: {
+                              productId: item.productId,
+                              quantity: Number(e),
+                            },
+                          },
+                        });
                         context.setQuantity(item.productId, Number(e));
                       }}
-                    />
+                    /> */}
 
                     <button
-                      onClick={() => {
+                      onClick={async () => {
+                        await mutate({
+                          variables: {
+                            input: {
+                              productId: item.productId,
+                              quantity: 1,
+                            },
+                          },
+                        });
                         context.setQuantity(item.productId, item.quantity + 1);
                       }}
                       className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"

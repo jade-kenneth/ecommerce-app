@@ -37,6 +37,7 @@ import { LicenseController } from './user-session/license/license.controller';
 import { LicenseModule } from './user-session/license/license.module';
 import { SessionController } from './user-session/session/session.controller';
 import { SessionModule } from './user-session/session/session.module';
+import { safeParseFloat } from '../util/safe-parse-float';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -107,7 +108,7 @@ import { SessionModule } from './user-session/session/session.module';
           },
           redis: {
             host: process.env.REDISHOST,
-            port: Number(process.env.REDISPORT),
+            port: safeParseFloat(process.env.REDISPORT, 0),
             password: process.env.REDISPASSWORD,
           },
           concurrency: 8,

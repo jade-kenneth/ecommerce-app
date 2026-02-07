@@ -51,11 +51,10 @@ type ShippingOption {
 type Cart {
   _id: ObjectId!
   items: [CartItem!]!
-  subtotal: String!
-  tax: String!
-  shippingFee: String!
-  total: String!
-
+  subtotal: String
+  tax: String
+  shippingFee: String
+  total: String
   status: CartStatus!
   createdAt: String!
   updatedAt: String!
@@ -76,15 +75,11 @@ type Order {
   createdAt: String!
 }
 
-input AddToCartInput {
-  productId: ObjectId!
-  quantity: Int!
-}
-
 input UpdateCartItemInput {
   productId: ObjectId!
   quantity: Int!
 }
+
 input CheckoutInput {
   shippingOptionId: ObjectId
   paymentMethodId: ObjectId
@@ -110,8 +105,8 @@ type Query {
 
 type Mutation {
   # Cart actions
-  addToCart(input: AddToCartInput!): Boolean
-  updateCartItem(input: UpdateCartItemInput!): Cart!
+  updateCartItem(input: UpdateCartItemInput!): Boolean
+
   removeFromCart(input: RemoveFromCartInput!): Cart!
   clearCart: Cart!
 

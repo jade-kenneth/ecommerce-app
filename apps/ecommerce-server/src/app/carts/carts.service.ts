@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  AddToCartInput,
   CartStatus,
   CheckoutInput,
   OrderStatus,
@@ -8,6 +7,7 @@ import {
   PaymentMethodType,
   ShippingOption,
   ShippingType,
+  UpdateCartItemInput,
 } from '../__generated/graphql-types';
 
 import { Types } from 'mongoose';
@@ -15,6 +15,7 @@ import { AsyncEventDispatcher } from '~/async-event-module/async-event-dispatche
 import { Filter } from '../../libs/repository';
 import { ObjectType } from '../../types/common';
 import { Tokens } from '../../types/tokens';
+import { safeParseFloat } from '../../util/safe-parse-float';
 import { ProductsService } from '../products/products.service';
 import { AccountService } from '../user-session/account/account.service';
 import { Cart, CartRepository } from './repositories/carts.repository';
@@ -101,38 +102,38 @@ export class CartsService {
   private async calculateOrderSummary(
     cart: Cart,
     shippingFeeOverride?: string,
-  ): Promise<Cart> {
-    const toAmount = (value: unknown) => {
-      const amount = Number(value);
-      return Number.isFinite(amount) ? amount : 0;
-    };
+  ): Promise<
+    Omit<Cart, 'items'> & {
+      items: {
+        productId: Types.ObjectId;
+        quantity: number;
+        unitPrice: string;
+        totalPrice: string;
+        name: string;
+        image?: string;
+      }[];
+    }
+  > {
+    const toAmount = (value: unknown) => safeParseFloat(value, 0);
 
     const resolvedShippingFee = shippingFeeOverride ?? cart.shippingFee ?? '0';
     const shippingFeeAmount = toAmount(resolvedShippingFee);
 
-    if (!cart.items?.length) {
-      cart.items = [];
-      cart.subtotal = '0.00';
-      cart.tax = '0.00';
-      cart.shippingFee = '0';
-      cart.total = '0.00';
-      return cart;
-    }
-
     const pricedItems = await Promise.all(
       cart.items.map(async (item) => {
-        const product = await this.products.findProduct(
-          new Types.ObjectId(item.productId),
-        );
+        const product = await this.products.findProduct(item.productId);
 
         if (!product) throw new Error('Product not found');
 
-        const unitPrice = toAmount(product.price);
+        const unitPrice =
+          toAmount(product.price) * (1 - toAmount(product.discount) / 100);
         const quantity = toAmount(item.quantity);
         const totalPrice = unitPrice * quantity;
 
         return {
           ...item,
+          name: product.name,
+          image: product.thumbnail,
           unitPrice: unitPrice.toFixed(2),
           totalPrice: totalPrice.toFixed(2),
         };
@@ -150,9 +151,8 @@ export class CartsService {
     cart.tax = taxAmount.toFixed(2);
     cart.shippingFee = resolvedShippingFee;
     cart.total = (subtotalAmount + taxAmount + shippingFeeAmount).toFixed(2);
-    cart.items = pricedItems;
 
-    return cart;
+    return { ...cart, items: pricedItems };
   }
 
   public async getCart(params: {
@@ -166,10 +166,10 @@ export class CartsService {
 
     return data;
   }
-  public async addToCart({
+  public async updateCartItem({
     params,
   }: {
-    params: AddToCartInput & { _id: string };
+    params: UpdateCartItemInput & { _id: string };
   }) {
     const timestamp = new Date();
     const product = await this.products.findProduct(
@@ -178,7 +178,8 @@ export class CartsService {
     const cart = await this.carts.find(new Types.ObjectId(params._id));
 
     if (!product) throw new Error('Product not found');
-    if (!cart) {
+
+    if (!cart?.items.length) {
       const newCart: Cart = {
         _id: new Types.ObjectId(params._id),
         createdAt: timestamp,
@@ -194,6 +195,8 @@ export class CartsService {
       };
 
       await this.carts.create(newCart);
+
+      return true;
     }
 
     const item = cart.items.find((cartItem) =>
@@ -201,7 +204,9 @@ export class CartsService {
     );
 
     if (item) {
-      item.quantity += params.quantity;
+      if (params.quantity === 1) item.quantity += params.quantity;
+      else if (params.quantity > 1) item.quantity = params.quantity;
+      else if (params.quantity === -1) item.quantity -= 1;
     } else {
       cart.items = [
         ...cart.items,
@@ -301,7 +306,7 @@ export class CartsService {
       throw new Error('Invalid payment method');
     }
 
-    const calculatedPrice = await this.calculateOrderSummary(
+    const calculatedSummary = await this.calculateOrderSummary(
       cart,
       shippingOption.fee,
     );
@@ -309,13 +314,13 @@ export class CartsService {
     const order: Order = {
       _id: new Types.ObjectId(),
       accountId,
-      items: calculatedPrice.items,
+      items: calculatedSummary.items,
       shippingOption,
       paymentMethod,
-      subtotal: calculatedPrice.subtotal,
-      tax: calculatedPrice.tax,
-      shippingFee: calculatedPrice.shippingFee,
-      total: calculatedPrice.total,
+      subtotal: calculatedSummary.subtotal,
+      tax: calculatedSummary.tax,
+      shippingFee: calculatedSummary.shippingFee,
+      total: calculatedSummary.total,
       status: OrderStatus.PENDING,
       createdAt: now,
       updatedAt: now,
@@ -328,12 +333,31 @@ export class CartsService {
     const account = await this.accounts.findAccount(accountId);
 
     try {
+      const eventItems = await Promise.all(
+        calculatedSummary.items.map(async (item) => {
+          const quantity = safeParseFloat(item.quantity ?? 0, 0);
+          const total =
+            item.totalPrice ??
+            (safeParseFloat(item.unitPrice ?? 0, 0) * quantity)
+              .toFixed(2)
+              .toString();
+
+          return {
+            name: item?.name,
+            image: item?.image,
+            quantity,
+            total,
+          };
+        }),
+      );
+
       await this.events.dispatch('OrderCreated', {
         orderId: order._id.toString(),
         accountId: accountId.toString(),
         emailAddress: account?.emailAddress,
         total: order.total,
         itemCount: order.items.length,
+        items: eventItems,
       });
     } catch (error) {
       console.error('OrderCreated event dispatch failed:', error);
@@ -391,20 +415,22 @@ export async function recalcCart(cart: Cart) {
   cart.subtotal = cart?.items
     .reduce(
       (sum, item) =>
-        Number(sum) + Number(item.unitPrice) * Number(item.quantity),
+        safeParseFloat(sum, 0) +
+        safeParseFloat(item.unitPrice, 0) * safeParseFloat(item.quantity, 0),
       0,
     )
     .toString();
 
   // 2️⃣ VAT (12%)
-  cart.tax = Number((Number(cart.subtotal) * VAT_RATE).toFixed(2)).toString();
+  const subtotal = safeParseFloat(cart.subtotal, 0);
+  cart.tax = (subtotal * VAT_RATE).toFixed(2).toString();
 
   // 3️⃣ Total
-  cart.total = Number(
-    (
-      Number(cart.subtotal) +
-      Number(cart.tax) +
-      Number(cart.shippingFee)
-    ).toFixed(2),
-  ).toString();
+  cart.total = (
+    subtotal +
+    safeParseFloat(cart.tax, 0) +
+    safeParseFloat(cart.shippingFee, 0)
+  )
+    .toFixed(2)
+    .toString();
 }

@@ -1,5 +1,5 @@
-mutation AddToCart($input: AddToCartInput!) {
-  addToCart(input: $input)
+mutation UpdateCartItem($input: UpdateCartItemInput!) {
+  updateCartItem(input: $input)
 }
 
 query Cart($id: ObjectID!) {

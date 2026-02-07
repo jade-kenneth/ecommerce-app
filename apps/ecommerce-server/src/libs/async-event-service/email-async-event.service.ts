@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailService } from 'src/app/mail/mail.service';
+import { safeParseFloat } from '../../util/safe-parse-float';
 import { AsyncEventHandler } from '../async-event-module/async-event-handler.decorator';
 import { AsyncEvent } from '../async-event-module/types';
 
@@ -97,6 +98,57 @@ export class EmailHandler {
   async handleOrderCreated(event: AsyncEvent<'OrderCreated'>) {
     if (!event.data.emailAddress) return;
 
+    const currencySymbol = '₱';
+    const formatMoney = (value: unknown) => {
+      const safeAmount = safeParseFloat(value, 0);
+      return `${currencySymbol}${safeAmount.toFixed(2)}`;
+    };
+
+    const items = event.data.items ?? [];
+    const itemsHtml = items
+      .map((item) => {
+        const imageHtml = item.image
+          ? `<img src="${item.image}" alt="${item.name}" style="
+              width: 56px;
+              height: 56px;
+              object-fit: cover;
+              border-radius: 6px;
+              border: 1px solid #e5e7eb;
+            " />`
+          : `<div style="
+              width: 56px;
+              height: 56px;
+              border-radius: 6px;
+              background-color: #e5e7eb;
+            "></div>`;
+
+        return `
+          <div style="
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+          ">
+            ${imageHtml}
+            <div style="flex: 1; ">
+              <div style="font-weight: 600; color: #0f172a;">
+                ${item.name}
+              </div>
+              <div style="font-size: 13px; color: #6b7280;">
+                Qty: ${item.quantity}
+              </div>
+              
+            </div>
+           
+            <div style="font-weight: 600; color: #0f172a;">
+              ${formatMoney(item.total)}
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
     await this.mail.sendEmail(
       event.data.emailAddress,
       `Order received: ${event.data.orderId}`,
@@ -135,8 +187,18 @@ export class EmailHandler {
         <p style="margin: 0; font-size: 15px;">
           Order ID: <strong>${event.data.orderId}</strong><br />
           Items: <strong>${event.data.itemCount}</strong><br />
-          Total: <strong>${event.data.total}</strong>
+          Total: <strong>${formatMoney(event.data.total)}</strong>
         </p>
+      </div>
+
+      <div style="
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+      ">
+        ${itemsHtml}
       </div>
 
       <p style="

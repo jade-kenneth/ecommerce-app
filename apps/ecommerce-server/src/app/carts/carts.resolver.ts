@@ -1,12 +1,4 @@
-import {
-  Args,
-  Context,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import assert from 'assert';
 
@@ -14,11 +6,9 @@ import { Types } from 'mongoose';
 import { Filter } from '../../libs/repository';
 import { AccountType } from '../../types/common';
 import {
-  AddToCartInput,
-  CartItem,
   CheckoutInput,
-  Order,
   RemoveFromCartInput,
+  UpdateCartItemInput,
 } from '../__generated/graphql-types';
 import { ProductsService } from '../products/products.service';
 import { Claims } from '../user-session/types';
@@ -48,12 +38,12 @@ export class CartResolver {
     return this.cartService.findCart(new Types.ObjectId(claims.sub));
   }
 
-  @Mutation('addToCart')
-  async addToCart(
+  @Mutation('updateCartItem')
+  async updateCartItem(
     @Context('claims') claims: Claims,
-    @Args('input') input: AddToCartInput,
+    @Args('input') input: UpdateCartItemInput,
   ) {
-    return this.cartService.addToCart({
+    return this.cartService.updateCartItem({
       params: { ...input, _id: claims.sub },
     });
   }
@@ -105,35 +95,7 @@ export class CartResolver {
 
     return this.cartService.checkout({ accountId: claims.sub, input });
   }
-  @ResolveField('subtotal')
-  resolveTotalPrice(@Parent() cart: Cart) {
-    if (cart.subtotal) return cart.subtotal;
 
-    const subtotal = cart.items.reduce((acc, item) => {
-      const totalPrice = Number(item.totalPrice ?? 0);
-      return acc + totalPrice;
-    }, 0);
-
-    return subtotal.toFixed(2).toString();
-  }
-
-  @ResolveField('total')
-  resolveTotal(@Parent() cart: Cart) {
-    if (cart.total) return cart.total;
-
-    const subtotal = Number(cart.subtotal ?? 0);
-    const tax = Number(cart.tax ?? 0);
-    const shippingFee = Number(cart.shippingFee ?? 0);
-
-    return (subtotal + tax + shippingFee).toFixed(2).toString();
-  }
-
-  @ResolveField('items')
-  resolveCartItems(@Parent() cart: Cart) {
-    return (cart.items ?? []).filter(
-      (item): item is CartItem => !!item?.productId,
-    );
-  }
   // ** build later **
 
   // @Mutation('create')
@@ -145,50 +107,4 @@ export class CartResolver {
   // async deleteProduct(@Args('input') input: DeleteProductInput) {
   //   return this.productService.deleteProduct(input);
   // }
-}
-
-@Resolver('Order')
-export class OrderResolver {
-  @ResolveField('total')
-  resolveTotal(@Parent() order: Order) {
-    if (order.total) return order.total;
-
-    const totalPrice =
-      order.items?.reduce((acc, item) => {
-        const itemTotal = Number(item?.totalPrice ?? 0);
-        return acc + itemTotal;
-      }, 0) ?? 0;
-
-    const subtotal = Number(totalPrice ?? 0);
-    const tax = Number(order.tax ?? 0);
-    const shippingFee = Number(order.shippingFee ?? 0);
-
-    return (subtotal + tax + shippingFee).toFixed(2).toString();
-  }
-
-  @ResolveField('items')
-  resolveOrderItems(@Parent() order: Order) {
-    return (order.items ?? []).filter(
-      (item): item is CartItem => !!item?.productId,
-    );
-  }
-}
-@Resolver('CartItem')
-export class CartItemResolver {
-  constructor(private readonly products: ProductsService) {}
-
-  @ResolveField('totalPrice')
-  async resolveTotalPrice(@Parent() item: CartItem) {
-    if (!item?.productId) return item?.totalPrice ?? '0';
-
-    const product = await this.products.findProduct(
-      new Types.ObjectId(item.productId),
-    );
-
-    if (!product) return item.totalPrice ?? '0';
-
-    const quantity = item.quantity ?? 0;
-    const total = Number(product.price) * Number(quantity);
-    return total.toFixed(2).toString();
-  }
 }

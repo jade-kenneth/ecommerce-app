@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Thu, 05 Feb 2026 22:18:26 GMT
+// Last modified: Sat, 07 Feb 2026 16:37:02 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -44,11 +44,6 @@ export enum AccountType {
   Admin = 'ADMIN',
   Member = 'MEMBER',
 }
-
-export type AddToCartInput = {
-  productId: Scalars['ObjectID']['input'];
-  quantity: Scalars['Int']['input'];
-};
 
 export enum CartStatus {
   Active = 'ACTIVE',
@@ -176,6 +171,11 @@ export type ProductsStatusFilterInput = {
   notIn?: InputMaybe<Array<StatusType>>;
 };
 
+export type RemoveFromCartInput = {
+  productId: Scalars['ObjectID']['input'];
+  quantity: Scalars['Int']['input'];
+};
+
 export enum ReservationType {
   Available = 'AVAILABLE',
   Unavailable = 'UNAVAILABLE',
@@ -263,13 +263,13 @@ export type SelfQuery = {
   } | null;
 };
 
-export type AddToCartMutationVariables = Exact<{
-  input: AddToCartInput;
+export type UpdateCartItemMutationVariables = Exact<{
+  input: UpdateCartItemInput;
 }>;
 
-export type AddToCartMutation = {
+export type UpdateCartItemMutation = {
   __typename: 'Mutation';
-  addToCart?: boolean | null;
+  updateCartItem?: boolean | null;
 };
 
 export type CartQueryVariables = Exact<{
@@ -281,8 +281,8 @@ export type CartQuery = {
   cart: {
     __typename: 'Cart';
     _id: string;
-    subtotal: string;
-    tax: string;
+    subtotal?: string | null;
+    tax?: string | null;
     status: CartStatus;
     createdAt: string;
     updatedAt: string;
@@ -290,8 +290,8 @@ export type CartQuery = {
       __typename: 'CartItem';
       productId: string;
       quantity: number;
-      unitPrice: string;
-      totalPrice: string;
+      unitPrice?: string | null;
+      totalPrice?: string | null;
     }>;
   };
 };
@@ -313,8 +313,8 @@ export type MyOrdersQuery = {
       __typename: 'CartItem';
       productId: string;
       quantity: number;
-      unitPrice: string;
-      totalPrice: string;
+      unitPrice?: string | null;
+      totalPrice?: string | null;
     } | null> | null;
     shippingOption: {
       __typename: 'ShippingOption';
@@ -361,8 +361,8 @@ export type CheckoutMutation = {
       __typename: 'CartItem';
       productId: string;
       quantity: number;
-      unitPrice: string;
-      totalPrice: string;
+      unitPrice?: string | null;
+      totalPrice?: string | null;
     } | null> | null;
     shippingOption: {
       __typename: 'ShippingOption';
@@ -681,34 +681,35 @@ export type SelfQueryResult = Apollo.QueryResult<SelfQuery, SelfQueryVariables>;
 export function refetchSelfQuery(variables?: SelfQueryVariables) {
   return { query: SelfDocument, variables: variables };
 }
-export const AddToCartDocument = /*#__PURE__*/ gql`
-  mutation AddToCart($input: AddToCartInput!) {
-    addToCart(input: $input)
+export const UpdateCartItemDocument = /*#__PURE__*/ gql`
+  mutation UpdateCartItem($input: UpdateCartItemInput!) {
+    updateCartItem(input: $input)
   }
 `;
-export type AddToCartMutationFn = Apollo.MutationFunction<
-  AddToCartMutation,
-  AddToCartMutationVariables
+export type UpdateCartItemMutationFn = Apollo.MutationFunction<
+  UpdateCartItemMutation,
+  UpdateCartItemMutationVariables
 >;
-export function useAddToCartMutation(
+export function useUpdateCartItemMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    AddToCartMutation,
-    AddToCartMutationVariables
+    UpdateCartItemMutation,
+    UpdateCartItemMutationVariables
   >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<AddToCartMutation, AddToCartMutationVariables>(
-    AddToCartDocument,
-    options,
-  );
+  return Apollo.useMutation<
+    UpdateCartItemMutation,
+    UpdateCartItemMutationVariables
+  >(UpdateCartItemDocument, options);
 }
-export type AddToCartMutationHookResult = ReturnType<
-  typeof useAddToCartMutation
+export type UpdateCartItemMutationHookResult = ReturnType<
+  typeof useUpdateCartItemMutation
 >;
-export type AddToCartMutationResult = Apollo.MutationResult<AddToCartMutation>;
-export type AddToCartMutationOptions = Apollo.BaseMutationOptions<
-  AddToCartMutation,
-  AddToCartMutationVariables
+export type UpdateCartItemMutationResult =
+  Apollo.MutationResult<UpdateCartItemMutation>;
+export type UpdateCartItemMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCartItemMutation,
+  UpdateCartItemMutationVariables
 >;
 export const CartDocument = /*#__PURE__*/ gql`
   query Cart($id: ObjectID!) {

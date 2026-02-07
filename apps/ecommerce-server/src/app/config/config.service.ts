@@ -2,6 +2,7 @@ import { Global, Inject, Injectable, Optional } from '@nestjs/common';
 
 import yaml from 'yamljs';
 import { Tokens } from '../../types/tokens';
+import { safeParseFloat } from '../../util/safe-parse-float';
 import { ConfigModuleOptions } from './types';
 
 export class MissingConfigError extends Error {
@@ -52,7 +53,7 @@ export class ConfigService {
     }
   ): number {
     try {
-      return Number(this.get(key));
+      return safeParseFloat(this.get(key), 0);
     } catch (err) {
       if (opts?.optional && err instanceof MissingConfigError) {
         return;

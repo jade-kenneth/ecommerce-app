@@ -13,6 +13,12 @@ export interface AsyncEventPayloads {
     emailAddress?: string;
     total: string;
     itemCount: number;
+    items: {
+      name: string;
+      image?: string;
+      quantity: number;
+      total: string;
+    }[];
   };
 }
 

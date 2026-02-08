@@ -224,3 +224,40 @@ This disables Capacitor IPC logging to protected directories.
 ---
 
 If you want this moved into `README.md` or converted to PDF, just say the word.
+
+---
+
+# Prompt (Generated From This Doc)
+
+Use this prompt to reproduce the full Android APK flow:
+
+```
+You are a senior mobile build engineer. Using Capacitor with a Next.js app, generate a signed Android APK with a static export. Follow these constraints:
+
+- Use `output: 'export'` and `images.unoptimized: true` in Next config.
+- Use `webDir: 'dist/apps/ecommerce-app/.next'` and `appName: 'Amy Store'` in `capacitor.config.ts`.
+- Add Capacitor dependencies: `@capacitor/core`, `@capacitor/android`, and `@capacitor/cli`.
+- Provide the exact commands for:
+  - build web assets
+  - cap sync
+  - keystore generation
+  - creating `android/keystore.properties`
+  - building a signed APK
+- Use scripts:
+  - `build:app` with `NX_NATIVE_COMMAND_RUNNER=false` and `NX_PSEUDO_TERMINAL=false`
+  - `cap:sync` with `CI=1`
+  - `android:version:bump` and `apk:release` via `scripts/run-apk-release.js`
+- Mention the APK output path.
+- Include fixes for these errors if they occur:
+  - Nx plugin worker EPERM (disable pseudo terminal)
+  - Java 24 major version 68 (force JDK 17)
+  - keystore password mismatch
+  - missing static params for `/product/[productId]` and `/admin/[slug]`
+  - Capacitor IPC log EPERM (use `CI=1`)
+  - Gradle `flatDir` warning (run `scripts/patch-capacitor-gradle.js`)
+- Include branding steps:
+  - App name set to “Amy Store”
+  - Launcher icon replaced with `LogoBlack.png` in all `mipmap-*` sizes
+
+Output a clean step-by-step guide and list the exact file paths changed.
+```

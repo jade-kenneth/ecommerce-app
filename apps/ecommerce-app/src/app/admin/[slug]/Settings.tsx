@@ -1,18 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Field } from '../../../../../../libs/ui/components/ui';
+
 import {
   useConfigQuery,
   useCreateConfigMutation,
   useUpdateConfigMutation,
 } from '~/graphql/generated';
 
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '../../../../../../libs/ui/components/Button';
-import { CarouselFileUpload } from '../../../../../../libs/ui/components/CarouselFileUpload';
-import { FieldInput } from '../../../../../../libs/ui/components/FieldInput';
-import { toaster } from '../../../../../../libs/ui/components/ToastContainer';
+import {
+  Button,
+  CarouselFileUpload,
+  Field,
+  FieldInput,
+  toaster,
+} from '~/components';
 
 const Definition = z.object({
   highPointsThreshold: z.string().min(0).default('0'),
@@ -31,19 +34,17 @@ export function Settings() {
   const [update] = useUpdateConfigMutation();
   const [create] = useCreateConfigMutation();
 
-  useMemo(
-    () =>
-      form.reset({
-        highPointsThreshold: config?.highPointsThreshold?.toString() || '0',
-        topSoldThreshold: config?.topSoldThreshold?.toString() || '0',
-        carouselItems: config?.carouselItems ?? [],
-      }),
-    [data],
-  );
+  useEffect(() => {
+    form.reset({
+      highPointsThreshold: config?.highPointsThreshold?.toString() || '0',
+      topSoldThreshold: config?.topSoldThreshold?.toString() || '0',
+      carouselItems: config?.carouselItems ?? [],
+    });
+  }, [config, form]);
 
   return (
     <form
-      className="p-7"
+      className="flex flex-col gap-8"
       onSubmit={form.handleSubmit(async (data) => {
         if (!config?._id) {
           await create({
@@ -73,60 +74,94 @@ export function Settings() {
         toaster.success({ description: 'Configuration saved!' });
       })}
     >
-      <h1 className="text-2xl font-bold mb-1">Settings</h1>
-      <p className="text-xl">Manage your application settings here.</p>
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+          <p className="text-sm text-gray-500">
+            Manage operational thresholds and homepage content in one place.
+          </p>
+        </div>
+      </div>
 
-      <Controller
-        name={'highPointsThreshold'}
-        control={form.control}
-        render={({ field }) => {
-          return (
-            <FieldInput
-              value={field.value?.toString() || '0'}
-              onChange={field.onChange}
-              className="mt-8 w-[300px]"
-              required
-              label="High points threshold"
-            />
-          );
-        }}
-      />
-      <Controller
-        control={form.control}
-        name="topSoldThreshold"
-        render={({ field }) => {
-          return (
-            <FieldInput
-              value={field.value?.toString() || '0'}
-              onChange={field.onChange}
-              className="mt-8 w-[300px]"
-              required
-              label="Top sold threshold"
-            />
-          );
-        }}
-      />
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Threshold Settings
+          </h2>
+          <p className="text-sm text-gray-500">
+            Control which products appear as high points and top sold.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Controller
+            name={'highPointsThreshold'}
+            control={form.control}
+            render={({ field }) => (
+              <div className="flex flex-col gap-2">
+                <FieldInput
+                  value={field.value?.toString() || '0'}
+                  onChange={field.onChange}
+                  required
+                  label="High points threshold"
+                />
+                <p className="text-xs text-gray-500">
+                  Minimum points to qualify as high points.
+                </p>
+              </div>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="topSoldThreshold"
+            render={({ field }) => (
+              <div className="flex flex-col gap-2">
+                <FieldInput
+                  value={field.value?.toString() || '0'}
+                  onChange={field.onChange}
+                  required
+                  label="Top sold threshold"
+                />
+                <p className="text-xs text-gray-500">
+                  Minimum sold count to qualify as top sold.
+                </p>
+              </div>
+            )}
+          />
+        </div>
+      </div>
 
       <Controller
         control={form.control}
         name="carouselItems"
         render={({ field }) => {
           return (
-            <Field.Root className="mt-8">
-              <Field.Label>Homepage Carousel</Field.Label>
-              <CarouselFileUpload
-                maxFiles={5}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            </Field.Root>
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Homepage Carousel
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Upload up to 5 images to highlight seasonal promotions.
+                </p>
+              </div>
+              <Field.Root>
+                <Field.Label>Carousel Images</Field.Label>
+                <CarouselFileUpload
+                  maxFiles={5}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </Field.Root>
+            </div>
           );
         }}
       />
 
-      <Button type="submit" className="mt-4">
-        Save Changes
-      </Button>
+      <div className="flex justify-end">
+        <Button type="submit" className="px-6">
+          Save Changes
+        </Button>
+      </div>
     </form>
   );
 }

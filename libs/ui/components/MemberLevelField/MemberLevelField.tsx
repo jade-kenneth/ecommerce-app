@@ -1,5 +1,5 @@
 import { isNull, isObject } from 'lodash';
-import { IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { CheckCircle2 } from 'lucide-react';
 
 import { useControllableState } from '~/hooks/useControllableState';
 import { NumberInputField } from '../NumberInputField';
@@ -43,7 +43,7 @@ export const MemberLevelField = ({
       >
         <Checkbox.Control>
           <Checkbox.Indicator asChild>
-            <IoCheckmarkCircleOutline />
+            <CheckCircle2 className="w-4 h-4" />
           </Checkbox.Indicator>
         </Checkbox.Control>
         <Checkbox.Label className="text-sm font-medium">

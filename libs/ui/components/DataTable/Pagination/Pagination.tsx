@@ -1,4 +1,4 @@
-import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import * as Pagination from '../../ui/Pagination';
 import { useDataTableContext } from '../DataTableContext';
 export default function TablePagination() {
@@ -21,7 +21,7 @@ export default function TablePagination() {
           table.pagination?.onPageChange?.(table.pagination.page - 1)
         }
       >
-        <LuChevronLeft /> Previous
+        <ChevronLeft className="w-4 h-4" /> Previous
       </Pagination.PrevTrigger>
 
       <Pagination.NextTrigger
@@ -29,7 +29,7 @@ export default function TablePagination() {
           table.pagination?.onPageChange?.(table.pagination.page + 1)
         }
       >
-        Next <LuChevronRight />
+        Next <ChevronRight className="w-4 h-4" />
       </Pagination.NextTrigger>
     </Pagination.Root>
   );

@@ -3,8 +3,8 @@ import { useParams } from 'next/navigation';
 
 import { use } from 'react';
 import { Dashboard } from './Dashboard';
+import { ManageInventory } from './ManageInventory';
 import { ManageOrders } from './ManageOrders';
-import { ManageProducts } from './ManageProducts';
 import { Settings } from './Settings';
 
 export default function Page(props: {
@@ -23,13 +23,13 @@ export default function Page(props: {
   //   );
   // }
   switch (slug) {
-    case 'manage-products':
-      return <ManageProducts />;
+    case 'inventory':
+      return <ManageInventory />;
     case 'settings':
       return <Settings />;
     case 'dashboard':
       return <Dashboard />;
-    case 'manage-orders':
+    case 'orders':
       return <ManageOrders />;
 
     default:

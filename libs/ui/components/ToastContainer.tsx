@@ -1,7 +1,7 @@
 'use client';
 
 import { createToaster, Toaster } from '@ark-ui/react';
-import { PiXCircleBold } from 'react-icons/pi';
+import { XCircle } from 'lucide-react';
 import { Toast } from './Toast';
 export const toaster = createToaster({
   placement: 'top',
@@ -28,7 +28,7 @@ export function ToastContainer() {
             {toast.description ?? toast.title}
           </Toast.Description>
           <Toast.CloseTrigger>
-            <PiXCircleBold />
+            <XCircle className="w-4 h-4" />
           </Toast.CloseTrigger>
         </Toast.Root>
       )}

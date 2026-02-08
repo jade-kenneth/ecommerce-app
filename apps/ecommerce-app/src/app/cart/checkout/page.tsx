@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { LuMoveLeft } from 'react-icons/lu';
+import { MoveLeft } from 'lucide-react';
 import { Sticky } from '~/components/Sticky';
 
 import { Navbar } from '~/features/portal';
@@ -18,7 +18,7 @@ export default function Index() {
         className="flex mt-5 gap-3 max-w-screen font-semibold items-center text-cyan-700 text-sm sm:text-base"
         onClick={() => router.push('/cart')}
       >
-        <LuMoveLeft />
+        <MoveLeft className="w-4 h-4" />
         Back to Cart
       </button>
 

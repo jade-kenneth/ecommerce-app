@@ -2,7 +2,7 @@
 
 import { use } from 'react';
 import { TEMPORARY_SITE_PASSWORD } from '~/utils/constant';
-import { ManageProducts } from './[slug]/ManageProducts';
+import { ManageInventory } from './[slug]/ManageInventory';
 
 export default async function Index(props: {
   searchParams: Promise<{ password?: string }>;
@@ -16,5 +16,5 @@ export default async function Index(props: {
       </div>
     );
   }
-  return <ManageProducts />;
+  return <ManageInventory />;
 }

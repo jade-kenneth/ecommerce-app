@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import { FaHeart, FaStar } from 'react-icons/fa';
-import { TbShoppingCartPlus } from 'react-icons/tb';
+import { Heart, ShoppingCart, Star } from 'lucide-react';
 
 import { useCartContext } from '~/features/portal';
 import {
@@ -36,7 +35,7 @@ export const Cards = (props: CardsProps) => {
         <div className="flex flex-col gap-[5px] absolute top-2 left-2 sm:top-3 sm:left-3">
           {props.isTopSold && (
             <div className="bg-error-600 w-[56px] sm:w-[62px] h-[24px] sm:h-[26px] rounded-[12px] flex items-center justify-center font-semibold text-white gap-1 text-[10px] sm:text-paragraph-xs">
-              <FaHeart size={12} />
+              <Heart className="w-3 h-3" />
               <p>TOP</p>
             </div>
           )}
@@ -110,11 +109,14 @@ export const Cards = (props: CardsProps) => {
           <div className="flex gap-[2px]">
             {Array.from({ length: 5 }).map((_, idx) => {
               return (
-                <FaStar
+                <Star
                   key={idx}
+                  className="w-4 h-4"
                   style={{
                     color: 3 >= idx + 1 ? '#FFA000' : '#D2D2D2',
                   }}
+                  fill="currentColor"
+                  stroke="currentColor"
                 />
               );
             })}
@@ -154,7 +156,7 @@ export const Cards = (props: CardsProps) => {
             }
           }}
         >
-          <TbShoppingCartPlus className="size-5 stroke-3" />{' '}
+          <ShoppingCart className="size-5 stroke-2" />{' '}
           <p className="text-sm sm:text-base font-medium">Add to Cart</p>
         </Button>
       </div>

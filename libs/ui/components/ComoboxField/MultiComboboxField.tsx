@@ -1,7 +1,7 @@
 import { createListCollection, useCombobox, useFilter } from '@ark-ui/react';
 import { isFunction } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { PiCaretDown, PiCaretUp } from 'react-icons/pi';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useDebounceCallback } from 'usehooks-ts';
 
 import { useControllableState } from '~/hooks/useControllableState';
@@ -81,7 +81,7 @@ export const MultiComboboxField = ({
       <Combobox.Control>
         <Combobox.Input placeholder={props.placeholder} />
         <Combobox.Trigger>
-          {combobox.open ? <PiCaretUp /> : <PiCaretDown />}
+                {combobox.open ? <ChevronUp /> : <ChevronDown />}
         </Combobox.Trigger>
       </Combobox.Control>
 

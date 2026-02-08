@@ -3,11 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Controller, useForm } from 'react-hook-form';
-import { FaPlusCircle } from 'react-icons/fa';
-import { IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { CheckCircle2, PlusCircle, XIcon } from 'lucide-react';
 import z from 'zod';
-
-import { XIcon } from 'lucide-react';
 import { ComboboxField, MultiComboboxField } from '../../../../../ui/components/ComoboxField';
 import { Dialog } from '../../../../../ui/components/Dialog';
 import { FieldInput } from '../../../../../ui/components/FieldInput';
@@ -58,7 +55,7 @@ export const CreateProduct = (props: AddProductButtonProps) => {
           className="flex items-center gap-2 rounded-[32px] bg-cyan-700 px-4 h-9 text-white hover:bg-cyan-600 transition-colors w-fit"
           onClick={() => disclosure.onOpen()}
         >
-          <FaPlusCircle />
+          <PlusCircle className="w-4 h-4" />
           <p className="text-paragraph-sm"> Add Product</p>
         </Dialog.Trigger>
       </div>
@@ -163,7 +160,7 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                 </Checkbox.Label>
                 <Checkbox.Control>
                   <Checkbox.Indicator className="flex items-center justify-center">
-                    <IoCheckmarkCircleOutline />
+                    <CheckCircle2 className="w-4 h-4" />
                   </Checkbox.Indicator>
                 </Checkbox.Control>
               </div>

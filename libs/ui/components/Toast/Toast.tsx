@@ -1,6 +1,6 @@
 import { ark, Toast } from '@ark-ui/react';
 
-import { LuCircleAlert, LuCircleCheck } from 'react-icons/lu';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { createRecipeContext } from '~/utils';
 import { toastRecipe } from './Toast.recipe';
 
@@ -19,8 +19,8 @@ export const Icon = () => {
       {({ type }) => {
         const Component =
           type === 'error' || type === 'warning'
-            ? LuCircleAlert
-            : LuCircleCheck;
+            ? AlertCircle
+            : CheckCircle2;
 
         return (
           <div className="flex size-[38px] shrink-0 items-center justify-center rounded-full border-2 ui-group-type-error:border-[#F04438]/10 ui-group-type-warning:border-[#F79009]/10 ui-group-type-success:border-[#17B26A]/10">

@@ -3,7 +3,7 @@ import { UseFileUploadProps } from '@ark-ui/react';
 
 import Image from 'next/image';
 import { useRef } from 'react';
-import { IoCloudUploadOutline } from 'react-icons/io5';
+import { UploadCloud } from 'lucide-react';
 
 import { useControllableState } from '~/hooks/useControllableState';
 import { uploadFile } from '~/utils/uploadFile';
@@ -42,7 +42,7 @@ export function UploadFile(props: UploadFileProps) {
         data-invalid={props.invalid ? '' : undefined}
       >
         <FileUpload.Dropzone hidden={value.length > 0}>
-          <IoCloudUploadOutline />
+          <UploadCloud className="w-5 h-5" />
           <FileUpload.Trigger ref={ref}>
             <p className="text-cyan-700 font-medium text-sm">
               Click to upload image

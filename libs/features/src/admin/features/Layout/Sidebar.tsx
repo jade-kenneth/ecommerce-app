@@ -21,13 +21,13 @@ const sidebarItems: SidebarItem[] = [
   },
   {
     icon: <Package className="w-5 h-5" />,
-    label: 'Manage Products',
-    href: '/admin/manage-products',
+    label: 'Inventory',
+    href: '/admin/inventory',
   },
   {
     icon: <ShoppingCart className="w-5 h-5" />,
-    label: 'Manage Orders',
-    href: '/admin/manage-orders',
+    label: 'Orders',
+    href: '/admin/orders',
   },
   {
     icon: <Settings className="w-5 h-5" />,

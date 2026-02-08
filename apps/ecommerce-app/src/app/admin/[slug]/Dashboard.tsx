@@ -1,11 +1,16 @@
 'use client';
 
 import { Package, ShoppingCart, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { OrderStatus, useMyOrdersQuery, useProductsQuery } from '~/graphql/generated';
+import {
+  OrderStatus,
+  useMyOrdersQuery,
+  useProductsQuery,
+} from '~/graphql/generated';
+import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { safeParseFloat } from '~/utils/safeParseFloat';
-import { capitalize } from '~/utils/capitalize';
 
 export const Dashboard = () => {
   const productsQuery = useProductsQuery({
@@ -15,7 +20,7 @@ export const Dashboard = () => {
   const ordersQuery = useMyOrdersQuery({
     fetchPolicy: 'network-only',
   });
-
+  const router = useRouter();
   const stats = useMemo(() => {
     const totalProducts = productsQuery.data?.products.totalCount ?? 0;
     const orders = ordersQuery.data?.myOrders ?? [];
@@ -24,8 +29,7 @@ export const Dashboard = () => {
       (sum, order) => sum + safeParseFloat(order.total, 0),
       0,
     );
-    const avgOrderValue =
-      totalOrders > 0 ? totalRevenue / totalOrders : 0;
+    const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
     const pendingOrders = orders.filter(
       (order) => order.status === OrderStatus.Pending,
     ).length;
@@ -67,6 +71,7 @@ export const Dashboard = () => {
       )
       .slice(0, 5);
   }, [ordersQuery.data]);
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -163,13 +168,13 @@ export const Dashboard = () => {
             </p>
           </div>
           <div className="space-y-3">
-            <button className="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 active:bg-cyan-800 text-white font-semibold rounded-lg transition-colors duration-200">
-              Add New Product
-            </button>
             <button className="w-full px-4 py-3 border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-50 active:bg-cyan-100 dark:hover:bg-cyan-950 dark:active:bg-cyan-900 font-semibold rounded-lg transition-colors duration-200">
               View Analytics
             </button>
-            <button className="w-full px-4 py-3 border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-50 active:bg-cyan-100 dark:hover:bg-cyan-950 dark:active:bg-cyan-900 font-semibold rounded-lg transition-colors duration-200">
+            <button
+              onClick={() => router.push('/admin/inventory')}
+              className="w-full px-4 py-3 border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-50 active:bg-cyan-100 dark:hover:bg-cyan-950 dark:active:bg-cyan-900 font-semibold rounded-lg transition-colors duration-200"
+            >
               Manage Inventory
             </button>
           </div>

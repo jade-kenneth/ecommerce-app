@@ -1,10 +1,9 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FunctionComponent } from 'react';
-import { CiSettings } from 'react-icons/ci';
 import { twMerge } from 'tailwind-merge';
 
-import { Menu as MenuIcon, Search, X } from 'lucide-react';
+import { Menu as MenuIcon, Search, Settings, X } from 'lucide-react';
 import { useSelfQuery } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { CartIcon } from '~/icons/CartIcon';
@@ -115,7 +114,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           <Show when={globalStore.authenticate.isAuthenticated}>
             <Menu.Root>
               <Menu.Trigger className="flex items-center justify-center w-10 h-10 rounded-full border border-cyan-100 text-cyan-700 hover:bg-cyan-50 transition-colors">
-                <CiSettings className="text-cyan-700 w-6 h-6" />
+                <Settings className="text-cyan-700 w-6 h-6" />
               </Menu.Trigger>
               <Menu.Positioner>
                 <Menu.Content>

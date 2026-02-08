@@ -1,4 +1,4 @@
-import { MdLocalShipping } from 'react-icons/md';
+import { Truck } from 'lucide-react';
 import { ShippingType } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';
 
@@ -56,7 +56,7 @@ export function ShippingOptionCard({ option, selected, onSelect }: Props) {
       />
 
       <div className="flex items-center gap-3">
-        <MdLocalShipping
+        <Truck
           data-selected-shipping={selected}
           className="
             h-10 w-10 p-2 rounded-md text-cyan-900 bg-carbon-950
@@ -85,7 +85,7 @@ export const ShippingOptions = () => {
   return (
     <div>
       <p className="text-carbon-25 flex gap-3 items-center text-lg font-bold">
-        <MdLocalShipping className="text-cyan-900 h-11 w-11" /> Shipping Method
+        <Truck className="text-cyan-900 h-11 w-11" /> Shipping Method
       </p>
       {shippingMethods.map((method) => (
         <ShippingOptionCard

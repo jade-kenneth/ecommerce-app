@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
-import { IoMdClose } from 'react-icons/io';
+import { X } from 'lucide-react';
 
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { Show } from '../../../ui/components/Show';
@@ -32,7 +32,7 @@ export function AuthForm() {
             onClick={() => globalStore.signIn.setIsSignIn(false)}
             aria-label="Close dialog"
           >
-            <IoMdClose className="p-1 size-6 sm:size-7 cursor-pointer text-cyan-500 absolute -top-2 -right-2 rounded-md" />
+            <X className="p-1 size-6 sm:size-7 cursor-pointer text-cyan-500 absolute -top-2 -right-2 rounded-md" />
           </Dialog.CloseTrigger>
           <Dialog.Header className="flex flex-col items-center gap-2">
             <Image

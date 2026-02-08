@@ -62,7 +62,7 @@ type Cart {
 
 type Order {
   _id: ObjectId!
-  items: [CartItem]
+  items: [CartItem!]!
   shippingOption: ShippingOption!
   paymentMethod: PaymentMethod!
 

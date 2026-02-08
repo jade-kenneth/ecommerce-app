@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 08 Feb 2026 08:01:16 GMT
+// Last modified: Sun, 08 Feb 2026 10:29:33 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -309,13 +309,13 @@ export type MyOrdersQuery = {
     total: string;
     status: OrderStatus;
     createdAt: string;
-    items?: Array<{
+    items: Array<{
       __typename: 'CartItem';
       productId: string;
       quantity: number;
       unitPrice?: string | null;
       totalPrice?: string | null;
-    } | null> | null;
+    }>;
     shippingOption: {
       __typename: 'ShippingOption';
       type: ShippingType;
@@ -357,13 +357,13 @@ export type CheckoutMutation = {
     total: string;
     status: OrderStatus;
     createdAt: string;
-    items?: Array<{
+    items: Array<{
       __typename: 'CartItem';
       productId: string;
       quantity: number;
       unitPrice?: string | null;
       totalPrice?: string | null;
-    } | null> | null;
+    }>;
     shippingOption: {
       __typename: 'ShippingOption';
       type: ShippingType;

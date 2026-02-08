@@ -3,11 +3,21 @@ import { useRouter } from 'next/navigation';
 import { FunctionComponent, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { Menu as MenuIcon, Search, Settings, X } from 'lucide-react';
+import {
+  Menu as MenuIcon,
+  Search,
+  Settings,
+  ShoppingBag,
+  ShoppingCart,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
-import { useSearchProductByNameQuery, useSelfQuery } from '~/graphql/generated';
+import {
+  useMyOrdersQuery,
+  useSearchProductByNameQuery,
+  useSelfQuery,
+} from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { CartIcon } from '~/icons/CartIcon';
 import { UserIcon } from '~/icons/UserIcon';
 import { logout } from '~/providers/AuthProvider';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
@@ -64,6 +74,11 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
       .filter((item) => item.name.toLowerCase().includes(normalizedSearch))
       .slice(0, 6);
   }, [normalizedSearch, productsQuery.data, shouldSearch]);
+  const ordersQuery = useMyOrdersQuery({
+    skip:
+      !globalStore.authenticate.isAuthenticated || !licenseContext.isLicensed,
+  });
+  const ordersCount = ordersQuery.data?.myOrders?.length ?? 0;
 
   return (
     <div
@@ -167,7 +182,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         </Popover.Root>
       </div>
       <div className="order-2 lg:order-none flex flex-wrap items-center justify-between lg:justify-end gap-2">
-        <div className="flex flex-wrap font-semibold divide-x-0 sm:divide-x-[1.5px] divide-primary-700 divide-solid">
+        <div className="flex flex-wrap font-semibold ">
           <Show
             when={!globalStore.authenticate.isAuthenticated}
             fallback={
@@ -181,20 +196,36 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
               <AuthForm />
             </div>
           </Show>
-          <div className="flex flex-row items-center cursor-pointer px-2 sm:px-5">
+          <div className="flex  flex-row items-center cursor-pointer px-2 sm:px-5">
             <button
               className="flex gap-2 relative cursor-pointer"
               onClick={() => router.push('/cart')}
             >
               <span
                 className={twMerge(
-                  'w-[18px] text-[10px] sm:w-[20px] sm:text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-2 sm:-right-5 h-[18px] sm:h-[20px] rounded-full bg-[red]',
+                  'w-[18px] text-[10px] sm:w-[20px] sm:text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-2 sm:-right-5 h-[18px] sm:h-[20px] rounded-full bg-cyan-700',
                 )}
               >
                 {cartContext.state.itemsCount}
               </span>
-              <CartIcon />
+              <ShoppingCart className="w-5 h-5" />
               <span className="hidden sm:inline text-sm">Cart</span>
+            </button>
+          </div>
+          <div className="flex flex-row items-center cursor-pointer px-2 sm:px-5">
+            <button
+              className="flex gap-2 relative cursor-pointer"
+              onClick={() => router.push('/orders')}
+            >
+              <span
+                className={twMerge(
+                  'w-[18px] text-[10px] sm:w-[20px] sm:text-xs font-medium text-white flex items-center justify-center absolute -top-2 -right-2 sm:-right-5 h-[18px] sm:h-[20px] rounded-full bg-cyan-700',
+                )}
+              >
+                {ordersCount}
+              </span>
+              <ShoppingBag className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm">Orders</span>
             </button>
           </div>
         </div>
@@ -277,6 +308,15 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                       }}
                     >
                       Cart
+                    </button>
+                    <button
+                      className="w-full text-left text-base font-semibold text-carbon-25"
+                      onClick={() => {
+                        router.push('/orders');
+                        menuDisclosure.onClose();
+                      }}
+                    >
+                      Orders
                     </button>
                   </div>
 

@@ -10,6 +10,7 @@ import {
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { Button } from './Button';
+import { toaster } from './ToastContainer';
 interface CardsProps extends ProductCoreDataFragment {
   isTopSold?: boolean;
   isHighPoint?: boolean;
@@ -150,6 +151,9 @@ export const Cards = (props: CardsProps) => {
                 thumbnail: props.thumbnail,
                 discount: props.discount,
                 categories: props.category,
+              });
+              toaster.success({
+                description: `${props.name} added to cart.`,
               });
             } catch (error) {
               /* empty */

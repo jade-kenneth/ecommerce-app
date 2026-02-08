@@ -87,7 +87,6 @@ input CheckoutInput {
 
 input RemoveFromCartInput {
   productId: ObjectId!
-  quantity: Int!
 }
 
 type Query {
@@ -107,7 +106,7 @@ type Mutation {
   # Cart actions
   updateCartItem(input: UpdateCartItemInput!): Boolean
 
-  removeFromCart(input: RemoveFromCartInput!): Cart!
+  removeFromCart(input: RemoveFromCartInput!): Boolean!
   clearCart: Cart!
 
   # Checkout

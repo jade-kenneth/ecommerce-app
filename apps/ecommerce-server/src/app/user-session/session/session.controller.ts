@@ -26,7 +26,7 @@ export class SessionController {
   constructor(
     private readonly session: SessionService,
     private readonly jwt: JwtService,
-    private readonly account: AccountService
+    private readonly account: AccountService,
   ) {}
   @Post('sessions')
   async createSession(@Request() request: AuthRequest) {
@@ -35,7 +35,7 @@ export class SessionController {
     // Time to live in seconds, max 7 days
     const ttl = Math.min(
       Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
-      604800
+      604800,
     );
 
     const { user } = request.body;
@@ -69,7 +69,7 @@ export class SessionController {
         },
         {
           ttl,
-        }
+        },
       );
 
       const refreshToken = this.jwt.sign(
@@ -79,7 +79,7 @@ export class SessionController {
         },
         {
           ttl: '24h',
-        }
+        },
       );
       return {
         session: {
@@ -105,7 +105,7 @@ export class SessionController {
     // Time to live in seconds, max 7 days
     const ttl = Math.min(
       Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
-      604800
+      604800,
     );
 
     const timestamp = new Date();
@@ -127,7 +127,7 @@ export class SessionController {
         },
         {
           dateTimeLastRefreshed: new Date(),
-        }
+        },
       );
 
       const accessToken = this.jwt.sign(
@@ -137,7 +137,7 @@ export class SessionController {
         },
         {
           ttl,
-        }
+        },
       );
 
       const refreshToken = this.jwt.sign(
@@ -147,7 +147,7 @@ export class SessionController {
         },
         {
           ttl: '24h',
-        }
+        },
       );
 
       return {
@@ -165,12 +165,23 @@ export class SessionController {
     }
   }
 
+  @Post('session/logout')
+  @UseGuards(RefreshJwtGuard)
+  async logout(@Request() request: AuthRequest) {
+    try {
+      await this.session.deleteSession({ _id: request.session._id });
+      return { success: true };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
   @Post('session/authenticate')
   async authenticate(@Request() request: AuthRequest) {
     const timestamp = new Date();
     const ttl = Math.min(
       Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
-      604800
+      604800,
     );
 
     const password = <string>request.body['password'];
@@ -231,7 +242,7 @@ export class SessionController {
       },
       {
         ttl: '5m',
-      }
+      },
     );
     const refreshToken = this.jwt.sign(
       {
@@ -240,7 +251,7 @@ export class SessionController {
       },
       {
         ttl: '24h',
-      }
+      },
     );
     return {
       accessToken,

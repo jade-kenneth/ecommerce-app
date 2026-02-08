@@ -81,3 +81,7 @@ mutation Checkout($input: CheckoutInput!) {
     createdAt
   }
 }
+
+mutation RemoveFromCart($input: RemoveFromCartInput!) {
+  removeFromCart(input: $input)
+}

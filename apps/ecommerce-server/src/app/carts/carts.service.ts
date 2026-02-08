@@ -249,31 +249,23 @@ export class CartsService {
     return this.orders.find({ _id: orderId, accountId });
   }
 
-  public async removeFromCart(
-    productId: Types.ObjectId,
-    params: { _id: string; quantity: number },
-  ) {
+  public async removeFromCart(params: {
+    _id: string;
+    productId: Types.ObjectId;
+  }) {
     const timestamp = new Date();
 
     const cart = await this.carts.find(new Types.ObjectId(params._id));
 
     if (!cart) throw new Error('Cart not found');
 
-    const itemIndex = cart.items.findIndex((cartItem) =>
-      cartItem.productId.equals(productId),
+    const itemIndex = cart.items.findIndex((item) =>
+      item.productId.equals(params.productId),
     );
 
-    if (itemIndex === -1) {
-      throw new Error('Product not in cart');
-    }
+    if (itemIndex === -1) throw new Error('Product not in cart');
 
-    const item = cart.items[itemIndex];
-
-    if (item.quantity <= params.quantity) {
-      cart.items.splice(itemIndex, 1);
-    } else {
-      item.quantity -= params.quantity;
-    }
+    cart.items.splice(itemIndex, 1);
 
     await this.carts.update(new Types.ObjectId(params._id), {
       items: cart.items,

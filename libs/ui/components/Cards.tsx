@@ -9,6 +9,7 @@ import {
 } from '~/graphql/generated';
 
 import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { numberFormatter } from '~/utils/numberFormatter';
 import { Button } from './Button';
 interface CardsProps extends ProductCoreDataFragment {
   isTopSold?: boolean;
@@ -67,14 +68,10 @@ export const Cards = (props: CardsProps) => {
                 return (
                   <p className="text-[10px] sm:text-paragraph-xs">
                     Save -{' '}
-                    {discount.toLocaleString('en-US', {
+                    {numberFormatter.format(discount, {
+                      locale: 'en-US',
                       currency: 'PHP',
-                      style: 'currency',
-                      maximumFractionDigits: 2,
-                      ...(discount >= discountThreshold && {
-                        notation: 'compact',
-                        compactDisplay: 'short',
-                      }),
+                      ...(discount >= discountThreshold && { compact: true }),
                     })}
                   </p>
                 );
@@ -93,23 +90,18 @@ export const Cards = (props: CardsProps) => {
               const amount = props.price - discount;
               const useCompact = amount >= 1000000;
 
-              return new Intl.NumberFormat('en-US', {
-                style: 'currency',
+              return numberFormatter.format(amount, {
+                locale: 'en-US',
                 currency: 'PHP',
-                maximumFractionDigits: 2,
-                ...(useCompact && {
-                  notation: 'compact',
-                  compactDisplay: 'short',
-                }),
-              }).format(amount);
+                ...(useCompact && { compact: true }),
+              });
             })()}
           </p>
           {props.discount > 0 && (
             <p className="text-carbon-25 line-through text-xs sm:text-paragraph-sm relative top-0">
-              {(+props.price).toLocaleString('en-US', {
+              {numberFormatter.format(props.price, {
+                locale: 'en-US',
                 currency: 'PHP',
-                style: 'currency',
-                maximumFractionDigits: 2,
               })}
             </p>
           )}
@@ -128,10 +120,7 @@ export const Cards = (props: CardsProps) => {
             })}
           </div>
           <p className="text-carbon-500 text-xs sm:text-paragraph-xs">
-            {(100).toLocaleString('en-US', {
-              notation: 'compact',
-              compactDisplay: 'short',
-            })}{' '}
+            {numberFormatter.format(100, { locale: 'en-US', compact: true })}{' '}
             sold
           </p>
         </div>

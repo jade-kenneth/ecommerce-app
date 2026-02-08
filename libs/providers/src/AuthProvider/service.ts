@@ -63,3 +63,16 @@ export async function authenticate(input: AuthenticateInput) {
     role,
   });
 }
+
+export async function logout() {
+  try {
+    const { refreshToken } = await store.get();
+    if (refreshToken) {
+      await services.logoutSession({ refreshToken });
+    }
+  } catch (error) {
+    /* empty */
+  } finally {
+    await store.clearSession();
+  }
+}

@@ -1,37 +1,72 @@
-import { BarChart, Package, TrendingUp, Users } from 'lucide-react';
+'use client';
+
+import { Package, ShoppingCart, TrendingUp } from 'lucide-react';
+import { useMemo } from 'react';
+import { OrderStatus, useMyOrdersQuery, useProductsQuery } from '~/graphql/generated';
+import { numberFormatter } from '~/utils/numberFormatter';
+import { safeParseFloat } from '~/utils/safeParseFloat';
+import { capitalize } from '~/utils/capitalize';
 
 export const Dashboard = () => {
-  const stats = [
-    {
-      title: 'Total Revenue',
-      value: '$12,485',
-      change: '+12.5%',
-      icon: TrendingUp,
-    },
-    {
-      title: 'Total Users',
-      value: '2,543',
-      change: '+5.2%',
-      icon: Users,
-    },
-    {
-      title: 'Products',
-      value: '384',
-      change: '+2.1%',
-      icon: Package,
-    },
-    {
-      title: 'Growth',
-      value: '23.5%',
-      change: '+8.2%',
-      icon: BarChart,
-    },
-  ];
-  const activities = [
-    { user: 'Sarah Johnson', action: 'Purchased', time: '2 hours ago' },
-    { user: 'Mike Chen', action: 'Reviewed product', time: '4 hours ago' },
-    { user: 'Emma Davis', action: 'Added to cart', time: '6 hours ago' },
-  ];
+  const productsQuery = useProductsQuery({
+    fetchPolicy: 'network-only',
+    variables: { first: 1 },
+  });
+  const ordersQuery = useMyOrdersQuery({
+    fetchPolicy: 'network-only',
+  });
+
+  const stats = useMemo(() => {
+    const totalProducts = productsQuery.data?.products.totalCount ?? 0;
+    const orders = ordersQuery.data?.myOrders ?? [];
+    const totalOrders = orders.length;
+    const totalRevenue = orders.reduce(
+      (sum, order) => sum + safeParseFloat(order.total, 0),
+      0,
+    );
+    const avgOrderValue =
+      totalOrders > 0 ? totalRevenue / totalOrders : 0;
+    const pendingOrders = orders.filter(
+      (order) => order.status === OrderStatus.Pending,
+    ).length;
+
+    return [
+      {
+        title: 'Total Revenue',
+        value: `₱${numberFormatter.format(totalRevenue, { locale: 'en-PH' })}`,
+        helper: `${totalOrders} order${totalOrders === 1 ? '' : 's'}`,
+        icon: TrendingUp,
+      },
+      {
+        title: 'Orders',
+        value: numberFormatter.format(totalOrders, { locale: 'en-PH' }),
+        helper: `${pendingOrders} pending`,
+        icon: ShoppingCart,
+      },
+      {
+        title: 'Products',
+        value: numberFormatter.format(totalProducts, { locale: 'en-PH' }),
+        helper: 'Active catalog count',
+        icon: Package,
+      },
+      {
+        title: 'Avg Order Value',
+        value: `₱${numberFormatter.format(avgOrderValue, { locale: 'en-PH' })}`,
+        helper: 'Based on total orders',
+        icon: TrendingUp,
+      },
+    ];
+  }, [productsQuery.data, ordersQuery.data]);
+
+  const recentOrders = useMemo(() => {
+    const orders = ordersQuery.data?.myOrders ?? [];
+    return [...orders]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
+      .slice(0, 5);
+  }, [ordersQuery.data]);
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -51,8 +86,8 @@ export const Dashboard = () => {
               <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 {stat.value}
               </div>
-              <p className="text-xs font-medium text-green-600 dark:text-green-500">
-                {stat.change} from last month
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                {stat.helper}
               </p>
             </div>
           );
@@ -61,39 +96,59 @@ export const Dashboard = () => {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity Card */}
+        {/* Recent Orders Card */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Recent Activity
+              Recent Orders
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Your latest transactions
+              Latest orders from your store
             </p>
           </div>
           <div className="space-y-4">
-            {activities.map((activity, index) => (
-              <div
-                key={activity.user}
-                className={`flex items-center justify-between py-4 ${
-                  index !== activities.length - 1
-                    ? 'border-b border-gray-200 dark:border-gray-800'
-                    : ''
-                }`}
-              >
-                <div>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                    {activity.user}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {activity.action}
-                  </p>
+            {ordersQuery.loading ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Loading orders...
+              </p>
+            ) : recentOrders.length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                No orders yet.
+              </p>
+            ) : (
+              recentOrders.map((order, index) => (
+                <div
+                  key={order._id}
+                  className={`flex items-center justify-between py-4 ${
+                    index !== recentOrders.length - 1
+                      ? 'border-b border-gray-200 dark:border-gray-800'
+                      : ''
+                  }`}
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                      #{order._id}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {capitalize(order.status ?? '', {
+                        delimiter: capitalize.delimiters.UNDERSCORE,
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-right space-y-1">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                      ₱
+                      {numberFormatter.format(order.total, {
+                        locale: 'en-PH',
+                      })}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {new Date(order.createdAt).toLocaleDateString('en-PH')}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {activity.time}
-                </p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 

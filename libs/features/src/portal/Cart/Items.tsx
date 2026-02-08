@@ -6,9 +6,10 @@ import { Show } from '~/components/Show';
 
 import { useUpdateCartItemMutation } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
+import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from './CartContext';
-import { ConfirmRemoveItem } from './ConfirmRemoveItem';
 import { EmptyCart } from './EmptyCart';
+import { RemoveItem } from './RemoveItem';
 
 interface ItemsProps {
   isCheckout?: boolean;
@@ -53,21 +54,26 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                       }),
                     )}
                   </p>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    Qty: {item.quantity}
+                  </p>
                 </div>
 
                 {/* Price */}
                 <div className="flex flex-wrap items-center gap-2 mt-2">
                   <span className="text-sm sm:text-lg line-through font-bold text-gray-500 dark:text-white">
-                    ₱{(item.price * item.quantity).toLocaleString('en-PH')}
+                    ₱
+                    {numberFormatter.format(item.price * item.quantity, {
+                      locale: 'en-PH',
+                    })}
                   </span>
 
                   <span className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
                     ₱
-                    {(
-                      item.price *
-                      item.quantity *
-                      (1 - item.discount / 100)
-                    ).toLocaleString('en-PH')}
+                    {numberFormatter.format(
+                      item.price * item.quantity * (1 - item.discount / 100),
+                      { locale: 'en-PH' },
+                    )}
                   </span>
 
                   <span className="text-xs sm:text-md text-error-500 font-semibold">
@@ -77,7 +83,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
               </div>
 
               {/* Quantity and Remove */}
-              <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3 md:gap-5">
+              <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-between gap-3 md:gap-5">
                 {/* Quantity Selector */}
                 <Show when={!isCheckout}>
                   <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-gray-50 dark:bg-slate-800">
@@ -149,7 +155,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
 
                 {/* Remove Button */}
                 <Show when={!isCheckout}>
-                  <ConfirmRemoveItem item={item} />
+                  <RemoveItem item={item} />
                 </Show>
               </div>
             </div>

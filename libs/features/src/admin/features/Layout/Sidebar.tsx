@@ -1,9 +1,11 @@
 'use client';
 
-import { Home, LogOut, Package, Settings } from 'lucide-react';
+import { Home, LogOut, Package, Settings, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { logout } from '~/providers/AuthProvider';
 
 interface SidebarItem {
   icon: React.ReactNode;
@@ -23,6 +25,11 @@ const sidebarItems: SidebarItem[] = [
     href: '/admin/manage-products',
   },
   {
+    icon: <ShoppingCart className="w-5 h-5" />,
+    label: 'Manage Orders',
+    href: '/admin/manage-orders',
+  },
+  {
     icon: <Settings className="w-5 h-5" />,
     label: 'Settings',
     href: '/admin/settings',
@@ -31,6 +38,8 @@ const sidebarItems: SidebarItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const globalStore = useGlobalStore((state) => state.authenticate);
 
   return (
     <aside className="w-[20%] bg-gradient-to-b bg-cyan-600 to-[bg-cyan-700] text-white min-h-screen p-6 flex flex-col">
@@ -66,7 +75,14 @@ export function Sidebar() {
       </nav>
 
       {/* Logout */}
-      <button className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200">
+      <button
+        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+        onClick={async () => {
+          await logout();
+          globalStore.setIsAuthenticated(false);
+          router.push('/');
+        }}
+      >
         <LogOut className="w-5 h-5" />
         <span className="font-medium">Logout</span>
       </button>

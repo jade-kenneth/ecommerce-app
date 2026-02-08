@@ -53,9 +53,9 @@ export class CartResolver {
     @Context('claims') claims: Claims,
     @Args('input') input: RemoveFromCartInput,
   ) {
-    return this.cartService.removeFromCart(input.productId, {
+    return this.cartService.removeFromCart({
       _id: claims.sub,
-      quantity: input.quantity,
+      productId: input.productId,
     });
   }
 

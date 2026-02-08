@@ -3,6 +3,7 @@
 import { Trash } from 'lucide-react';
 import Image from 'next/image';
 import { AlertDialog } from '~/components/ui/AlertDialog';
+import { useRemoveFromCartMutation } from '~/graphql/generated';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { useCartContext } from './CartContext';
 import { Item } from './useCart';
@@ -10,13 +11,13 @@ import { Item } from './useCart';
 interface ConfirmRemoveItemProps {
   item: Item;
 }
-export const ConfirmRemoveItem = ({ item }: ConfirmRemoveItemProps) => {
+export const RemoveItem = ({ item }: ConfirmRemoveItemProps) => {
   const context = useCartContext();
   const discountPercentage = item.discount / 100;
 
   const discounted = item.price * item.quantity * discountPercentage;
   const priceAfterDiscount = item.price - item.price * discountPercentage;
-
+  const [removeFromCart] = useRemoveFromCartMutation();
   const disclosure = useDisclosure();
   return (
     <AlertDialog.Root open={disclosure.open} onOpenChange={disclosure.onToggle}>
@@ -92,7 +93,12 @@ export const ConfirmRemoveItem = ({ item }: ConfirmRemoveItemProps) => {
             </button>
 
             <button
-              onClick={() => context.removeCartItem(item.productId)}
+              onClick={async () => {
+                await removeFromCart({
+                  variables: { input: { productId: item.productId } },
+                });
+                context.removeCartItem(item.productId);
+              }}
               className="flex-1 py-3 border rounded-xl text-gray-700 font-medium hover:bg-gray-100"
             >
               Remove Anyway

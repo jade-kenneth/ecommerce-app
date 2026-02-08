@@ -27,7 +27,7 @@ const scalars = {
 function createAdminConfig(
   schema: string | string[],
   documents: string | string[],
-  outputPath: string
+  outputPath: string,
 ) {
   return {
     schema,
@@ -81,7 +81,7 @@ const projects = {
   'ecommerce-app.admin': createAdminConfig(
     NEXT_PUBLIC_PORTAL_API,
     './libs/graphql/src/**/*.gql',
-    './libs/graphql/src/generated.tsx'
+    './libs/graphql/src/generated.tsx',
   ),
 };
 

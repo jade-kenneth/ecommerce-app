@@ -38,6 +38,24 @@ export async function refreshSession(input: RefreshSession) {
   }
 }
 
+export async function logoutSession(input: RefreshSession) {
+  try {
+    await axios.post(
+      '/session/logout',
+      {},
+      {
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+        headers: {
+          Authorization: `Bearer ${input.refreshToken}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.error('Error logging out:', error);
+    throw error;
+  }
+}
+
 export async function createSession(input: CreateSessionInput) {
   try {
     const response = await axios.post<Token & { role: AccountType }>(

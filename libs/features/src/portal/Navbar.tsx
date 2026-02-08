@@ -4,17 +4,19 @@ import { FunctionComponent } from 'react';
 import { CiSettings } from 'react-icons/ci';
 import { twMerge } from 'tailwind-merge';
 
-import { Menu, Search, X } from 'lucide-react';
+import { Menu as MenuIcon, Search, X } from 'lucide-react';
 import { useSelfQuery } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { CartIcon } from '~/icons/CartIcon';
 import { UserIcon } from '~/icons/UserIcon';
+import { logout } from '~/providers/AuthProvider';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { Button } from '../../../ui/components/Button';
 import { DebounceInput } from '../../../ui/components/DebounceInput';
 import { Dialog } from '../../../ui/components/Dialog';
 import { Show } from '../../../ui/components/Show';
+import { Menu } from '../../../ui/components/ui';
 import { AuthForm } from './AuthForm';
 import { useCartContext } from './Cart/CartContext';
 import { categoryItems } from './Categories';
@@ -110,7 +112,29 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <CiSettings className="text-cyan-700 w-6 h-6" />
+          <Show when={globalStore.authenticate.isAuthenticated}>
+            <Menu.Root>
+              <Menu.Trigger className="flex items-center justify-center w-10 h-10 rounded-full border border-cyan-100 text-cyan-700 hover:bg-cyan-50 transition-colors">
+                <CiSettings className="text-cyan-700 w-6 h-6" />
+              </Menu.Trigger>
+              <Menu.Positioner>
+                <Menu.Content>
+                  <Menu.ItemGroup>
+                    <Menu.Item
+                      value="logout"
+                      onClick={async () => {
+                        await logout();
+                        globalStore.authenticate.setIsAuthenticated(false);
+                        router.push('/');
+                      }}
+                    >
+                      Logout
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                </Menu.Content>
+              </Menu.Positioner>
+            </Menu.Root>
+          </Show>
           <Dialog.Root
             open={menuDisclosure.open}
             onOpenChange={menuDisclosure.onToggle}
@@ -122,7 +146,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                 className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full border border-carbon-900 text-carbon-25"
                 aria-label="Open menu"
               >
-                <Menu className="w-5 h-5" />
+                <MenuIcon className="w-5 h-5" />
               </button>
             </Dialog.Trigger>
             <Dialog.Backdrop className="lg:hidden" />

@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 07 Feb 2026 16:37:02 GMT
+// Last modified: Sun, 08 Feb 2026 03:25:51 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -173,7 +173,6 @@ export type ProductsStatusFilterInput = {
 
 export type RemoveFromCartInput = {
   productId: Scalars['ObjectID']['input'];
-  quantity: Scalars['Int']['input'];
 };
 
 export enum ReservationType {
@@ -374,6 +373,15 @@ export type CheckoutMutation = {
     };
     paymentMethod: { __typename: 'PaymentMethod'; type: PaymentMethodType };
   };
+};
+
+export type RemoveFromCartMutationVariables = Exact<{
+  input: RemoveFromCartInput;
+}>;
+
+export type RemoveFromCartMutation = {
+  __typename: 'Mutation';
+  removeFromCart: boolean;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -1009,6 +1017,36 @@ export type CheckoutMutationResult = Apollo.MutationResult<CheckoutMutation>;
 export type CheckoutMutationOptions = Apollo.BaseMutationOptions<
   CheckoutMutation,
   CheckoutMutationVariables
+>;
+export const RemoveFromCartDocument = /*#__PURE__*/ gql`
+  mutation RemoveFromCart($input: RemoveFromCartInput!) {
+    removeFromCart(input: $input)
+  }
+`;
+export type RemoveFromCartMutationFn = Apollo.MutationFunction<
+  RemoveFromCartMutation,
+  RemoveFromCartMutationVariables
+>;
+export function useRemoveFromCartMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveFromCartMutation,
+    RemoveFromCartMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveFromCartMutation,
+    RemoveFromCartMutationVariables
+  >(RemoveFromCartDocument, options);
+}
+export type RemoveFromCartMutationHookResult = ReturnType<
+  typeof useRemoveFromCartMutation
+>;
+export type RemoveFromCartMutationResult =
+  Apollo.MutationResult<RemoveFromCartMutation>;
+export type RemoveFromCartMutationOptions = Apollo.BaseMutationOptions<
+  RemoveFromCartMutation,
+  RemoveFromCartMutationVariables
 >;
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {

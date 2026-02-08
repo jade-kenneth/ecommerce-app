@@ -22,7 +22,7 @@ export class ProductsService {
   constructor(
     @Inject(Tokens.ProductRepositoryToken)
     private products: ProductRepository,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   public async getProducts(params: {

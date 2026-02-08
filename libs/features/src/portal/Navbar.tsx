@@ -1,19 +1,22 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { Menu as MenuIcon, Search, Settings, X } from 'lucide-react';
-import { useSelfQuery } from '~/graphql/generated';
+import Link from 'next/link';
+import { useSearchProductByNameQuery, useSelfQuery } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { CartIcon } from '~/icons/CartIcon';
 import { UserIcon } from '~/icons/UserIcon';
 import { logout } from '~/providers/AuthProvider';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
+import { numberFormatter } from '~/utils/numberFormatter';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { Button } from '../../../ui/components/Button';
 import { DebounceInput } from '../../../ui/components/DebounceInput';
 import { Dialog } from '../../../ui/components/Dialog';
+import { Popover } from '../../../ui/components/Popover';
 import { Show } from '../../../ui/components/Show';
 import { Menu } from '../../../ui/components/ui';
 import { AuthForm } from './AuthForm';
@@ -28,6 +31,8 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   const globalStore = useGlobalStore((state) => state);
   const licenseContext = useLicenseContext();
   const menuDisclosure = useDisclosure();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { data } = useSelfQuery({
     skip:
       !globalStore.authenticate.isAuthenticated || !licenseContext.isLicensed,
@@ -41,6 +46,25 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
       .replace(/\s+/g, ' ')
       .trim(),
   );
+  const normalizedSearch = searchQuery.trim();
+  const shouldSearch = normalizedSearch.length > 0;
+  const productsQuery = useSearchProductByNameQuery({
+    variables: {
+      search: normalizedSearch,
+      first: 6,
+    },
+
+    skip: !shouldSearch,
+  });
+  const searchResults = useMemo(() => {
+    if (!shouldSearch) return [];
+    const items =
+      productsQuery.data?.searchProductByName?.map((node) => node) ?? [];
+    return items
+      .filter((item) => item.name.toLowerCase().includes(normalizedSearch))
+      .slice(0, 6);
+  }, [normalizedSearch, productsQuery.data, shouldSearch]);
+
   return (
     <div
       className={twMerge(
@@ -62,21 +86,85 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           onClick={() => router.push('/')}
         />
       </div>
-      <div className="order-3 lg:order-none w-full lg:w-auto">
-        <DebounceInput
-          hasDebounce
-          placeholder="Search snacks, essentials, and more..."
-          onChange={(val) => console.log(val, 'valval')}
-          className="rounded-[32px] h-11 sm:h-12 w-full lg:w-[35.0625rem] bg-primary-25 text-primary-500"
-          rightAddon={
-            <Button className="flex items-center w-auto h-[36px] sm:h-[40px] mr-1 gap-[5px] rounded-[32px]">
-              <Search className="w-4 h-4" />
-              <span className="hidden sm:inline font-semibold text-sm">
-                Search
-              </span>
-            </Button>
-          }
-        />
+      <div className="order-3 lg:order-none w-fit">
+        <Popover.Root
+          open={isSearchOpen}
+          onOpenChange={(details) => setIsSearchOpen(details.open)}
+          autoFocus={false}
+          closeOnInteractOutside={true}
+          positioning={{ sameWidth: true }}
+        >
+          <Popover.Anchor>
+            <DebounceInput
+              hasDebounce
+              debounceDelay={300}
+              placeholder="Search snacks, essentials, and more..."
+              onChange={(val) => {
+                setSearchQuery(val);
+                setIsSearchOpen(val.trim().length > 0);
+              }}
+              className="rounded-[32px] h-11 sm:h-12 w-full lg:w-[35.0625rem] bg-primary-25 text-primary-500"
+              rightAddon={
+                <Button className="flex items-center w-auto h-[36px] sm:h-[40px] mr-1 gap-[5px] rounded-[32px]">
+                  <Search className="w-4 h-4" />
+                  <span className="hidden sm:inline font-semibold text-sm">
+                    Search
+                  </span>
+                </Button>
+              }
+            />
+          </Popover.Anchor>
+
+          <Popover.Positioner>
+            <Popover.Content>
+              <div className="flex items-center justify-between pb-2 border-b border-gray-100">
+                <p className="text-xs text-gray-500">Search results</p>
+                {productsQuery.loading && (
+                  <span className="text-xs text-gray-400">Searching…</span>
+                )}
+              </div>
+              <div className="flex flex-col gap-2 pt-2 max-h-72 overflow-y-auto">
+                {!productsQuery.loading &&
+                  shouldSearch &&
+                  searchResults.length === 0 && (
+                    <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-500">
+                      No products found for &quot;{searchQuery}&quot;.
+                    </div>
+                  )}
+                {searchResults.map((item) => (
+                  <Link href={`/product/${item._id}`}>
+                    <button
+                      key={item._id}
+                      type="button"
+                      className="flex items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-cyan-50 transition-colors"
+                      onClick={() => setIsSearchOpen(false)}
+                    >
+                      <div className="relative h-10 w-10 rounded-md overflow-hidden border border-gray-100 bg-gray-50">
+                        <Image
+                          src={item.thumbnail}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-gray-900 line-clamp-1">
+                          {item.name}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {numberFormatter.format(item.price, {
+                            locale: 'en-US',
+                            currency: 'PHP',
+                          })}
+                        </span>
+                      </div>
+                    </button>
+                  </Link>
+                ))}
+              </div>
+            </Popover.Content>
+          </Popover.Positioner>
+        </Popover.Root>
       </div>
       <div className="order-2 lg:order-none flex flex-wrap items-center justify-between lg:justify-end gap-2">
         <div className="flex flex-wrap font-semibold divide-x-0 sm:divide-x-[1.5px] divide-primary-700 divide-solid">

@@ -73,3 +73,9 @@ query HighPointProducts(
     totalCount
   }
 }
+
+query SearchProductByName($search: String!, $first: Int, $after: Cursor) {
+  searchProductByName(search: $search, first: $first, after: $after) {
+    ...ProductCoreData
+  }
+}

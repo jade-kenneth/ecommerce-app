@@ -5,8 +5,8 @@ import { Filter } from '../../libs/repository';
 import {
   CreateProductInput,
   DeleteProductInput,
+  ProductByIdsInput,
   UpdateProductInput,
-  ProductByIdsInput
 } from '../__generated/graphql-types';
 import { ProductsService } from './products.service';
 
@@ -18,7 +18,7 @@ export class ProductResolver {
   async products(
     @Args('first') first: number,
     @Args('after') after: string,
-    @Args('filter') filter?: Filter<Product>
+    @Args('filter') filter?: Filter<Product>,
   ) {
     /** This query requires authentication that comes from middleware
      *
@@ -32,7 +32,7 @@ export class ProductResolver {
   async highPointProducts(
     @Args('first') first: number,
     @Args('after') after: string,
-    @Args('filter') filter?: Filter<Product>
+    @Args('filter') filter?: Filter<Product>,
   ) {
     return this.productService.getHighPointsProducts({ filter, after, first });
   }
@@ -54,6 +54,15 @@ export class ProductResolver {
 
   @Query('productByIds')
   async getProductByIds(@Args('input') input: ProductByIdsInput) {
-    return this.productService.findProduct
+    return this.productService.findProduct;
+  }
+
+  @Query('searchProductByName')
+  async searchProductByName(
+    @Args('search') search: string,
+    @Args('first') first: number,
+    @Args('filter') filter?: Filter<Product>,
+  ) {
+    return this.productService.searchProductByName({ search, first, filter });
   }
 }

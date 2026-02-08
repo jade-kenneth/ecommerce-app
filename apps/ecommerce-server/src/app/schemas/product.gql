@@ -74,9 +74,14 @@ input ProductsFilterInput {
   status: ProductsStatusFilterInput
   category: ProductsCategoryFilterInput
   _id: IdFilterInput
+  name: IdFilterInput
 }
 type Query {
   products(first: Int, after: Cursor, filter: ProductsFilterInput): Connection!
+}
+
+type Query {
+  searchProductByName(search: String!, first: Int, after: Cursor): [Product!]
 }
 
 type Query {

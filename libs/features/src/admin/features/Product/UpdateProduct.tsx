@@ -190,6 +190,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
                         <UploadFile
                           value={field.value ? [field.value] : []}
                           onChange={(files) => {
+                            
                             field.onChange(files[0]);
                           }}
                           invalid={!!form.formState.errors.thumbnail}

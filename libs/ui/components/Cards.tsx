@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
 
 import { useCartContext } from '~/features/portal';
@@ -25,7 +26,11 @@ export const Cards = (props: CardsProps) => {
   const context = useCartContext();
   return (
     <div className="w-full min-w-[194px] bg-white border border-carbon-900 rounded-[12px] flex flex-col h-auto">
-      <div className="h-[170px] sm:h-[194px] flex items-center justify-center bg-carbon-950 rounded-t-[12px] relative overflow-hidden">
+      <Link
+        href={`/product/${props._id}`}
+        className="h-[170px] sm:h-[194px] flex items-center justify-center bg-carbon-950 rounded-t-[12px] relative overflow-hidden"
+        aria-label={`View ${props.name}`}
+      >
         <Image
           src={props.thumbnail}
           alt="item"
@@ -79,11 +84,14 @@ export const Cards = (props: CardsProps) => {
             </div>
           )}
         </div>
-      </div>
+      </Link>
       <div className="flex flex-col p-3 sm:p-4">
-        <p className="text-carbon-25 text-sm sm:text-paragraph-sm">
+        <Link
+          href={`/product/${props._id}`}
+          className="text-carbon-25 text-sm sm:text-paragraph-sm hover:text-cyan-600 transition-colors"
+        >
           {props.name}
-        </p>
+        </Link>
         <div className="flex flex-wrap gap-1 border-b border-carbon-900">
           <p className="text-carbon-25 font-bold text-base sm:text-paragraph-lg mb-[6px]">
             {(() => {

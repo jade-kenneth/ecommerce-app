@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js';
+import { Types } from 'mongoose';
 import { Node } from './common';
 
 // Services consumes this types
@@ -39,6 +40,7 @@ export interface Voucher {
   value?: number;
 }
 export type Product = Node & {
+  _id: Types.ObjectId;
   thumbnail: string;
   name: string;
   price: number;

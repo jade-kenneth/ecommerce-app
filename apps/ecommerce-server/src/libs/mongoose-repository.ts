@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js';
-import { CollationOptions, Decimal128 } from 'mongodb';
+import { Binary, CollationOptions, Decimal128 } from 'mongodb';
 import {
   Connection as DBConnection,
   IndexDefinition,
@@ -57,11 +57,15 @@ export function serializeFilter(filter: any): any {
    * so instead we serialize the filter object
    * to be compatible with the MongoDB query format.
    */
-  const data: Record<string, unknown> = R.omit(['id'], filter);
+  const data: Record<string, unknown> = R.omit(['_id', 'or'], filter);
 
-  if (filter.id) {
-    data['_id'] = filter.id;
-    delete filter.id;
+  if (filter._id) {
+    data['_id'] = filter._id;
+    delete filter._id;
+  }
+
+  if (filter.or) {
+    data['$or'] = Array.isArray(filter.or) ? filter.or : [filter.or];
   }
 
   return R.map(serializeFilterField, data);
@@ -108,6 +112,14 @@ function serializeFilterField(field: any): any {
   try {
     return normalizeFilterField(field);
   } catch (err) {
+    if (Array.isArray(field)) {
+      return field.map((elem) => {
+        if (elem && typeof elem === 'object' && !Array.isArray(elem)) {
+          return serializeFilter(elem);
+        }
+        return serializeFilterField(elem);
+      });
+    }
     /** this transforms filter field
      *  to be accepted by mongodb format
      *  example:
@@ -170,7 +182,123 @@ export function flattenObject(item: any, parentKey?: string): Partial<RawItem> {
 }
 
 export type RawItem = { _id: Buffer; [key: string]: unknown };
+function deserializeArray(arr: any[]): any[] {
+  return R.map(
+    (item) =>
+      item instanceof Binary
+        ? new Types.ObjectId(item.buffer)
+        : Array.isArray(item)
+          ? deserializeArray(item)
+          : typeof item === 'object' && item !== null
+            ? deserializeItem(item)
+            : item,
+    arr,
+  );
+}
 
+export function deserializeItem(item: any) {
+  if (item === null) {
+    return null;
+  }
+
+  if (!item['__t']) {
+    const _item = item;
+
+    item['__t'] = R.pipe(
+      R.toPairs,
+      R.filter(([key, _]) => {
+        if (key.startsWith('__t.')) {
+          delete item[key];
+          return true;
+        }
+
+        return false;
+      }),
+      R.reduce(
+        (acc, [key, value]) => R.assocPath(key.slice(4).split('.'), value, acc),
+        {},
+      ),
+    )(_item);
+  }
+
+  const normalizeBuffer = (obj: Record<string, unknown>) => {
+    return R.compose(
+      R.fromPairs,
+      R.filter(R.complement(R.isNil)) as never,
+      R.map(([key, value]): unknown => {
+        if (value === undefined) {
+          return null;
+        }
+
+        if (value instanceof Types.Decimal128) {
+          return [key, new Decimal(value.toString())];
+        }
+
+        if (value instanceof Binary) {
+          return [key, value.buffer];
+        }
+
+        if (Array.isArray(value)) {
+          return [key, deserializeArray(value)];
+        }
+
+        if (
+          typeof value === 'object' &&
+          value !== null &&
+          !(
+            value instanceof Array ||
+            value instanceof Buffer ||
+            value instanceof Types.ObjectId ||
+            value instanceof Decimal ||
+            value instanceof Date
+          )
+        ) {
+          return [key, normalizeBuffer(value)];
+        }
+
+        return [key, value];
+      }) as never,
+      R.toPairs,
+    )(obj || {});
+  };
+
+  const raw = R.compose(
+    normalizeBuffer,
+    R.reduce(
+      (accum, [key, value]) => {
+        const serialized = R.path(key.split('.'), item);
+
+        let deserialized;
+
+        if (value === 0 && R.complement(R.isNil)(serialized)) {
+          deserialized = new Types.ObjectId(
+            Buffer.from(
+              <any>serialized instanceof Binary
+                ? (<Binary>serialized).buffer
+                : serialized,
+            ),
+          );
+        }
+
+        if (value === 1 && R.complement(R.isNil)(serialized)) {
+          deserialized = new Decimal(
+            (serialized as Types.Decimal128).toString(),
+          );
+        }
+
+        return R.set(R.lensPath(key.split('.')), deserialized, accum);
+      },
+      R.omit(['__v', '__t'], item.toObject ? item.toObject() : item),
+    ),
+    R.toPairs,
+    flattenObject,
+  )(item['__t']) as Record<string, unknown>;
+
+  return {
+    ...R.omit(['_id'], raw),
+    _id: R.prop('_id', raw),
+  };
+}
 export class MongooseRepository<
   TEntity extends { _id: Types.ObjectId } = {
     _id: Types.ObjectId;
@@ -250,6 +378,82 @@ export class MongooseRepository<
     const options = R.pick(['upsert'], opts || {});
     await this.model.deleteOne({ _id: filter }, options);
     return;
+  }
+  public async search(
+    search: string,
+    filter: Filter<TEntity>,
+    opts: {
+      index: string;
+      path: string;
+      type?: 'autocomplete' | 'text';
+      limit?: number;
+      secondaryPreferred?: true;
+    },
+  ): Promise<TEntity[]> {
+    if (R.isEmpty(search)) {
+      return [];
+    }
+
+    const options = {};
+
+    if (opts?.secondaryPreferred) {
+      Object.assign(options, {
+        readPreference: 'secondaryPreferred',
+      });
+    }
+
+    const operator =
+      opts.type === 'text'
+        ? {
+            text: {
+              path: opts.path,
+              query: search,
+            },
+          }
+        : {
+            autocomplete: {
+              path: opts.path,
+              query: search,
+              tokenOrder: 'sequential',
+            },
+          };
+
+    const results = this.model.aggregate(
+      [
+        {
+          $search: {
+            index: opts.index,
+            ...operator,
+            sort: {
+              score: { $meta: 'searchScore', order: -1 },
+            },
+          },
+        },
+        {
+          $match: filter ? serializeFilter(filter) : {},
+        },
+        {
+          $limit: 50,
+        },
+        {
+          $sort: {
+            [opts.path]: 1,
+          },
+        },
+        {
+          $limit: opts.limit ?? 10,
+        },
+      ],
+      options,
+    );
+
+    const values: TEntity[] = [];
+
+    for await (const value of results) {
+      values.push(deserializeItem(value) as TEntity);
+    }
+
+    return values;
   }
   async find(
     filter: Types.ObjectId | Filter<TEntity>,
@@ -395,18 +599,7 @@ export class MongooseRepository<
   ): Promise<number> {
     throw new Error('Method not implemented.');
   }
-  search(
-    search: string,
-    filter: Filter<TEntity>,
-    opts: {
-      index: string;
-      path: string;
-      limit?: number;
-      secondaryPreferred?: true;
-    },
-  ): Promise<TEntity[]> {
-    throw new Error('Method not implemented.');
-  }
+
   increment(
     filter: Types.ObjectId | Filter<TEntity>,
     field: string,

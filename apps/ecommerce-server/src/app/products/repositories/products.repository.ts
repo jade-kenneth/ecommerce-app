@@ -37,7 +37,7 @@ export type Product = Node & {
 
 export type ProductRepository = Repository<Product>;
 export async function ProductRepositoryFactory(
-  connection: Connection
+  connection: Connection,
 ): Promise<ProductRepository> {
   return new MongooseRepository<Product>(
     connection,
@@ -63,6 +63,6 @@ export async function ProductRepositoryFactory(
       dateAdded: Date,
       cursor: Buffer,
     },
-    []
+    [],
   );
 }

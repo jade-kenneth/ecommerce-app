@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 08 Feb 2026 03:25:51 GMT
+// Last modified: Sun, 08 Feb 2026 08:01:16 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -161,6 +161,7 @@ export type ProductsCategoryFilterInput = {
 export type ProductsFilterInput = {
   _id?: InputMaybe<IdFilterInput>;
   category?: InputMaybe<ProductsCategoryFilterInput>;
+  name?: InputMaybe<IdFilterInput>;
   status?: InputMaybe<ProductsStatusFilterInput>;
 };
 
@@ -558,6 +559,28 @@ export type HighPointProductsQuery = {
       };
     }>;
   };
+};
+
+export type SearchProductByNameQueryVariables = Exact<{
+  search: Scalars['String']['input'];
+  first?: InputMaybe<Scalars['Int']['input']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+}>;
+
+export type SearchProductByNameQuery = {
+  __typename: 'Query';
+  searchProductByName?: Array<{
+    __typename: 'Product';
+    _id: string;
+    name: string;
+    price: number;
+    points: string;
+    pieces: number;
+    status: StatusType;
+    discount: number;
+    category?: Array<CategoryType> | null;
+    thumbnail: string;
+  }> | null;
 };
 
 export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
@@ -1540,4 +1563,96 @@ export function refetchHighPointProductsQuery(
   variables?: HighPointProductsQueryVariables,
 ) {
   return { query: HighPointProductsDocument, variables: variables };
+}
+export const SearchProductByNameDocument = /*#__PURE__*/ gql`
+  query SearchProductByName($search: String!, $first: Int, $after: Cursor) {
+    searchProductByName(search: $search, first: $first, after: $after) {
+      ...ProductCoreData
+    }
+  }
+  ${ProductCoreDataFragmentDoc}
+`;
+export function useSearchProductByNameQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchProductByNameQuery,
+    SearchProductByNameQueryVariables
+  > &
+    (
+      | { variables: SearchProductByNameQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    SearchProductByNameQuery,
+    SearchProductByNameQueryVariables
+  >(SearchProductByNameDocument, options);
+}
+export function useSearchProductByNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchProductByNameQuery,
+    SearchProductByNameQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SearchProductByNameQuery,
+    SearchProductByNameQueryVariables
+  >(SearchProductByNameDocument, options);
+}
+// @ts-ignore
+export function useSearchProductByNameSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    SearchProductByNameQuery,
+    SearchProductByNameQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  SearchProductByNameQuery,
+  SearchProductByNameQueryVariables
+>;
+export function useSearchProductByNameSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SearchProductByNameQuery,
+        SearchProductByNameQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  SearchProductByNameQuery | undefined,
+  SearchProductByNameQueryVariables
+>;
+export function useSearchProductByNameSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SearchProductByNameQuery,
+        SearchProductByNameQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    SearchProductByNameQuery,
+    SearchProductByNameQueryVariables
+  >(SearchProductByNameDocument, options);
+}
+export type SearchProductByNameQueryHookResult = ReturnType<
+  typeof useSearchProductByNameQuery
+>;
+export type SearchProductByNameLazyQueryHookResult = ReturnType<
+  typeof useSearchProductByNameLazyQuery
+>;
+export type SearchProductByNameSuspenseQueryHookResult = ReturnType<
+  typeof useSearchProductByNameSuspenseQuery
+>;
+export type SearchProductByNameQueryResult = Apollo.QueryResult<
+  SearchProductByNameQuery,
+  SearchProductByNameQueryVariables
+>;
+export function refetchSearchProductByNameQuery(
+  variables: SearchProductByNameQueryVariables,
+) {
+  return { query: SearchProductByNameDocument, variables: variables };
 }

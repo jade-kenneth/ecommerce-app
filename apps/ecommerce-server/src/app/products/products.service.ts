@@ -38,6 +38,26 @@ export class ProductsService {
 
     return data;
   }
+  public async searchProductByName(params: {
+    search: string;
+    filter: Filter<Product>;
+    first: number;
+  }): Promise<Product[]> {
+    const { filter = {}, first, search } = params;
+
+    const trimmedSearch = search?.trim();
+
+    if (!trimmedSearch) {
+      return [];
+    }
+
+    return this.products.search(trimmedSearch, filter, {
+      index: 'product_by_name',
+      path: 'name',
+      type: 'autocomplete',
+      limit: first ?? 10,
+    });
+  }
   public async createProduct(params: CreateProductInput) {
     await this.products
       .create({

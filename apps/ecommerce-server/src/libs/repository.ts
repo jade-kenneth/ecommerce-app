@@ -112,6 +112,7 @@ export interface Repository<T extends { _id: Types.ObjectId }> {
     filter: Filter<T>,
     opts: {
       index: string;
+      type?: 'autocomplete' | 'text';
       path: string;
       limit?: number;
       secondaryPreferred?: true;

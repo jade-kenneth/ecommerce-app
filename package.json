@@ -3,15 +3,20 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:app": " npx nx run ecommerce-app:build",
+    "build:app": "NX_ISOLATE_PLUGINS=false NX_NATIVE_COMMAND_RUNNER=false NX_PSEUDO_TERMINAL=false npx nx run ecommerce-app:build",
     "build:server": "npx nx run ecommerce-server:build",
     "server": "JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 nx serve ecommerce-server",
     "app": "nx run ecommerce-app:dev --port=4201 ",
+    "cap:sync": "CI=1 npx cap sync android",
+    "android:version:bump": "node scripts/bump-android-version.js",
+    "apk:release": "node scripts/run-apk-release.js",
     "dev": "concurrently \"npm run app\" \"JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 npm run server\"",
     "general:graphql-codegen": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin"
   },
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
     "@apollo/client": "^3.13.1",
     "@apollo/server": "^4.11.3",
     "@ark-ui/anatomy": "^3.5.0",
@@ -91,6 +96,7 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.0.0",
     "@angular-devkit/core": "^19.0.7",
     "@babel/core": "^7.14.5",
     "@babel/plugin-transform-react-jsx-self": "^7.25.9",

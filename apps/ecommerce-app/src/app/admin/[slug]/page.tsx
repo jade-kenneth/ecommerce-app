@@ -1,38 +1,25 @@
-'use client';
-import { useParams } from 'next/navigation';
+import AdminSlugClient from './AdminSlugClient';
 
-import { use } from 'react';
-import { Dashboard } from './Dashboard';
-import { ManageInventory } from './ManageInventory';
-import { ManageOrders } from './ManageOrders';
-import { Settings } from './Settings';
+type AdminSlugParams = {
+  slug: string;
+};
 
-export default function Page(props: {
-  searchParams: Promise<{ password?: string }>;
+const ADMIN_SLUGS: AdminSlugParams[] = [
+  { slug: 'dashboard' },
+  { slug: 'inventory' },
+  { slug: 'orders' },
+  { slug: 'settings' },
+];
+
+export async function generateStaticParams(): Promise<AdminSlugParams[]> {
+  return ADMIN_SLUGS;
+}
+
+export default async function AdminSlugPage({
+  params,
+}: {
+  params: Promise<AdminSlugParams>;
 }) {
-  const params = useParams();
-  const { slug } = params;
-
-  const password = use(props.searchParams).password;
-
-  // if (password !== TEMPORARY_SITE_PASSWORD) {
-  //   return (
-  //     <div className="w-full h-full flex items-center bg-white/80 justify-center">
-  //       <p className="text-lg font-medium">You are unauthorized</p>
-  //     </div>
-  //   );
-  // }
-  switch (slug) {
-    case 'inventory':
-      return <ManageInventory />;
-    case 'settings':
-      return <Settings />;
-    case 'dashboard':
-      return <Dashboard />;
-    case 'orders':
-      return <ManageOrders />;
-
-    default:
-      return <p>HMMMM what are you looking for?</p>;
-  }
+  const { slug } = await params;
+  return <AdminSlugClient slug={slug} />;
 }

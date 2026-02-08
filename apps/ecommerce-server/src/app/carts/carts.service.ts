@@ -249,6 +249,30 @@ export class CartsService {
     return this.orders.find({ _id: orderId, accountId });
   }
 
+  public async updateOrderStatus(params: {
+    orderId: Types.ObjectId;
+    status: OrderStatus;
+  }): Promise<Order> {
+    const order = await this.orders.find(params.orderId);
+
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+    const updatedAt = new Date();
+
+    await this.orders.update(params.orderId, {
+      status: params.status,
+      updatedAt,
+    });
+
+    return {
+      ...order,
+      status: params.status,
+      updatedAt,
+    };
+  }
+
   public async removeFromCart(params: {
     _id: string;
     productId: Types.ObjectId;

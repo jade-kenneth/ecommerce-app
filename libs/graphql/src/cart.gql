@@ -85,3 +85,7 @@ mutation Checkout($input: CheckoutInput!) {
 mutation RemoveFromCart($input: RemoveFromCartInput!) {
   removeFromCart(input: $input)
 }
+
+mutation UpdateOrderStatus($input: UpdateOrderStatusInput!) {
+  updateOrderStatus(input: $input)
+}

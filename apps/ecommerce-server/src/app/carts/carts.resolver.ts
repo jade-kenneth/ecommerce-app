@@ -7,6 +7,7 @@ import { Filter } from '../../libs/repository';
 import { AccountType } from '../../types/common';
 import {
   CheckoutInput,
+  OrderStatus,
   RemoveFromCartInput,
   UpdateCartItemInput,
 } from '../__generated/graphql-types';
@@ -94,6 +95,24 @@ export class CartResolver {
     assert(claims.role === AccountType.Member, 'unauthorized');
 
     return this.cartService.checkout({ accountId: claims.sub, input });
+  }
+
+  @Mutation('updateOrderStatus')
+  async updateOrderStatus(
+    @Context('claims') claims: Claims,
+    @Args('input')
+    input: {
+      orderId: string;
+      status: OrderStatus;
+    },
+  ) {
+    // TODO should be admin only, build admin panel later
+    assert(claims.role === AccountType.Member, 'unauthorized');
+
+    await this.cartService.updateOrderStatus({
+      orderId: new Types.ObjectId(input.orderId),
+      status: input.status,
+    });
   }
 
   // ** build later **

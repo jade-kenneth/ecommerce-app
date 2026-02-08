@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 08 Feb 2026 10:29:33 GMT
+// Last modified: Sun, 08 Feb 2026 10:45:26 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -206,6 +206,11 @@ export type UpdateConfigInput = {
   topSoldThreshold: Scalars['Int']['input'];
 };
 
+export type UpdateOrderStatusInput = {
+  orderId: Scalars['ObjectID']['input'];
+  status: OrderStatus;
+};
+
 export type UpdateProductInput = {
   _id: Scalars['ObjectID']['input'];
   category: Array<CategoryType>;
@@ -383,6 +388,15 @@ export type RemoveFromCartMutationVariables = Exact<{
 export type RemoveFromCartMutation = {
   __typename: 'Mutation';
   removeFromCart: boolean;
+};
+
+export type UpdateOrderStatusMutationVariables = Exact<{
+  input: UpdateOrderStatusInput;
+}>;
+
+export type UpdateOrderStatusMutation = {
+  __typename: 'Mutation';
+  updateOrderStatus?: boolean | null;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -1070,6 +1084,36 @@ export type RemoveFromCartMutationResult =
 export type RemoveFromCartMutationOptions = Apollo.BaseMutationOptions<
   RemoveFromCartMutation,
   RemoveFromCartMutationVariables
+>;
+export const UpdateOrderStatusDocument = /*#__PURE__*/ gql`
+  mutation UpdateOrderStatus($input: UpdateOrderStatusInput!) {
+    updateOrderStatus(input: $input)
+  }
+`;
+export type UpdateOrderStatusMutationFn = Apollo.MutationFunction<
+  UpdateOrderStatusMutation,
+  UpdateOrderStatusMutationVariables
+>;
+export function useUpdateOrderStatusMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOrderStatusMutation,
+    UpdateOrderStatusMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateOrderStatusMutation,
+    UpdateOrderStatusMutationVariables
+  >(UpdateOrderStatusDocument, options);
+}
+export type UpdateOrderStatusMutationHookResult = ReturnType<
+  typeof useUpdateOrderStatusMutation
+>;
+export type UpdateOrderStatusMutationResult =
+  Apollo.MutationResult<UpdateOrderStatusMutation>;
+export type UpdateOrderStatusMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOrderStatusMutation,
+  UpdateOrderStatusMutationVariables
 >;
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {

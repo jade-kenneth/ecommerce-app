@@ -232,7 +232,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         <div className="flex items-center gap-2">
           <Show when={globalStore.authenticate.isAuthenticated}>
             <Menu.Root>
-              <Menu.Trigger className="flex items-center justify-center w-10 h-10 rounded-full border border-cyan-100 text-cyan-700 hover:bg-cyan-50 transition-colors">
+              <Menu.Trigger className="flex items-center justify-center w-10 h-10  text-cyan-700 hover:bg-cyan-50 transition-colors">
                 <Settings className="text-cyan-700 w-6 h-6" />
               </Menu.Trigger>
               <Menu.Positioner>

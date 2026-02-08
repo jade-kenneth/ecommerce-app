@@ -8,11 +8,20 @@ import {
   RefreshCcw,
   ShoppingCart,
   Wallet,
+  XIcon,
 } from 'lucide-react';
-import { Reducer, useMemo, useReducer } from 'react';
-import { Badge, Button, DataTable, Menu } from '~/components';
+import Image from 'next/image';
+import { Reducer, useMemo, useReducer, useState } from 'react';
+import { Badge, Button, DataTable, Menu, toaster } from '~/components';
+import { Dialog } from '~/components/Dialog';
 
-import { OrderStatus, useMyOrdersQuery } from '~/graphql/generated';
+import type { MyOrdersQuery } from '~/graphql/generated';
+import {
+  OrderStatus,
+  useMyOrdersQuery,
+  useProductsQuery,
+  useUpdateOrderStatusMutation,
+} from '~/graphql/generated';
 import { usePaginated } from '~/hooks/usePaginated';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
@@ -38,6 +47,21 @@ const getStatusColorScheme = (status?: OrderStatus) => {
   }
 };
 
+const formatCurrency = (value?: string | number | null) =>
+  numberFormatter.format(value ?? 0, {
+    locale: 'en-PH',
+    currency: 'PHP',
+  });
+
+const formatDate = (value?: string | null) => {
+  if (!value) return '-';
+  return new Date(value).toLocaleDateString('en-PH', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+  });
+};
+
 export const ManageOrders = () => {
   const [state, setState] = useReducer<Reducer<PageState, Partial<PageState>>>(
     (prev, next) => ({
@@ -50,8 +74,43 @@ export const ManageOrders = () => {
   const query = useMyOrdersQuery({
     fetchPolicy: 'network-only',
   });
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const [selectedOrder, setSelectedOrder] = useState<
+    MyOrdersQuery['myOrders'][number] | null
+  >(null);
+
+  const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
   const orders = query.data?.myOrders ?? [];
+  const productIds = useMemo(() => {
+    const ids = orders
+      .flatMap((order) => order.items ?? [])
+      .map((item) => item.productId)
+      .filter(Boolean);
+    return Array.from(new Set(ids));
+  }, [orders]);
+
+  const productsQuery = useProductsQuery({
+    variables: {
+      first: productIds.length,
+      filter: {
+        _id: {
+          in: productIds,
+        },
+      },
+    },
+    skip: productIds.length === 0,
+  });
+  const productMap = useMemo(() => {
+    return new Map(
+      productsQuery.data?.products.edges.map((edge) => [
+        edge.node._id,
+        edge.node,
+      ]) ?? [],
+    );
+  }, [productsQuery.data]);
+
   const { currentPage, totalPages } = usePaginated(orders, state);
   const summary = useMemo(() => {
     const totalOrders = orders.length;
@@ -93,6 +152,34 @@ export const ManageOrders = () => {
       },
     ];
   }, [orders]);
+
+  const handleUpdateStatus = async (orderId: string, status: OrderStatus) => {
+    try {
+      setUpdatingId(orderId);
+      await updateOrderStatus({
+        variables: {
+          input: {
+            orderId,
+            status,
+          },
+        },
+      });
+      toaster.success({
+        description: `Order status updated to ${capitalize(status, {
+          delimiter: capitalize.delimiters.UNDERSCORE,
+        })}.`,
+      });
+      await query.refetch();
+    } catch (error) {
+      toaster.error({
+        description: 'Unable to update order status. Please try again.',
+      });
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const selectedItems = selectedOrder?.items ?? [];
 
   return (
     <div className="flex flex-col gap-6">
@@ -247,15 +334,41 @@ export const ManageOrders = () => {
           {
             heading: '',
             filterable: true,
-            render: () => (
+            render: (item) => (
               <Menu.Root>
                 <Menu.Trigger>
                   <MoreVertical className="w-4 h-4" />
                 </Menu.Trigger>
                 <Menu.Positioner>
                   <Menu.Content className="min-w-[150px]">
-                    <Menu.Item value="view">View details</Menu.Item>
-                    <Menu.Item value="update">Update status</Menu.Item>
+                    <Menu.Item
+                      value="view"
+                      onSelect={() => setSelectedOrder(item)}
+                    >
+                      View details
+                    </Menu.Item>
+                    <Menu.Separator />
+                    {Object.values(OrderStatus).map((status) => {
+                      const isCurrent = item.status === status;
+                      return (
+                        <Menu.Item
+                          key={status}
+                          value={`${item._id}-${status}`}
+                          disabled={isCurrent || updatingId === item._id}
+                          onSelect={() =>
+                            !isCurrent && handleUpdateStatus(item._id, status)
+                          }
+                        >
+                          {isCurrent
+                            ? `Current: ${capitalize(status, {
+                                delimiter: capitalize.delimiters.UNDERSCORE,
+                              })}`
+                            : `Mark as ${capitalize(status, {
+                                delimiter: capitalize.delimiters.UNDERSCORE,
+                              })}`}
+                        </Menu.Item>
+                      );
+                    })}
                   </Menu.Content>
                 </Menu.Positioner>
               </Menu.Root>
@@ -277,6 +390,148 @@ export const ManageOrders = () => {
           },
         }}
       />
+
+      <Dialog.Root
+        open={Boolean(selectedOrder)}
+        onOpenChange={(details) => {
+          if (!details.open) {
+            setSelectedOrder(null);
+          }
+        }}
+      >
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content className="w-[92vw] max-w-4xl p-0 overflow-hidden">
+            <div className="flex items-start justify-between border-b border-cyan-100 bg-cyan-50 px-6 py-5">
+              <div className="flex flex-col gap-1">
+                <p className="text-xl font-semibold text-gray-900">
+                  Order Details
+                </p>
+                <p className="text-sm text-gray-500">{selectedOrder?._id}</p>
+              </div>
+              <Dialog.CloseTrigger>
+                <XIcon
+                  size={18}
+                  color="gray"
+                  onClick={() => setSelectedOrder(null)}
+                />
+              </Dialog.CloseTrigger>
+            </div>
+
+            <Dialog.Body className="flex flex-col gap-6 px-6 py-6">
+              {selectedOrder && (
+                <>
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <p className="text-xs uppercase text-gray-400">
+                        Placed on
+                      </p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {formatDate(selectedOrder.createdAt)}
+                      </p>
+                    </div>
+                    <Badge.Root
+                      colorScheme={getStatusColorScheme(selectedOrder.status)}
+                    >
+                      <Badge.Indicator asChild>
+                        <span className="w-2 h-2 rounded-full bg-current" />
+                      </Badge.Indicator>
+                      <Badge.Label>
+                        {capitalize(selectedOrder.status ?? 'pending', {
+                          delimiter: capitalize.delimiters.UNDERSCORE,
+                        })}
+                      </Badge.Label>
+                    </Badge.Root>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <p className="text-xs uppercase text-gray-500">
+                        Subtotal
+                      </p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {formatCurrency(selectedOrder.subtotal)}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Tax: {formatCurrency(selectedOrder.tax)}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <p className="text-xs uppercase text-gray-500">
+                        Shipping
+                      </p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {formatCurrency(selectedOrder.shippingFee)}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {selectedOrder.shippingOption?.label ?? 'Standard'}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-cyan-100 bg-cyan-50 p-4">
+                      <p className="text-xs uppercase text-cyan-700">Total</p>
+                      <p className="text-lg font-semibold text-cyan-800">
+                        {formatCurrency(selectedOrder.total)}
+                      </p>
+                      <p className="text-xs text-cyan-700">
+                        Includes taxes and shipping
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <p className="text-sm font-semibold text-gray-900">
+                      Items ({selectedItems.length})
+                    </p>
+                    <div className="flex flex-col gap-3">
+                      {selectedItems.map((item) => {
+                        const product = productMap.get(item.productId);
+                        const name = product?.name ?? 'Unknown product';
+                        const thumbnail =
+                          product?.thumbnail ?? '/LogoBlack.png';
+                        return (
+                          <div
+                            key={`${selectedOrder._id}-${item.productId}`}
+                            className="flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 sm:flex-row sm:items-center sm:gap-4"
+                          >
+                            <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-gray-200 bg-white">
+                              <Image
+                                src={thumbnail}
+                                alt={name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                            <div className="flex flex-1 flex-col gap-1">
+                              <p className="text-sm font-semibold text-gray-900">
+                                {name}
+                              </p>
+                              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                <span>Qty {item.quantity}</span>
+                                <span className="h-3 w-px bg-gray-200" />
+                                <span>
+                                  {formatCurrency(item.unitPrice)} each
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-left sm:text-right">
+                              <p className="text-xs text-gray-500">
+                                Line total
+                              </p>
+                              <p className="text-sm font-semibold text-gray-900">
+                                {formatCurrency(item.totalPrice)}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
+            </Dialog.Body>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Dialog.Root>
     </div>
   );
 };

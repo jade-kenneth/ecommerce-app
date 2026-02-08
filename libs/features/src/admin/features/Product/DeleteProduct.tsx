@@ -1,5 +1,6 @@
 import { Portal } from '@ark-ui/react';
 import { Trash, XIcon } from 'lucide-react';
+import { Menu } from '~/components';
 import { useDeleteProductMutation } from '~/graphql/generated';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { Dialog } from '../../../../../ui/components/Dialog';
@@ -22,35 +23,62 @@ export const DeleteProduct = () => {
   });
 
   return (
-    <Dialog.Root closeOnInteractOutside open={disclosure.open}>
-      <div
-        className="flex w-full items-center gap-2 rounded-lg cursor-pointer outline-none  transition-colors"
-        onClick={() => disclosure.onOpen()}
-      >
+    <>
+      <Menu.Item value="delete" onSelect={() => disclosure.setOpen(true)}>
         <Trash className="w-4 h-4" />
         <p className="text-paragraph-sm"> Delete</p>
-      </div>
-      <Portal>
-        <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content>
-            <Dialog.CloseTrigger>
-              <XIcon onClick={() => disclosure.setOpen(false)} />
-            </Dialog.CloseTrigger>
+      </Menu.Item>
+      <Dialog.Root
+        closeOnInteractOutside
+        open={disclosure.open}
+        onOpenChange={(details) => disclosure.setOpen(details.open)}
+      >
+        <Portal>
+          <Dialog.Backdrop />
+          <Dialog.Positioner>
+            <Dialog.Content className="w-[92vw] max-w-xl p-0 overflow-hidden">
+              <div className="flex items-start justify-between border-b border-cyan-100 bg-cyan-50 px-6 py-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <Trash className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xl font-semibold text-gray-900">
+                      Delete Product
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      This action is permanent and cannot be undone.
+                    </p>
+                  </div>
+                </div>
+                <Dialog.CloseTrigger>
+                  <XIcon
+                    size={18}
+                    color="gray"
+                    onClick={() => disclosure.setOpen(false)}
+                  />
+                </Dialog.CloseTrigger>
+              </div>
 
-            <Dialog.Header>
-              <p className="text-heading-6 font-medium">Delete Product</p>
-            </Dialog.Header>
-            <Dialog.Body className="flex flex-col gap-4">
-              <p className="text-paragraph-sm">
-                Are you sure you want to delete this product? This action cannot
-                be undone.
-              </p>
-            </Dialog.Body>
-            <Dialog.Footer className="flex justify-end">
-              <div className="flex gap-2 items-center">
+              <Dialog.Body className="flex flex-col gap-4 px-6 py-6">
+                <div className="rounded-2xl border border-red-100 bg-red-50/40 p-4 text-sm text-gray-600">
+                  You are about to delete{' '}
+                  <span className="font-semibold text-gray-900">
+                    {context.name}
+                  </span>
+                  . This will remove it from your catalog immediately.
+                </div>
+              </Dialog.Body>
+              <Dialog.Footer className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
                 <button
-                  className="bg-cyan-700 p-3 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-carbon-500 text-sm font-medium "
+                  className="rounded-[32px] border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  type="button"
+                  onClick={() => disclosure.setOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-error-600 px-5 py-2 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-sm font-medium hover:bg-red-500"
                   onClick={async () => {
                     await deleteProduct({
                       variables: {
@@ -59,16 +87,18 @@ export const DeleteProduct = () => {
                         },
                       },
                     });
+                    disclosure.setOpen(false);
                   }}
+                  data-disabled={loading ? '' : undefined}
                 >
                   <p>Delete Product</p>{' '}
                   {loading && <Spinner className="w-2 h-2" />}
                 </button>
-              </div>
-            </Dialog.Footer>
-          </Dialog.Content>
-        </Dialog.Positioner>
-      </Portal>
-    </Dialog.Root>
+              </Dialog.Footer>
+            </Dialog.Content>
+          </Dialog.Positioner>
+        </Portal>
+      </Dialog.Root>
+    </>
   );
 };

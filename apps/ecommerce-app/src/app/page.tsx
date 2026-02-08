@@ -25,18 +25,20 @@ const ClientOnlyCategories = dynamic(
 
 export default function Index() {
   return (
-    <Layout>
+    <>
       <Sticky>
         <Highlight />
         <ClientOnlyNavbar />
       </Sticky>
-      <FrequentlySearched />
-      <Carousel />
-      <ClientOnlyCategories />
-      <TopSelling />
-      <HighPoint />
-      <JustForYou />
-      <Footer />
-    </Layout>
+      <Layout>
+        <FrequentlySearched />
+        <Carousel />
+        <ClientOnlyCategories />
+        <TopSelling />
+        <HighPoint />
+        <JustForYou />
+        <Footer />
+      </Layout>
+    </>
   );
 }

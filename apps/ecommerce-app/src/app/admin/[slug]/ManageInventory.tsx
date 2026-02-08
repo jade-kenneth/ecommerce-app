@@ -304,9 +304,7 @@ export const ManageInventory = () => {
                             }}
                           />
 
-                          <Menu.Item value="delete">
-                            <DeleteProduct />
-                          </Menu.Item>
+                          <DeleteProduct />
                         </Menu.Content>
                       </ProductProvider>
                     </Menu.Positioner>

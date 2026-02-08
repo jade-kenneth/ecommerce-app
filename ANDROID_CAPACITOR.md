@@ -24,6 +24,7 @@ Capacitor needs a **static web directory** that includes an `index.html`.
 `capacitor.config.ts`
 ```
 webDir: 'dist/apps/ecommerce-app/.next'
+appName: 'Amy Store'
 ```
 
 ### ✅ Installed
@@ -89,6 +90,29 @@ android/app/build/outputs/apk/release/app-release.apk
 
 ---
 
+## 6) Branding (App Name + Icon)
+
+### ✅ App name
+Updated Android app name to **Amy Store**:
+`android/app/src/main/res/values/strings.xml`
+- `app_name`
+- `title_activity_main`
+
+Also updated Capacitor config:
+`capacitor.config.ts` → `appName: 'Amy Store'`
+
+### ✅ App icon
+Replaced all Android launcher icons with `LogoBlack.png` (padded on white background) in:
+```
+android/app/src/main/res/mipmap-*
+```
+Files replaced:
+- `ic_launcher.png`
+- `ic_launcher_round.png`
+- `ic_launcher_foreground.png`
+
+---
+
 # Errors Encountered & Fixes
 
 ### ❌ `NX Failed to start plugin worker`
@@ -146,4 +170,3 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 17)
 ---
 
 If you want this moved into `README.md` or converted to PDF, just say the word.
-

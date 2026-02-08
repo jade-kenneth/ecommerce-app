@@ -38,8 +38,8 @@ const readJavaMajorFromJavaBin = (javaBin, env) => {
 const parseJavaMajor = (text) => {
   if (!text) return null;
   const match =
-    text.match(/version \"(\d+)(?:\.(\d+))?/i) ||
-    text.match(/openjdk version \"(\d+)(?:\.(\d+))?/i);
+    text.match(/version "(\d+)(?:\.(\d+))?/i) ||
+    text.match(/openjdk version "(\d+)(?:\.(\d+))?/i);
   if (!match) return null;
   const major = Number(match[1]);
   return Number.isFinite(major) ? major : null;
@@ -164,7 +164,8 @@ run('npm', ['run', 'cap:sync'], { cwd: rootDir, env });
 
 const gradleUserHome = path.join(rootDir, '.gradle-cache');
 const androidDir = path.join(rootDir, 'android');
-const gradleCommand = process.platform === 'win32' ? 'gradlew.bat' : './gradlew';
+const gradleCommand =
+  process.platform === 'win32' ? 'gradlew.bat' : './gradlew';
 
 run(gradleCommand, ['assembleRelease'], {
   cwd: androidDir,

@@ -3,7 +3,7 @@ import { useDataTableContext } from './DataTableContext';
 export function TableContent() {
   const datatable = useDataTableContext();
   return (
-    <div className="overflow-x-scroll ">
+    <div className="overflow-x-scroll whitespace-nowrap">
       <div className="flex py-3 px-3">
         <p className="text-[18px] font-medium text-carbon-300">
           Product Details

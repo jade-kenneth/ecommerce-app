@@ -1,6 +1,6 @@
 'use client';
 
-import { createListCollection } from '@ark-ui/react';
+import { createListCollection, Portal } from '@ark-ui/react';
 import {
   CheckCircle2,
   ClipboardList,
@@ -318,48 +318,49 @@ export const ManageOrders = () => {
             sortable: true,
           },
           {
-            heading: '',
-            filterable: true,
+            heading: 'Actions',
+
             render: (item) => (
               <Menu.Root>
-                <Menu.Trigger>
+                <Menu.Trigger className="flex items-center justify-center">
                   <MoreVertical className="w-4 h-4" />
                 </Menu.Trigger>
-                <Menu.Positioner>
-                  <Menu.Content className="min-w-[150px]">
-                    <Menu.Item
-                      value="view"
-                      onSelect={() => setSelectedOrder(item)}
-                    >
-                      View details
-                    </Menu.Item>
-                    <Menu.Separator />
-                    {Object.values(OrderStatus).map((status) => {
-                      const isCurrent = item.status === status;
-                      return (
-                        <Menu.Item
-                          key={status}
-                          value={`${item._id}-${status}`}
-                          disabled={isCurrent || updatingId === item._id}
-                          onSelect={() =>
-                            !isCurrent && handleUpdateStatus(item._id, status)
-                          }
-                        >
-                          {isCurrent
-                            ? `Current: ${capitalize(status, {
-                                delimiter: capitalize.delimiters.UNDERSCORE,
-                              })}`
-                            : `Mark as ${capitalize(status, {
-                                delimiter: capitalize.delimiters.UNDERSCORE,
-                              })}`}
-                        </Menu.Item>
-                      );
-                    })}
-                  </Menu.Content>
-                </Menu.Positioner>
+                <Portal>
+                  <Menu.Positioner>
+                    <Menu.Content className="min-w-[150px]">
+                      <Menu.Item
+                        value="view"
+                        onSelect={() => setSelectedOrder(item)}
+                      >
+                        View details
+                      </Menu.Item>
+                      <Menu.Separator />
+                      {Object.values(OrderStatus).map((status) => {
+                        const isCurrent = item.status === status;
+                        return (
+                          <Menu.Item
+                            key={status}
+                            value={`${item._id}-${status}`}
+                            disabled={isCurrent || updatingId === item._id}
+                            onSelect={() =>
+                              !isCurrent && handleUpdateStatus(item._id, status)
+                            }
+                          >
+                            {isCurrent
+                              ? `Current: ${capitalize(status, {
+                                  delimiter: capitalize.delimiters.UNDERSCORE,
+                                })}`
+                              : `Mark as ${capitalize(status, {
+                                  delimiter: capitalize.delimiters.UNDERSCORE,
+                                })}`}
+                          </Menu.Item>
+                        );
+                      })}
+                    </Menu.Content>
+                  </Menu.Positioner>
+                </Portal>
               </Menu.Root>
             ),
-            sortable: true,
           },
         ]}
         pagination={{

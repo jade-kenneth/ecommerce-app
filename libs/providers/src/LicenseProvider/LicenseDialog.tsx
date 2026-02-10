@@ -24,8 +24,8 @@ export const LicenseDialog = (props: PropsWithChildren) => {
       <Dialog.Backdrop className="bg-[unset]">{props.children}</Dialog.Backdrop>
 
       <Dialog.Positioner className="bg-white/80 flex justify-center items-center px-4 py-6 sm:px-8 sm:py-12">
-        <Dialog.Content className="flex justify-center w-[94vw] sm:w-auto max-w-[550px] min-w-0 py-4 sm:py-6 items-center">
-          <div className="rounded-3xl text-center shadow-lg px-4 sm:px-12 py-4 sm:py-6 w-full">
+        <Dialog.Content className="flex justify-center w-[94vw] border-[1px]  rounded-3xl  sm:w-auto max-w-[550px] min-w-0  items-center">
+          <div className="rounded-3xl text-center shadow-lg px-4 h-full sm:px-12 py-4 sm:py-6 w-full">
             <div className="flex flex-col items-center mb-6 sm:mb-8">
               <div className="w-14 h-14 sm:w-20 sm:h-20 bg-cyan-100 rounded-full flex items-center justify-center mb-4 sm:mb-6">
                 <ShieldCheck

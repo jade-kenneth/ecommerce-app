@@ -8,6 +8,7 @@ import {
   useMyOrdersQuery,
   useProductsQuery,
 } from '~/graphql/generated';
+import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { safeParseFloat } from '~/utils/safeParseFloat';
@@ -148,7 +149,7 @@ export const Dashboard = () => {
                       })}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {new Date(order.createdAt).toLocaleDateString('en-PH')}
+                      {formatDate(order.createdAt)}
                     </p>
                   </div>
                 </div>

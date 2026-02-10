@@ -42,7 +42,7 @@ export function OtpField(props: OtpFieldProps) {
       placeholder="-"
       className={props.className}
     >
-      <PinInput.Control className="grid grid-cols-9 gap-2 sm:grid-cols-9 xs:grid-cols-3">
+      <PinInput.Control className="flex h-[30px]">
         <PinInput.Input index={0} />
         <PinInput.Input index={1} />
         <PinInput.Input index={2} />

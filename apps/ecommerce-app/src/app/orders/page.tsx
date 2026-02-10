@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
-import { Button, Spinner } from '~/components';
+import { Badge, Button, Spinner } from '~/components';
 import { Sticky } from '~/components/Sticky';
 import { Footer, Highlight } from '~/features/portal';
 import { Layout } from '~/features/portal/layout/Layout';
@@ -14,6 +14,7 @@ import {
   useMyOrdersQuery,
   useProductsQuery,
 } from '~/graphql/generated';
+import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 
@@ -22,36 +23,42 @@ const ClientOnlyNavbar = dynamic(
   { ssr: false },
 );
 
-const getStatusStyles = (status?: OrderStatus) => {
+const getStatusColorScheme = (status?: OrderStatus) => {
   switch (status) {
     case OrderStatus.Completed:
-      return 'border-success-100 bg-success-50 text-success-700';
+      return 'success';
     case OrderStatus.Paid:
-      return 'border-cyan-100 bg-cyan-50 text-cyan-700';
+      return 'info';
     case OrderStatus.Shipped:
-      return 'border-yellow-100 bg-yellow-50 text-yellow-700';
+      return 'warning';
     case OrderStatus.Cancelled:
-      return 'border-error-100 bg-error-50 text-error-700';
+      return 'danger';
     case OrderStatus.Pending:
     default:
-      return 'border-warning-100 bg-warning-50 text-warning-700';
+      return 'warning';
   }
 };
 
-const formatCurrency = (value?: string | number | null) =>
-  numberFormatter.format(value ?? 0, {
-    locale: 'en-US',
-    currency: 'PHP',
-  });
-
-const formatDate = (value?: string | null) => {
-  if (!value) return '';
-  return new Date(value).toLocaleDateString('en-PH', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+const getHeaderStyles = (status?: OrderStatus) => {
+  switch (status) {
+    case OrderStatus.Completed:
+      return 'border-success-100 bg-success-50/70';
+    case OrderStatus.Paid:
+      return 'border-cyan-100 bg-cyan-50/70';
+    case OrderStatus.Shipped:
+      return 'border-yellow-100 bg-yellow-50/70';
+    case OrderStatus.Cancelled:
+      return 'border-error-100 bg-error-50/70';
+    case OrderStatus.Pending:
+    default:
+      return 'border-warning-100 bg-warning-50/70';
+  }
 };
+
+const currencyFormatConfig = {
+  locale: 'en-US',
+  currency: 'PHP',
+} as const;
 
 export default function OrdersPage() {
   const router = useRouter();
@@ -146,8 +153,12 @@ export default function OrdersPage() {
                     key={order._id}
                     className="rounded-3xl border border-gray-200 bg-white shadow-sm overflow-hidden"
                   >
-                    <div className="flex flex-col gap-3 bg-gray-50/70 px-6 py-4 border-b border-gray-100">
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div
+                      className={`flex flex-col gap-3 px-6 py-4 border-b ${getHeaderStyles(
+                        order.status,
+                      )}`}
+                    >
+                      <div className="flex  flex-col lg:flex-row h-full  gap-2 lg:gap-3 sm:flex-row items-start lg:items-start justify-between">
                         <div>
                           <p className="text-xs uppercase tracking-wide text-gray-400">
                             Order
@@ -158,24 +169,30 @@ export default function OrdersPage() {
                           <p className="text-xs text-gray-500 mt-1">
                             Placed {formatDate(order.createdAt)}
                           </p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="text-xs text-gray-500">Total</p>
-                            <p className="text-lg font-semibold text-gray-900">
-                              {formatCurrency(order.total)}
+                          <div className="text-left mt-2">
+                            <p className="lg:block hidden text-xs text-gray-500">
+                              Total
+                            </p>
+                            <p className="lg:text-lg text-sm font-semibold text-gray-900">
+                              {numberFormatter.format(
+                                order.total,
+                                currencyFormatConfig,
+                              )}
                             </p>
                           </div>
-                          <div
-                            className={`rounded-full border px-3 py-1 text-xs font-semibold ${getStatusStyles(
-                              order.status,
-                            )}`}
-                          >
+                        </div>
+
+                        <Badge.Root
+                          colorScheme={getStatusColorScheme(order.status)}
+                          size="sm"
+                          className="font-semibold"
+                        >
+                          <Badge.Label>
                             {capitalize(order.status ?? 'pending', {
                               delimiter: capitalize.delimiters.UNDERSCORE,
                             })}
-                          </div>
-                        </div>
+                          </Badge.Label>
+                        </Badge.Root>
                       </div>
                       <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
                         <span>{itemsCount} items</span>
@@ -221,7 +238,11 @@ export default function OrdersPage() {
                                 <span>Qty {item.quantity}</span>
                                 <span className="h-3 w-px bg-gray-200" />
                                 <span>
-                                  {formatCurrency(item.unitPrice)} each
+                                  {numberFormatter.format(
+                                    item.unitPrice,
+                                    currencyFormatConfig,
+                                  )}{' '}
+                                  each
                                 </span>
                               </div>
                             </div>
@@ -230,7 +251,10 @@ export default function OrdersPage() {
                                 Line total
                               </p>
                               <p className="text-sm font-semibold text-gray-900">
-                                {formatCurrency(item.totalPrice)}
+                                {numberFormatter.format(
+                                  item.totalPrice,
+                                  currencyFormatConfig,
+                                )}
                               </p>
                             </div>
                           </div>
@@ -244,10 +268,17 @@ export default function OrdersPage() {
                           Subtotal
                         </p>
                         <p className="text-sm font-semibold text-gray-900">
-                          {formatCurrency(order.subtotal)}
+                          {numberFormatter.format(
+                            order.subtotal,
+                            currencyFormatConfig,
+                          )}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Tax: {formatCurrency(order.tax)}
+                          Tax:{' '}
+                          {numberFormatter.format(
+                            order.tax,
+                            currencyFormatConfig,
+                          )}
                         </p>
                       </div>
                       <div className="rounded-2xl border border-gray-200 bg-white p-4">
@@ -255,7 +286,10 @@ export default function OrdersPage() {
                           Shipping
                         </p>
                         <p className="text-sm font-semibold text-gray-900">
-                          {formatCurrency(order.shippingFee)}
+                          {numberFormatter.format(
+                            order.shippingFee,
+                            currencyFormatConfig,
+                          )}
                         </p>
                         <p className="text-xs text-gray-500">
                           {order.shippingOption?.label ?? 'Standard'}
@@ -264,7 +298,10 @@ export default function OrdersPage() {
                       <div className="rounded-2xl border border-cyan-100 bg-cyan-50 p-4">
                         <p className="text-xs uppercase text-cyan-700">Total</p>
                         <p className="text-lg font-semibold text-cyan-900">
-                          {formatCurrency(order.total)}
+                          {numberFormatter.format(
+                            order.total,
+                            currencyFormatConfig,
+                          )}
                         </p>
                         <p className="text-xs text-cyan-700">
                           Includes taxes and shipping

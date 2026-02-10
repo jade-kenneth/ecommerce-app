@@ -10,7 +10,6 @@ import { authenticate } from '~/providers/AuthProvider';
 import { Button } from '../../../ui/components/Button';
 import { Input } from '../../../ui/components/Input';
 import { toaster } from '../../../ui/components/ToastContainer';
-import { Checkbox } from '../../../ui/components/ui/Checkbox';
 import { Field } from '../../../ui/components/ui/Field';
 
 interface LoginFormProps {
@@ -120,7 +119,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           )}
         />
       </Field.Root>
-      <div className="flex justify-between mt-4 sm:mt-5">
+      {/* <div className="flex justify-between mt-4 sm:mt-5">
         <Checkbox.Root>
           <Checkbox.HiddenInput />
           <Checkbox.Control />
@@ -129,25 +128,33 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         <span className="text-primary-700 text-sm font-semibold cursor-pointer">
           Forgot your Password?
         </span>
-      </div>
+      </div> */}
 
       <Button
         type="submit"
-        className="w-full rounded-[50px] text-white mt-5 sm:mt-6"
+        className="w-full rounded-[50px] text-white mt-5 sm:mt-6 h-[40px]"
       >
         Sign in
       </Button>
 
-      <p className="w-fit mx-auto mt-3 sm:mt-4">
-        Don&apos;t have an account yet?{' '}
-        <span
+      <p className="w-full font-normal mx-auto mt-3 sm:mt-4 text-sm">
+        No account yet?{' '}
+        <a
+          className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
+          target="_blank"
+          href="https://www.facebook.com/jeidosenpaitsx/"
+        >
+          {' '}
+          Ask Admin
+        </a>
+        {/* <span
           className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
           onClick={() => onToggleToSignup?.()}
         >
           Register here
-        </span>
+        </span> */}
       </p>
-      <p className="mx-auto w-fit mt-3 sm:mt-4">Or sign in using</p>
+      {/* <p className="mx-auto w-fit mt-3 sm:mt-4">Or sign in using</p>
       <div className="flex w-full max-w-[296px] mx-auto mt-3 sm:mt-4 items-start gap-3 relative">
         {socialButtons.map((button, index) => (
           <button
@@ -164,7 +171,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
             </span>
           </button>
         ))}
-      </div>
+      </div> */}
     </form>
   );
 };

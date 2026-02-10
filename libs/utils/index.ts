@@ -9,3 +9,4 @@ export * from './numberFormatter';
 
 export * from './object-shared';
 export * from './sha256';
+export * from './timestampToDateFormat';

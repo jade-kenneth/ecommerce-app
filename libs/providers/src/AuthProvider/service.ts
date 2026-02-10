@@ -27,7 +27,7 @@ export async function getSession(): Promise<Session> {
         refreshToken: session.refreshToken,
         role,
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'unauthenticated',
       };
@@ -70,7 +70,7 @@ export async function logout() {
     if (refreshToken) {
       await services.logoutSession({ refreshToken });
     }
-  } catch (error) {
+  } catch {
     /* empty */
   } finally {
     await store.clearSession();

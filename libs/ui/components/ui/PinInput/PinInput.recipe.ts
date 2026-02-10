@@ -9,9 +9,10 @@ export const pinInputRecipe = tv({
     control: 'grid grid-cols-6 gap-md',
     input: [
       'w-full',
-      'aspect-square',
+      'lg:aspect-square',
       'rounded-lg',
-      'text-4xl',
+      'lg:text-4xl',
+      'text-sm',
       'font-semibold',
       'text-center',
       'border',

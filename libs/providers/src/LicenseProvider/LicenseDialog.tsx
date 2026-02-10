@@ -23,21 +23,21 @@ export const LicenseDialog = (props: PropsWithChildren) => {
     <Dialog.Root open={true}>
       <Dialog.Backdrop className="bg-[unset]">{props.children}</Dialog.Backdrop>
 
-      <Dialog.Positioner className="bg-white/80 flex justify-center items-center">
-        <Dialog.Content className="flex justify-center   max-w-[550px] min-w-[350px] py-6 items-center">
-          <div className=" rounded-3xl text-center shadow-lg px-12 py-3">
-            <div className="flex flex-col items-center mb-8">
-              <div className="w-20 h-20 bg-cyan-100 rounded-full flex items-center justify-center mb-6">
+      <Dialog.Positioner className="bg-white/80 flex justify-center items-center px-4 py-6 sm:px-8 sm:py-12">
+        <Dialog.Content className="flex justify-center w-[94vw] sm:w-auto max-w-[550px] min-w-0 py-4 sm:py-6 items-center">
+          <div className="rounded-3xl text-center shadow-lg px-4 sm:px-12 py-4 sm:py-6 w-full">
+            <div className="flex flex-col items-center mb-6 sm:mb-8">
+              <div className="w-14 h-14 sm:w-20 sm:h-20 bg-cyan-100 rounded-full flex items-center justify-center mb-4 sm:mb-6">
                 <ShieldCheck
-                  size={40}
+                  size={28}
                   className="text-cyan-600"
                   strokeWidth={1.5}
                 />
               </div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-3">
+              <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
                 License Required
               </h1>
-              <p className="text-lg text-gray-500">
+              <p className="text-sm sm:text-lg text-gray-500">
                 Enter your license code to access the site
               </p>
             </div>
@@ -51,18 +51,21 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                     }
                   }}
                 />
-                <p className="text-error-600  font-semibold mt-2">{error}</p>
+                <p className="text-error-600 text-sm sm:text-base font-semibold mt-2">
+                  {error}
+                </p>
               </div>
               <Button
                 disabled={context.loading}
-                className="w-full  text-white font-semibold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 transition-colors text-lg"
+                className="w-full text-white font-semibold py-3 sm:py-4 px-5 sm:px-6 rounded-2xl flex items-center justify-center gap-3 transition-colors text-base sm:text-lg"
               >
-                <Key size={24} />
+                <Key size={20} className="sm:hidden" />
+                <Key size={24} className="hidden sm:inline" />
                 {context.loading ? 'Validating License...' : 'Activate License'}
               </Button>
             </div>
-            <div className="text-center mb-8">
-              <p className="text-gray-600">
+            <div className="text-center mb-6 sm:mb-8">
+              <p className="text-gray-600 text-sm sm:text-base">
                 Don&apos;t have a license?{' '}
                 <a
                   href="https://www.facebook.com/jeidosenpaitsx/"

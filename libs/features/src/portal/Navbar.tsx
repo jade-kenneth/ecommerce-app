@@ -83,15 +83,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   return (
     <div
       className={twMerge(
-        'max-w-screen w-full flex flex-col gap-4 py-4 sm:py-6 lg:py-9 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6',
-        !globalStore.authenticate.isAuthenticated &&
-          'aria-hidden aria-disabled aria-readonly',
+        'max-w-screen  w-full flex flex-col  gap-4 py-4 sm:py-6  lg:py-9 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6',
       )}
-      aria-hidden={!globalStore.authenticate.isAuthenticated}
-      aria-disabled={!globalStore.authenticate.isAuthenticated}
-      aria-readonly={!globalStore.authenticate.isAuthenticated}
     >
-      <div className="order-1 lg:order-none flex items-center">
+      <div className="order-1 hidden md:flex   lg:order-none items-center">
         <Image
           src={logoSrc ?? '/LogoBlack.png'}
           alt="brand"
@@ -101,7 +96,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
           onClick={() => router.push('/')}
         />
       </div>
-      <div className="order-3 lg:order-none w-fit">
+      <div className="order-3 lg:order-none lg:w-fit w-full ">
         <Popover.Root
           open={isSearchOpen}
           onOpenChange={(details) => setIsSearchOpen(details.open)}
@@ -113,7 +108,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
             <DebounceInput
               hasDebounce
               debounceDelay={300}
-              placeholder="Search snacks, essentials, and more..."
+              placeholder="Search..."
               onChange={(val) => {
                 setSearchQuery(val);
                 setIsSearchOpen(val.trim().length > 0);
@@ -182,11 +177,11 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         </Popover.Root>
       </div>
       <div className="order-2 lg:order-none flex flex-wrap items-center justify-between lg:justify-end gap-2">
-        <div className="flex flex-wrap font-semibold ">
+        <div className="flex items-center flex-wrap font-semibold ">
           <Show
             when={!globalStore.authenticate.isAuthenticated}
             fallback={
-              <p className="px-2 sm:px-5 flex items-center text-xs sm:text-sm max-w-[140px] sm:max-w-none truncate">
+              <p className="px-2 sm:px-5   text-xs sm:text-sm max-w-[120px] sm:max-w-none line-clamp-1 truncate">
                 {`Hi, ${data?.self?.emailAddress}!`}
               </p>
             }

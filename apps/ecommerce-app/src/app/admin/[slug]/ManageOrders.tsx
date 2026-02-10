@@ -23,6 +23,7 @@ import {
   useUpdateOrderStatusMutation,
 } from '~/graphql/generated';
 import { usePaginated } from '~/hooks/usePaginated';
+import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { safeParseFloat } from '~/utils/safeParseFloat';
@@ -52,15 +53,6 @@ const formatCurrency = (value?: string | number | null) =>
     locale: 'en-PH',
     currency: 'PHP',
   });
-
-const formatDate = (value?: string | null) => {
-  if (!value) return '-';
-  return new Date(value).toLocaleDateString('en-PH', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric',
-  });
-};
 
 export const ManageOrders = () => {
   const [state, setState] = useReducer<Reducer<PageState, Partial<PageState>>>(
@@ -320,13 +312,7 @@ export const ManageOrders = () => {
             filterable: true,
             render: (item) => (
               <p className="text-sm text-gray-600">
-                {item.createdAt
-                  ? new Date(item.createdAt).toLocaleDateString('en-PH', {
-                      month: 'short',
-                      day: '2-digit',
-                      year: 'numeric',
-                    })
-                  : '-'}
+                {item.createdAt ? formatDate(item.createdAt) : '-'}
               </p>
             ),
             sortable: true,

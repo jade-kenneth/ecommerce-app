@@ -83,13 +83,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
         'max-w-screen  w-full flex flex-col  gap-4 py-4 sm:py-6  lg:py-9 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6',
       )}
     >
-      <div className="order-1 hidden md:flex   lg:order-none items-center">
+      <div className="order-1 hidden md:flex lg:order-none items-center">
         <Image
           src={logoSrc ?? '/LogoBlack.png'}
           alt="brand"
-          style={{ height: '32px', width: '133px', cursor: 'pointer' }}
-          width={133}
-          height={32}
+          style={{ cursor: 'pointer' }}
+          width={180}
+          height={64}
+          className="h-12 w-auto object-contain sm:h-14 lg:h-10"
           onClick={() => router.push('/')}
         />
       </div>
@@ -112,11 +113,13 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
               }}
               className="rounded-[32px] h-11 sm:h-12 w-full lg:w-[35.0625rem] bg-primary-25 text-primary-500"
               rightAddon={
-                <Button className="flex items-center w-auto h-[36px] sm:h-[40px] mr-1 gap-[5px] rounded-[32px]">
-                  <Search className="w-4 h-4" />
-                  <span className="hidden sm:inline font-semibold text-sm">
-                    Search
-                  </span>
+                <Button
+                  size="sm"
+                  className="flex items-center h-9 sm:h-10 mr-1 gap-2 rounded-full px-3 sm:px-4 text-sm leading-none"
+                  aria-label="Search"
+                >
+                  <Search className="h-4 w-4 shrink-0" />
+                  <span className="hidden sm:inline font-semibold">Search</span>
                 </Button>
               }
             />
@@ -265,9 +268,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                   <Image
                     src={logoSrc ?? '/LogoBlack.png'}
                     alt="brand"
-                    className="h-8 w-auto"
-                    width={133}
-                    height={32}
+                    className="h-10 w-auto object-contain"
+                    width={160}
+                    height={48}
                   />
                   <Dialog.CloseTrigger
                     className="static ml-auto flex items-center justify-center w-10 h-10 rounded-full border border-carbon-900 text-carbon-25"

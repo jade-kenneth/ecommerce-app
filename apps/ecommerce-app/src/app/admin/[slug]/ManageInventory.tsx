@@ -254,11 +254,11 @@ export const ManageInventory = () => {
               sortable: true,
             },
             {
-              heading: '',
+              heading: 'Actions',
               filterable: true,
               render: (item) => (
                 <Menu.Root unmountOnExit={false} lazyMount>
-                  <Menu.Trigger>
+                  <Menu.Trigger className="flex items-center justify-center">
                     <MoreVertical className="w-4 h-4" />
                   </Menu.Trigger>
                   <Portal>

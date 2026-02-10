@@ -472,9 +472,8 @@ export const ManageOrders = () => {
                     <div className="flex flex-col gap-3">
                       {selectedItems.map((item) => {
                         const product = productMap.get(item.productId);
-                        const name = product?.name ?? 'Unknown product';
-                        const thumbnail =
-                          product?.thumbnail ?? '/LogoBlack.png';
+                        const name = product?.name ?? 'Discontinued Product';
+                        const thumbnail = product?.thumbnail ?? '/Logo.png';
                         return (
                           <div
                             key={`${selectedOrder._id}-${item.productId}`}

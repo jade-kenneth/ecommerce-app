@@ -205,8 +205,8 @@ export const useCart = () => {
       const product = productsMap.get(item.productId);
       return {
         ...item,
-        thumbnail: product?.thumbnail ?? '',
-        name: product?.name ?? 'Unknown product',
+        thumbnail: product?.thumbnail ?? './Logo.png',
+        name: product?.name ?? 'Discontinued Product',
         price: product?.price ?? 0,
         discount: product?.discount ?? 0,
         categories: product?.categories ?? [],

@@ -214,9 +214,8 @@ export default function OrdersPage() {
                     <div className="flex flex-col gap-4 px-6 py-5">
                       {items.map((item) => {
                         const product = productMap.get(item.productId);
-                        const name = product?.name ?? 'Unknown product';
-                        const thumbnail =
-                          product?.thumbnail ?? '/LogoBlack.png';
+                        const name = product?.name ?? 'Discontinued Product';
+                        const thumbnail = product?.thumbnail ?? '/Logo.png';
                         return (
                           <div
                             key={`${order._id}-${item.productId}`}

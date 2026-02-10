@@ -67,17 +67,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
     skip: !shouldSearch,
   });
   const searchResults = useMemo(() => {
-    if (!shouldSearch) return [];
-    const items =
-      productsQuery.data?.searchProductByName?.map((node) => node) ?? [];
-    return items
-      .filter((item) => item.name.toLowerCase().includes(normalizedSearch))
-      .slice(0, 6);
+    return productsQuery.data?.searchProductByName?.map((node) => node) ?? [];
   }, [normalizedSearch, productsQuery.data, shouldSearch]);
+
   const ordersQuery = useMyOrdersQuery({
     skip:
       !globalStore.authenticate.isAuthenticated || !licenseContext.isLicensed,
   });
+
   const ordersCount = ordersQuery.data?.myOrders?.length ?? 0;
 
   return (
@@ -142,9 +139,8 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                     </div>
                   )}
                 {searchResults.map((item) => (
-                  <Link href={`/product/${item._id}`}>
+                  <Link href={`/product/${item._id}`} key={item._id}>
                     <button
-                      key={item._id}
                       type="button"
                       className="flex items-center gap-3 rounded-lg px-2 py-2 text-left hover:bg-cyan-50 transition-colors"
                       onClick={() => setIsSearchOpen(false)}

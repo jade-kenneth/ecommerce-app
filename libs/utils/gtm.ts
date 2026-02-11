@@ -1,6 +1,3 @@
-import { FirebaseAnalytics } from '@capacitor-firebase/analytics';
-import { Capacitor } from '@capacitor/core';
-
 function getDeviceType(): string | undefined {
   if (typeof navigator === 'undefined') return undefined;
   const ua = navigator.userAgent;
@@ -14,38 +11,6 @@ function getDeviceType(): string | undefined {
     return 'mobile';
   }
   return 'desktop';
-}
-
-function gtmPageView(params?: Record<string, any>) {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: 'page_view',
-    pageTitle: document.title,
-    pagePath: window.location.pathname,
-    pageHostname: window.location.hostname,
-    deviceType: getDeviceType(),
-    timestamp: Date.now(),
-    ...params,
-  });
-
-  if (Capacitor.isNativePlatform()) {
-    FirebaseAnalytics.logEvent({
-      name: 'page_view',
-      params: {
-        page_title: document.title,
-        page_path: window.location.pathname,
-        page_hostname: window.location.hostname,
-        device_type: getDeviceType(),
-        ...params,
-      },
-    });
-
-    FirebaseAnalytics.setCurrentScreen({
-      screenName: window.location.pathname,
-      screenClassOverride: document.title,
-    });
-  }
 }
 
 type event = 'add_to_cart' | 'purchase' | 'begin_checkout' | 'view_item';
@@ -105,23 +70,9 @@ function gtmPurchaseEvent(params: {
     deviceType: getDeviceType(),
     timestamp: Date.now(),
   });
-
-  if (Capacitor.isNativePlatform()) {
-    FirebaseAnalytics.logEvent({
-      name: 'purchase',
-      params: {
-        transaction_id: transactionId,
-        value: amount,
-        currency,
-        payment_type: paymentType,
-        coupon,
-      },
-    });
-  }
 }
 
 export const gtm = {
-  gtmPageView,
   gtmEvent,
   gtmPurchaseEvent,
 };

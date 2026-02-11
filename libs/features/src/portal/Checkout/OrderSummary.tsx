@@ -7,6 +7,7 @@ import {
   useCheckoutMutation,
   useCreateGcashPaymentMutation,
 } from '~/graphql/generated';
+import { gtm } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from '../Cart/CartContext';
@@ -124,6 +125,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
               className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
               onClick={async () => {
                 // TODO: Replace with actual shipping option and payment method IDs
+
                 const orderRes = await order({
                   variables: {
                     input: {
@@ -132,6 +134,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                     },
                   },
                 });
+
                 const res = await mutate({
                   variables: {
                     input: {
@@ -161,6 +164,22 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           <button
             className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
             onClick={async () => {
+              gtm.gtmEvent('begin_checkout', {
+                valueWithShippingAndTax: totalAmountWithShippingAndTax,
+                currency: 'PHP',
+                payment_type: context.state.cart.paymentMethod,
+                items: context.state.cart.items.map((item) => ({
+                  item_id: item.productId,
+                  item_name: item.name,
+                  price: item.price,
+                  quantity: item.quantity,
+                  categories: item.categories,
+                })),
+                total: context.state.cart.items.reduce(
+                  (acc, item) => acc + item.price * item.quantity,
+                  0,
+                ),
+              });
               router.replace('/cart/checkout');
             }}
           >

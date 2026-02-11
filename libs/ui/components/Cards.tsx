@@ -29,6 +29,14 @@ export const Cards = (props: CardsProps) => {
     <div className="w-full min-w-[194px] bg-white border border-carbon-900 rounded-[12px] flex flex-col h-auto">
       <Link
         href={`/product/${props._id}`}
+        onClick={() => {
+          gtm.gtmEvent('view_item', {
+            item_id: props._id,
+            item_name: props.name,
+            price: props.price,
+            categories: props.category,
+          });
+        }}
         className="h-[170px] sm:h-[194px] flex items-center justify-center bg-carbon-950 rounded-t-[12px] relative overflow-hidden"
         aria-label={`View ${props.name}`}
       >

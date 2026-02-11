@@ -7,6 +7,7 @@ export * from './dataAttr';
 export * from './hexToRgba';
 export * from './numberFormatter';
 
+export { gtm } from './gtm';
 export * from './object-shared';
 export * from './sha256';
 export * from './timestampToDateFormat';

@@ -1,6 +1,6 @@
+import { Heart, ShoppingCart, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Star } from 'lucide-react';
 
 import { useCartContext } from '~/features/portal';
 import {
@@ -9,6 +9,7 @@ import {
 } from '~/graphql/generated';
 
 import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { gtm } from '~/utils';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { Button } from './Button';
 import { toaster } from './ToastContainer';
@@ -160,6 +161,14 @@ export const Cards = (props: CardsProps) => {
                 discount: props.discount,
                 categories: props.category,
               });
+
+              gtm.gtmEvent('add_to_cart', {
+                product_id: props._id,
+                product_name: props.name,
+                discount: props.discount,
+                categories: props.category,
+              });
+
               toaster.success({
                 description: `${props.name} added to cart.`,
               });

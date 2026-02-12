@@ -81,13 +81,18 @@ export interface UpdateCartItemInput {
 }
 
 export interface CheckoutInput {
+    clientId?: Nullable<string>;
     shippingOptionId?: Nullable<ObjectId>;
     paymentMethodId?: Nullable<ObjectId>;
 }
 
 export interface RemoveFromCartInput {
     productId: ObjectId;
-    quantity: number;
+}
+
+export interface UpdateOrderStatusInput {
+    orderId: ObjectId;
+    status: OrderStatus;
 }
 
 export interface ProductByIdsInput {
@@ -147,6 +152,7 @@ export interface ProductsFilterInput {
     status?: Nullable<ProductsStatusFilterInput>;
     category?: Nullable<ProductsCategoryFilterInput>;
     _id?: Nullable<IdFilterInput>;
+    name?: Nullable<IdFilterInput>;
 }
 
 export interface KeyValuePairInput {
@@ -230,8 +236,9 @@ export interface IMutation {
     createAdminAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     createMemberAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateCartItem(input: UpdateCartItemInput): Nullable<boolean> | Promise<Nullable<boolean>>;
-    removeFromCart(input: RemoveFromCartInput): Cart | Promise<Cart>;
+    removeFromCart(input: RemoveFromCartInput): boolean | Promise<boolean>;
     clearCart(): Cart | Promise<Cart>;
+    updateOrderStatus(input: UpdateOrderStatusInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     checkout(input: CheckoutInput): Order | Promise<Order>;
     createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateConfig(input: UpdateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -254,6 +261,7 @@ export interface IQuery {
     productByIds(ids?: Nullable<ProductByIdsInput>): CartProductDetails | Promise<CartProductDetails>;
     config(): Config | Promise<Config>;
     products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
+    searchProductByName(search: string, first?: Nullable<number>, after?: Nullable<Cursor>): Nullable<Product[]> | Promise<Nullable<Product[]>>;
     highPointProducts(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
 }
 
@@ -295,7 +303,7 @@ export interface Cart {
 
 export interface Order {
     _id: ObjectId;
-    items?: Nullable<Nullable<CartItem>[]>;
+    items: CartItem[];
     shippingOption: ShippingOption;
     paymentMethod: PaymentMethod;
     subtotal: string;

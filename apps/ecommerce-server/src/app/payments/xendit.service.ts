@@ -23,6 +23,7 @@ export class XenditService {
   async post(path: string, data: any) {
     try {
       const res = await this.client().post(path, data);
+
       return res.data;
     } catch (error) {}
   }

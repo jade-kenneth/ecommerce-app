@@ -22,6 +22,7 @@ export type Order = {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
+  gaClientId: string;
 };
 
 const CartItemSchema = {
@@ -45,6 +46,7 @@ export async function OrdersRepositoryFactory(
     {
       accountId: Types.ObjectId,
       items: [CartItemSchema],
+      gaClientId: String,
       shippingOption: ShippingOptionSchema,
       paymentMethod: PaymentMethodSchema,
       subtotal: String,

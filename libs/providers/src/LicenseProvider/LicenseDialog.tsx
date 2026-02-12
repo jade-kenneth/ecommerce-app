@@ -3,9 +3,9 @@ import { PropsWithChildren, useState } from 'react';
 import { Button } from '../../../ui/components/Button';
 import { Dialog } from '../../../ui/components/Dialog';
 import { OtpField } from '../../../ui/components/OtpField';
+import { gtm } from '../../../utils/gtm';
 import { useLicenseContext } from './LicenseContext';
 import { getLicense } from './service';
-
 export const LicenseDialog = (props: PropsWithChildren) => {
   const context = useLicenseContext();
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +71,9 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                   href="https://www.facebook.com/jeidosenpaitsx/"
                   target="_blank"
                   className="text-cyan-600 hover:text-cyan-700 font-medium"
+                  onClick={() => {
+                    gtm.gtmEvent('contact_admin');
+                  }}
                 >
                   Contact admin
                 </a>

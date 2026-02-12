@@ -13,7 +13,12 @@ function getDeviceType(): string | undefined {
   return 'desktop';
 }
 
-type event = 'add_to_cart' | 'purchase' | 'begin_checkout' | 'view_item';
+type event =
+  | 'add_to_cart'
+  | 'purchase'
+  | 'begin_checkout'
+  | 'view_item'
+  | 'contact_admin';
 
 function gtmEvent(event: event, params?: Record<string, any>) {
   if (typeof window === 'undefined') return;

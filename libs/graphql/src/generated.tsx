@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sun, 08 Feb 2026 10:45:26 GMT
+// Last modified: Wed, 11 Feb 2026 14:59:26 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -65,6 +65,7 @@ export enum CategoryType {
 }
 
 export type CheckoutInput = {
+  clientId: Scalars['String']['input'];
   paymentMethodId?: InputMaybe<Scalars['ObjectID']['input']>;
   shippingOptionId?: InputMaybe<Scalars['ObjectID']['input']>;
 };

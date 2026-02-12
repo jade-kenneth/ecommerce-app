@@ -36,6 +36,8 @@ appName: 'Amy Store'
 - `@capacitor/core`
 - `@capacitor/android`
 - `@capacitor/cli`
+- `@capacitor/browser`  
+  Used to open external payment/checkout URLs (e.g., GCash/Xendit) in an in-app browser from native Android. This is required because the checkout flow calls `Browser.open()` in `libs/features/src/portal/Checkout/OrderSummary.tsx`.
 
 ### ✅ package.json updates
 Added scripts:

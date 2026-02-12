@@ -1,5 +1,6 @@
 'use client';
 
+import { Browser } from '@capacitor/browser';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
@@ -11,6 +12,7 @@ import { gtm } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from '../Cart/CartContext';
+
 interface OrderSummaryProps {
   isCheckout?: boolean;
 }
@@ -126,35 +128,44 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
               onClick={async () => {
                 // TODO: Replace with actual shipping option and payment method IDs
 
-                const orderRes = await order({
-                  variables: {
-                    input: {
-                      shippingOptionId: '000000000000000000000010',
-                      paymentMethodId: '000000000000000000000020',
-                    },
-                  },
-                });
+                window.gtag(
+                  'get',
+                  'G-N7BZ4QRB31',
+                  'client_id',
+                  async (clientId: any) => {
+                    const orderRes = await order({
+                      variables: {
+                        input: {
+                          clientId,
+                          shippingOptionId: '000000000000000000000010',
+                          paymentMethodId: '000000000000000000000020',
+                        },
+                      },
+                    });
+                    const res = await mutate({
+                      variables: {
+                        input: {
+                          amount:
+                            totalAmountWithShippingAndTax as unknown as string,
+                          failureUrl: process.env
+                            .NEXT_PUBLIC_BASE_URL as string,
+                          successUrl: process.env
+                            .NEXT_PUBLIC_BASE_URL as string,
+                          referenceId: `order-${Date.now()}`,
+                          description:
+                            'Payment for order #' +
+                            `order-${orderRes.data?.checkout._id}`,
+                        },
+                      },
+                    });
 
-                const res = await mutate({
-                  variables: {
-                    input: {
-                      amount:
-                        totalAmountWithShippingAndTax as unknown as string,
-                      failureUrl: window.location.origin,
-                      successUrl: window.location.origin,
-                      referenceId: `order-${Date.now()}`,
-                      description:
-                        'Payment for order #' +
-                        `order-${orderRes.data?.checkout._id}`,
-                    },
+                    const checkoutUrl =
+                      res.data?.createGcashPayment?.actions?.[0]?.value;
+                    if (checkoutUrl) {
+                      await Browser.open({ url: checkoutUrl });
+                    }
                   },
-                });
-
-                const checkoutUrl =
-                  res.data?.createGcashPayment?.actions?.[0]?.value;
-                if (checkoutUrl) {
-                  window.location.href = checkoutUrl;
-                }
+                );
               }}
             >
               Place Order

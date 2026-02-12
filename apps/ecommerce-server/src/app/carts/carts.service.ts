@@ -10,6 +10,7 @@ import {
   UpdateCartItemInput,
 } from '../__generated/graphql-types';
 
+import axios from 'axios';
 import { Types } from 'mongoose';
 import { AsyncEventDispatcher } from '~/async-event-module/async-event-dispatcher';
 import { Filter } from '../../libs/repository';
@@ -132,6 +133,8 @@ export class CartsService {
 
         return {
           ...item,
+          quantity: item.quantity,
+          productId: product._id,
           name: product.name,
           image: product.thumbnail,
           unitPrice: unitPrice.toFixed(2),
@@ -328,6 +331,7 @@ export class CartsService {
     );
 
     const order: Order = {
+      gaClientId: params.input.clientId,
       _id: new Types.ObjectId(),
       accountId,
       items: calculatedSummary.items,
@@ -343,8 +347,6 @@ export class CartsService {
     };
 
     await this.orders.create(order);
-
-    await this.carts.delete(accountId);
 
     const account = await this.accounts.findAccount(accountId);
 
@@ -366,7 +368,23 @@ export class CartsService {
           };
         }),
       );
-
+      // TODO move this to a separate analytics service and make it more generic to handle other events as well
+      await axios.post(
+        `https://www.google-analytics.com/mp/collect?measurement_id=G-N7BZ4QRB31&api_secret=kd1nvBHlSvu25oIW0E5Emg`,
+        {
+          client_id: order.gaClientId,
+          events: [
+            {
+              name: 'purchase',
+              params: {
+                transaction_id: order._id,
+                value: order.total,
+                currency: 'PHP',
+              },
+            },
+          ],
+        },
+      );
       await this.events.dispatch('OrderCreated', {
         orderId: order._id.toString(),
         accountId: accountId.toString(),
@@ -375,6 +393,7 @@ export class CartsService {
         itemCount: order.items.length,
         items: eventItems,
       });
+      await this.carts.delete(accountId);
     } catch (error) {
       console.error('OrderCreated event dispatch failed:', error);
     }

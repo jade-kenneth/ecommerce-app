@@ -87,3 +87,7 @@ gtag('config', '${GA_MEASUREMENT_ID}');`}
 
 - If you want the GA4 Measurement ID to be environment-driven, switch to `process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 - If you want SPA route changes tracked as pageviews, add a route-change handler to call `gtag('config', ...)` on navigation.
+
+
+nextjs-xendit - kd1nvBHlSvu25oIW0E5Emg //Measurement Protocol API secrets api key
+GA client__id - 1105717841.1770815026  //found in cookies

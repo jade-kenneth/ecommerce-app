@@ -53,18 +53,22 @@ export const ManageInventory = () => {
   }, state);
 
   const summaryCards = useMemo(() => {
-    const items = query.data?.products.edges.map(({ node }) => node) ?? [];
-    const total = items.length;
-    const active = items.filter(
-      (item) => item.status === StatusType.Active,
+    const active = query.data?.products.edges.filter(
+      (item) => item.node.status === StatusType.Active,
     ).length;
-    const discounted = items.filter((item) => (item.discount ?? 0) > 0).length;
-    const lowStock = items.filter((item) => (item.pieces ?? 0) <= 5).length;
+    const discounted = query.data?.products.edges.filter(
+      (item) => (item.node.discount ?? 0) > 0,
+    ).length;
+    const lowStock = query.data?.products.edges.filter(
+      (item) => (item.node.pieces ?? 0) <= 5,
+    ).length;
 
     return [
       {
         label: 'Total Products',
-        value: numberFormatter.format(total, { locale: 'en-PH' }),
+        value: numberFormatter.format(query?.data?.products.totalCount ?? 0, {
+          locale: 'en-PH',
+        }),
       },
       {
         label: 'Active Products',

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
 import {
+  PaymentMethodType,
   useCheckoutMutation,
   useCreateGcashPaymentMutation,
 } from '~/graphql/generated';
@@ -142,27 +143,64 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                         },
                       },
                     });
-                    const res = await mutate({
-                      variables: {
-                        input: {
-                          amount:
-                            totalAmountWithShippingAndTax as unknown as string,
-                          failureUrl: process.env
-                            .NEXT_PUBLIC_BASE_URL as string,
-                          successUrl: process.env
-                            .NEXT_PUBLIC_BASE_URL as string,
-                          referenceId: `order-${Date.now()}`,
-                          description:
-                            'Payment for order #' +
-                            `order-${orderRes.data?.checkout._id}`,
-                        },
-                      },
-                    });
+                    const orderId = orderRes.data?.checkout._id;
+                    const baseUrl =
+                      (process.env.NEXT_PUBLIC_BASE_URL ?? '').replace(
+                        /\/$/,
+                        '',
+                      ) || window.location.origin;
 
-                    const checkoutUrl =
-                      res.data?.createGcashPayment?.actions?.[0]?.value;
-                    if (checkoutUrl) {
-                      await Browser.open({ url: checkoutUrl });
+                    const isCashOnDelivery =
+                      context.state.cart.paymentMethod ===
+                      PaymentMethodType.CashOnDelivery;
+
+                    const successPath = isCashOnDelivery
+                      ? '/payment/cod/success'
+                      : '/payment/success';
+
+                    const failurePath = '/payment/failure';
+
+                    const successUrl = orderId
+                      ? `${baseUrl}${successPath}?orderId=${encodeURIComponent(
+                          orderId,
+                        )}`
+                      : baseUrl;
+
+                    const failureUrl = orderId
+                      ? `${baseUrl}${failurePath}?orderId=${encodeURIComponent(
+                          orderId,
+                        )}`
+                      : baseUrl;
+
+                    const referenceId = orderId
+                      ? `order-${orderId}`
+                      : `order-${Date.now()}`;
+
+                    const description = orderId
+                      ? `Payment for order #${orderId}`
+                      : 'Payment for order';
+
+                    if (isCashOnDelivery) {
+                      window.location.href = successUrl;
+                    } else {
+                      const res = await mutate({
+                        variables: {
+                          input: {
+                            amount:
+                              totalAmountWithShippingAndTax as unknown as string,
+                            failureUrl,
+                            successUrl,
+                            referenceId,
+                            description,
+                          },
+                        },
+                      });
+
+                      const checkoutUrl =
+                        res.data?.createGcashPayment?.actions?.[0]?.value;
+                      if (checkoutUrl) {
+                        await Browser.open({ url: checkoutUrl });
+                      }
                     }
                   },
                 );
@@ -173,7 +211,9 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           }
         >
           <button
-            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
+            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+            disabled={context.state.itemsCount === 0}
+            data-disabled={context.state.itemsCount === 0}
             onClick={async () => {
               gtm.gtmEvent('begin_checkout', {
                 valueWithShippingAndTax: totalAmountWithShippingAndTax,

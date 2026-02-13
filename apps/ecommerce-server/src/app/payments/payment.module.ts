@@ -9,5 +9,6 @@ import { XenditService } from './xendit.service';
   // add repository module for saving referenceId in db
   imports: [OrdersRepositoryModule],
   providers: [PaymentsService, XenditService, PaymentsResolver],
+  exports: [PaymentsService],
 })
 export class PaymentsModule {}

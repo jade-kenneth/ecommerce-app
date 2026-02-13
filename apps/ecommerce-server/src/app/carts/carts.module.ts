@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
+import { PaymentsModule } from '../payments/payment.module';
 import { ProductsService } from '../products/products.service';
 import { ProductsRepositoryModule } from '../products/repositories/product.repository.module';
 import { AccountModule } from '../user-session/account/account.module';
-import { PaymentsModule } from '../payments/payment.module';
 import { CartResolver } from './carts.resolver';
 import { CartsService } from './carts.service';
 import { CartsRepositoryModule } from './repositories/carts.repository.module';

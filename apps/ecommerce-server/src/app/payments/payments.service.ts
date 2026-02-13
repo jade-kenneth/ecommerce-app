@@ -29,4 +29,8 @@ export class PaymentsService {
       });
     } catch (error) {}
   }
+
+  async getPaymentRequest(paymentRequestId: string): Promise<PaymentRequestResponse> {
+    return this.xendit.get(`/v3/payment_requests/${paymentRequestId}`);
+  }
 }

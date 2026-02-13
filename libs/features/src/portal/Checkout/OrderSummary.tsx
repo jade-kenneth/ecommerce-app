@@ -6,6 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
 import {
   PaymentMethodType,
+  ShippingType,
   useCheckoutMutation,
   useCreateGcashPaymentMutation,
 } from '~/graphql/generated';
@@ -17,6 +18,19 @@ import { useCartContext } from '../Cart/CartContext';
 interface OrderSummaryProps {
   isCheckout?: boolean;
 }
+
+const PAYMENT_METHOD_IDS: Record<PaymentMethodType, string> = {
+  [PaymentMethodType.Gcash]: '000000000000000000000020',
+  [PaymentMethodType.Card]: '000000000000000000000021',
+  [PaymentMethodType.BankTransfer]: '000000000000000000000022',
+  [PaymentMethodType.CashOnDelivery]: '000000000000000000000023',
+};
+
+const SHIPPING_OPTION_IDS: Record<ShippingType, string> = {
+  [ShippingType.Standard]: '000000000000000000000010',
+  [ShippingType.Express]: '000000000000000000000011',
+  [ShippingType.SameDay]: '000000000000000000000012',
+};
 export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const context = useCartContext();
 
@@ -134,12 +148,26 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                   'G-N7BZ4QRB31',
                   'client_id',
                   async (clientId: any) => {
+                    const selectedPaymentType =
+                      context.state.cart.paymentMethod ??
+                      PaymentMethodType.Gcash;
+
+                    const paymentMethodId =
+                      PAYMENT_METHOD_IDS[selectedPaymentType];
+
+                    const selectedShippingType =
+                      context.state.cart.shipping?.type ??
+                      ShippingType.Standard;
+
+                    const shippingOptionId =
+                      SHIPPING_OPTION_IDS[selectedShippingType];
+
                     const orderRes = await order({
                       variables: {
                         input: {
                           clientId,
-                          shippingOptionId: '000000000000000000000010',
-                          paymentMethodId: '000000000000000000000020',
+                          shippingOptionId,
+                          paymentMethodId,
                         },
                       },
                     });
@@ -151,8 +179,8 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                       ) || window.location.origin;
 
                     const isCashOnDelivery =
-                      context.state.cart.paymentMethod ===
-                      PaymentMethodType.CashOnDelivery;
+                      paymentMethodId ===
+                      PAYMENT_METHOD_IDS[PaymentMethodType.CashOnDelivery];
 
                     const successPath = isCashOnDelivery
                       ? '/payment/cod/success'

@@ -160,7 +160,7 @@ export class SessionController {
         accessToken,
         refreshToken,
       };
-    } catch (error) {
+    } catch {
       throw new InternalServerErrorException();
     }
   }

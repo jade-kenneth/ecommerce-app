@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { PaymentsModule } from '../payments/payment.module';
 import { ProductsService } from '../products/products.service';
 import { ProductsRepositoryModule } from '../products/repositories/product.repository.module';
 import { AccountModule } from '../user-session/account/account.module';
@@ -14,6 +15,7 @@ import { OrdersRepositoryModule } from './repositories/orders.repository.module'
     OrdersRepositoryModule,
     ProductsRepositoryModule,
     AccountModule,
+    PaymentsModule,
   ],
   providers: [CartsService, CartResolver, ProductsService],
   exports: [CartsService],

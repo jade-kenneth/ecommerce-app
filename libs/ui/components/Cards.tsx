@@ -148,7 +148,7 @@ export const Cards = (props: CardsProps) => {
           className="text-white items-center justify-center h-[40px] mt-3 flex gap-2 cursor-pointer text-sm sm:text-base"
           onClick={async () => {
             if (!globalStore.authenticate.isAuthenticated) {
-              globalStore.signIn.setIsSignIn(true);
+              globalStore.authenticate.setAuthDialogOpen(true);
               return;
             }
             try {

@@ -20,6 +20,7 @@
     "@ark-ui/anatomy": "^3.5.0",
     "@ark-ui/react": "^5.11.0",
     "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
     "@capacitor/browser": "^7.0.3",
     "@capacitor/core": "^7.0.0",
     "@getbrevo/brevo": "^3.0.1",

@@ -18,6 +18,12 @@ export async function getSession(): Promise<Session> {
     }
     try {
       const session = await services.refreshSession({ refreshToken });
+      if (!session) {
+        await store.clearSession();
+        return {
+          status: 'unauthenticated',
+        };
+      }
       await store.set({
         accessToken: session.accessToken,
       });

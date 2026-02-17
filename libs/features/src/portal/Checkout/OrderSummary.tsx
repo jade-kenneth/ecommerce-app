@@ -1,21 +1,38 @@
 'use client';
 
 import { Browser } from '@capacitor/browser';
+import { Capacitor } from '@capacitor/core';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
 import {
+  PaymentMethodType,
+  ShippingType,
   useCheckoutMutation,
   useCreateGcashPaymentMutation,
 } from '~/graphql/generated';
 import { gtm } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
+import { APP_URL_SCHEME } from '~/utils/constant';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from '../Cart/CartContext';
 
 interface OrderSummaryProps {
   isCheckout?: boolean;
 }
+
+const PAYMENT_METHOD_IDS: Record<PaymentMethodType, string> = {
+  [PaymentMethodType.Gcash]: '000000000000000000000020',
+  [PaymentMethodType.Card]: '000000000000000000000021',
+  [PaymentMethodType.BankTransfer]: '000000000000000000000022',
+  [PaymentMethodType.CashOnDelivery]: '000000000000000000000023',
+};
+
+const SHIPPING_OPTION_IDS: Record<ShippingType, string> = {
+  [ShippingType.Standard]: '000000000000000000000010',
+  [ShippingType.Express]: '000000000000000000000011',
+  [ShippingType.SameDay]: '000000000000000000000012',
+};
 export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const context = useCartContext();
 
@@ -133,36 +150,97 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                   'G-N7BZ4QRB31',
                   'client_id',
                   async (clientId: any) => {
+                    const selectedPaymentType =
+                      context.state.cart.paymentMethod ??
+                      PaymentMethodType.Gcash;
+
+                    const paymentMethodId =
+                      PAYMENT_METHOD_IDS[selectedPaymentType];
+
+                    const selectedShippingType =
+                      context.state.cart.shipping?.type ??
+                      ShippingType.Standard;
+
+                    const shippingOptionId =
+                      SHIPPING_OPTION_IDS[selectedShippingType];
+
                     const orderRes = await order({
                       variables: {
                         input: {
                           clientId,
-                          shippingOptionId: '000000000000000000000010',
-                          paymentMethodId: '000000000000000000000020',
+                          shippingOptionId,
+                          paymentMethodId,
                         },
                       },
                     });
-                    const res = await mutate({
-                      variables: {
-                        input: {
-                          amount:
-                            totalAmountWithShippingAndTax as unknown as string,
-                          failureUrl: process.env
-                            .NEXT_PUBLIC_BASE_URL as string,
-                          successUrl: process.env
-                            .NEXT_PUBLIC_BASE_URL as string,
-                          referenceId: `order-${Date.now()}`,
-                          description:
-                            'Payment for order #' +
-                            `order-${orderRes.data?.checkout._id}`,
-                        },
-                      },
-                    });
+                    const orderId = orderRes.data?.checkout._id;
+                    const baseUrl =
+                      (process.env.NEXT_PUBLIC_BASE_URL ?? '').replace(
+                        /\/$/,
+                        '',
+                      ) || window.location.origin;
 
-                    const checkoutUrl =
-                      res.data?.createGcashPayment?.actions?.[0]?.value;
-                    if (checkoutUrl) {
-                      await Browser.open({ url: checkoutUrl });
+                    const isCashOnDelivery =
+                      paymentMethodId ===
+                      PAYMENT_METHOD_IDS[PaymentMethodType.CashOnDelivery];
+
+                    const successPath = isCashOnDelivery
+                      ? '/payment/cod/success'
+                      : '/payment/success';
+
+                    const failurePath = '/payment/failure';
+
+                    const successUrl = orderId
+                      ? `${baseUrl}${successPath}?orderId=${encodeURIComponent(
+                          orderId,
+                        )}`
+                      : baseUrl;
+
+                    const failureUrl = orderId
+                      ? `${baseUrl}${failurePath}?orderId=${encodeURIComponent(
+                          orderId,
+                        )}`
+                      : baseUrl;
+
+                    const referenceId = orderId
+                      ? `order-${orderId}`
+                      : `order-${Date.now()}`;
+
+                    const description = orderId
+                      ? `Payment for order #${orderId}`
+                      : 'Payment for order';
+
+                    if (isCashOnDelivery) {
+                      if (Capacitor.getPlatform() === 'web') {
+                        window.location.href = successUrl;
+                      } else {
+                        window.location.href = `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`;
+                      }
+                    } else {
+                      const res = await mutate({
+                        variables: {
+                          input: {
+                            amount:
+                              totalAmountWithShippingAndTax as unknown as string,
+                            failureUrl:
+                              Capacitor.getPlatform() === 'web'
+                                ? failureUrl
+                                : `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`,
+                            successUrl:
+                              Capacitor.getPlatform() === 'web'
+                                ? successUrl
+                                : `${APP_URL_SCHEME}://payment/success?orderId=${orderId}`,
+                            referenceId,
+                            description,
+                          },
+                        },
+                      });
+
+                      const checkoutUrl =
+                        res.data?.createGcashPayment?.actions?.[0]?.value;
+                      if (checkoutUrl) {
+                        await Browser.open({ url: checkoutUrl });
+                      }
                     }
                   },
                 );
@@ -173,7 +251,9 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           }
         >
           <button
-            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
+            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+            disabled={context.state.itemsCount === 0}
+            data-disabled={context.state.itemsCount === 0}
             onClick={async () => {
               gtm.gtmEvent('begin_checkout', {
                 valueWithShippingAndTax: totalAmountWithShippingAndTax,

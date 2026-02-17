@@ -1,5 +1,5 @@
 /**
- * build 3x
+ * build 4x
  */
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import {
@@ -21,6 +21,7 @@ import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
 import { AsyncEventModule } from '~/async-event-module/async-event-module';
+import { safeParseFloat } from '../util/safe-parse-float';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
 import { CartsModule } from './carts/carts.module';
@@ -37,7 +38,6 @@ import { LicenseController } from './user-session/license/license.controller';
 import { LicenseModule } from './user-session/license/license.module';
 import { SessionController } from './user-session/session/session.controller';
 import { SessionModule } from './user-session/session/session.module';
-import { safeParseFloat } from '../util/safe-parse-float';
 @Module({
   imports: [
     ConfigModule.forRoot(),

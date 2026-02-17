@@ -3,10 +3,11 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Badge, Button, Spinner } from '~/components';
 import { Sticky } from '~/components/Sticky';
+import { Tabs } from '~/components/Tabs';
 import { Footer, Highlight } from '~/features/portal';
 import { Layout } from '~/features/portal/layout/Layout';
 import {
@@ -60,18 +61,74 @@ const currencyFormatConfig = {
   currency: 'PHP',
 } as const;
 
+type OrdersTabValue = 'ALL' | OrderStatus;
+
 export default function OrdersPage() {
   const router = useRouter();
   const ordersQuery = useMyOrdersQuery();
   const orders = ordersQuery.data?.myOrders ?? [];
+  const [activeTab, setActiveTab] = useState<OrdersTabValue>('ALL');
+
+  const statusTabs = useMemo(() => {
+    const counts = orders.reduce(
+      (acc, order) => {
+        acc[order.status] = (acc[order.status] ?? 0) + 1;
+        return acc;
+      },
+      {
+        [OrderStatus.Pending]: 0,
+        [OrderStatus.Paid]: 0,
+        [OrderStatus.Shipped]: 0,
+        [OrderStatus.Completed]: 0,
+        [OrderStatus.Cancelled]: 0,
+      } as Record<OrderStatus, number>,
+    );
+
+    return [
+      { value: 'ALL' as const, label: 'All', count: orders.length },
+      {
+        value: OrderStatus.Pending,
+        label: 'Pending',
+        count: counts[OrderStatus.Pending],
+      },
+      {
+        value: OrderStatus.Paid,
+        label: 'Paid',
+        count: counts[OrderStatus.Paid],
+      },
+      {
+        value: OrderStatus.Shipped,
+        label: 'Shipped',
+        count: counts[OrderStatus.Shipped],
+      },
+      {
+        value: OrderStatus.Completed,
+        label: 'Completed',
+        count: counts[OrderStatus.Completed],
+      },
+      {
+        value: OrderStatus.Cancelled,
+        label: 'Cancelled',
+        count: counts[OrderStatus.Cancelled],
+      },
+    ];
+  }, [orders]);
+
+  const visibleOrders = useMemo(() => {
+    if (activeTab === 'ALL') return orders;
+    return orders.filter((order) => order.status === activeTab);
+  }, [activeTab, orders]);
+
+  const activeTabLabel =
+    statusTabs.find((tab) => tab.value === activeTab)?.label ?? 'All';
 
   const productIds = useMemo(() => {
-    const ids = orders
+    const ids = visibleOrders
       .flatMap((order) => order.items ?? [])
       .map((item) => item.productId)
       .filter(Boolean);
     return Array.from(new Set(ids));
-  }, [orders]);
+  }, [visibleOrders]);
 
   const productsQuery = useProductsQuery({
     variables: {
@@ -109,12 +166,6 @@ export default function OrdersPage() {
                 Track your recent purchases and order status.
               </p>
             </div>
-            <Button
-              className="rounded-[32px] bg-cyan-700 text-white px-5 py-2"
-              onClick={() => router.push('/')}
-            >
-              Continue Shopping
-            </Button>
           </div>
 
           {ordersQuery.loading && (
@@ -142,7 +193,50 @@ export default function OrdersPage() {
 
           {!ordersQuery.loading && orders.length > 0 && (
             <div className="mt-8 flex flex-col gap-6">
-              {orders.map((order) => {
+              <Tabs.Root
+                value={activeTab}
+                onValueChange={(details) =>
+                  setActiveTab(details.value as OrdersTabValue)
+                }
+                variant="enclosed"
+                size="sm"
+                className="w-full"
+              >
+                <Tabs.List className="w-full overflow-x-auto">
+                  <Tabs.Indicator />
+                  {statusTabs.map((tab) => (
+                    <Tabs.Trigger
+                      key={tab.value}
+                      value={tab.value}
+                      className="gap-2 whitespace-nowrap ui-selected:bg-cyan-500 rounded-md ui-selected:text-white"
+                    >
+                      <span>{tab.label}</span>
+                      <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-gray-600 shadow-sm">
+                        {tab.count}
+                      </span>
+                    </Tabs.Trigger>
+                  ))}
+                </Tabs.List>
+              </Tabs.Root>
+
+              {visibleOrders.length === 0 && (
+                <div className="rounded-3xl border border-gray-100 bg-white p-8 text-center">
+                  <p className="text-lg font-semibold text-gray-900">
+                    No {activeTabLabel.toLowerCase()} orders
+                  </p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Check back later or browse products to place a new order.
+                  </p>
+                  <Button
+                    className="mt-4 rounded-[32px] bg-cyan-700 text-white px-6 py-2"
+                    onClick={() => router.push('/')}
+                  >
+                    Shop Now
+                  </Button>
+                </div>
+              )}
+
+              {visibleOrders.map((order) => {
                 const items = order.items ?? [];
                 const itemsCount = items.reduce(
                   (total, item) => total + (item.quantity ?? 0),
@@ -151,7 +245,7 @@ export default function OrdersPage() {
                 return (
                   <div
                     key={order._id}
-                    className="rounded-3xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+                    className="rounded-3xl  border border-gray-200 bg-white shadow-sm overflow-hidden"
                   >
                     <div
                       className={`flex flex-col gap-3 px-6 py-4 border-b ${getHeaderStyles(
@@ -169,17 +263,6 @@ export default function OrdersPage() {
                           <p className="text-xs text-gray-500 mt-1">
                             Placed {formatDate(order.createdAt)}
                           </p>
-                          <div className="text-left mt-2">
-                            <p className="lg:block hidden text-xs text-gray-500">
-                              Total
-                            </p>
-                            <p className="lg:text-lg text-sm font-semibold text-gray-900">
-                              {numberFormatter.format(
-                                order.total,
-                                currencyFormatConfig,
-                              )}
-                            </p>
-                          </div>
                         </div>
 
                         <Badge.Root
@@ -211,7 +294,7 @@ export default function OrdersPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-4 px-6 py-5">
+                    <div className="grid lg:grid-cols-3  gap-4 px-6 py-5">
                       {items.map((item) => {
                         const product = productMap.get(item.productId);
                         const name = product?.name ?? 'Discontinued Product';
@@ -261,7 +344,7 @@ export default function OrdersPage() {
                       })}
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4 px-6 pb-6 sm:grid-cols-3">
+                    <div className="grid grid-cols-1 bg-gray-50 border-t border-gray-200 py-4 gap-4 px-6 pb-6 sm:grid-cols-3">
                       <div className="rounded-2xl border border-gray-200 bg-white p-4">
                         <p className="text-xs uppercase text-gray-500">
                           Subtotal

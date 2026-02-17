@@ -2,6 +2,7 @@
 import { MedalIcon } from '~/icons/MedalIcon';
 import { PhoneIcon } from '~/icons/PhoneIcon';
 import { TruckIcon } from '~/icons/TruckIcon';
+import { LicenseTimer } from './LicenseTimer';
 
 interface HighlightProps {
   storeName?: string;
@@ -17,9 +18,11 @@ export const Highlight = ({
   return (
     <div className="w-full bg-cyan-700 text-cyan-950">
       <div className="max-w-screen flex flex-col gap-2 py-2 sm:flex-row sm:items-center sm:justify-between sm:py-3">
-        <div>
+        <div className="flex gap-2 items-center">
           <p className="text-xs sm:text-sm text-white font-bold">{storeName}</p>
+          <LicenseTimer />
         </div>
+
         <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm sm:gap-0 sm:divide-x sm:divide-cyan-600">
           <div className="flex items-center gap-2 sm:px-4">
             <MedalIcon

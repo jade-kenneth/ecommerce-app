@@ -1,8 +1,6 @@
-import { ArrowDown } from 'lucide-react';
 import { FunctionComponent } from 'react';
 import { useProductsQuery } from '~/graphql/generated';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
-import { Button } from '../../../ui/components/Button';
 import { Cards } from '../../../ui/components/Cards';
 import { Container } from '../../../ui/components/Container';
 
@@ -21,7 +19,7 @@ export const JustForYou: FunctionComponent<JustForYouProps> = () => {
         })}
       </div>
 
-      <div className="w-full flex justify-center mt-8 sm:mt-10 items-center">
+      {/* <div className="w-full flex justify-center mt-8 sm:mt-10 items-center">
         <Button
           variant="ghost"
           className="flex items-center gap-3 font-semibold text-cyan-700 hover:text-cyan-600 text-sm sm:text-base"
@@ -29,7 +27,7 @@ export const JustForYou: FunctionComponent<JustForYouProps> = () => {
           <span className="text-base sm:text-lg">See More</span>
           <ArrowDown />
         </Button>
-      </div>
+      </div> */}
     </Container>
   );
 };

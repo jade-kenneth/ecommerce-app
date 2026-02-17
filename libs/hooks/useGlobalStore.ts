@@ -5,11 +5,12 @@ interface GlobalState {
   authenticate: {
     isAuthenticated: boolean;
     setIsAuthenticated: (value: boolean) => void;
+    isAuthDialogOpen: boolean;
+    setAuthDialogOpen: (value: boolean) => void;
+    setUser: (email: string) => void;
+    email?: string;
   };
-  signIn: {
-    isSignIn: boolean;
-    setIsSignIn: (value: boolean) => void;
-  };
+
   cart: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
@@ -31,6 +32,23 @@ export const useGlobalStore = create<GlobalState>()(
               isAuthenticated,
             },
           })),
+        isAuthDialogOpen: false,
+        setAuthDialogOpen: (isAuthDialogOpen: boolean) =>
+          set((prev) => ({
+            authenticate: {
+              ...prev.authenticate,
+              isAuthDialogOpen,
+            },
+          })),
+        email: '',
+        setUser: (email) =>
+          set((prev) => ({
+            ...prev,
+            user: {
+              ...prev,
+              email,
+            },
+          })),
       },
       cart: {
         isOpen: false,
@@ -44,14 +62,6 @@ export const useGlobalStore = create<GlobalState>()(
         setCount: (count) =>
           set((prev) => ({ ...prev, cart: { ...prev.cart, count } })),
       },
-      signIn: {
-        isSignIn: false,
-        setIsSignIn: (isSignIn) =>
-          set((prev) => ({
-            ...prev,
-            signIn: { ...prev.signIn, isSignIn },
-          })),
-      },
-    }))
-  )
+    })),
+  ),
 );

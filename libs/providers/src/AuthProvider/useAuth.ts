@@ -26,8 +26,8 @@ export const useAuth = (): UseAuthReturn => {
           globalStore.setIsAuthenticated(true);
         }
         setSession(session);
-      } catch (error) {
-        /* empty */
+      } catch {
+        return null;
       }
     };
 

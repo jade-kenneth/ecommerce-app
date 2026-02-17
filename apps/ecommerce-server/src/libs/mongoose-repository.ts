@@ -98,9 +98,10 @@ const FILTER_CONDITION_MAP = new Map([
 const serializeItem = (obj: Record<string, any>) => {
   /** This function serializes an item to ensure that
    * Decimal128 values are converted to strings. */
+  const source = obj?.toObject ? obj.toObject() : obj;
   const result: Record<string, any> = {};
-  for (const key in obj) {
-    const val = obj[key];
+  for (const key in source) {
+    const val = source[key];
     result[key] = val instanceof Decimal128 ? val.toString() : val;
   }
   return result;

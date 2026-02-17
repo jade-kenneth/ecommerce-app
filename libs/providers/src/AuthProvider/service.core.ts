@@ -21,11 +21,12 @@ export interface AuthenticateInput {
   role: AccountType;
 }
 
-export async function refreshSession(input: RefreshSession) {
+export async function refreshSession(
+  input: RefreshSession,
+): Promise<Token | null> {
   try {
     const response = await axios.post<Token>('/session/refresh', input, {
       baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
-
       headers: {
         Authorization: `Bearer ${input.refreshToken}`,
       },
@@ -33,8 +34,15 @@ export async function refreshSession(input: RefreshSession) {
 
     return response.data;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      if (status === 401 || status === 403) {
+        return null;
+      }
+    }
+
     console.error('Error refreshing session:', error);
-    throw error;
+    return null;
   }
 }
 
@@ -48,7 +56,7 @@ export async function logoutSession(input: RefreshSession) {
         headers: {
           Authorization: `Bearer ${input.refreshToken}`,
         },
-      }
+      },
     );
   } catch (error) {
     console.error('Error logging out:', error);
@@ -63,7 +71,7 @@ export async function createSession(input: CreateSessionInput) {
       input,
       {
         baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -82,7 +90,7 @@ export async function __authenticate(input: AuthenticateInput) {
         headers: {
           Role: input.role,
         },
-      }
+      },
     );
 
     return response.data;

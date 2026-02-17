@@ -69,7 +69,7 @@ export default function ProductDetailsClient({
   const handleAddToCart = async () => {
     if (!product) return;
     if (!globalStore.authenticate.isAuthenticated) {
-      globalStore.signIn.setIsSignIn(true);
+      globalStore.authenticate.setAuthDialogOpen(true);
       return;
     }
 

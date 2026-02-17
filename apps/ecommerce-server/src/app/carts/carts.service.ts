@@ -17,6 +17,7 @@ import { Filter } from '../../libs/repository';
 import { ObjectType } from '../../types/common';
 import { Tokens } from '../../types/tokens';
 import { safeParseFloat } from '../../util/safe-parse-float';
+import { PaymentsService } from '../payments/payments.service';
 import { ProductsService } from '../products/products.service';
 import { AccountService } from '../user-session/account/account.service';
 import { Cart, CartRepository } from './repositories/carts.repository';
@@ -90,6 +91,7 @@ export class CartsService {
     private readonly products: ProductsService,
     private readonly accounts: AccountService,
     private readonly events: AsyncEventDispatcher,
+    private readonly payments: PaymentsService,
   ) {}
 
   private findShippingOption(id: Types.ObjectId) {
@@ -263,17 +265,57 @@ export class CartsService {
     }
 
     const updatedAt = new Date();
+    const shouldSendPurchaseEvent =
+      ![OrderStatus.PAID, OrderStatus.COMPLETED].includes(order.status) &&
+      [OrderStatus.PAID, OrderStatus.COMPLETED].includes(params.status);
+
+    const shouldVerifyPayment =
+      [OrderStatus.PAID, OrderStatus.COMPLETED].includes(params.status) &&
+      order.paymentMethod?.type === PaymentMethodType.GCASH;
+
+    if (shouldVerifyPayment) {
+      await this.assertPaymentVerified(order);
+    }
 
     await this.orders.update(params.orderId, {
       status: params.status,
       updatedAt,
     });
 
-    return {
+    const updatedOrder = {
       ...order,
       status: params.status,
       updatedAt,
     };
+
+    if (shouldSendPurchaseEvent) {
+      await this.sendPurchaseAnalytics(updatedOrder);
+    }
+
+    return updatedOrder;
+  }
+
+  private async assertPaymentVerified(order: Order) {
+    if (!order.paymentRequestId) {
+      throw new Error('Payment verification is required');
+    }
+
+    const payment = await this.payments.getPaymentRequest(
+      order.paymentRequestId,
+    );
+    const status = (payment?.status ?? '').toUpperCase();
+    const successStatuses = new Set([
+      'SUCCEEDED',
+      'COMPLETED',
+      'PAID',
+      'SUCCESS',
+      'SUCCESSFUL',
+      'SETTLED',
+    ]);
+
+    if (!successStatuses.has(status)) {
+      throw new Error('Payment not verified');
+    }
   }
 
   public async removeFromCart(params: {
@@ -368,7 +410,34 @@ export class CartsService {
           };
         }),
       );
-      // TODO move this to a separate analytics service and make it more generic to handle other events as well
+
+      await this.carts.delete(accountId);
+
+      await this.events.dispatch('OrderCreated', {
+        orderId: order._id.toString(),
+        accountId: accountId.toString(),
+        emailAddress: account?.emailAddress,
+        total: order.total,
+        itemCount: order.items.length,
+        items: eventItems,
+      });
+    } catch (error) {
+      console.error('OrderCreated event dispatch failed:', error);
+    }
+
+    try {
+      await this.carts.delete(accountId);
+    } catch (error) {
+      console.error('Cart cleanup failed:', error);
+    }
+
+    return order;
+  }
+
+  private async sendPurchaseAnalytics(order: Order) {
+    if (!order.gaClientId) return;
+
+    try {
       await axios.post(
         `https://www.google-analytics.com/mp/collect?measurement_id=G-N7BZ4QRB31&api_secret=kd1nvBHlSvu25oIW0E5Emg`,
         {
@@ -385,20 +454,9 @@ export class CartsService {
           ],
         },
       );
-      await this.events.dispatch('OrderCreated', {
-        orderId: order._id.toString(),
-        accountId: accountId.toString(),
-        emailAddress: account?.emailAddress,
-        total: order.total,
-        itemCount: order.items.length,
-        items: eventItems,
-      });
-      await this.carts.delete(accountId);
     } catch (error) {
-      console.error('OrderCreated event dispatch failed:', error);
+      console.error('GA purchase event dispatch failed:', error);
     }
-
-    return order;
   }
 
   public async findCart(id: Types.ObjectId) {

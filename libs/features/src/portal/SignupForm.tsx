@@ -23,9 +23,8 @@ interface SignupFormProps {
 const schema = z
   .object({
     emailAddress: z.string().email({ message: 'Invalid email address' }),
-    mobileNumber: z
-      .string()
-      .min(10, { message: 'Mobile number must be at least 10 digits' }),
+    mobileNumber: z.string(),
+    // .min(10, { message: 'Mobile number must be at least 10 digits' }),
     password: z
       .string()
       .min(8, { message: 'Password must be at least 8 characters long' }),
@@ -124,8 +123,12 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
             <Field.ErrorText>
               {form.formState.errors.emailAddress?.message}
             </Field.ErrorText>
+            <p className="text-[10px] mt-1 italic text-carbon-400">
+              Please use a valid and active working email address to fully
+              utilize all features.
+            </p>
           </Field.Root>
-          <Field.Root invalid={!!form.formState.errors.mobileNumber}>
+          {/* <Field.Root invalid={!!form.formState.errors.mobileNumber}>
             <Field.Label>
               <span className="text-sm font-bold text-carbon-100">
                 Mobile number
@@ -148,7 +151,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
             <Field.ErrorText>
               {form.formState.errors.mobileNumber?.message}
             </Field.ErrorText>
-          </Field.Root>
+          </Field.Root> */}
 
           <Field.Root invalid={!!form.formState.errors.password}>
             <Field.Label>
@@ -268,11 +271,15 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
           </Field.Root>
         </div>
         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-          <Button className="w-full bg-cyan-700 rounded-[50px] " type="submit">
+          <Button
+            disabled={loading}
+            className="w-full bg-cyan-700 rounded-[50px] h-[40px] "
+            type="submit"
+          >
             Create Account
           </Button>
 
-          <div className="inline-flex items-center justify-center gap-2 relative flex-[0_0_auto]">
+          <div className="flex items-start  w-full  gap-2 relative">
             <p className="relative w-fit mt-[-1.00px] text-carbon-400 text-sm text-center tracking-wide leading-5 whitespace-nowrap">
               Already have an account?
             </p>
@@ -286,7 +293,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
               </span>
             </a>
           </div>
-          <p className="relative w-fit text-carbon-400 text-sm text-center tracking-wide leading-5 whitespace-nowrap">
+          {/* <p className="relative w-fit text-carbon-400 text-sm text-center tracking-wide leading-5 whitespace-nowrap">
             Or create an account using
           </p>
           <div className="flex w-full max-w-[296px] items-start gap-3 relative flex-[0_0_auto]">
@@ -305,7 +312,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                 </span>
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
       </form>
     </div>

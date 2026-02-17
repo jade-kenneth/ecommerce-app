@@ -16,7 +16,9 @@ export const Checkout = () => {
         <div className="flex-1">
           <ShippingOptions />
           <PaymentMethod />
-          <OrderSummary isCheckout />
+          <div className="flex w-full flex-1 flex-col gap-5 self-start lg:sticky lg:top-[170px] h-fit">
+            <OrderSummary isCheckout />
+          </div>
         </div>
       </div>
       <Footer />

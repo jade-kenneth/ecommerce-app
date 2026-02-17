@@ -116,7 +116,7 @@ export interface UpdateConfigInput {
 export interface LicenseInput {
     _id: ObjectId;
     code: string;
-    expirationDate: string;
+    expirationDate?: Nullable<string>;
 }
 
 export interface CreateGcashPaymentInput {
@@ -364,7 +364,7 @@ export interface FileNameTooLongError extends Error {
 export interface License {
     _id: ObjectId;
     code: string;
-    expirationDate: string;
+    expirationDate?: Nullable<string>;
 }
 
 export interface CheckoutUrl {

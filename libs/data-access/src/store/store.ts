@@ -180,8 +180,8 @@ const createStore = (): Store => {
           );
           setexp(
             $('licenseCode'),
-            arg0.licenseCode,
-            addMinutes(new Date(), 30).getTime(),
+            arg0.licenseCode?.split('@')[0].toString() ?? '',
+            new Date(arg0.licenseCode?.split('@')[1] as string).getTime() ?? '',
           );
           set($('role'), arg0.role);
           resolve();

@@ -15,6 +15,7 @@ export type Order = {
   items: CartItem[];
   shippingOption: ShippingOption;
   paymentMethod: PaymentMethod;
+  paymentRequestId?: string;
   subtotal: string;
   tax: string;
   shippingFee: string;
@@ -49,6 +50,7 @@ export async function OrdersRepositoryFactory(
       gaClientId: String,
       shippingOption: ShippingOptionSchema,
       paymentMethod: PaymentMethodSchema,
+      paymentRequestId: String,
       subtotal: String,
       tax: String,
       shippingFee: String,

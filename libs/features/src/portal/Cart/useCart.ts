@@ -9,8 +9,8 @@ import {
   ShippingType,
   useCartQuery,
   useProductsQuery,
-  useSelfQuery,
 } from '~/graphql/generated';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 
 export interface Item {
   thumbnail: string;
@@ -140,14 +140,12 @@ export const useCart = () => {
     itemsCount: 0,
   });
 
+  const globalStore = useGlobalStore((state) => state);
+
   const { itemsCount } = state;
 
-  const { data: selfQuery } = useSelfQuery();
-  const selfId = selfQuery?.self?._id;
-
   const { data: cartData } = useCartQuery({
-    skip: !selfId,
-    variables: { id: selfId ?? '' },
+    skip: !globalStore.authenticate.isAuthenticated,
   });
 
   const productIds = useMemo(() => {
@@ -157,7 +155,6 @@ export const useCart = () => {
   }, [cartData]);
 
   const { data: productsData } = useProductsQuery({
-    skip: productIds.length === 0,
     variables: {
       filter: {
         _id: { in: productIds },
@@ -186,6 +183,10 @@ export const useCart = () => {
   );
 
   useEffect(() => {
+    if (!globalStore.authenticate.isAuthenticated) {
+      dispatch({ type: 'setCart', payload: initialCart });
+      return;
+    }
     if (!cartData?.cart) return;
 
     const productsMap = new Map(

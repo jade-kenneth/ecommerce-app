@@ -27,3 +27,5 @@ type Edge {
   cursor: Cursor!
   node: Node!
 }
+
+directive @authorizationRequired(roles: [AccountType!]!) on FIELD_DEFINITION

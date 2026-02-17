@@ -12,12 +12,14 @@ export async function getSession(): Promise<Session> {
   }
   if (!accessToken) {
     if (!refreshToken) {
+      await store.clearSession();
       return {
         status: 'unauthenticated',
       };
     }
     try {
       const session = await services.refreshSession({ refreshToken });
+
       if (!session) {
         await store.clearSession();
         return {
@@ -34,22 +36,39 @@ export async function getSession(): Promise<Session> {
         role,
       };
     } catch {
+      await store.clearSession();
       return {
         status: 'unauthenticated',
       };
     }
   }
-  return {
-    status: 'authenticated',
-    accessToken,
-    refreshToken,
-    role,
-  };
+
+  try {
+    const validation = await services.validateSession({ accessToken });
+    if (!validation.ok) {
+      await store.clearSession();
+
+      return {
+        status: 'unauthenticated',
+      };
+    }
+
+    return {
+      status: 'authenticated',
+      accessToken,
+      refreshToken,
+      role,
+    };
+  } catch {
+    await store.clearSession();
+    return {
+      status: 'unauthenticated',
+    };
+  }
 }
 export async function create_session(input: services.CreateSessionInput) {
-  const { accessToken, refreshToken, role } = await services.createSession(
-    input
-  );
+  const { accessToken, refreshToken, role } =
+    await services.createSession(input);
 
   await store.set({
     accessToken,
@@ -59,9 +78,8 @@ export async function create_session(input: services.CreateSessionInput) {
 }
 
 export async function authenticate(input: AuthenticateInput) {
-  const { accessToken, refreshToken, role } = await services.__authenticate(
-    input
-  );
+  const { accessToken, refreshToken, role } =
+    await services.__authenticate(input);
 
   await store.set({
     accessToken,

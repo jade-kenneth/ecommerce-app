@@ -53,6 +53,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   const router = useRouter();
 
   const cartContext = useCartContext();
+
   const categoryLabels = categoryItems.map((item) =>
     item.name
       .replace(/<[^>]*>/g, ' ')

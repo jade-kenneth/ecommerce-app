@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Mon, 16 Feb 2026 15:57:37 GMT
+// Last modified: Tue, 17 Feb 2026 13:15:10 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -130,8 +130,16 @@ export type KeyValuePairInput = {
 export type LicenseInput = {
   _id: Scalars['ObjectID']['input'];
   code: Scalars['String']['input'];
-  expirationDate: Scalars['String']['input'];
+  expirationDate?: InputMaybe<Scalars['String']['input']>;
+  variant: LicenseVariant;
 };
+
+export enum LicenseVariant {
+  FiveMinuteTrial = 'FIVE_MINUTE_TRIAL',
+  OneHourTrial = 'ONE_HOUR_TRIAL',
+  OneMinuteTrial = 'ONE_MINUTE_TRIAL',
+  TenMinuteTrial = 'TEN_MINUTE_TRIAL',
+}
 
 export enum OrderStatus {
   Cancelled = 'CANCELLED',
@@ -278,9 +286,7 @@ export type UpdateCartItemMutation = {
   updateCartItem?: boolean | null;
 };
 
-export type CartQueryVariables = Exact<{
-  id: Scalars['ObjectID']['input'];
-}>;
+export type CartQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CartQuery = {
   __typename: 'Query';
@@ -758,8 +764,8 @@ export type UpdateCartItemMutationOptions = Apollo.BaseMutationOptions<
   UpdateCartItemMutationVariables
 >;
 export const CartDocument = /*#__PURE__*/ gql`
-  query Cart($id: ObjectID!) {
-    cart(id: $id) {
+  query Cart {
+    cart {
       _id
       items {
         productId
@@ -776,8 +782,7 @@ export const CartDocument = /*#__PURE__*/ gql`
   }
 `;
 export function useCartQuery(
-  baseOptions: Apollo.QueryHookOptions<CartQuery, CartQueryVariables> &
-    ({ variables: CartQueryVariables; skip?: boolean } | { skip: boolean }),
+  baseOptions?: Apollo.QueryHookOptions<CartQuery, CartQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<CartQuery, CartQueryVariables>(CartDocument, options);
@@ -820,7 +825,7 @@ export type CartSuspenseQueryHookResult = ReturnType<
   typeof useCartSuspenseQuery
 >;
 export type CartQueryResult = Apollo.QueryResult<CartQuery, CartQueryVariables>;
-export function refetchCartQuery(variables: CartQueryVariables) {
+export function refetchCartQuery(variables?: CartQueryVariables) {
   return { query: CartDocument, variables: variables };
 }
 export const MyOrdersDocument = /*#__PURE__*/ gql`

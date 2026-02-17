@@ -9,6 +9,13 @@ export interface Token {
 export interface RefreshSession {
   refreshToken: string;
 }
+export interface ValidateSessionInput {
+  accessToken: string;
+}
+export type ValidateSessionResult = {
+  ok: boolean;
+  status: 200 | 403;
+};
 export interface CreateSessionInput {
   user: {
     _id: string;
@@ -43,6 +50,32 @@ export async function refreshSession(
 
     console.error('Error refreshing session:', error);
     return null;
+  }
+}
+
+export async function validateSession(
+  input: ValidateSessionInput,
+): Promise<ValidateSessionResult> {
+  try {
+    const response = await axios.post<ValidateSessionResult>(
+      '/session/validate',
+      {},
+      {
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+        headers: {
+          Authorization: `Bearer ${input.accessToken}`,
+        },
+      },
+    );
+    return {
+      ok: response.data.ok,
+      status: response.data.status,
+    };
+  } catch {
+    return {
+      ok: false,
+      status: 403,
+    };
   }
 }
 

@@ -15,6 +15,7 @@ import {
   useMyOrdersQuery,
   useProductsQuery,
 } from '~/graphql/generated';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
@@ -65,7 +66,12 @@ type OrdersTabValue = 'ALL' | OrderStatus;
 
 export default function OrdersPage() {
   const router = useRouter();
-  const ordersQuery = useMyOrdersQuery();
+
+  const globalStore = useGlobalStore((state) => state);
+
+  const ordersQuery = useMyOrdersQuery({
+    skip: !globalStore.authenticate.isAuthenticated,
+  });
   const orders = ordersQuery.data?.myOrders ?? [];
   const [activeTab, setActiveTab] = useState<OrdersTabValue>('ALL');
 

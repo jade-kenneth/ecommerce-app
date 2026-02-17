@@ -21,6 +21,11 @@ import { JwtService } from '../jwt/jwt.service';
 import { Session } from './repositories/session.repository';
 import { SessionService } from './session.service';
 
+export type ValidateSessionResult = {
+  ok: boolean;
+  status: 200 | 403;
+};
+
 @Controller()
 export class SessionController {
   constructor(
@@ -39,17 +44,18 @@ export class SessionController {
     );
 
     const { user } = request.body;
+    const accountId = new Types.ObjectId(user._id);
 
     const session: Session = {
       _id: new Types.ObjectId(),
-      account: user._id,
+      account: accountId,
       jti: randomBytes(12),
       dateTimeCreated: timestamp,
       dateTimeLastRefreshed: timestamp,
     };
 
     const claims = {
-      sub: user._id.toString(),
+      sub: accountId.toString(),
       jti: session.jti.toString('hex'),
       role: user.role,
       iap: DateTime.fromJSDate(timestamp)
@@ -60,6 +66,10 @@ export class SessionController {
     };
 
     try {
+      await this.session.deleteSession({
+        account: accountId,
+      });
+
       await this.session.createSession(session);
 
       const accessToken = this.jwt.sign(
@@ -165,6 +175,59 @@ export class SessionController {
     }
   }
 
+  @Post('session/validate')
+  async validateSession(
+    @Request() request: AuthRequest,
+  ): Promise<ValidateSessionResult> {
+    try {
+      if (!request.claims || !request.session) {
+        throw new UnauthorizedException({
+          code: 'INVALID_TOKEN',
+        });
+      }
+
+      if (request.claims.type !== TokenType.Access) {
+        throw new UnauthorizedException({
+          code: 'INVALID_TOKEN_TYPE',
+        });
+      }
+
+      if (
+        !request.claims.sub ||
+        !request.claims.jti ||
+        !Types.ObjectId.isValid(request.claims.sub) ||
+        !/^[a-f0-9]+$/i.test(request.claims.jti)
+      ) {
+        throw new UnauthorizedException({
+          code: 'INVALID_TOKEN',
+        });
+      }
+
+      const activeSession = await this.session.findSession({
+        account: new Types.ObjectId(request.claims.sub),
+        jti: Buffer.from(request.claims.jti, 'hex'),
+      });
+
+      if (!activeSession) {
+        return {
+          ok: false,
+          status: 403,
+        };
+      }
+
+      return {
+        ok: true,
+        status: 200,
+      };
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
   @Post('session/logout')
   @UseGuards(RefreshJwtGuard)
   async logout(@Request() request: AuthRequest) {
@@ -197,14 +260,6 @@ export class SessionController {
     //   'decoded password'
     // );
 
-    try {
-      await this.session.deleteSession({
-        account: account._id,
-      });
-    } catch (error) {
-      console.log('Error updating session during authenticate:', error);
-    }
-
     if (!account || !bcrypt.compareSync(password, account.password)) {
       throw new UnauthorizedException({
         error: {
@@ -212,6 +267,16 @@ export class SessionController {
           message: 'Invalid credentials provided.',
         },
       });
+    }
+
+    try {
+      await this.session.deleteSession({
+        account: account._id,
+      });
+    } catch {
+      throw new InternalServerErrorException(
+        'Unable to reset previous sessions.',
+      );
     }
 
     const session: Session = {

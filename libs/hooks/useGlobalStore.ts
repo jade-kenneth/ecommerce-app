@@ -15,8 +15,6 @@ interface GlobalState {
   cart: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
-    count: number;
-    setCount: (value: number) => void;
     '~touched': boolean;
   };
 
@@ -60,14 +58,11 @@ export const useGlobalStore = create<GlobalState>()(
       cart: {
         isOpen: false,
         '~touched': false,
-        count: 0,
         setIsOpen: (isOpen) =>
           set((prev) => ({
             ...prev,
             cart: { ...prev.cart, isOpen, '~touched': true },
           })),
-        setCount: (count) =>
-          set((prev) => ({ ...prev, cart: { ...prev.cart, count } })),
       },
       rating: {
         isOpen: false,

@@ -17,9 +17,11 @@ import {
   ObjectIDResolver,
 } from 'graphql-scalars';
 
+import { GraphQLSchema } from 'graphql';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import path from 'path';
+import { authorizationRequiredDirectiveSchemaTransformer } from 'src/util/authorization-required-directive';
 import { AsyncEventModule } from '~/async-event-module/async-event-module';
 import { safeParseFloat } from '../util/safe-parse-float';
 import { AppService } from './app.service';
@@ -69,6 +71,22 @@ import { SessionModule } from './user-session/session/session.module';
 
           // destructure context to get req object from middleware
           context: ({ req }) => ({ claims: req.claims }),
+
+          // apply authorizationRequired directive
+          transformSchema: async (schema: GraphQLSchema) => {
+            let combinedSchemas = schema;
+            const schemaTransformers = [
+              {
+                name: 'authorizationRequired',
+                fn: authorizationRequiredDirectiveSchemaTransformer,
+              },
+            ];
+            schemaTransformers.forEach((s) => {
+              combinedSchemas = s.fn(combinedSchemas, s.name);
+            });
+
+            return combinedSchemas;
+          },
         };
 
         return options;
@@ -96,13 +114,6 @@ import { SessionModule } from './user-session/session/session.module';
     RatingsModule,
     AsyncEventModule.forRootAsync({
       useFactory: () => {
-        console.log('KAFKA_BROKER:', process.env.KAFKA_BROKER);
-        console.log('KAFKA_PASSWORD exists:', !!process.env.KAFKA_PASSWORD);
-        console.log('KAFKA_USERNAME exists:', process.env.KAFKA_USERNAME);
-        console.log('REDISHOST:', process.env.REDISHOST);
-        console.log('REDISPORT:', process.env.REDISPORT);
-        console.log('REDISPASSWORD exists:', !!process.env.REDISPASSWORD);
-        console.log('rebuild2x');
         return {
           context: 'ecommerce',
           kafka: {

@@ -4,8 +4,10 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 import { JwtService } from '../../user-session/jwt/jwt.service';
 import { SessionService } from '../../user-session/session/session.service';
 import { Claims } from '../../user-session/types';
@@ -32,21 +34,38 @@ export class RefreshJwtGuard implements CanActivate {
     try {
       const claims = this.jwt.verify<Claims>(token);
 
-      const session = await this.session.findSession({
-        jti: Buffer.from(claims.jti, 'hex'),
-      });
-
-      if (!session)
+      if (
+        !claims.sub ||
+        !claims.jti ||
+        !Types.ObjectId.isValid(claims.sub) ||
+        !/^[a-f0-9]+$/i.test(claims.jti)
+      ) {
         throw new ForbiddenException({
           code: 'INVALID_TOKEN',
         });
+      }
+
+      const session = await this.session.findSession({
+        account: new Types.ObjectId(claims.sub),
+        jti: Buffer.from(claims.jti, 'hex'),
+      });
+
+      if (!session) {
+        throw new UnauthorizedException({
+          code: 'SESSION_REPLACED',
+        });
+      }
 
       request.session = session;
       request.claims = claims;
 
       return true;
     } catch (error) {
-      if (error instanceof ForbiddenException) throw error;
+      if (
+        error instanceof ForbiddenException ||
+        error instanceof UnauthorizedException
+      )
+        throw error;
 
       if (error instanceof TokenExpiredError) {
         throw new ForbiddenException({

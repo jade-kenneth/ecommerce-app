@@ -178,11 +178,16 @@ const createStore = (): Store => {
             arg0.refreshToken,
             addDays(new Date(), 30).getTime(),
           );
-          setexp(
-            $('licenseCode'),
-            arg0.licenseCode?.split('@')[0].toString() ?? '',
-            new Date(arg0.licenseCode?.split('@')[1] as string).getTime() ?? '',
-          );
+
+          if (arg0.licenseCode) {
+            setexp(
+              $('licenseCode'),
+              arg0.licenseCode?.split('@')[0].toString() ?? '',
+              new Date(arg0.licenseCode?.split('@')[1] as string).getTime() ??
+                '',
+            );
+          }
+
           set($('role'), arg0.role);
           resolve();
         });

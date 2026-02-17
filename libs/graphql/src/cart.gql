@@ -2,8 +2,8 @@ mutation UpdateCartItem($input: UpdateCartItemInput!) {
   updateCartItem(input: $input)
 }
 
-query Cart($id: ObjectID!) {
-  cart(id: $id) {
+query Cart {
+  cart {
     _id
     items {
       productId

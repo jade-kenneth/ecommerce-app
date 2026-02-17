@@ -97,7 +97,7 @@ input UpdateOrderStatusInput {
 
 type Query {
   # Cart
-  cart(id: ObjectId!): Cart!
+  cart: Cart!
 
   # Checkout options
   shippingOptions: [ShippingOption!]!

@@ -3,7 +3,6 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import assert from 'assert';
 
 import { Types } from 'mongoose';
-import { Filter } from '../../libs/repository';
 import { AccountType } from '../../types/common';
 import {
   CheckoutInput,
@@ -14,7 +13,6 @@ import {
 import { ProductsService } from '../products/products.service';
 import { Claims } from '../user-session/types';
 import { CartsService } from './carts.service';
-import { Cart } from './repositories/carts.repository';
 
 @Resolver('Cart')
 export class CartResolver {
@@ -24,12 +22,7 @@ export class CartResolver {
   ) {}
 
   @Query('cart')
-  async carts(
-    @Context('claims') claims: Claims,
-    @Args('first') first: number,
-    @Args('after') after: string,
-    @Args('filter') filter?: Filter<Cart>,
-  ) {
+  async carts(@Context('claims') claims: Claims) {
     /** This query requires authentication that comes from middleware
      *
      * If claims.role is missing, it means the token is invalid

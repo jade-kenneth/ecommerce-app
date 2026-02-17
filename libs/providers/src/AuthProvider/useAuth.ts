@@ -15,16 +15,15 @@ export const useAuth = (): UseAuthReturn => {
     status: 'loading',
   });
   const globalStore = useGlobalStore((state) => state.authenticate);
+
   useEffect(() => {
     const fetchSession = async () => {
       try {
         const session = await getSession();
 
-        if (session.status === 'unauthenticated') {
+        if (session.status === 'unauthenticated')
           globalStore.setIsAuthenticated(false);
-        } else {
-          globalStore.setIsAuthenticated(true);
-        }
+        else globalStore.setIsAuthenticated(true);
         setSession(session);
       } catch {
         return null;

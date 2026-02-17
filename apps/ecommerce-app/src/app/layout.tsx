@@ -105,14 +105,14 @@ gtag('js', new Date());
 gtag('config', '${GA_MEASUREMENT_ID}');`}
         </Script>
         <ClientApolloProvider>
-          <ClientCartProvider>
-            <AuthProvider>
+          <AuthProvider>
+            <ClientCartProvider>
               <LicenseProvider excludePaths={['/admin']}>
                 {children}
               </LicenseProvider>
               <ToastContainer />
-            </AuthProvider>
-          </ClientCartProvider>
+            </ClientCartProvider>
+          </AuthProvider>
         </ClientApolloProvider>
       </body>
     </html>

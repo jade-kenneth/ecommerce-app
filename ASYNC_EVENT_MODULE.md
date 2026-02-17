@@ -62,3 +62,60 @@ Optional:
 ## Good to know
 - SSL + SASL are enabled in the Kafka client for Redpanda Cloud.  
   If you are using local Kafka, you’ll likely remove those settings.
+
+---
+
+# Prompt (Generated From This Doc)
+
+Use this prompt to scaffold an Async Event Module in this codebase:
+
+```txt
+You are a senior NestJS engineer. Scaffold an Async Event Module for a backend service so events are produced and consumed through Kafka, with optional Redis deduplication.
+
+Requirements:
+
+1) Create a global DynamicModule named `AsyncEventModule` with `forRootAsync`.
+2) Module should initialize:
+   - Kafka client
+   - Kafka producer
+   - Kafka consumer
+   - handler registry map (`Map<string, any>`)
+   - optional Redis client
+3) Topic and group naming must be context-based:
+   - topic: `async-event-{context}`
+   - consumer group: `async-event-{context}`
+4) Support options shape:
+   - `context: string`
+   - `kafka.brokers: string[]`
+   - `kafka.clientId?: string` (fallback to `context`)
+   - optional `redis.host`, `redis.port`
+   - optional `concurrency`
+5) Add dispatcher and producer:
+   - dispatcher method `dispatch(type, data, { id? })`
+   - producer sends JSON event with `headers.type`
+6) Add consumer that:
+   - discovers handlers via Nest DiscoveryService + MetadataScanner + Reflector
+   - reads event type from Kafka header
+   - executes matching handler
+   - applies optional Redis dedupe using key `async-event:{type}:{event.id}` and `dedupeTtl`
+7) Add decorator:
+   - `@AsyncEventHandler(eventType, { dedupeTtl? })`
+8) Add typed event contracts:
+   - `AsyncEventPayloads`
+   - `AsyncEventType`
+   - `AsyncEvent<TType>`
+9) Wire module in `AppModule` using `forRootAsync` and environment-based config.
+10) Include usage examples:
+    - dispatch `SuccessfulSignup` from a service
+    - consume it in an email handler class
+
+Environment notes:
+- Kafka creds: `KAFKA_USERNAME`, `KAFKA_PASSWORD`
+- Redis password: `REDISPASSWORD` (if Redis is enabled)
+- For Redpanda Cloud keep SSL/SASL settings; for local Kafka allow disabling them.
+
+Output format:
+- show created/updated file list first
+- include complete code per file
+- include a short verification checklist (producer, consumer, handler discovery, dedupe path)
+```

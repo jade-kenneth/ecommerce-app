@@ -1,98 +1,71 @@
-# account repository
+# Authentication Guide
 
-# session controller
+This document explains the authentication lifecycle for the app: signup, login, session validation, token refresh, and request authorization.
 
-# apollo config
+## Core Files Involved
 
-# jwt service
+- `account repository`
+- `session controller`
+- `apollo config`
+- `jwt service`
+- `auth guard`
+- `refresh guard`
+- `auth middleware`
 
-# auth guard
+These parts work together to create, validate, refresh, and authorize user sessions.
 
-# refresh guard
+## Authentication Flow
 
-# auth middleware
+### 1) Signup Flow (Mutation)
 
-# These files work together to create, validate, refresh, and authorize user sessions.
+1. User signs up through GraphQL.
+2. Frontend calls `createSession`, which sends `POST /session`.
+3. Backend `session controller` creates a session record in the database with:
+   - session id (`_id`)
+   - account id
+   - `jti`
+   - `dateTimeCreated`
+   - `dateTimeLastRefreshed`
+4. Backend generates `accessToken` and `refreshToken` using JWT.
+5. Backend returns `accessToken`, `refreshToken`, and `memberId`.
+6. Frontend stores tokens in `localStorage` or cookies.
 
-# Authentication Flow
+### 2) Login Flow (Mutation)
 
-This document explains the full authentication lifecycle including signup, login, session management, and request authorization.
+1. Frontend calls `authenticate`, which sends `POST /authenticate`.
+2. Backend verifies the user password.
+3. Backend deletes any previous session for that user.
+4. Backend creates a new session record.
+5. Backend signs a new `accessToken` and `refreshToken`.
+6. Backend returns the new tokens.
+7. Frontend replaces stored tokens with the new values.
 
-### Signup Flow (Mutation)
+### 3) Session Validation (`self` + visibility checks)
 
-User signs up through GraphQL.
+1. After successful authentication, global authenticated state becomes `true`.
+2. A `self` query runs to load authenticated user data.
+3. On page visibility change, frontend runs `getSession` to verify validity.
+4. If required, tokens are refreshed.
 
-Frontend calls a createSession utility which sends a POST request to /session.
+### 4) Request Authorization
 
-Backend session controller creates a new session in the database containing:
+When authenticated, frontend attaches:
 
-- session id (\_id)
+`Authorization: Bearer <accessToken>`
 
-- account id
+Backend middleware validates:
 
-- jti
+- token validity
+- session existence in the database
+- session is not expired or revoked
 
-- dateTimeCreated
+If valid, request proceeds.
+If invalid, backend returns `401 Unauthorized`.
 
-- dateTimeLastRefreshed
+## Summary
 
-Backend generates an accessToken and refreshToken using JWT.
-
-Backend returns accessToken, refreshToken, and memberId.
-
-Frontend stores the tokens in localStorage or cookies.
-
-### Login Flow (Mutation)
-
-Frontend calls an authenticate utility which sends a POST request to /authenticate.
-
-Backend verifies the user password.
-
-Backend deletes any previous session for the user by finding a session using the user id.
-
-Backend creates a new session record.
-
-Backend signs a new accessToken and refreshToken.
-
-Backend returns accessToken and refreshToken.
-
-Frontend replaces the stored tokens with the new tokens.
-
-### Self Query and Session Validation
-
-After authentication succeeds, the global authenticated state becomes true.
-
-A self query automatically runs to fetch the authenticated user data.
-
-On page visibility change, a getSession utility runs to confirm the session is still valid.
-
-If needed, tokens are refreshed.
-
-Authorization on API Requests
-
-When the user is authenticated, the frontend attaches the Authorization header to every request:
-Authorization: Bearer <accessToken>
-
-Backend middleware reads the token and checks:
-
-token validity
-
-session existence in the database
-
-session is not expired or revoked
-
-If the session is valid, the request continues normally.
-
-If the session is invalid, the backend returns 401 Unauthorized.
-
-Summary
-
-Authentication is session-based and uses JWT tokens.
-
-Access and refresh tokens are generated on signup or login.
-
-Sessions are stored in the database and can be revoked.
-
-Every request includes an Authorization header.
-
-The backend verifies the session before processing any request.
+- Authentication is session-based and uses JWT.
+- Access and refresh tokens are issued on signup/login.
+- Sessions are persisted in the database and can be revoked.
+- Authenticated API requests include `Authorization` header.
+- Backend validates session state before processing requests.

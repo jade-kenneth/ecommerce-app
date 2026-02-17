@@ -25,7 +25,9 @@ export class LicenseController {
       }
       if (isNil(data.expirationDate)) {
         let expirationDate: string;
-        if (data.variant === LicenseVariant.FIVE_MINUTE_TRIAL) {
+        if (data.variant === LicenseVariant.ONE_MINUTE_TRIAL) {
+          expirationDate = addMinutes(new Date(), 1).toISOString();
+        } else if (data.variant === LicenseVariant.FIVE_MINUTE_TRIAL) {
           expirationDate = addMinutes(new Date(), 5).toISOString();
         } else if (data.variant === LicenseVariant.TEN_MINUTE_TRIAL) {
           expirationDate = addMinutes(new Date(), 10).toISOString();

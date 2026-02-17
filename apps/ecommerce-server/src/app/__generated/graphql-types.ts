@@ -43,6 +43,7 @@ export enum OrderStatus {
 }
 
 export enum LicenseVariant {
+    ONE_MINUTE_TRIAL = "ONE_MINUTE_TRIAL",
     FIVE_MINUTE_TRIAL = "FIVE_MINUTE_TRIAL",
     TEN_MINUTE_TRIAL = "TEN_MINUTE_TRIAL",
     ONE_HOUR_TRIAL = "ONE_HOUR_TRIAL"

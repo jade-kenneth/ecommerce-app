@@ -7,8 +7,9 @@ interface GlobalState {
     setIsAuthenticated: (value: boolean) => void;
     isAuthDialogOpen: boolean;
     setAuthDialogOpen: (value: boolean) => void;
-    setUser: (email: string) => void;
+    setUser: (user: { email?: string; userId?: string }) => void;
     email?: string;
+    userId?: string;
   };
 
   cart: {
@@ -17,6 +18,11 @@ interface GlobalState {
     count: number;
     setCount: (value: number) => void;
     '~touched': boolean;
+  };
+
+  rating: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
   };
 }
 
@@ -40,13 +46,14 @@ export const useGlobalStore = create<GlobalState>()(
               isAuthDialogOpen,
             },
           })),
-        email: '',
-        setUser: (email) =>
+        email: undefined,
+        userId: undefined,
+        setUser: ({ email, userId }) =>
           set((prev) => ({
-            ...prev,
-            user: {
-              ...prev,
-              email,
+            authenticate: {
+              ...prev.authenticate,
+              email: email ?? prev.authenticate.email,
+              userId: userId ?? prev.authenticate.userId,
             },
           })),
       },
@@ -61,6 +68,17 @@ export const useGlobalStore = create<GlobalState>()(
           })),
         setCount: (count) =>
           set((prev) => ({ ...prev, cart: { ...prev.cart, count } })),
+      },
+      rating: {
+        isOpen: false,
+        setIsOpen: (isOpen: boolean) =>
+          set((prev) => ({
+            ...prev,
+            rating: {
+              ...prev.rating,
+              isOpen,
+            },
+          })),
       },
     })),
   ),

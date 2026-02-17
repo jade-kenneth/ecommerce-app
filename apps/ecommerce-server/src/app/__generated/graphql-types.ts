@@ -42,6 +42,12 @@ export enum OrderStatus {
     CANCELLED = "CANCELLED"
 }
 
+export enum LicenseVariant {
+    FIVE_MINUTE_TRIAL = "FIVE_MINUTE_TRIAL",
+    TEN_MINUTE_TRIAL = "TEN_MINUTE_TRIAL",
+    ONE_HOUR_TRIAL = "ONE_HOUR_TRIAL"
+}
+
 export enum StatusType {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE",
@@ -117,6 +123,7 @@ export interface LicenseInput {
     _id: ObjectId;
     code: string;
     expirationDate?: Nullable<string>;
+    variant: LicenseVariant;
 }
 
 export interface CreateGcashPaymentInput {
@@ -365,6 +372,7 @@ export interface License {
     _id: ObjectId;
     code: string;
     expirationDate?: Nullable<string>;
+    variant: LicenseVariant;
 }
 
 export interface CheckoutUrl {

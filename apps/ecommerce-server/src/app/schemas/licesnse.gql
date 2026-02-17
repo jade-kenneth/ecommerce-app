@@ -1,12 +1,19 @@
+enum LicenseVariant {
+  FIVE_MINUTE_TRIAL
+  TEN_MINUTE_TRIAL
+  ONE_HOUR_TRIAL
+}
 input LicenseInput {
   _id: ObjectId!
   code: String!
   expirationDate: String
+  variant: LicenseVariant!
 }
 type License {
   _id: ObjectId!
   code: String!
   expirationDate: String
+  variant: LicenseVariant!
 }
 type Mutation {
   createLicense(input: LicenseInput!): Boolean

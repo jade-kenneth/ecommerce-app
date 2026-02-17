@@ -141,15 +141,13 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           when={!isCheckout}
           fallback={
             <button
-              className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
+              className="w-full py-3  text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
               onClick={async () => {
-                // TODO: Replace with actual shipping option and payment method IDs
-
                 window.gtag(
                   'get',
                   'G-N7BZ4QRB31',
                   'client_id',
-                  async (clientId: any) => {
+                  async (clientId: string) => {
                     const selectedPaymentType =
                       context.state.cart.paymentMethod ??
                       PaymentMethodType.Gcash;
@@ -251,7 +249,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
           }
         >
           <button
-            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl shadow bg-cyan-700 transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+            className="w-full py-3  text-white font-semibold rounded-xl shadow bg-cyan-700 transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
             disabled={context.state.itemsCount === 0}
             data-disabled={context.state.itemsCount === 0}
             onClick={async () => {
@@ -280,7 +278,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
         <Show when={!isCheckout}>
           <button
             onClick={() => router.push('/')}
-            className="w-full bg-carbon-950 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition"
+            className="w-full bg-carbon-950 py-3  text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition"
           >
             Continue Shopping
           </button>

@@ -30,6 +30,7 @@ import { ConfigService } from './config/config.service';
 import { MailModule } from './mail/mail.module';
 import { PaymentsModule } from './payments/payment.module';
 import { ProductsModule } from './products/products.module';
+import { RatingsModule } from './ratings/ratings.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { UploadModule } from './upload/upload/upload.module';
 import { AccountModule } from './user-session/account/account.module';
@@ -92,6 +93,7 @@ import { SessionModule } from './user-session/session/session.module';
     PaymentsModule,
     LicenseModule,
     MailModule,
+    RatingsModule,
     AsyncEventModule.forRootAsync({
       useFactory: () => {
         console.log('KAFKA_BROKER:', process.env.KAFKA_BROKER);

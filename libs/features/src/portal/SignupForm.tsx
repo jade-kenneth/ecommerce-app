@@ -87,6 +87,10 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       setTimeout(async () => {
         await create_session({ user: { _id, role: AccountType.Member } });
         globalStore.authenticate.setIsAuthenticated(true);
+        globalStore.authenticate.setUser({
+          email: data.emailAddress,
+          userId: _id,
+        });
         form.reset();
         toaster.success({ description: 'Account created successfully' });
       }, 3000);

@@ -8,5 +8,6 @@ export const Tokens = {
   CartsToken: Symbol('CartsRepositoryToken'),
   OrdersToken: Symbol('OrdersRepositoryToken'),
   LicenseRepository: Symbol('LicenseRepository'),
+  RatingRepository: Symbol('RatingRepository'),
   MailService: Symbol('MailService'),
 };

@@ -1,4 +1,5 @@
 import { Connection, Types } from 'mongoose';
+import { LicenseVariant } from 'src/app/__generated/graphql-types';
 import { MongooseRepository } from '~/mongoose-repository';
 import { Repository } from '~/repository';
 import { Node } from '~/types/common';
@@ -7,6 +8,7 @@ export type License = Node & {
   _id: Types.ObjectId;
   expirationDate?: string | null;
   code: string;
+  variant: LicenseVariant;
 };
 
 export type LicenseRepository = Repository<License>;
@@ -18,5 +20,6 @@ export function LicenseRepositoryFactory(
     _id: Types.ObjectId,
     expirationDate: String,
     code: String,
+    variant: String,
   });
 }

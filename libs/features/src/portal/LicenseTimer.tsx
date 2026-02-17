@@ -2,6 +2,7 @@
 
 import { differenceInSeconds, intervalToDuration } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { LICENSE_CODE_LOCAL_STORAGE_KEY } from '~/utils/constant';
 
@@ -44,6 +45,7 @@ export const LicenseTimer = () => {
   const [now, setNow] = useState(() => Date.now());
 
   const license = useLicenseContext();
+  const rating = useGlobalStore((state) => state.rating);
 
   useEffect(() => {
     const tick = () => {
@@ -66,9 +68,9 @@ export const LicenseTimer = () => {
     if (!expiresAt || remainingSeconds !== 0) return;
     if (typeof window === 'undefined') return;
     localStorage.removeItem(LICENSE_CODE_LOCAL_STORAGE_KEY);
-    license.setLicense({ isLicensed: false });
+    rating.setIsOpen(true);
     setExpiresAt(null);
-  }, [expiresAt, remainingSeconds]);
+  }, [expiresAt, license, remainingSeconds, rating]);
 
   if (!expiresAt || remainingSeconds === null) return null;
 

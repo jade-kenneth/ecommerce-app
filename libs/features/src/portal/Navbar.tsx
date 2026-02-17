@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FunctionComponent, useMemo, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import {
@@ -39,6 +39,9 @@ interface NavbarProps {
 
 export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
   const globalStore = useGlobalStore((state) => state);
+  const setAuthenticatedUser = useGlobalStore(
+    (state) => state.authenticate.setUser,
+  );
   const licenseContext = useLicenseContext();
   const menuDisclosure = useDisclosure();
   const [searchQuery, setSearchQuery] = useState('');
@@ -74,6 +77,15 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
     skip:
       !globalStore.authenticate.isAuthenticated || !licenseContext.isLicensed,
   });
+
+  useEffect(() => {
+    if (!data?.self) return;
+
+    setAuthenticatedUser({
+      email: data.self.emailAddress,
+      userId: data.self._id,
+    });
+  }, [data?.self, setAuthenticatedUser]);
 
   const ordersCount = ordersQuery.data?.myOrders?.length ?? 0;
 
@@ -182,7 +194,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
             when={!globalStore.authenticate.isAuthenticated}
             fallback={
               <p className="px-2 sm:px-5   text-xs sm:text-sm max-w-[120px] sm:max-w-none line-clamp-1 truncate">
-                {`Hi, ${data?.self?.emailAddress}!`}
+                {`Hi, ${data?.self?.emailAddress ?? 'Guest'}!`}
               </p>
             }
           >
@@ -238,6 +250,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                       onClick={async () => {
                         await logout();
                         globalStore.authenticate.setIsAuthenticated(false);
+                        setAuthenticatedUser({ email: '', userId: '' });
                         router.push('/');
                       }}
                     >

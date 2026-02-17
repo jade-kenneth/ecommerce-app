@@ -1,6 +1,7 @@
 'use client';
 
 import { Browser } from '@capacitor/browser';
+import { Capacitor } from '@capacitor/core';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
@@ -12,6 +13,7 @@ import {
 } from '~/graphql/generated';
 import { gtm } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
+import { APP_URL_SCHEME } from '~/utils/constant';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from '../Cart/CartContext';
 
@@ -209,15 +211,25 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                       : 'Payment for order';
 
                     if (isCashOnDelivery) {
-                      window.location.href = successUrl;
+                      if (Capacitor.getPlatform() === 'web') {
+                        window.location.href = successUrl;
+                      } else {
+                        window.location.href = `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`;
+                      }
                     } else {
                       const res = await mutate({
                         variables: {
                           input: {
                             amount:
                               totalAmountWithShippingAndTax as unknown as string,
-                            failureUrl,
-                            successUrl,
+                            failureUrl:
+                              Capacitor.getPlatform() === 'web'
+                                ? failureUrl
+                                : `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`,
+                            successUrl:
+                              Capacitor.getPlatform() === 'web'
+                                ? successUrl
+                                : `${APP_URL_SCHEME}://payment/success?orderId=${orderId}`,
                             referenceId,
                             description,
                           },

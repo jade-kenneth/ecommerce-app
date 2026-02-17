@@ -14,11 +14,14 @@ export function AuthForm() {
 
   if (globalStore.authenticate.isAuthenticated) return null;
   return (
-    <Dialog.Root open={globalStore.signIn.isSignIn} closeOnInteractOutside>
+    <Dialog.Root
+      open={globalStore.authenticate.isAuthDialogOpen}
+      closeOnInteractOutside
+    >
       <Dialog.Trigger>
         <span
           className="text-base font-medium cursor-pointer text-blue-600 "
-          onClick={() => globalStore.signIn.setIsSignIn(true)}
+          onClick={() => globalStore.authenticate.setAuthDialogOpen(true)}
         >
           Register / Log In
         </span>
@@ -28,7 +31,7 @@ export function AuthForm() {
       <Dialog.Positioner className="px-4 py-6 sm:px-8 sm:py-12 flex items-center justify-center">
         <Dialog.Content className="rounded-xl lg:p-4  border border-gray-200 bg-white relative w-[92vw] max-w-[520px] min-w-0">
           <Dialog.CloseTrigger
-            onClick={() => globalStore.signIn.setIsSignIn(false)}
+            onClick={() => globalStore.authenticate.setAuthDialogOpen(false)}
             aria-label="Close dialog"
           >
             <X className="p-1 size-6 sm:size-7 cursor-pointer text-cyan-500 absolute -top-2 -right-2 rounded-md" />

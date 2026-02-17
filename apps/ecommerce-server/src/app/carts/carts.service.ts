@@ -410,6 +410,9 @@ export class CartsService {
           };
         }),
       );
+
+      await this.carts.delete(accountId);
+
       await this.events.dispatch('OrderCreated', {
         orderId: order._id.toString(),
         accountId: accountId.toString(),

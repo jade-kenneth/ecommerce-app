@@ -36,7 +36,9 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const form = useForm({
     resolver: zodResolver(definition),
   });
-  const globalStore = useGlobalStore((state) => state.authenticate);
+
+  const globalStore = useGlobalStore((state) => state);
+
   const onSubmit = form.handleSubmit(async (data) => {
     try {
       await authenticate({
@@ -44,9 +46,11 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         password: data.password,
         role: AccountType.Member,
       });
+
       toaster.success({ description: 'Successfully logged in!' });
-      globalStore.setIsAuthenticated(true);
-    } catch (error) {
+      globalStore.authenticate.setIsAuthenticated(true);
+      globalStore.authenticate.setUser(data.emailAddress);
+    } catch {
       toaster.error({ description: 'Failed to log in. Please try again.' });
     }
   });
@@ -139,20 +143,20 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
 
       <p className="w-full font-normal mx-auto mt-3 sm:mt-4 text-sm">
         No account yet?{' '}
-        <a
+        {/* <a
           className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
           target="_blank"
           href="https://www.facebook.com/jeidosenpaitsx/"
         >
           {' '}
           Ask Admin
-        </a>
-        {/* <span
+        </a> */}
+        <span
           className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
           onClick={() => onToggleToSignup?.()}
         >
           Register here
-        </span> */}
+        </span>
       </p>
       {/* <p className="mx-auto w-fit mt-3 sm:mt-4">Or sign in using</p>
       <div className="flex w-full max-w-[296px] mx-auto mt-3 sm:mt-4 items-start gap-3 relative">

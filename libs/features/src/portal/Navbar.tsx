@@ -107,6 +107,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
               hasDebounce
               debounceDelay={300}
               placeholder="Search..."
+              value={''}
               onChange={(val) => {
                 setSearchQuery(val);
                 setIsSearchOpen(val.trim().length > 0);

@@ -32,7 +32,7 @@ const BASE_LINK = ApolloLink.from([AUTH_LINK]);
 
 export const apolloLink = ApolloLink.split(
   () => true,
-  ApolloLink.from([BASE_LINK.concat(PORTAL_LINK)])
+  ApolloLink.from([BASE_LINK.concat(PORTAL_LINK)]),
 );
 
 export const apolloClient = new ApolloClient({

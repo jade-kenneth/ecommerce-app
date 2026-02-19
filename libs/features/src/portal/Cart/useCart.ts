@@ -87,7 +87,9 @@ const reducer = (state: CartState, action: CartAction): CartState => {
       const existingIndex = state.cart.items.findIndex(
         (i) => i.productId === action.payload.productId,
       );
+
       const updatedItems = [...state.cart.items];
+
       if (existingIndex !== -1) {
         updatedItems[existingIndex] = {
           ...updatedItems[existingIndex],
@@ -109,9 +111,10 @@ const reducer = (state: CartState, action: CartAction): CartState => {
       if (existingIndex === -1) return state;
 
       const updatedItems = [...state.cart.items];
+
       updatedItems[existingIndex] = {
         ...updatedItems[existingIndex],
-        quantity: Math.max(0, action.payload.quantity),
+        quantity: action.payload.quantity,
       };
       return {
         ...state,
@@ -144,15 +147,14 @@ export const useCart = () => {
 
   const { itemsCount } = state;
 
-  const { data: cartData } = useCartQuery({
+  const { data: cartQuery } = useCartQuery({
     skip: !globalStore.authenticate.isAuthenticated,
   });
 
-  const productIds = useMemo(() => {
-    const ids =
-      cartData?.cart.items?.map((p) => p?.productId).filter(Boolean) ?? [];
-    return Array.from(new Set(ids));
-  }, [cartData]);
+  const productIds = useMemo(
+    () => cartQuery?.cart.items?.map((p) => p?.productId).filter(Boolean) ?? [],
+    [cartQuery],
+  );
 
   const { data: productsData } = useProductsQuery({
     variables: {
@@ -175,10 +177,7 @@ export const useCart = () => {
   }, []);
 
   const setState = useCallback(
-    (next: Partial<CartState> | ((prev: CartState) => Partial<CartState>)) => {
-      const payload = typeof next === 'function' ? next(state) : next;
-      dispatch({ type: 'mergeState', payload });
-    },
+    (payload: CartState) => dispatch({ type: 'mergeState', payload }),
     [state],
   );
 
@@ -187,7 +186,7 @@ export const useCart = () => {
       dispatch({ type: 'setCart', payload: initialCart });
       return;
     }
-    if (!cartData?.cart) return;
+    if (!cartQuery?.cart) return;
 
     const productsMap = new Map(
       productsData?.products.edges.map((p) => [
@@ -202,7 +201,7 @@ export const useCart = () => {
       ]) ?? [],
     );
 
-    const mergedItems = cartData.cart.items.map((item) => {
+    const mergedItems = cartQuery.cart.items.map((item) => {
       const product = productsMap.get(item.productId);
       return {
         ...item,
@@ -216,12 +215,12 @@ export const useCart = () => {
 
     const nextCart: CartItem = {
       ...initialCart,
-      ...cartData.cart,
+      ...cartQuery.cart,
       items: mergedItems.map((i) => omit(i, ['__typename'])),
     };
 
     dispatch({ type: 'setCart', payload: nextCart });
-  }, [cartData, productsData]);
+  }, [cartQuery, productsData]);
 
   return {
     state,

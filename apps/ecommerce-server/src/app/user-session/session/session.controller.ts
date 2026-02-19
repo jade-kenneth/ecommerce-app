@@ -136,6 +136,7 @@ export class SessionController {
           _id: request.session._id,
         },
         {
+          jti: Buffer.from(claims.jti, 'hex'),
           dateTimeLastRefreshed: new Date(),
         },
       );

@@ -8,8 +8,8 @@ import {
 import { Types } from 'mongoose';
 
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
-import { JwtService } from '../user-session/jwt/jwt.service';
-import { SessionService } from '../user-session/session/session.service';
+import { JwtService } from '../identity/jwt/jwt.service';
+import { SessionService } from '../identity/session/session.service';
 
 const JWT_REGEX =
   /Bearer\s*([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$)/i;

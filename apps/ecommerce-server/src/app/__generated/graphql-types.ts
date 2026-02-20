@@ -102,6 +102,16 @@ export interface UpdateOrderStatusInput {
     status: OrderStatus;
 }
 
+export interface UpdateShippingMethodStatusInput {
+    type: ShippingType;
+    isActive: boolean;
+}
+
+export interface UpdatePaymentMethodStatusInput {
+    type: PaymentMethodType;
+    isActive: boolean;
+}
+
 export interface ProductByIdsInput {
     ids: ObjectId[];
 }
@@ -247,6 +257,8 @@ export interface IMutation {
     removeFromCart(input: RemoveFromCartInput): boolean | Promise<boolean>;
     clearCart(): Cart | Promise<Cart>;
     updateOrderStatus(input: UpdateOrderStatusInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    updateShippingMethodStatus(input: UpdateShippingMethodStatusInput): boolean | Promise<boolean>;
+    updatePaymentMethodStatus(input: UpdatePaymentMethodStatusInput): boolean | Promise<boolean>;
     checkout(input: CheckoutInput): Order | Promise<Order>;
     createConfig(input: CreateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateConfig(input: UpdateConfigInput): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -261,9 +273,9 @@ export interface IMutation {
 export interface IQuery {
     memberAccounts(): Account[] | Promise<Account[]>;
     self(): Nullable<Account> | Promise<Nullable<Account>>;
-    cart(id: ObjectId): Cart | Promise<Cart>;
-    shippingOptions(): ShippingOption[] | Promise<ShippingOption[]>;
-    paymentMethods(): PaymentMethod[] | Promise<PaymentMethod[]>;
+    cart(): Cart | Promise<Cart>;
+    shippingOptions(includeInactive?: Nullable<boolean>): ShippingOption[] | Promise<ShippingOption[]>;
+    paymentMethods(includeInactive?: Nullable<boolean>): PaymentMethod[] | Promise<PaymentMethod[]>;
     myOrders(): Order[] | Promise<Order[]>;
     order(id: ObjectId): Nullable<Order> | Promise<Nullable<Order>>;
     productByIds(ids?: Nullable<ProductByIdsInput>): CartProductDetails | Promise<CartProductDetails>;
@@ -295,6 +307,7 @@ export interface ShippingOption {
     description?: Nullable<string>;
     fee: string;
     estimatedDays?: Nullable<string>;
+    isActive: boolean;
 }
 
 export interface Cart {

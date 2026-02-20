@@ -7,9 +7,10 @@ import { twMerge } from 'tailwind-merge';
 import { Show } from '~/components/Show';
 import {
   PaymentMethodType,
-  ShippingType,
   useCheckoutMutation,
   useCreateGcashPaymentMutation,
+  usePaymentMethodsQuery,
+  useShippingOptionsQuery,
 } from '~/graphql/generated';
 import { gtm } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
@@ -20,21 +21,10 @@ import { useCartContext } from '../Cart/CartContext';
 interface OrderSummaryProps {
   isCheckout?: boolean;
 }
-
-const PAYMENT_METHOD_IDS: Record<PaymentMethodType, string> = {
-  [PaymentMethodType.Gcash]: '000000000000000000000020',
-  [PaymentMethodType.Card]: '000000000000000000000021',
-  [PaymentMethodType.BankTransfer]: '000000000000000000000022',
-  [PaymentMethodType.CashOnDelivery]: '000000000000000000000023',
-};
-
-const SHIPPING_OPTION_IDS: Record<ShippingType, string> = {
-  [ShippingType.Standard]: '000000000000000000000010',
-  [ShippingType.Express]: '000000000000000000000011',
-  [ShippingType.SameDay]: '000000000000000000000012',
-};
 export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const context = useCartContext();
+  const paymentMethodsQuery = usePaymentMethodsQuery();
+  const shippingOptionsQuery = useShippingOptionsQuery();
 
   const totalAmount = context.state.cart.items.reduce((total, item) => {
     return total + Number(item.price) * (item.quantity || 1);
@@ -148,19 +138,32 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                   'G-N7BZ4QRB31',
                   'client_id',
                   async (clientId: string) => {
+                    const paymentMethods =
+                      paymentMethodsQuery.data?.paymentMethods ?? [];
+                    const shippingOptions =
+                      shippingOptionsQuery.data?.shippingOptions ?? [];
+
                     const selectedPaymentType =
                       context.state.cart.paymentMethod ??
-                      PaymentMethodType.Gcash;
+                      paymentMethods[0]?.type;
 
                     const paymentMethodId =
-                      PAYMENT_METHOD_IDS[selectedPaymentType];
+                      paymentMethods.find(
+                        (method) => method.type === selectedPaymentType,
+                      )?._id ?? paymentMethods[0]?._id;
 
                     const selectedShippingType =
                       context.state.cart.shipping?.type ??
-                      ShippingType.Standard;
+                      shippingOptions[0]?.type;
 
                     const shippingOptionId =
-                      SHIPPING_OPTION_IDS[selectedShippingType];
+                      shippingOptions.find(
+                        (option) => option.type === selectedShippingType,
+                      )?._id ?? shippingOptions[0]?._id;
+
+                    if (!paymentMethodId || !shippingOptionId) {
+                      return;
+                    }
 
                     const orderRes = await order({
                       variables: {
@@ -179,8 +182,7 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                       ) || window.location.origin;
 
                     const isCashOnDelivery =
-                      paymentMethodId ===
-                      PAYMENT_METHOD_IDS[PaymentMethodType.CashOnDelivery];
+                      selectedPaymentType === PaymentMethodType.CashOnDelivery;
 
                     const successPath = isCashOnDelivery
                       ? '/payment/cod/success'

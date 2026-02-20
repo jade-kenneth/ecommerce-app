@@ -1,13 +1,13 @@
 import { Connection, Schema, Types } from 'mongoose';
 
-import { MongooseRepository } from '../../../libs/mongoose-repository';
-import { Repository } from '../../../libs/repository';
+import { MongooseRepository } from '../../../../libs/mongoose-repository';
+import { Repository } from '../../../../libs/repository';
 import {
   CartItem,
   OrderStatus,
   PaymentMethod,
   ShippingOption,
-} from '../../__generated/graphql-types';
+} from '../../../__generated/graphql-types';
 
 export type Order = {
   _id: Types.ObjectId;

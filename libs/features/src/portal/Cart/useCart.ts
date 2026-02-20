@@ -52,8 +52,8 @@ const initialCart: CartItem = {
   paymentMethod: PaymentMethodType.Gcash,
   shipping: {
     type: ShippingType.Standard,
-    description: 'Estimated delivery: 5-7 business days',
-    fee: '5',
+    description: '3-5 business days',
+    fee: '50',
   },
 };
 

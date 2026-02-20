@@ -11,7 +11,9 @@
     "android:version:bump": "node scripts/bump-android-version.js",
     "apk:release": "node scripts/run-apk-release.js",
     "dev": "concurrently \"npm run app\" \"JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 npm run server\"",
-    "general:graphql-codegen": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin"
+    "general:graphql-codegen": "graphql-codegen --config .graphqlrc.ts --project ecommerce-app.admin",
+    "backend:starter:prompt": "node scripts/generate-backend-starter-prompt.js",
+    "backend:scaffold": "node scripts/scaffold-backend-app.js"
   },
   "private": true,
   "dependencies": {

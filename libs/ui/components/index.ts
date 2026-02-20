@@ -17,6 +17,7 @@ export * from './NumberInputField';
 export * from './Show';
 export * from './Spinner';
 export * from './TextareaField';
+export * from './Toggle';
 export * from './Toast';
 export * from './ToastContainer';
 export * from './ui';

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
 
 import { Tokens } from '~/types/tokens';
-import { CartRepositoryFactory } from './carts.repository';
+import { CartRepositoryFactory } from './cart.repository';
 
 @Module({
   providers: [
@@ -14,4 +14,4 @@ import { CartRepositoryFactory } from './carts.repository';
   ],
   exports: [Tokens.CartsToken],
 })
-export class CartsRepositoryModule {}
+export class CartRepositoryModule {}

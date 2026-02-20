@@ -1,13 +1,13 @@
 'use client';
 
+import { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { PaymentMethodType } from '~/graphql/generated';
+import { PaymentMethodType, usePaymentMethodsQuery } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';
 
 type PaymentOptionCardProps = {
   title: string;
   description: string;
-  type: PaymentMethodType;
   icon: React.ReactNode;
   selected: boolean;
   onSelect: () => void;
@@ -16,7 +16,6 @@ type PaymentOptionCardProps = {
 export function PaymentOptionCard({
   title,
   description,
-  type,
   icon,
   selected,
   onSelect,
@@ -54,6 +53,7 @@ export function PaymentOptionCard({
 }
 
 export type PaymentOption = {
+  _id: string;
   title: string;
   description: string;
   type: PaymentMethodType;
@@ -124,46 +124,71 @@ const QrIcon = () => (
     />{' '}
   </svg>
 );
-export const paymentMethods: PaymentOption[] = [
-  {
-    title: 'GCash',
-    description: 'Digital wallet payment',
-    type: PaymentMethodType.Gcash,
-    icon: <WalletIcon />,
-  },
-  // {
-  //   title: 'Credit/Debit Card',
-  //   description: 'Visa, Mastercard, AmEx',
-  //   type: PaymentMethodType.Card,
-  //   icon: <CardIcon />,
-  // },
-  // {
-  //   title: 'Bank Transfer',
-  //   description: 'Direct bank transfer',
-  //   type: PaymentMethodType.BankTransfer,
-  //   icon: <BankIcon />,
-  // },
-  {
-    title: 'Cash on Delivery',
-    description: 'Pay when you receive',
-    type: PaymentMethodType.CashOnDelivery,
-    icon: <QrIcon />,
-  },
-];
+
+const paymentMethodIconByType: Record<PaymentMethodType, React.ReactNode> = {
+  [PaymentMethodType.Gcash]: <WalletIcon />,
+  [PaymentMethodType.Card]: <CardIcon />,
+  [PaymentMethodType.BankTransfer]: <BankIcon />,
+  [PaymentMethodType.CashOnDelivery]: <QrIcon />,
+};
+
 export default function PaymentMethod() {
   const context = useCartContext();
+  const query = usePaymentMethodsQuery();
+
+  const paymentMethods: PaymentOption[] = (
+    query.data?.paymentMethods ?? []
+  ).map((method) => ({
+    _id: method._id,
+    title: method.label,
+    description: method.description || 'No description',
+    type: method.type,
+    icon: paymentMethodIconByType[method.type],
+  }));
+
+  useEffect(() => {
+    if (!paymentMethods.length) {
+      return;
+    }
+
+    const selectedType = context.state.cart.paymentMethod;
+    const hasSelectedType = paymentMethods.some(
+      (method) => method.type === selectedType,
+    );
+
+    if (hasSelectedType) {
+      return;
+    }
+
+    context.setState({
+      ...context.state,
+      cart: {
+        ...context.state.cart,
+        paymentMethod: paymentMethods[0].type,
+      },
+    });
+  }, [paymentMethods, context.state]);
 
   return (
     <div className="w-[inherit] mx-auto py-6 space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Payment Method</h2>
 
+      {query.loading && (
+        <p className="text-sm text-gray-500">Loading payment methods...</p>
+      )}
+
+      {!query.loading && !paymentMethods.length && (
+        <p className="text-sm text-gray-500">
+          No active payment methods are available right now.
+        </p>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {paymentMethods.map((method) => (
           <PaymentOptionCard
-            key={method.type}
+            key={method._id}
             title={method.title}
             description={method.description}
-            type={method.type}
             icon={method.icon}
             selected={context.state.cart.paymentMethod === method.type}
             onSelect={() =>

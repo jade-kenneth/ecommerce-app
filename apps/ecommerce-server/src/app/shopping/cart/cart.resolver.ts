@@ -3,22 +3,26 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import assert from 'assert';
 
 import { Types } from 'mongoose';
-import { AccountType } from '../../types/common';
+import { AccountType } from '../../../types/common';
 import {
   CheckoutInput,
   OrderStatus,
+  PaymentMethodType,
   RemoveFromCartInput,
+  ShippingType,
   UpdateCartItemInput,
-} from '../__generated/graphql-types';
-import { ProductsService } from '../products/products.service';
-import { Claims } from '../user-session/types';
-import { CartsService } from './carts.service';
+} from '../../__generated/graphql-types';
+import { Claims } from '../../identity/types';
+import { CheckoutService } from '../checkout/checkout.service';
+import { OrderService } from '../order/order.service';
+import { CartService } from './cart.service';
 
 @Resolver('Cart')
 export class CartResolver {
   constructor(
-    private readonly cartService: CartsService,
-    private readonly products: ProductsService,
+    private readonly cartService: CartService,
+    private readonly checkoutService: CheckoutService,
+    private readonly orderService: OrderService,
   ) {}
 
   @Query('cart')
@@ -54,27 +58,43 @@ export class CartResolver {
   }
 
   @Query('shippingOptions')
-  async shippingOptions() {
-    return this.cartService.shippingOptions();
+  async shippingOptions(
+    @Context('claims') claims: Claims,
+    @Args('includeInactive') includeInactive?: boolean,
+  ) {
+    //TODO should be admin only, build admin panel later
+    assert(claims?.role === AccountType.Member, 'unauthorized');
+
+    return this.checkoutService.shippingOptions({
+      includeInactive: Boolean(includeInactive),
+    });
   }
 
   @Query('paymentMethods')
-  async paymentMethods() {
-    return this.cartService.paymentMethods();
+  async paymentMethods(
+    @Context('claims') claims: Claims,
+    @Args('includeInactive') includeInactive?: boolean,
+  ) {
+    //TODO should be admin only, build admin panel later
+    assert(claims?.role === AccountType.Member, 'unauthorized');
+
+    return this.checkoutService.paymentMethods({
+      includeInactive: Boolean(includeInactive),
+    });
   }
 
   @Query('myOrders')
   async myOrders(@Context('claims') claims: Claims) {
     assert(claims.role === AccountType.Member, 'unauthorized');
 
-    return this.cartService.myOrders(new Types.ObjectId(claims.sub));
+    return this.orderService.myOrders(new Types.ObjectId(claims.sub));
   }
 
   @Query('order')
   async order(@Context('claims') claims: Claims, @Args('id') id: string) {
     assert(claims.role === AccountType.Member, 'unauthorized');
 
-    return this.cartService.findOrder(
+    return this.orderService.findOrder(
       new Types.ObjectId(claims.sub),
       new Types.ObjectId(id),
     );
@@ -87,7 +107,7 @@ export class CartResolver {
   ) {
     assert(claims.role === AccountType.Member, 'unauthorized');
 
-    return this.cartService.checkout({ accountId: claims.sub, input });
+    return this.checkoutService.checkout({ accountId: claims.sub, input });
   }
 
   @Mutation('updateOrderStatus')
@@ -102,10 +122,40 @@ export class CartResolver {
     // TODO should be admin only, build admin panel later
     assert(claims.role === AccountType.Member, 'unauthorized');
 
-    await this.cartService.updateOrderStatus({
+    await this.orderService.updateOrderStatus({
       orderId: new Types.ObjectId(input.orderId),
       status: input.status,
     });
+  }
+
+  @Mutation('updateShippingMethodStatus')
+  async updateShippingMethodStatus(
+    @Context('claims') claims: Claims,
+    @Args('input')
+    input: {
+      type: ShippingType;
+      isActive: boolean;
+    },
+  ) {
+    // TODO should be admin only, build admin panel later
+    assert(claims.role === AccountType.Member, 'unauthorized');
+
+    return this.checkoutService.updateShippingMethodStatus(input);
+  }
+
+  @Mutation('updatePaymentMethodStatus')
+  async updatePaymentMethodStatus(
+    @Context('claims') claims: Claims,
+    @Args('input')
+    input: {
+      type: PaymentMethodType;
+      isActive: boolean;
+    },
+  ) {
+    // TODO should be admin only, build admin panel later
+    assert(claims.role === AccountType.Member, 'unauthorized');
+
+    return this.checkoutService.updatePaymentMethodStatus(input);
   }
 
   // ** build later **

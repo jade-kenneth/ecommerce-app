@@ -1,12 +1,16 @@
+'use client';
+
 import { Truck } from 'lucide-react';
-import { ShippingType } from '~/graphql/generated';
+import { useEffect } from 'react';
+import { ShippingType, useShippingOptionsQuery } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';
 
 type ShippingOption = {
-  name: string;
+  _id: string;
+  label: string;
   description: string;
   type: ShippingType;
-  price: string;
+  fee: string;
 };
 
 type Props = {
@@ -15,26 +19,6 @@ type Props = {
   onSelect: () => void;
 };
 
-export const shippingMethods: ShippingOption[] = [
-  {
-    name: 'Standard Shipping',
-    description: 'Estimated delivery: 5-7 business days',
-    type: ShippingType.Standard,
-    price: '5',
-  },
-  {
-    name: 'Express Shipping',
-    description: 'Estimated delivery: 2-3 business days',
-    type: ShippingType.Express,
-    price: '15',
-  },
-  {
-    name: 'Same Day Shipping',
-    description: 'Estimated delivery: 1 business day',
-    type: ShippingType.SameDay,
-    price: '25',
-  },
-];
 export function ShippingOptionCard({ option, selected, onSelect }: Props) {
   return (
     <div
@@ -71,7 +55,7 @@ export function ShippingOptionCard({ option, selected, onSelect }: Props) {
             data-[selected-shipping=true]:text-black
           "
         >
-          {option.name}
+          {option.label}
         </p>
       </div>
 
@@ -82,14 +66,65 @@ export function ShippingOptionCard({ option, selected, onSelect }: Props) {
 
 export const ShippingOptions = () => {
   const context = useCartContext();
+
+  const query = useShippingOptionsQuery();
+
+  const shippingMethods: ShippingOption[] = (
+    query.data?.shippingOptions ?? []
+  ).map((method) => ({
+    _id: method._id,
+    label: method.label,
+    type: method.type,
+    description: method.description || method.estimatedDays || 'No details',
+    fee: method.fee,
+  }));
+
+  useEffect(() => {
+    if (!shippingMethods.length) return;
+
+    const selectedType = context.state.cart.shipping?.type;
+    const selectedMethod = shippingMethods.find(
+      (method) => method.type === selectedType,
+    );
+
+    if (selectedMethod) return;
+
+    const fallbackMethod = shippingMethods[0];
+
+    context.setState({
+      ...context.state,
+      cart: {
+        ...context.state.cart,
+        shipping: {
+          type: fallbackMethod.type,
+          fee: fallbackMethod.fee,
+          description: fallbackMethod.description,
+        },
+      },
+    });
+  }, [shippingMethods, context.state]);
+
   return (
     <div>
       <p className="text-carbon-25 flex gap-3 items-center text-lg font-bold">
         <Truck className="text-cyan-900 h-11 w-11" /> Shipping Method
       </p>
+
+      {query.loading && (
+        <p className="text-sm text-gray-500 mt-2">
+          Loading shipping methods...
+        </p>
+      )}
+
+      {!query.loading && !shippingMethods.length && (
+        <p className="text-sm text-gray-500 mt-2">
+          No active shipping methods are available right now.
+        </p>
+      )}
+
       {shippingMethods.map((method) => (
         <ShippingOptionCard
-          key={method.type}
+          key={method._id}
           option={method}
           selected={method.type === context.state.cart.shipping?.type}
           onSelect={() => {
@@ -99,7 +134,7 @@ export const ShippingOptions = () => {
                 ...context.state.cart,
                 shipping: {
                   type: method.type,
-                  fee: method.price,
+                  fee: method.fee,
                   description: method.description,
                 },
               },

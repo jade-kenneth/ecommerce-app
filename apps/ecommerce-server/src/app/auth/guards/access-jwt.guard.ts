@@ -6,9 +6,9 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 
-import { AccountService } from '../../user-session/account/account.service';
-import { JwtService } from '../../user-session/jwt/jwt.service';
-import { Claims } from '../../user-session/types';
+import { AccountService } from '../../identity/account/account.service';
+import { JwtService } from '../../identity/jwt/jwt.service';
+import { Claims } from '../../identity/types';
 
 const JWT_REGEX =
   /Bearer\s*([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$)/i;

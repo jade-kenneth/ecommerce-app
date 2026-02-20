@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Tue, 17 Feb 2026 13:15:10 GMT
+// Last modified: Fri, 20 Feb 2026 16:56:23 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -36,7 +36,7 @@ export type Scalars = {
   DateTime: { input: string | Date; output: string };
   Decimal: { input: string; output: string };
   JSON: { input: Record<string, any>; output: Record<string, any> };
-  ObjectID: { input: string; output: string };
+  ObjectId: { input: string; output: string };
   Upload: { input: File; output: File };
 };
 
@@ -66,19 +66,19 @@ export enum CategoryType {
 
 export type CheckoutInput = {
   clientId?: InputMaybe<Scalars['String']['input']>;
-  paymentMethodId?: InputMaybe<Scalars['ObjectID']['input']>;
-  shippingOptionId?: InputMaybe<Scalars['ObjectID']['input']>;
+  paymentMethodId?: InputMaybe<Scalars['ObjectId']['input']>;
+  shippingOptionId?: InputMaybe<Scalars['ObjectId']['input']>;
 };
 
 export type CreateAccountInput = {
-  _id: Scalars['ObjectID']['input'];
+  _id: Scalars['ObjectId']['input'];
   emailAddress: Scalars['String']['input'];
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
 };
 
 export type CreateConfigInput = {
-  _id: Scalars['ObjectID']['input'];
+  _id: Scalars['ObjectId']['input'];
   carouselItems: Array<Scalars['String']['input']>;
   highPointsThreshold: Scalars['Int']['input'];
   topSoldThreshold: Scalars['Int']['input'];
@@ -112,7 +112,7 @@ export type CreateProductInput = {
 };
 
 export type DeleteProductInput = {
-  _id: Scalars['ObjectID']['input'];
+  _id: Scalars['ObjectId']['input'];
 };
 
 export type IdFilterInput = {
@@ -128,7 +128,7 @@ export type KeyValuePairInput = {
 };
 
 export type LicenseInput = {
-  _id: Scalars['ObjectID']['input'];
+  _id: Scalars['ObjectId']['input'];
   code: Scalars['String']['input'];
   expirationDate?: InputMaybe<Scalars['String']['input']>;
   variant: LicenseVariant;
@@ -157,7 +157,7 @@ export enum PaymentMethodType {
 }
 
 export type ProductByIdsInput = {
-  ids: Array<Scalars['ObjectID']['input']>;
+  ids: Array<Scalars['ObjectId']['input']>;
 };
 
 export type ProductsCategoryFilterInput = {
@@ -182,7 +182,7 @@ export type ProductsStatusFilterInput = {
 };
 
 export type RemoveFromCartInput = {
-  productId: Scalars['ObjectID']['input'];
+  productId: Scalars['ObjectId']['input'];
 };
 
 export enum ReservationType {
@@ -204,24 +204,29 @@ export enum StatusType {
 }
 
 export type UpdateCartItemInput = {
-  productId: Scalars['ObjectID']['input'];
+  productId: Scalars['ObjectId']['input'];
   quantity: Scalars['Int']['input'];
 };
 
 export type UpdateConfigInput = {
-  _id: Scalars['ObjectID']['input'];
+  _id: Scalars['ObjectId']['input'];
   carouselItems: Array<Scalars['String']['input']>;
   highPointsThreshold: Scalars['Int']['input'];
   topSoldThreshold: Scalars['Int']['input'];
 };
 
 export type UpdateOrderStatusInput = {
-  orderId: Scalars['ObjectID']['input'];
+  orderId: Scalars['ObjectId']['input'];
   status: OrderStatus;
 };
 
+export type UpdatePaymentMethodStatusInput = {
+  isActive: Scalars['Boolean']['input'];
+  type: PaymentMethodType;
+};
+
 export type UpdateProductInput = {
-  _id: Scalars['ObjectID']['input'];
+  _id: Scalars['ObjectId']['input'];
   category: Array<CategoryType>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -237,6 +242,11 @@ export type UpdateProductInput = {
   type?: InputMaybe<CategoryType>;
   variations?: InputMaybe<Array<KeyValuePairInput>>;
   vouchers?: InputMaybe<Array<VoucherInput>>;
+};
+
+export type UpdateShippingMethodStatusInput = {
+  isActive: Scalars['Boolean']['input'];
+  type: ShippingType;
 };
 
 export type VoucherInput = {
@@ -354,6 +364,46 @@ export type ShippingOptionsQuery = {
   }>;
 };
 
+export type PaymentMethodsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PaymentMethodsQuery = {
+  __typename: 'Query';
+  paymentMethods: Array<{
+    __typename: 'PaymentMethod';
+    _id: string;
+    type: PaymentMethodType;
+    label: string;
+    description?: string | null;
+    isActive: boolean;
+  }>;
+};
+
+export type CheckoutMethodSettingsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type CheckoutMethodSettingsQuery = {
+  __typename: 'Query';
+  shippingOptions: Array<{
+    __typename: 'ShippingOption';
+    _id: string;
+    type: ShippingType;
+    label: string;
+    description?: string | null;
+    fee: string;
+    estimatedDays?: string | null;
+    isActive: boolean;
+  }>;
+  paymentMethods: Array<{
+    __typename: 'PaymentMethod';
+    _id: string;
+    type: PaymentMethodType;
+    label: string;
+    description?: string | null;
+    isActive: boolean;
+  }>;
+};
+
 export type CheckoutMutationVariables = Exact<{
   input: CheckoutInput;
 }>;
@@ -404,6 +454,24 @@ export type UpdateOrderStatusMutationVariables = Exact<{
 export type UpdateOrderStatusMutation = {
   __typename: 'Mutation';
   updateOrderStatus?: boolean | null;
+};
+
+export type UpdateShippingMethodStatusMutationVariables = Exact<{
+  input: UpdateShippingMethodStatusInput;
+}>;
+
+export type UpdateShippingMethodStatusMutation = {
+  __typename: 'Mutation';
+  updateShippingMethodStatus: boolean;
+};
+
+export type UpdatePaymentMethodStatusMutationVariables = Exact<{
+  input: UpdatePaymentMethodStatusInput;
+}>;
+
+export type UpdatePaymentMethodStatusMutation = {
+  __typename: 'Mutation';
+  updatePaymentMethodStatus: boolean;
 };
 
 export type UploadFileMutationVariables = Exact<{
@@ -1010,6 +1078,197 @@ export function refetchShippingOptionsQuery(
 ) {
   return { query: ShippingOptionsDocument, variables: variables };
 }
+export const PaymentMethodsDocument = /*#__PURE__*/ gql`
+  query PaymentMethods {
+    paymentMethods {
+      _id
+      type
+      label
+      description
+      isActive
+    }
+  }
+`;
+export function usePaymentMethodsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PaymentMethodsQuery,
+    PaymentMethodsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PaymentMethodsQuery, PaymentMethodsQueryVariables>(
+    PaymentMethodsDocument,
+    options,
+  );
+}
+export function usePaymentMethodsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PaymentMethodsQuery,
+    PaymentMethodsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PaymentMethodsQuery, PaymentMethodsQueryVariables>(
+    PaymentMethodsDocument,
+    options,
+  );
+}
+// @ts-ignore
+export function usePaymentMethodsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    PaymentMethodsQuery,
+    PaymentMethodsQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  PaymentMethodsQuery,
+  PaymentMethodsQueryVariables
+>;
+export function usePaymentMethodsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        PaymentMethodsQuery,
+        PaymentMethodsQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  PaymentMethodsQuery | undefined,
+  PaymentMethodsQueryVariables
+>;
+export function usePaymentMethodsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        PaymentMethodsQuery,
+        PaymentMethodsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    PaymentMethodsQuery,
+    PaymentMethodsQueryVariables
+  >(PaymentMethodsDocument, options);
+}
+export type PaymentMethodsQueryHookResult = ReturnType<
+  typeof usePaymentMethodsQuery
+>;
+export type PaymentMethodsLazyQueryHookResult = ReturnType<
+  typeof usePaymentMethodsLazyQuery
+>;
+export type PaymentMethodsSuspenseQueryHookResult = ReturnType<
+  typeof usePaymentMethodsSuspenseQuery
+>;
+export type PaymentMethodsQueryResult = Apollo.QueryResult<
+  PaymentMethodsQuery,
+  PaymentMethodsQueryVariables
+>;
+export function refetchPaymentMethodsQuery(
+  variables?: PaymentMethodsQueryVariables,
+) {
+  return { query: PaymentMethodsDocument, variables: variables };
+}
+export const CheckoutMethodSettingsDocument = /*#__PURE__*/ gql`
+  query CheckoutMethodSettings {
+    shippingOptions(includeInactive: true) {
+      _id
+      type
+      label
+      description
+      fee
+      estimatedDays
+      isActive
+    }
+    paymentMethods(includeInactive: true) {
+      _id
+      type
+      label
+      description
+      isActive
+    }
+  }
+`;
+export function useCheckoutMethodSettingsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    CheckoutMethodSettingsQuery,
+    CheckoutMethodSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    CheckoutMethodSettingsQuery,
+    CheckoutMethodSettingsQueryVariables
+  >(CheckoutMethodSettingsDocument, options);
+}
+export function useCheckoutMethodSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CheckoutMethodSettingsQuery,
+    CheckoutMethodSettingsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    CheckoutMethodSettingsQuery,
+    CheckoutMethodSettingsQueryVariables
+  >(CheckoutMethodSettingsDocument, options);
+}
+// @ts-ignore
+export function useCheckoutMethodSettingsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    CheckoutMethodSettingsQuery,
+    CheckoutMethodSettingsQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  CheckoutMethodSettingsQuery,
+  CheckoutMethodSettingsQueryVariables
+>;
+export function useCheckoutMethodSettingsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        CheckoutMethodSettingsQuery,
+        CheckoutMethodSettingsQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  CheckoutMethodSettingsQuery | undefined,
+  CheckoutMethodSettingsQueryVariables
+>;
+export function useCheckoutMethodSettingsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        CheckoutMethodSettingsQuery,
+        CheckoutMethodSettingsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    CheckoutMethodSettingsQuery,
+    CheckoutMethodSettingsQueryVariables
+  >(CheckoutMethodSettingsDocument, options);
+}
+export type CheckoutMethodSettingsQueryHookResult = ReturnType<
+  typeof useCheckoutMethodSettingsQuery
+>;
+export type CheckoutMethodSettingsLazyQueryHookResult = ReturnType<
+  typeof useCheckoutMethodSettingsLazyQuery
+>;
+export type CheckoutMethodSettingsSuspenseQueryHookResult = ReturnType<
+  typeof useCheckoutMethodSettingsSuspenseQuery
+>;
+export type CheckoutMethodSettingsQueryResult = Apollo.QueryResult<
+  CheckoutMethodSettingsQuery,
+  CheckoutMethodSettingsQueryVariables
+>;
+export function refetchCheckoutMethodSettingsQuery(
+  variables?: CheckoutMethodSettingsQueryVariables,
+) {
+  return { query: CheckoutMethodSettingsDocument, variables: variables };
+}
 export const CheckoutDocument = /*#__PURE__*/ gql`
   mutation Checkout($input: CheckoutInput!) {
     checkout(input: $input) {
@@ -1121,6 +1380,70 @@ export type UpdateOrderStatusMutationOptions = Apollo.BaseMutationOptions<
   UpdateOrderStatusMutation,
   UpdateOrderStatusMutationVariables
 >;
+export const UpdateShippingMethodStatusDocument = /*#__PURE__*/ gql`
+  mutation UpdateShippingMethodStatus(
+    $input: UpdateShippingMethodStatusInput!
+  ) {
+    updateShippingMethodStatus(input: $input)
+  }
+`;
+export type UpdateShippingMethodStatusMutationFn = Apollo.MutationFunction<
+  UpdateShippingMethodStatusMutation,
+  UpdateShippingMethodStatusMutationVariables
+>;
+export function useUpdateShippingMethodStatusMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateShippingMethodStatusMutation,
+    UpdateShippingMethodStatusMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateShippingMethodStatusMutation,
+    UpdateShippingMethodStatusMutationVariables
+  >(UpdateShippingMethodStatusDocument, options);
+}
+export type UpdateShippingMethodStatusMutationHookResult = ReturnType<
+  typeof useUpdateShippingMethodStatusMutation
+>;
+export type UpdateShippingMethodStatusMutationResult =
+  Apollo.MutationResult<UpdateShippingMethodStatusMutation>;
+export type UpdateShippingMethodStatusMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateShippingMethodStatusMutation,
+    UpdateShippingMethodStatusMutationVariables
+  >;
+export const UpdatePaymentMethodStatusDocument = /*#__PURE__*/ gql`
+  mutation UpdatePaymentMethodStatus($input: UpdatePaymentMethodStatusInput!) {
+    updatePaymentMethodStatus(input: $input)
+  }
+`;
+export type UpdatePaymentMethodStatusMutationFn = Apollo.MutationFunction<
+  UpdatePaymentMethodStatusMutation,
+  UpdatePaymentMethodStatusMutationVariables
+>;
+export function useUpdatePaymentMethodStatusMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdatePaymentMethodStatusMutation,
+    UpdatePaymentMethodStatusMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdatePaymentMethodStatusMutation,
+    UpdatePaymentMethodStatusMutationVariables
+  >(UpdatePaymentMethodStatusDocument, options);
+}
+export type UpdatePaymentMethodStatusMutationHookResult = ReturnType<
+  typeof useUpdatePaymentMethodStatusMutation
+>;
+export type UpdatePaymentMethodStatusMutationResult =
+  Apollo.MutationResult<UpdatePaymentMethodStatusMutation>;
+export type UpdatePaymentMethodStatusMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdatePaymentMethodStatusMutation,
+    UpdatePaymentMethodStatusMutationVariables
+  >;
 export const UploadFileDocument = /*#__PURE__*/ gql`
   mutation UploadFile($file: Upload!) {
     uploadFile(file: $file)

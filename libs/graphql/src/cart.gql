@@ -54,6 +54,35 @@ query ShippingOptions {
   }
 }
 
+query PaymentMethods {
+  paymentMethods {
+    _id
+    type
+    label
+    description
+    isActive
+  }
+}
+
+query CheckoutMethodSettings {
+  shippingOptions(includeInactive: true) {
+    _id
+    type
+    label
+    description
+    fee
+    estimatedDays
+    isActive
+  }
+  paymentMethods(includeInactive: true) {
+    _id
+    type
+    label
+    description
+    isActive
+  }
+}
+
 mutation Checkout($input: CheckoutInput!) {
   checkout(input: $input) {
     _id
@@ -88,4 +117,12 @@ mutation RemoveFromCart($input: RemoveFromCartInput!) {
 
 mutation UpdateOrderStatus($input: UpdateOrderStatusInput!) {
   updateOrderStatus(input: $input)
+}
+
+mutation UpdateShippingMethodStatus($input: UpdateShippingMethodStatusInput!) {
+  updateShippingMethodStatus(input: $input)
+}
+
+mutation UpdatePaymentMethodStatus($input: UpdatePaymentMethodStatusInput!) {
+  updatePaymentMethodStatus(input: $input)
 }

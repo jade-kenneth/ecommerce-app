@@ -26,7 +26,7 @@ import { AsyncEventModule } from '~/async-event-module/async-event-module';
 import { safeParseFloat } from '../util/safe-parse-float';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
-import { CartsModule } from './carts/carts.module';
+
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { MailModule } from './mail/mail.module';
@@ -34,13 +34,14 @@ import { PaymentsModule } from './payments/payment.module';
 import { ProductsModule } from './products/products.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { NodeResolver } from './resolver/node.resolver';
+import { ShoppingModule } from './shopping/shopping.module';
 import { UploadModule } from './upload/upload/upload.module';
-import { AccountModule } from './user-session/account/account.module';
-import { JwtModule } from './user-session/jwt/jwt.module';
-import { LicenseController } from './user-session/license/license.controller';
-import { LicenseModule } from './user-session/license/license.module';
-import { SessionController } from './user-session/session/session.controller';
-import { SessionModule } from './user-session/session/session.module';
+import { AccountModule } from './identity/account/account.module';
+import { JwtModule } from './identity/jwt/jwt.module';
+import { LicenseController } from './identity/license/license.controller';
+import { LicenseModule } from './identity/license/license.module';
+import { SessionController } from './identity/session/session.controller';
+import { SessionModule } from './identity/session/session.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -107,7 +108,7 @@ import { SessionModule } from './user-session/session/session.module';
     UploadModule,
     ConfigModule,
     SessionModule,
-    CartsModule,
+    ShoppingModule,
     PaymentsModule,
     LicenseModule,
     MailModule,

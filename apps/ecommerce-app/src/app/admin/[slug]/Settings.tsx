@@ -1,9 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
+  PaymentMethodType,
+  ShippingType,
+  useCheckoutMethodSettingsQuery,
   useConfigQuery,
   useCreateConfigMutation,
   useUpdateConfigMutation,
+  useUpdatePaymentMethodStatusMutation,
+  useUpdateShippingMethodStatusMutation,
 } from '~/graphql/generated';
 
 import { useEffect } from 'react';
@@ -14,6 +19,7 @@ import {
   CarouselFileUpload,
   Field,
   FieldInput,
+  Toggle,
   toaster,
 } from '~/components';
 
@@ -33,6 +39,13 @@ export function Settings() {
 
   const [update] = useUpdateConfigMutation();
   const [create] = useCreateConfigMutation();
+  const methodsQuery = useCheckoutMethodSettingsQuery({
+    fetchPolicy: 'network-only',
+  });
+  const [updateShippingMethodStatus, shippingMethodMutation] =
+    useUpdateShippingMethodStatusMutation();
+  const [updatePaymentMethodStatus, paymentMethodMutation] =
+    useUpdatePaymentMethodStatusMutation();
 
   useEffect(() => {
     form.reset({
@@ -41,6 +54,65 @@ export function Settings() {
       carouselItems: config?.carouselItems ?? [],
     });
   }, [config, form]);
+
+  const isUpdatingMethod =
+    shippingMethodMutation.loading || paymentMethodMutation.loading;
+
+  const handleShippingMethodToggle = async (params: {
+    type: ShippingType;
+    label: string;
+    isActive: boolean;
+  }) => {
+    try {
+      await updateShippingMethodStatus({
+        variables: {
+          input: {
+            type: params.type,
+            isActive: !params.isActive,
+          },
+        },
+      });
+
+      toaster.success({
+        description: `${params.label} shipping ${
+          params.isActive ? 'disabled' : 'enabled'
+        }.`,
+      });
+    } catch {
+      toaster.error({
+        description:
+          'Unable to update shipping method. Keep at least one active option.',
+      });
+    }
+  };
+
+  const handlePaymentMethodToggle = async (params: {
+    type: PaymentMethodType;
+    label: string;
+    isActive: boolean;
+  }) => {
+    try {
+      await updatePaymentMethodStatus({
+        variables: {
+          input: {
+            type: params.type,
+            isActive: !params.isActive,
+          },
+        },
+      });
+
+      toaster.success({
+        description: `${params.label} payment ${
+          params.isActive ? 'disabled' : 'enabled'
+        }.`,
+      });
+    } catch {
+      toaster.error({
+        description:
+          'Unable to update payment method. Keep at least one active option.',
+      });
+    }
+  };
 
   return (
     <form
@@ -127,6 +199,129 @@ export function Settings() {
               </div>
             )}
           />
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Checkout Methods
+          </h2>
+          <p className="text-sm text-gray-500">
+            Toggle which shipping and payment methods customers can use at
+            checkout.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-3">
+            <p className="text-sm font-semibold text-gray-700">
+              Shipping Methods
+            </p>
+
+            {methodsQuery.data?.shippingOptions.map((method) => (
+              <div
+                key={method._id}
+                className="flex items-center justify-between rounded-xl border border-gray-200 p-3"
+              >
+                <div>
+                  <p className="text-sm font-medium text-gray-700">
+                    {method.label}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {method.description || method.estimatedDays || 'No details'}
+                  </p>
+                  <p className="text-xs text-gray-500">Fee: PHP {method.fee}</p>
+                </div>
+                <Toggle.Root
+                  aria-label={`Toggle ${method.label}`}
+                  pressed={method.isActive}
+                  disabled={methodsQuery.loading || isUpdatingMethod}
+                  onPressedChange={() => {
+                    void handleShippingMethodToggle({
+                      type: method.type,
+                      label: method.label,
+                      isActive: method.isActive,
+                    });
+                  }}
+                  className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors ${
+                    method.isActive ? 'bg-cyan-600' : 'bg-gray-300'
+                  }`}
+                >
+                  <Toggle.Indicator
+                    className={`absolute h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                      method.isActive ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </Toggle.Root>
+              </div>
+            ))}
+            {methodsQuery.loading && (
+              <p className="text-xs text-gray-500">
+                Loading shipping methods...
+              </p>
+            )}
+            {!methodsQuery.loading &&
+              !methodsQuery.data?.shippingOptions.length && (
+                <p className="text-xs text-gray-500">
+                  No shipping methods found.
+                </p>
+              )}
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <p className="text-sm font-semibold text-gray-700">
+              Payment Methods
+            </p>
+
+            {methodsQuery.data?.paymentMethods.map((method) => (
+              <div
+                key={method._id}
+                className="flex items-center justify-between rounded-xl border border-gray-200 p-3"
+              >
+                <div>
+                  <p className="text-sm font-medium text-gray-700">
+                    {method.label}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {method.description || 'No details'}
+                  </p>
+                </div>
+                <Toggle.Root
+                  aria-label={`Toggle ${method.label}`}
+                  pressed={method.isActive}
+                  disabled={methodsQuery.loading || isUpdatingMethod}
+                  onPressedChange={() => {
+                    void handlePaymentMethodToggle({
+                      type: method.type,
+                      label: method.label,
+                      isActive: method.isActive,
+                    });
+                  }}
+                  className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors ${
+                    method.isActive ? 'bg-cyan-600' : 'bg-gray-300'
+                  }`}
+                >
+                  <Toggle.Indicator
+                    className={`absolute h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                      method.isActive ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </Toggle.Root>
+              </div>
+            ))}
+            {methodsQuery.loading && (
+              <p className="text-xs text-gray-500">
+                Loading payment methods...
+              </p>
+            )}
+            {!methodsQuery.loading &&
+              !methodsQuery.data?.paymentMethods.length && (
+                <p className="text-xs text-gray-500">
+                  No payment methods found.
+                </p>
+              )}
+          </div>
         </div>
       </div>
 

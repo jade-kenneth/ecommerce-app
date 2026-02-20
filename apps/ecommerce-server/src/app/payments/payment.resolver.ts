@@ -4,7 +4,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Types } from 'mongoose';
 import { CreateGcashPaymentInput } from '../../types/payment';
 import { Tokens } from '../../types/tokens';
-import { OrdersRepository } from '../carts/repositories/orders.repository';
+import { OrdersRepository } from '../shopping/order/repositories/orders.repository';
 import { PaymentsService } from './payments.service';
 
 @Resolver()

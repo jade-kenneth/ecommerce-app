@@ -46,6 +46,7 @@ type ShippingOption {
   description: String
   fee: String!
   estimatedDays: String
+  isActive: Boolean!
 }
 
 type Cart {
@@ -95,13 +96,23 @@ input UpdateOrderStatusInput {
   status: OrderStatus!
 }
 
+input UpdateShippingMethodStatusInput {
+  type: ShippingType!
+  isActive: Boolean!
+}
+
+input UpdatePaymentMethodStatusInput {
+  type: PaymentMethodType!
+  isActive: Boolean!
+}
+
 type Query {
   # Cart
   cart: Cart!
 
   # Checkout options
-  shippingOptions: [ShippingOption!]!
-  paymentMethods: [PaymentMethod!]!
+  shippingOptions(includeInactive: Boolean = false): [ShippingOption!]!
+  paymentMethods(includeInactive: Boolean = false): [PaymentMethod!]!
 
   # Orders
   myOrders: [Order!]!
@@ -117,6 +128,10 @@ type Mutation {
 
   # Orders
   updateOrderStatus(input: UpdateOrderStatusInput!): Boolean
+
+  # Checkout method settings
+  updateShippingMethodStatus(input: UpdateShippingMethodStatusInput!): Boolean!
+  updatePaymentMethodStatus(input: UpdatePaymentMethodStatusInput!): Boolean!
 
   # Checkout
   checkout(input: CheckoutInput!): Order!

@@ -1,9 +1,17 @@
-import { Layout as AdminLayout } from '~/features/admin/features/Layout';
+'use client';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <AdminLayout>{children}</AdminLayout>;
+import type { ReactNode } from 'react';
+import { withLayout } from '~/admin/layout';
+import { AccountType } from '~/graphql/generated';
+
+interface RootLayoutProps {
+  children: ReactNode;
 }
+
+function RootLayout({ children }: RootLayoutProps) {
+  return <>{children}</>;
+}
+
+export default withLayout(RootLayout, {
+  role: [AccountType.Admin],
+});

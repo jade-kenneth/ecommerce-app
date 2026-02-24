@@ -19,6 +19,8 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
+      "~/admin": ["../../libs/admin/index.ts"],
+      "~/admin/*": ["../../libs/admin/*"],
       "~/components": ["../../libs/ui/components/index.ts"],
       "~/components/*": ["../../libs/ui/components/*"],
       "~/constants": ["../../libs/utils/src/constant.ts"],

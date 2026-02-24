@@ -1,10 +1,13 @@
 import React from 'react';
-import { Sidebar } from './Sidebar';
+
+import dynamic from 'next/dynamic';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
-
+const Sidebar = dynamic(() => import('./Sidebar').then((mod) => mod.Sidebar), {
+  ssr: false,
+});
 export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex h-screen bg-background">

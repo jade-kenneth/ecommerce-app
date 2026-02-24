@@ -3,7 +3,6 @@
 import { differenceInSeconds, intervalToDuration } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { LICENSE_CODE_LOCAL_STORAGE_KEY } from '~/utils/constant';
 
 type LicenseStoragePayload = {
@@ -31,32 +30,52 @@ const formatRemaining = (now: number, expiresAt: number) => {
   const pad = (value: number) => value.toString().padStart(2, '0');
   const hours = duration.hours ?? 0;
   const minutes = duration.minutes ?? 0;
-  const seconds = duration.seconds ?? 0;
 
   if (hours > 0) {
-    return `${hours}:${pad(minutes)}:${pad(seconds)}`;
+    return `${hours}:${pad(minutes)}h`;
   }
 
-  return `${minutes}:${pad(seconds)}`;
+  if (minutes > 0) {
+    return `${minutes}m`;
+  }
+
+  return '<1m';
 };
 
 export const LicenseTimer = () => {
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
-  const license = useLicenseContext();
   const rating = useGlobalStore((state) => state.rating);
+  const syncExpiryFromStorage = () => {
+    setExpiresAt(readLicenseExpiry());
+  };
 
   useEffect(() => {
-    const tick = () => {
+    const syncNowAndExpiry = () => {
       setNow(Date.now());
-      const nextExpiry = readLicenseExpiry();
-      setExpiresAt((prev) => (prev === nextExpiry ? prev : nextExpiry));
+      syncExpiryFromStorage();
     };
 
-    tick();
-    const interval = window.setInterval(tick, 1000);
-    return () => window.clearInterval(interval);
+    syncNowAndExpiry();
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+      syncNowAndExpiry();
+    };
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== LICENSE_CODE_LOCAL_STORAGE_KEY) return;
+      syncNowAndExpiry();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('storage', handleStorage);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('storage', handleStorage);
+    };
   }, []);
 
   const remainingSeconds = useMemo(() => {
@@ -65,12 +84,30 @@ export const LicenseTimer = () => {
   }, [expiresAt, now]);
 
   useEffect(() => {
+    if (!expiresAt) return;
+
+    const tick = () => setNow(Date.now());
+
+    tick();
+
+    const intervalMs =
+      (remainingSeconds ?? 0) > 3600
+        ? 60_000
+        : (remainingSeconds ?? 0) > 300
+          ? 15_000
+          : 1_000;
+
+    const interval = window.setInterval(tick, intervalMs);
+    return () => window.clearInterval(interval);
+  }, [expiresAt, remainingSeconds]);
+
+  useEffect(() => {
     if (!expiresAt || remainingSeconds !== 0) return;
     if (typeof window === 'undefined') return;
     localStorage.removeItem(LICENSE_CODE_LOCAL_STORAGE_KEY);
     rating.setIsOpen(true);
     setExpiresAt(null);
-  }, [expiresAt, license, remainingSeconds, rating]);
+  }, [expiresAt, remainingSeconds, rating]);
 
   if (!expiresAt || remainingSeconds === null) return null;
 

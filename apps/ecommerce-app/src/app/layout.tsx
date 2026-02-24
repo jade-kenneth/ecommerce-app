@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import { ToastContainer } from '~/components/ToastContainer';
 import { AuthProvider } from '~/providers/AuthProvider';
@@ -7,7 +9,20 @@ import { LicenseProvider } from '~/providers/LicenseProvider';
 import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
 import './globals.css';
 
-const GA_MEASUREMENT_ID = 'G-N7BZ4QRB31';
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Amy Store',
+    template: '%s | Amy Store',
+  },
+  description:
+    'Amy Store ecommerce app for shopping, checkout, and order tracking.',
+  applicationName: 'Amy Store',
+};
 
 export default function RootLayout({
   children,
@@ -25,7 +40,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TPVR9TRQ');`}
         </Script>
       </head>
-      <body className="w-full">
+      <body className={`${inter.className} w-full`}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-TPVR9TRQ"
@@ -34,16 +49,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_MEASUREMENT_ID}');`}
-        </Script>
         <CapacitorDeepLinkBridge />
         <ClientApolloProvider>
           <AuthProvider>

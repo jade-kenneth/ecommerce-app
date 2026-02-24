@@ -1,3 +1,4 @@
+'use client';
 import { ark } from '@ark-ui/react';
 import { createRecipeContext } from '~/utils';
 import { badgeRecipe } from './Badge.recipe';

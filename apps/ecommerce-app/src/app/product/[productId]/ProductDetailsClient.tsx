@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-
 import { Badge, Button, Cards, Spinner, toaster } from '~/components';
 import { Sticky } from '~/components/Sticky';
 import { Footer, Highlight } from '~/features/portal';
@@ -24,15 +23,12 @@ const ClientOnlyNavbar = dynamic(
   { ssr: false },
 );
 
-interface ProductDetailsClientProps {
-  productId: string;
-}
-
 export default function ProductDetailsClient({
   productId,
-}: ProductDetailsClientProps) {
+}: {
+  productId: string;
+}) {
   const router = useRouter();
-  const resolvedProductId = productId ?? '';
 
   const globalStore = useGlobalStore((state) => state);
   const cartContext = useCartContext();
@@ -42,14 +38,14 @@ export default function ProductDetailsClient({
       first: 1,
       filter: {
         _id: {
-          equal: resolvedProductId,
+          equal: productId,
         },
       },
     },
-    skip: !resolvedProductId,
   });
 
   const product = data?.products.edges?.[0]?.node;
+  const isProductLoading = loading;
   const relatedProductsQuery = useProductsQuery({
     variables: {
       first: 5,
@@ -58,7 +54,7 @@ export default function ProductDetailsClient({
           in: product?.category ?? [],
         },
         _id: {
-          notEqual: resolvedProductId,
+          notEqual: productId,
         },
       },
     },
@@ -123,13 +119,13 @@ export default function ProductDetailsClient({
       </Sticky>
       <Layout>
         <div className="mx-auto w-full max-w-screen px-4 sm:px-6 lg:px-10 py-8">
-          {loading && (
+          {isProductLoading && (
             <div className="flex justify-center py-16">
               <Spinner className="h-16" />
             </div>
           )}
 
-          {!loading && !product && (
+          {!isProductLoading && !product && (
             <div className="flex flex-col items-center gap-4 rounded-3xl border border-gray-100 bg-white p-8 text-center">
               <p className="text-lg font-semibold text-gray-900">
                 Product not found
@@ -146,7 +142,7 @@ export default function ProductDetailsClient({
             </div>
           )}
 
-          {!loading && product && (
+          {!isProductLoading && product && (
             <div className="flex flex-col gap-10">
               <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-8">
                 <div className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
@@ -157,6 +153,7 @@ export default function ProductDetailsClient({
                       fill
                       className="object-cover"
                       priority
+                      sizes="(min-width: 1024px) 42vw, (min-width: 640px) 80vw, 92vw"
                     />
                     {product.discount > 0 && (
                       <div className="absolute top-4 left-4 rounded-full bg-cyan-700 px-3 py-1 text-xs font-semibold text-white">

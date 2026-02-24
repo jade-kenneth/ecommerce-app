@@ -1,9 +1,17 @@
 'use client';
+import dynamic from 'next/dynamic';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { MedalIcon } from '~/icons/MedalIcon';
 import { PhoneIcon } from '~/icons/PhoneIcon';
 import { TruckIcon } from '~/icons/TruckIcon';
 import { LicenseTimer } from './LicenseTimer';
-import { RatingModal } from './RatingModal';
+
+const LazyRatingModal = dynamic(
+  () => import('./RatingModal').then((mod) => mod.RatingModal),
+  {
+    ssr: false,
+  },
+);
 
 interface HighlightProps {
   storeName?: string;
@@ -16,13 +24,15 @@ export const Highlight = ({
   storeName = 'Welcome to AmyStore',
   disabled = false,
 }: HighlightProps) => {
+  const isRatingModalOpen = useGlobalStore((state) => state.rating.isOpen);
+
   return (
     <div className="w-full bg-cyan-700 text-cyan-950">
       <div className="max-w-screen flex flex-col gap-2 py-2 sm:flex-row sm:items-center sm:justify-between sm:py-3">
         <div className="flex gap-2 items-center">
           <p className="text-xs sm:text-sm text-white font-bold">{storeName}</p>
           <LicenseTimer />
-          <RatingModal />
+          {isRatingModalOpen ? <LazyRatingModal /> : null}
         </div>
 
         <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm sm:gap-0 sm:divide-x sm:divide-cyan-600">

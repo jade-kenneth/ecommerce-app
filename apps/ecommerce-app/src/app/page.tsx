@@ -1,42 +1,31 @@
-'use client';
-
-import dynamic from 'next/dynamic';
+import type { Metadata } from 'next';
 import { Sticky } from '~/components/Sticky';
-
-import {
-  Carousel,
-  Footer,
-  FrequentlySearched,
-  Highlight,
-  HighPoint,
-  JustForYou,
-  TopSelling,
-} from '~/features/portal';
+import { Navbar } from '~/features/portal';
+import { Carousel } from '~/features/portal/Carousel';
+import { Categories } from '~/features/portal/Categories';
+import { Footer } from '~/features/portal/Footer';
+import { FrequentlySearched } from '~/features/portal/FrequentlySearch';
+import { Highlight } from '~/features/portal/Highlight';
 import { Layout } from '~/features/portal/layout/Layout';
+import { HomeProductSections } from './HomeProductSections';
 
-const ClientOnlyNavbar = dynamic(
-  () => import('~/features/portal').then((mod) => mod.Navbar),
-  { ssr: false },
-);
-const ClientOnlyCategories = dynamic(
-  () => import('~/features/portal').then((mod) => mod.Categories),
-  { ssr: false },
-);
+export const metadata: Metadata = {
+  title: 'Home',
+  description: 'Browse featured categories, promos, and top products on Amy.',
+};
 
 export default function Index() {
   return (
     <>
       <Sticky>
         <Highlight />
-        <ClientOnlyNavbar />
+        <Navbar />
       </Sticky>
       <Layout>
         <FrequentlySearched />
         <Carousel />
-        <ClientOnlyCategories />
-        <TopSelling />
-        <HighPoint />
-        <JustForYou />
+        <Categories />
+        <HomeProductSections />
         <Footer />
       </Layout>
     </>

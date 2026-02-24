@@ -485,6 +485,7 @@ export const ManageOrders = () => {
                                 alt={name}
                                 fill
                                 className="object-cover"
+                                sizes="64px"
                               />
                             </div>
                             <div className="flex flex-1 flex-col gap-1">

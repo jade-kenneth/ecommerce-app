@@ -21,6 +21,26 @@ import { useCartContext } from '../Cart/CartContext';
 interface OrderSummaryProps {
   isCheckout?: boolean;
 }
+
+const readGaClientIdFromCookie = (): string | undefined => {
+  if (typeof document === 'undefined') return undefined;
+
+  const rawGaCookie = document.cookie
+    .split('; ')
+    .find((cookie) => cookie.startsWith('_ga='))
+    ?.slice(4);
+
+  if (!rawGaCookie) return undefined;
+
+  const parts = rawGaCookie.split('.');
+  if (parts.length < 4) return undefined;
+
+  const clientIdParts = parts.slice(-2);
+  if (clientIdParts.some((part) => !part)) return undefined;
+
+  return clientIdParts.join('.');
+};
+
 export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const context = useCartContext();
   const paymentMethodsQuery = usePaymentMethodsQuery();
@@ -133,117 +153,107 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
             <button
               className="w-full py-3  text-white font-semibold rounded-xl shadow bg-cyan-700 transition"
               onClick={async () => {
-                window.gtag(
-                  'get',
-                  'G-N7BZ4QRB31',
-                  'client_id',
-                  async (clientId: string) => {
-                    const paymentMethods =
-                      paymentMethodsQuery.data?.paymentMethods ?? [];
-                    const shippingOptions =
-                      shippingOptionsQuery.data?.shippingOptions ?? [];
+                const clientId = readGaClientIdFromCookie();
 
-                    const selectedPaymentType =
-                      context.state.cart.paymentMethod ??
-                      paymentMethods[0]?.type;
+                const paymentMethods =
+                  paymentMethodsQuery.data?.paymentMethods ?? [];
+                const shippingOptions =
+                  shippingOptionsQuery.data?.shippingOptions ?? [];
 
-                    const paymentMethodId =
-                      paymentMethods.find(
-                        (method) => method.type === selectedPaymentType,
-                      )?._id ?? paymentMethods[0]?._id;
+                const selectedPaymentType =
+                  context.state.cart.paymentMethod ?? paymentMethods[0]?.type;
 
-                    const selectedShippingType =
-                      context.state.cart.shipping?.type ??
-                      shippingOptions[0]?.type;
+                const paymentMethodId =
+                  paymentMethods.find(
+                    (method) => method.type === selectedPaymentType,
+                  )?._id ?? paymentMethods[0]?._id;
 
-                    const shippingOptionId =
-                      shippingOptions.find(
-                        (option) => option.type === selectedShippingType,
-                      )?._id ?? shippingOptions[0]?._id;
+                const selectedShippingType =
+                  context.state.cart.shipping?.type ?? shippingOptions[0]?.type;
 
-                    if (!paymentMethodId || !shippingOptionId) {
-                      return;
-                    }
+                const shippingOptionId =
+                  shippingOptions.find(
+                    (option) => option.type === selectedShippingType,
+                  )?._id ?? shippingOptions[0]?._id;
 
-                    const orderRes = await order({
-                      variables: {
-                        input: {
-                          clientId,
-                          shippingOptionId,
-                          paymentMethodId,
-                        },
-                      },
-                    });
-                    const orderId = orderRes.data?.checkout._id;
-                    const baseUrl =
-                      (process.env.NEXT_PUBLIC_BASE_URL ?? '').replace(
-                        /\/$/,
-                        '',
-                      ) || window.location.origin;
+                if (!paymentMethodId || !shippingOptionId) {
+                  return;
+                }
 
-                    const isCashOnDelivery =
-                      selectedPaymentType === PaymentMethodType.CashOnDelivery;
-
-                    const successPath = isCashOnDelivery
-                      ? '/payment/cod/success'
-                      : '/payment/success';
-
-                    const failurePath = '/payment/failure';
-
-                    const successUrl = orderId
-                      ? `${baseUrl}${successPath}?orderId=${encodeURIComponent(
-                          orderId,
-                        )}`
-                      : baseUrl;
-
-                    const failureUrl = orderId
-                      ? `${baseUrl}${failurePath}?orderId=${encodeURIComponent(
-                          orderId,
-                        )}`
-                      : baseUrl;
-
-                    const referenceId = orderId
-                      ? `order-${orderId}`
-                      : `order-${Date.now()}`;
-
-                    const description = orderId
-                      ? `Payment for order #${orderId}`
-                      : 'Payment for order';
-
-                    if (isCashOnDelivery) {
-                      if (Capacitor.getPlatform() === 'web') {
-                        window.location.href = successUrl;
-                      } else {
-                        window.location.href = `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`;
-                      }
-                    } else {
-                      const res = await mutate({
-                        variables: {
-                          input: {
-                            amount:
-                              totalAmountWithShippingAndTax as unknown as string,
-                            failureUrl:
-                              Capacitor.getPlatform() === 'web'
-                                ? failureUrl
-                                : `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`,
-                            successUrl:
-                              Capacitor.getPlatform() === 'web'
-                                ? successUrl
-                                : `${APP_URL_SCHEME}://payment/success?orderId=${orderId}`,
-                            referenceId,
-                            description,
-                          },
-                        },
-                      });
-
-                      const checkoutUrl =
-                        res.data?.createGcashPayment?.actions?.[0]?.value;
-                      if (checkoutUrl) {
-                        await Browser.open({ url: checkoutUrl });
-                      }
-                    }
+                const orderRes = await order({
+                  variables: {
+                    input: {
+                      clientId,
+                      shippingOptionId,
+                      paymentMethodId,
+                    },
                   },
-                );
+                });
+                const orderId = orderRes.data?.checkout._id;
+                const baseUrl =
+                  (process.env.NEXT_PUBLIC_BASE_URL ?? '').replace(/\/$/, '') ||
+                  window.location.origin;
+
+                const isCashOnDelivery =
+                  selectedPaymentType === PaymentMethodType.CashOnDelivery;
+
+                const successPath = isCashOnDelivery
+                  ? '/payment/cod/success'
+                  : '/payment/success';
+
+                const failurePath = '/payment/failure';
+
+                const successUrl = orderId
+                  ? `${baseUrl}${successPath}?orderId=${encodeURIComponent(
+                      orderId,
+                    )}`
+                  : baseUrl;
+
+                const failureUrl = orderId
+                  ? `${baseUrl}${failurePath}?orderId=${encodeURIComponent(
+                      orderId,
+                    )}`
+                  : baseUrl;
+
+                const referenceId = orderId
+                  ? `order-${orderId}`
+                  : `order-${Date.now()}`;
+
+                const description = orderId
+                  ? `Payment for order #${orderId}`
+                  : 'Payment for order';
+
+                if (isCashOnDelivery) {
+                  if (Capacitor.getPlatform() === 'web') {
+                    window.location.href = successUrl;
+                  } else {
+                    window.location.href = `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`;
+                  }
+                } else {
+                  const res = await mutate({
+                    variables: {
+                      input: {
+                        amount: totalAmountWithShippingAndTax as unknown as string,
+                        failureUrl:
+                          Capacitor.getPlatform() === 'web'
+                            ? failureUrl
+                            : `${APP_URL_SCHEME}://payment/failure?orderId=${orderId}`,
+                        successUrl:
+                          Capacitor.getPlatform() === 'web'
+                            ? successUrl
+                            : `${APP_URL_SCHEME}://payment/success?orderId=${orderId}`,
+                        referenceId,
+                        description,
+                      },
+                    },
+                  });
+
+                  const checkoutUrl =
+                    res.data?.createGcashPayment?.actions?.[0]?.value;
+                  if (checkoutUrl) {
+                    await Browser.open({ url: checkoutUrl });
+                  }
+                }
               }}
             >
               Place Order

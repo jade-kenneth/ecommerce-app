@@ -61,7 +61,7 @@ export function BrandMark({
     >
       <Image
         src="/Logo.png"
-        alt="Opexa logo"
+        alt="Amy logo"
         width={36}
         height={36}
         className="h-8 w-8 object-contain sm:h-9 sm:w-9"
@@ -91,4 +91,3 @@ export function FallbackShell({
     </div>
   );
 }
-

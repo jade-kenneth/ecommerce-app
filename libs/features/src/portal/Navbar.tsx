@@ -168,6 +168,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
                           alt={item.name}
                           fill
                           className="object-cover"
+                          sizes="40px"
                         />
                       </div>
                       <div className="flex flex-col">

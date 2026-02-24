@@ -54,6 +54,7 @@ export const Items = ({ isCheckout = false }: ItemsProps) => {
                     alt={item.name}
                     fill
                     className="object-cover"
+                    sizes="(min-width: 640px) 260px, 220px"
                   />
                 </div>
               </div>

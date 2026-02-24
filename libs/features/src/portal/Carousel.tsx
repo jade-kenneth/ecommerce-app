@@ -1,3 +1,5 @@
+'use client';
+
 import { CSSProperties, FunctionComponent } from 'react';
 // Import Swiper React components
 
@@ -23,6 +25,9 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
   },
   items = ['./dishes.png', './buldak.png', './attire.png'],
 }) => {
+  const heroImageSizes =
+    '(min-width: 1280px) 900px, (min-width: 1024px) calc(100vw - 370px), 100vw';
+
   return (
     <div className="max-w-screen  gap-4  lg:flex lg:flex-row flex-col mt-6 sm:mt-10 ">
       <Swiper
@@ -36,13 +41,17 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
         }}
       >
         {items.map((item, index) => {
+          const isLikelyLcpSlide = index === 0;
+
           return (
             <SwiperSlide key={`${item}-${index}`}>
               <Image
                 src={item}
-                alt="carousel-image"
+                alt={`AmyStore promo slide ${index + 1}`}
                 width={1280}
                 height={1000}
+                priority={isLikelyLcpSlide}
+                sizes={heroImageSizes}
                 className="h-full w-full object-cover"
                 objectPosition="start"
               />

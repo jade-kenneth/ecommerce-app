@@ -33,7 +33,7 @@ export const useLicense = (options: UseLicenseOptions) => {
       const data = await getLicense(licenseCode || '');
       if (!isMountedRef.current) return;
 
-      if (isAfter(new Date(data.expirationDate), new Date())) {
+      if (isAfter(new Date(data.expirationDate ?? ''), new Date())) {
         setState({
           isLicensed: true,
           loading: false,

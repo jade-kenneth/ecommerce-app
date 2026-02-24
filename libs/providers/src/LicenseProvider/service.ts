@@ -1,5 +1,6 @@
 import { store } from '~/store';
-import { LicenseInput } from '../../../global/src/graphql/generated';
+
+import { LicenseInput } from '~/graphql/generated';
 import * as service from './service.core';
 
 export type License = LicenseInput;

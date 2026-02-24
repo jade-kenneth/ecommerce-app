@@ -104,6 +104,7 @@ input VoucherInput {
 }
 
 input CreateProductInput {
+  _id: ObjectId!
   thumbnail: String!
   name: String!
   price: Int!

@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ObjectId } from 'bson';
 
 import { CheckCircle2, PlusCircle, XIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
@@ -27,7 +28,7 @@ import { Field } from '../../../../../ui/components/ui/Field';
 import { SchemaDefinition } from './utils';
 
 interface AddProductButtonProps {
-  onAddProduct?: (data: ProductCoreDataFragment) => void;
+  onAddProduct?: (data: ProductCoreDataFragment) => void | Promise<void>;
 }
 export const CreateProduct = (props: AddProductButtonProps) => {
   const disclosure = useDisclosure();
@@ -323,10 +324,12 @@ export const CreateProduct = (props: AddProductButtonProps) => {
             <button
               className="bg-cyan-700 px-5 py-2 ui-disabled:opacity-10 ui-disabled:cursor-not-allowed text-white rounded-[32px] flex gap-2 items-center text-sm font-medium"
               onClick={form.handleSubmit(async (data) => {
+                const _id = new ObjectId().toHexString();
                 try {
-                  await createProduct({
+                  const result = await createProduct({
                     variables: {
                       input: {
+                        _id,
                         name: data.name,
                         category: data.category,
                         price: parseFloat(data.price),
@@ -340,14 +343,21 @@ export const CreateProduct = (props: AddProductButtonProps) => {
                     },
                   });
 
-                  props.onAddProduct?.({
-                    ...data,
+                  if (!result.data?.createProduct) {
+                    throw new Error('Create product mutation did not succeed');
+                  }
+
+                  await props.onAddProduct?.({
+                    __typename: 'Product',
+                    _id,
+                    name: data.name,
+                    category: data.category,
                     price: +data.price,
+                    thumbnail: data.thumbnail,
                     points: data.points,
                     pieces: data.stock,
                     discount: data.discountPercentage || 0,
-                    _id: 'FIXME',
-                    __typename: 'Product',
+                    status: data.status,
                   });
                   disclosure.onClose();
                   form.reset();

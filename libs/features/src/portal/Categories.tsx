@@ -56,10 +56,9 @@ export const Card = ({ imgSrc, name, size }: CardProps) => {
         />
       </div>
 
-      <span
-        className="text-sm sm:text-base lg:text-lg text-carbon-100 text-center font-medium"
-        dangerouslySetInnerHTML={{ __html: name }}
-      />
+      <span className="text-sm sm:text-base lg:text-lg text-carbon-100 text-center font-medium">
+        {name}
+      </span>
     </div>
   );
 };

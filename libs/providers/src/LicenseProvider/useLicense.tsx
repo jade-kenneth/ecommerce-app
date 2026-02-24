@@ -1,6 +1,6 @@
 'use client';
 import { isAfter } from 'date-fns';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { store } from '~/store';
 import { getLicense } from './service';
 interface UseLicenseOptions {
@@ -21,11 +21,17 @@ export const useLicense = (options: UseLicenseOptions) => {
       loading: true,
     },
   );
+  const isMountedRef = useRef(true);
+  const isValidatingRef = useRef(false);
 
   async function validateLicense() {
+    if (isValidatingRef.current) return;
+    isValidatingRef.current = true;
+
     try {
       const { licenseCode } = await store.get();
       const data = await getLicense(licenseCode || '');
+      if (!isMountedRef.current) return;
 
       if (isAfter(new Date(data.expirationDate), new Date())) {
         setState({
@@ -39,18 +45,29 @@ export const useLicense = (options: UseLicenseOptions) => {
         });
       }
     } catch (err) {
+      if (!isMountedRef.current) return;
       setState({
         isLicensed: false,
         loading: false,
       });
+    } finally {
+      isValidatingRef.current = false;
     }
   }
   useEffect(() => {
+    isMountedRef.current = true;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+      validateLicense();
+    };
+
     validateLicense();
-    document.addEventListener('visibilitychange', validateLicense);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      document.removeEventListener('visibilitychange', validateLicense);
+      isMountedRef.current = false;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 

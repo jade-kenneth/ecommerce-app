@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ObjectId } from 'bson';
 
 import {
   PaymentMethodType,
@@ -119,10 +120,12 @@ export function Settings() {
       className="flex flex-col gap-8"
       onSubmit={form.handleSubmit(async (data) => {
         if (!config?._id) {
+          const _id = new ObjectId().toHexString();
+
           await create({
             variables: {
               input: {
-                _id: 'FIXME',
+                _id,
                 highPointsThreshold: parseInt(data.highPointsThreshold, 10),
                 topSoldThreshold: parseInt(data.topSoldThreshold, 10),
                 carouselItems: data.carouselItems || [],

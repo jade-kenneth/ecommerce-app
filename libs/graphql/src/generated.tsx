@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Fri, 20 Feb 2026 16:56:23 GMT
+// Last modified: Tue, 24 Feb 2026 15:22:27 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -36,7 +36,7 @@ export type Scalars = {
   DateTime: { input: string | Date; output: string };
   Decimal: { input: string; output: string };
   JSON: { input: Record<string, any>; output: Record<string, any> };
-  ObjectId: { input: string; output: string };
+  ObjectID: { input: string; output: string };
   Upload: { input: File; output: File };
 };
 
@@ -66,19 +66,19 @@ export enum CategoryType {
 
 export type CheckoutInput = {
   clientId?: InputMaybe<Scalars['String']['input']>;
-  paymentMethodId?: InputMaybe<Scalars['ObjectId']['input']>;
-  shippingOptionId?: InputMaybe<Scalars['ObjectId']['input']>;
+  paymentMethodId?: InputMaybe<Scalars['ObjectID']['input']>;
+  shippingOptionId?: InputMaybe<Scalars['ObjectID']['input']>;
 };
 
 export type CreateAccountInput = {
-  _id: Scalars['ObjectId']['input'];
+  _id: Scalars['ObjectID']['input'];
   emailAddress: Scalars['String']['input'];
   mobileNumber?: InputMaybe<Scalars['String']['input']>;
   password: Scalars['String']['input'];
 };
 
 export type CreateConfigInput = {
-  _id: Scalars['ObjectId']['input'];
+  _id: Scalars['ObjectID']['input'];
   carouselItems: Array<Scalars['String']['input']>;
   highPointsThreshold: Scalars['Int']['input'];
   topSoldThreshold: Scalars['Int']['input'];
@@ -93,6 +93,7 @@ export type CreateGcashPaymentInput = {
 };
 
 export type CreateProductInput = {
+  _id: Scalars['ObjectID']['input'];
   category: Array<CategoryType>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -112,7 +113,7 @@ export type CreateProductInput = {
 };
 
 export type DeleteProductInput = {
-  _id: Scalars['ObjectId']['input'];
+  _id: Scalars['ObjectID']['input'];
 };
 
 export type IdFilterInput = {
@@ -128,7 +129,7 @@ export type KeyValuePairInput = {
 };
 
 export type LicenseInput = {
-  _id: Scalars['ObjectId']['input'];
+  _id: Scalars['ObjectID']['input'];
   code: Scalars['String']['input'];
   expirationDate?: InputMaybe<Scalars['String']['input']>;
   variant: LicenseVariant;
@@ -157,7 +158,7 @@ export enum PaymentMethodType {
 }
 
 export type ProductByIdsInput = {
-  ids: Array<Scalars['ObjectId']['input']>;
+  ids: Array<Scalars['ObjectID']['input']>;
 };
 
 export type ProductsCategoryFilterInput = {
@@ -182,7 +183,7 @@ export type ProductsStatusFilterInput = {
 };
 
 export type RemoveFromCartInput = {
-  productId: Scalars['ObjectId']['input'];
+  productId: Scalars['ObjectID']['input'];
 };
 
 export enum ReservationType {
@@ -204,19 +205,19 @@ export enum StatusType {
 }
 
 export type UpdateCartItemInput = {
-  productId: Scalars['ObjectId']['input'];
+  productId: Scalars['ObjectID']['input'];
   quantity: Scalars['Int']['input'];
 };
 
 export type UpdateConfigInput = {
-  _id: Scalars['ObjectId']['input'];
+  _id: Scalars['ObjectID']['input'];
   carouselItems: Array<Scalars['String']['input']>;
   highPointsThreshold: Scalars['Int']['input'];
   topSoldThreshold: Scalars['Int']['input'];
 };
 
 export type UpdateOrderStatusInput = {
-  orderId: Scalars['ObjectId']['input'];
+  orderId: Scalars['ObjectID']['input'];
   status: OrderStatus;
 };
 
@@ -226,7 +227,7 @@ export type UpdatePaymentMethodStatusInput = {
 };
 
 export type UpdateProductInput = {
-  _id: Scalars['ObjectId']['input'];
+  _id: Scalars['ObjectID']['input'];
   category: Array<CategoryType>;
   dateAdded?: InputMaybe<Scalars['DateTime']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;

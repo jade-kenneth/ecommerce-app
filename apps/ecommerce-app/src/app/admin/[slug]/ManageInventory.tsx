@@ -97,26 +97,33 @@ export const ManageInventory = () => {
             variables: query.variables,
           });
 
-          if (!cacheResponse) return query.refetch();
+          if (!cacheResponse) {
+            void query.refetch();
+            return;
+          }
 
           apolloClient.writeQuery<ProductsQuery, ProductsQueryVariables>({
             query: ProductsDocument,
             variables: query.variables,
             data: {
+              __typename: 'Query',
               products: {
                 ...cacheResponse.products,
+                totalCount: (cacheResponse.products.totalCount ?? 0) + 1,
                 edges: [
                   {
                     __typename: 'Edge',
-                    cursor: '',
+                    cursor: data._id,
                     node: data,
                   },
                   ...(cacheResponse.products.edges || []),
                 ],
               },
-              __typename: 'Query',
             },
           });
+
+          // Reconcile optimistic row with the canonical server record.
+          void query.refetch();
         }}
       />
 

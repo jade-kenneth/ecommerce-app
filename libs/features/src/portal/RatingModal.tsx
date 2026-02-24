@@ -7,11 +7,11 @@ import { Check, Star, X } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import z from 'zod';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { Button } from '../../../ui/components/Button';
 import { Dialog } from '../../../ui/components/Dialog';
 import { toaster } from '../../../ui/components/ToastContainer';
 import { Checkbox } from '../../../ui/components/ui/Checkbox';
-import { delay } from '../../../utils';
 
 const IMPROVEMENT_OPTIONS = [
   'App design',
@@ -59,6 +59,7 @@ export const RatingModal = () => {
   const ratingStore = useGlobalStore((state) => state.rating);
   const userId = useGlobalStore((state) => state.authenticate.userId);
   const userEmail = useGlobalStore((state) => state.authenticate.email);
+  const license = useLicenseContext();
 
   const form = useForm<RatingFormValues>({
     resolver: zodResolver(ratingFormSchema),
@@ -135,8 +136,8 @@ export const RatingModal = () => {
       toaster.success({
         description: 'Thanks! Your rating was submitted.',
       });
-      await delay(2000);
-      window.location.reload();
+      setRatingModalOpen(false);
+      license.clearLicense();
     } catch (error) {
       console.error('Failed to submit rating:', error);
       toaster.error({ description: 'Failed to submit rating. Please retry.' });

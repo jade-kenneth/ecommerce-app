@@ -3,7 +3,7 @@
 import { Home, LogOut, Package, Settings, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { logout } from '~/providers/AuthProvider';
 
@@ -36,13 +36,25 @@ const sidebarItems: SidebarItem[] = [
   },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  className?: string;
+  onNavigate?: () => void;
+}
+
+export function Sidebar({ className, onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const globalStore = useGlobalStore((state) => state.authenticate);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   return (
-    <aside className="w-[20%] bg-gradient-to-b bg-cyan-600 to-[bg-cyan-700] text-white min-h-screen p-6 flex flex-col">
+    <aside
+      className={`flex h-full flex-col bg-gradient-to-b from-cyan-600 to-cyan-700 p-6 text-white md:min-h-screen ${className ?? ''}`}
+    >
       {/* Logo */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-xl font-bold">
@@ -56,11 +68,13 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 space-y-2">
         {sidebarItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = hasMounted && pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={isActive ? 'page' : undefined}
+              onClick={onNavigate}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                 isActive
                   ? 'bg-white/20 border-2 border-white text-white'
@@ -80,6 +94,7 @@ export function Sidebar() {
         onClick={async () => {
           await logout();
           globalStore.setIsAuthenticated(false);
+          onNavigate?.();
           router.push('/');
         }}
       >

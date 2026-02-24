@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { withLayout } from '~/admin/layout';
+import { withLayout } from '~/admin';
 import { AccountType } from '~/graphql/generated';
 
 interface RootLayoutProps {
@@ -13,5 +13,5 @@ function RootLayout({ children }: RootLayoutProps) {
 }
 
 export default withLayout(RootLayout, {
-  role: [AccountType.Admin],
+  role: [AccountType.Member],
 });

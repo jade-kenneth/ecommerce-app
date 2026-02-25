@@ -11,6 +11,10 @@ const ADMIN_SLUGS: AdminSlugParams[] = [
   { slug: 'settings' },
 ];
 
+export function generateStaticParams(): AdminSlugParams[] {
+  return ADMIN_SLUGS;
+}
+
 export default async function AdminSlugPage({
   params,
 }: {

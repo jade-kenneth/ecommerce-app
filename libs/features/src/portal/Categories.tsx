@@ -10,12 +10,12 @@ export const categoryItems = [
   { name: 'Canned Goods', src: '/canned.png', size: 100 },
   { name: 'Instant Food', src: '/instant.png', size: 140 },
   { name: 'Rice', src: '/rice.png', size: 100 },
-  { name: 'Cooking </br> Essentials', src: '/cooking.png', size: 100 },
-  { name: 'Fresh </br> Produce', src: '/fresh.png', size: 150 },
-  { name: 'Personal </br> Care', src: '/personal.png', size: 150 },
-  { name: 'Household </br> Items ', src: '/household.png', size: 150 },
-  { name: '<p">Sweets & </br>Candies</p>', src: '/sweets.png', size: 150 },
-  { name: 'Health & </br> Wellness', src: '/health.png', size: 150 },
+  { name: 'Cooking Essentials', src: '/cooking.png', size: 100 },
+  { name: 'Fresh Produce', src: '/fresh.png', size: 150 },
+  { name: 'Personal Care', src: '/personal.png', size: 150 },
+  { name: 'Household Items ', src: '/household.png', size: 150 },
+  { name: 'Sweets & Candies', src: '/sweets.png', size: 150 },
+  { name: 'Health & Wellness', src: '/health.png', size: 150 },
   { name: 'Daily Dishes', src: '/dishes.png', size: 150 },
 ];
 

@@ -1,3 +1,4 @@
+/** trigger */
 import Image, { StaticImageData } from 'next/image';
 import { FunctionComponent } from 'react';
 import { Container } from '../../../ui/components/Container';

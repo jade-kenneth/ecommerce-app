@@ -3,7 +3,7 @@
 import { Field } from '@ark-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { Check, Star, X } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import z from 'zod';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
@@ -104,8 +104,8 @@ export const RatingModal = () => {
       improvement: values.improvement.map((item) => item.value),
       customImprovement: values.customImprovement ?? '',
       notify: values.notify,
-      userId: (userId ?? '').trim(),
-      userEmail: (userEmail ?? '').trim(),
+      userId: (userId ?? 'Anonymous').trim(),
+      userEmail: (userEmail ?? 'user@anonymous.test').trim(),
     });
 
     if (!payloadResult.success) {
@@ -163,14 +163,6 @@ export const RatingModal = () => {
                 Your license expired. Tell us how we can improve.
               </Dialog.Description>
             </div>
-            <Dialog.CloseTrigger
-              className="rounded-md p-1.5 text-gray-500 transition hover:bg-gray-100 disabled:cursor-not-allowed"
-              aria-label="Close rating modal"
-              onClick={() => setRatingModalOpen(false)}
-              disabled={isSubmitting}
-            >
-              <X className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Dialog.CloseTrigger>
           </div>
 
           <form

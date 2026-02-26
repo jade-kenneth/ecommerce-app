@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import axios, { type AxiosResponse } from 'axios';
+import type { Metadata } from 'next';
 import ProductDetailsClient from './ProductDetailsClient';
 
 type ProductIdParam = {
@@ -43,7 +43,9 @@ const PRODUCT_IDS_QUERY = `
   }
 `;
 
-function getOfflineFallbackProductStaticParams(reason: string): ProductIdParam[] {
+function getOfflineFallbackProductStaticParams(
+  reason: string,
+): ProductIdParam[] {
   console.warn(
     `Using offline fallback product static params (${reason}). Static export will not include the full product catalog without API access.`,
   );
@@ -55,7 +57,9 @@ async function fetchProductStaticParams(): Promise<ProductIdParam[]> {
   const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
 
   if (!portalApi) {
-    return getOfflineFallbackProductStaticParams('missing NEXT_PUBLIC_PORTAL_API');
+    return getOfflineFallbackProductStaticParams(
+      'missing NEXT_PUBLIC_PORTAL_API',
+    );
   }
 
   const params: ProductIdParam[] = [];
@@ -64,22 +68,23 @@ async function fetchProductStaticParams(): Promise<ProductIdParam[]> {
 
   try {
     while (hasNextPage) {
-      const apiResponse: AxiosResponse<ProductIdsQueryResponse> = await axios.post(
-        portalApi,
-        {
-          query: PRODUCT_IDS_QUERY,
-          variables: {
-            first: 200,
-            after,
+      const apiResponse: AxiosResponse<ProductIdsQueryResponse> =
+        await axios.post(
+          portalApi,
+          {
+            query: PRODUCT_IDS_QUERY,
+            variables: {
+              first: 200,
+              after,
+            },
           },
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 5000,
           },
-          timeout: 5000,
-        },
-      );
+        );
 
       const products = apiResponse.data?.data?.products;
       const edges = products?.edges ?? [];

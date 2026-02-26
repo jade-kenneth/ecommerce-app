@@ -178,7 +178,7 @@ export const useCart = () => {
 
   const setState = useCallback(
     (payload: CartState) => dispatch({ type: 'mergeState', payload }),
-    [state],
+    [],
   );
 
   useEffect(() => {

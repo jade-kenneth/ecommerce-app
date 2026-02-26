@@ -31,15 +31,17 @@ export function createRecipeContext<
     defaultProps: Partial<Props> = {},
   ) {
     const StyledComponent = (props: Props) => {
-      const [recipeProps, localProps] = React.useMemo(() => {
-        return splitProps(props, recipe.variantKeys as string[]);
-      }, [props]);
+      const [recipeProps, localProps] = splitProps(
+        props,
+        recipe.variantKeys as string[],
+      );
 
       const context = recipe(recipeProps);
 
-      const mergedProps = React.useMemo(() => {
-        return mergeProps<GenericProps>(defaultProps, localProps) as Props;
-      }, [localProps]);
+      const mergedProps = mergeProps<GenericProps>(
+        defaultProps,
+        localProps,
+      ) as Props;
 
       return (
         <RecipeContext.Provider value={context}>

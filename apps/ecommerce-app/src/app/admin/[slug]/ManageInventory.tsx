@@ -4,7 +4,7 @@ import { createListCollection, Portal } from '@ark-ui/react';
 
 import { MoreVertical } from 'lucide-react';
 import Image from 'next/image';
-import { Reducer, useMemo, useReducer } from 'react';
+import { Reducer, useReducer } from 'react';
 import { DataTable } from '~/components/DataTable/DataTable';
 import { Badge } from '~/components/ui/Badge';
 import { Menu } from '~/components/ui/Menu';
@@ -52,38 +52,36 @@ export const ManageInventory = () => {
     return query.data.products.edges.map(({ node }) => node);
   }, state);
 
-  const summaryCards = useMemo(() => {
-    const active = query.data?.products.edges.filter(
-      (item) => item.node.status === StatusType.Active,
-    ).length;
-    const discounted = query.data?.products.edges.filter(
-      (item) => (item.node.discount ?? 0) > 0,
-    ).length;
-    const lowStock = query.data?.products.edges.filter(
-      (item) => (item.node.pieces ?? 0) <= 5,
-    ).length;
+  const active = query.data?.products.edges.filter(
+    (item) => item.node.status === StatusType.Active,
+  ).length;
+  const discounted = query.data?.products.edges.filter(
+    (item) => (item.node.discount ?? 0) > 0,
+  ).length;
+  const lowStock = query.data?.products.edges.filter(
+    (item) => (item.node.pieces ?? 0) <= 5,
+  ).length;
 
-    return [
-      {
-        label: 'Total Products',
-        value: numberFormatter.format(query?.data?.products.totalCount ?? 0, {
-          locale: 'en-PH',
-        }),
-      },
-      {
-        label: 'Active Products',
-        value: numberFormatter.format(active, { locale: 'en-PH' }),
-      },
-      {
-        label: 'Discounted',
-        value: numberFormatter.format(discounted, { locale: 'en-PH' }),
-      },
-      {
-        label: 'Low Stock',
-        value: numberFormatter.format(lowStock, { locale: 'en-PH' }),
-      },
-    ];
-  }, [query.data]);
+  const summaryCards = [
+    {
+      label: 'Total Products',
+      value: numberFormatter.format(query?.data?.products.totalCount ?? 0, {
+        locale: 'en-PH',
+      }),
+    },
+    {
+      label: 'Active Products',
+      value: numberFormatter.format(active, { locale: 'en-PH' }),
+    },
+    {
+      label: 'Discounted',
+      value: numberFormatter.format(discounted, { locale: 'en-PH' }),
+    },
+    {
+      label: 'Low Stock',
+      value: numberFormatter.format(lowStock, { locale: 'en-PH' }),
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">

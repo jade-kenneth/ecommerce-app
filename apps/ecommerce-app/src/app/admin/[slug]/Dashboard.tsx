@@ -22,56 +22,53 @@ export const Dashboard = () => {
     fetchPolicy: 'network-only',
   });
   const router = useRouter();
-  const stats = useMemo(() => {
-    const totalProducts = productsQuery.data?.products.totalCount ?? 0;
-    const orders = ordersQuery.data?.myOrders ?? [];
-    const totalOrders = orders.length;
-    const totalRevenue = orders.reduce(
-      (sum, order) => sum + safeParseFloat(order.total, 0),
-      0,
-    );
-    const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-    const pendingOrders = orders.filter(
-      (order) => order.status === OrderStatus.Pending,
-    ).length;
+  const totalProducts = productsQuery.data?.products.totalCount ?? 0;
+  const orders = ordersQuery.data?.myOrders ?? [];
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce(
+    (sum, order) => sum + safeParseFloat(order.total, 0),
+    0,
+  );
+  const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
+  const pendingOrders = orders.filter(
+    (order) => order.status === OrderStatus.Pending,
+  ).length;
 
-    return [
-      {
-        title: 'Total Revenue',
-        value: `₱${numberFormatter.format(totalRevenue, { locale: 'en-PH' })}`,
-        helper: `${totalOrders} order${totalOrders === 1 ? '' : 's'}`,
-        icon: TrendingUp,
-      },
-      {
-        title: 'Orders',
-        value: numberFormatter.format(totalOrders, { locale: 'en-PH' }),
-        helper: `${pendingOrders} pending`,
-        icon: ShoppingCart,
-      },
-      {
-        title: 'Products',
-        value: numberFormatter.format(totalProducts, { locale: 'en-PH' }),
-        helper: 'Active catalog count',
-        icon: Package,
-      },
-      {
-        title: 'Avg Order Value',
-        value: `₱${numberFormatter.format(avgOrderValue, { locale: 'en-PH' })}`,
-        helper: 'Based on total orders',
-        icon: TrendingUp,
-      },
-    ];
-  }, [productsQuery.data, ordersQuery.data]);
+  const stats = [
+    {
+      title: 'Total Revenue',
+      value: `₱${numberFormatter.format(totalRevenue, { locale: 'en-PH' })}`,
+      helper: `${totalOrders} order${totalOrders === 1 ? '' : 's'}`,
+      icon: TrendingUp,
+    },
+    {
+      title: 'Orders',
+      value: numberFormatter.format(totalOrders, { locale: 'en-PH' }),
+      helper: `${pendingOrders} pending`,
+      icon: ShoppingCart,
+    },
+    {
+      title: 'Products',
+      value: numberFormatter.format(totalProducts, { locale: 'en-PH' }),
+      helper: 'Active catalog count',
+      icon: Package,
+    },
+    {
+      title: 'Avg Order Value',
+      value: `₱${numberFormatter.format(avgOrderValue, { locale: 'en-PH' })}`,
+      helper: 'Based on total orders',
+      icon: TrendingUp,
+    },
+  ];
 
   const recentOrders = useMemo(() => {
-    const orders = ordersQuery.data?.myOrders ?? [];
     return [...orders]
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
       .slice(0, 5);
-  }, [ordersQuery.data]);
+  }, [orders]);
 
   return (
     <>

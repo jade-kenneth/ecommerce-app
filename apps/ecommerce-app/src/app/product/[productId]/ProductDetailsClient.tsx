@@ -4,7 +4,6 @@ import { ShoppingCart } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
 import { Badge, Button, Cards, Spinner, toaster } from '~/components';
 import { Sticky } from '~/components/Sticky';
 import { Footer, Highlight } from '~/features/portal';
@@ -105,11 +104,8 @@ export default function ProductDetailsClient({
   const finalPrice = product ? product.price - discountAmount : 0;
   const isInStock = (product?.pieces ?? 0) > 0;
 
-  const relatedProducts = useMemo(() => {
-    return (
-      relatedProductsQuery.data?.products.edges.map((edge) => edge.node) ?? []
-    );
-  }, [relatedProductsQuery.data]);
+  const relatedProducts =
+    relatedProductsQuery.data?.products.edges.map((edge) => edge.node) ?? [];
 
   return (
     <>

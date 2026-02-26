@@ -1,7 +1,7 @@
 'use client';
 
 import { differenceInSeconds, intervalToDuration } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { LICENSE_CODE_LOCAL_STORAGE_KEY } from '~/utils/constant';
 
@@ -78,10 +78,9 @@ export const LicenseTimer = () => {
     };
   }, []);
 
-  const remainingSeconds = useMemo(() => {
-    if (!expiresAt) return null;
-    return Math.max(0, differenceInSeconds(expiresAt, now));
-  }, [expiresAt, now]);
+  const remainingSeconds = !expiresAt
+    ? null
+    : Math.max(0, differenceInSeconds(expiresAt, now));
 
   useEffect(() => {
     if (!expiresAt) return;

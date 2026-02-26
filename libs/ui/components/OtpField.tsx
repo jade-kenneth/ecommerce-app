@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useControllableState } from '~/hooks/useControllableState';
 import { PinInput } from './ui/PinInput';
 
@@ -20,11 +19,9 @@ export function OtpField(props: OtpFieldProps) {
     onChange: props.onChange,
   });
 
-  const arrayValue = useMemo(() => {
-    return Array.from({ length: 9 }, () => '').map(
-      (v, idx) => value.charAt(idx) || v,
-    );
-  }, [value]);
+  const arrayValue = Array.from({ length: 9 }, () => '').map(
+    (v, idx) => value.charAt(idx) || v,
+  );
 
   return (
     <PinInput.Root

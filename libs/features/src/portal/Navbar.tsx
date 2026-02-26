@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FunctionComponent, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import {
@@ -70,9 +70,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ logoSrc }) => {
 
     skip: !shouldSearch,
   });
-  const searchResults = useMemo(() => {
-    return productsQuery.data?.searchProductByName?.map((node) => node) ?? [];
-  }, [normalizedSearch, productsQuery.data, shouldSearch]);
+  const searchResults = productsQuery.data?.searchProductByName ?? [];
 
   const ordersQuery = useMyOrdersQuery({
     skip:

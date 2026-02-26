@@ -1,9 +1,9 @@
 'use client';
 import { UseFileUploadProps } from '@ark-ui/react';
 
-import Image from 'next/image';
-import { useCallback, useMemo, useRef } from 'react';
 import { UploadCloud } from 'lucide-react';
+import Image from 'next/image';
+import { useCallback, useRef } from 'react';
 
 import { useControllableState } from '~/hooks/useControllableState';
 import { uploadFile } from '~/utils/uploadFile';
@@ -19,16 +19,16 @@ export function UploadFile(props: UploadFileProps) {
     defaultValue: [],
   });
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const preview = useMemo(() => value?.[0], [value]);
+  const preview = value?.[0];
   const hasPreview = Boolean(preview);
 
-  const handleOpenPicker = useCallback(() => {
+  const handleOpenPicker = () => {
     triggerRef.current?.click();
-  }, []);
+  };
 
-  const handleClear = useCallback(() => {
+  const handleClear = () => {
     setValue([]);
-  }, [setValue]);
+  };
 
   const handleFileChange = useCallback(
     async (details: { acceptedFiles: File[] }) => {
@@ -76,7 +76,12 @@ export function UploadFile(props: UploadFileProps) {
 
         {hasPreview && (
           <div className="relative w-full h-full  rounded-md overflow-hidden">
-            <Image src={preview} alt="thumbnail" fill className="object-cover" />
+            <Image
+              src={preview}
+              alt="thumbnail"
+              fill
+              className="object-cover"
+            />
 
             <div
               aria-label="overlay"

@@ -84,4 +84,4 @@ And join the Nx community:
 
 - create a package for object-id and object-type
 
-## trigger
+## trigger x2

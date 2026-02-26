@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   description:
     'Amy Store ecommerce app for shopping, checkout, and order tracking.',
   applicationName: 'Amy Store',
+  verification: {
+    google: 'jojN1BJdPqWwW9QxYEXfV3CXAZ6zGju9yGUO9FX67As',
+  },
 };
 
 export default function RootLayout({
@@ -32,10 +35,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta
-          name="google-site-verification"
-          content="jojN1BJdPqWwW9QxYEXfV3CXAZ6zGju9yGUO9FX67As"
-        />
         <Script id="gtm-base" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

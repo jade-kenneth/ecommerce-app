@@ -10,8 +10,9 @@ import { Layout } from '~/features/portal/layout/Layout';
 import { HomeProductSections } from './HomeProductSections';
 
 export const metadata: Metadata = {
-  title: 'Home',
-  description: 'Browse featured categories, promos, and top products on Amy.',
+  title: 'Home | Amy Store',
+  description:
+    'Browse featured categories, promos, and top products on Amy Store.',
 };
 
 export default function Index() {

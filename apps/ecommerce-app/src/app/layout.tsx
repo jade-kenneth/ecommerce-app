@@ -22,6 +22,11 @@ export const metadata: Metadata = {
   description:
     'Amy Store ecommerce app for shopping, checkout, and order tracking.',
   applicationName: 'Amy Store',
+  icons: {
+    icon: '/Logo.png',
+    shortcut: '/Logo.png',
+    apple: '/Logo.png',
+  },
   verification: {
     google: 'jojN1BJdPqWwW9QxYEXfV3CXAZ6zGju9yGUO9FX67As',
   },
@@ -42,6 +47,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TPVR9TRQ');`}
         </Script>
+        <Script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Amy Store',
+              url: 'https://amy-store.site',
+              logo: 'https://amy-store.site/Logo.png',
+            }),
+          }}
+        />
       </head>
       <body className={`${inter.className} w-full`}>
         <noscript>

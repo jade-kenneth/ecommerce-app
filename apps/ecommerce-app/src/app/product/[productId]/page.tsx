@@ -1,28 +1,24 @@
 import axios, { type AxiosResponse } from 'axios';
 import type { Metadata } from 'next';
+import Script from 'next/script';
+import { ProductCoreDataFragment } from '~/graphql/generated';
 import ProductDetailsClient from './ProductDetailsClient';
 
-type ProductIdParam = {
-  productId: string;
-};
+type ProductIdParam = { productId: string };
 
-const OFFLINE_FALLBACK_PRODUCT_PARAMS: ProductIdParam[] = [
-  { productId: 'offline-placeholder' },
-];
+interface Paginated<T> {
+  pageInfo: {
+    hasNextPage: boolean;
+    endCursor: string | null;
+  };
+  edges: Array<{
+    node: T;
+  }>;
+}
 
-type ProductIdsQueryResponse = {
+type ProductQueryResponse = {
   data?: {
-    products?: {
-      edges?: Array<{
-        node?: {
-          _id?: string | null;
-        } | null;
-      }>;
-      pageInfo?: {
-        hasNextPage?: boolean | null;
-        endCursor?: string | null;
-      } | null;
-    } | null;
+    products?: Paginated<ProductCoreDataFragment> | null;
   };
   errors?: Array<{ message?: string }>;
 };
@@ -36,89 +32,43 @@ const PRODUCT_IDS_QUERY = `
       }
       edges {
         node {
-          _id
+          ... on Product {
+            _id
+            name
+            thumbnail
+            price
+            pieces
+          }
         }
       }
     }
   }
 `;
 
-function getOfflineFallbackProductStaticParams(
-  reason: string,
-): ProductIdParam[] {
-  console.warn(
-    `Using offline fallback product static params (${reason}). Static export will not include the full product catalog without API access.`,
-  );
-
-  return OFFLINE_FALLBACK_PRODUCT_PARAMS;
-}
-
-async function fetchProductStaticParams(): Promise<ProductIdParam[]> {
+async function fetchProduct(productId: string) {
   const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
-
-  if (!portalApi) {
-    return getOfflineFallbackProductStaticParams(
-      'missing NEXT_PUBLIC_PORTAL_API',
-    );
-  }
-
-  const params: ProductIdParam[] = [];
-  let after: string | null = null;
-  let hasNextPage = true;
+  if (!portalApi) return null;
 
   try {
-    while (hasNextPage) {
-      const apiResponse: AxiosResponse<ProductIdsQueryResponse> =
-        await axios.post(
-          portalApi,
-          {
-            query: PRODUCT_IDS_QUERY,
-            variables: {
-              first: 200,
-              after,
-            },
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            timeout: 5000,
-          },
-        );
+    const { data }: AxiosResponse<ProductQueryResponse> = await axios.post(
+      portalApi,
+      {
+        query: PRODUCT_IDS_QUERY,
+        variables: { filter: { _id: productId }, first: 1 },
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 8000,
+      },
+    );
 
-      const products = apiResponse.data?.data?.products;
-      const edges = products?.edges ?? [];
+    const product = data?.data?.products?.edges[0]?.node ?? null;
 
-      params.push(
-        ...edges
-          .map((edge) => edge?.node?._id)
-          .filter((id): id is string => typeof id === 'string' && id.length > 0)
-          .map((productId) => ({ productId })),
-      );
-
-      const pageInfo = products?.pageInfo;
-      hasNextPage = Boolean(pageInfo?.hasNextPage);
-      after = pageInfo?.endCursor ?? null;
-
-      if (!after && hasNextPage) {
-        // Defensive break for malformed pagination responses.
-        break;
-      }
-    }
-  } catch (error) {
-    console.error('Failed to generate static params for products:', error);
-    return getOfflineFallbackProductStaticParams('API request failed');
+    return product;
+  } catch (e) {
+    console.error('Failed to fetch product for JSON-LD:', e);
+    return null;
   }
-
-  if (params.length === 0) {
-    return getOfflineFallbackProductStaticParams('empty product ID result');
-  }
-
-  return params;
-}
-
-export async function generateStaticParams(): Promise<ProductIdParam[]> {
-  return fetchProductStaticParams();
 }
 
 export async function generateMetadata({
@@ -126,11 +76,28 @@ export async function generateMetadata({
 }: {
   params: Promise<ProductIdParam>;
 }): Promise<Metadata> {
-  const resolvedParams = await params;
+  const { productId } = await params;
+
+  const product = await fetchProduct(productId);
+
+  const title = product?.name
+    ? `${product.name} | Amy`
+    : 'Product Details | Amy';
+  const description = `View product details, pricing, and availability for item ${productId} on Amy.`;
 
   return {
-    title: 'Product Details',
-    description: `View product details, pricing, and availability for item ${resolvedParams.productId} on Amy.`,
+    title,
+    description,
+    alternates: {
+      canonical: `https://yourdomain.com/products/${productId}`,
+    },
+    openGraph: product?.thumbnail
+      ? {
+          title,
+          description,
+          images: [{ url: product.thumbnail }],
+        }
+      : undefined,
   };
 }
 
@@ -139,7 +106,48 @@ export default async function ProductDetailsPage({
 }: {
   params: Promise<ProductIdParam>;
 }) {
-  const resolvedParams = await params;
+  const { productId } = await params;
 
-  return <ProductDetailsClient productId={resolvedParams.productId} />;
+  const product = await fetchProduct(productId);
+
+  const structuredData = product
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        image: [product.thumbnail],
+        description:
+          'View product details, pricing, and availability for this item on Amy Store.',
+
+        brand: {
+          '@type': 'Brand',
+          name: 'Amy Store',
+        },
+        offers: {
+          '@type': 'Offer',
+          url: `https://yourdomain.com/products/${productId}`,
+          priceCurrency: 'PHP',
+          price: String(product.price),
+          availability:
+            product.pieces < 0
+              ? 'https://schema.org/OutOfStock'
+              : 'https://schema.org/InStock',
+          itemCondition: 'https://schema.org/NewCondition',
+        },
+      }
+    : null;
+
+  return (
+    <>
+      {structuredData ? (
+        <Script
+          id="product-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      ) : null}
+
+      <ProductDetailsClient productId={productId} />
+    </>
+  );
 }

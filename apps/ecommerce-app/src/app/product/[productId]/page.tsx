@@ -91,7 +91,7 @@ async function fetchProduct(productId?: string) {
 }
 
 export async function generateStaticParams(): Promise<ProductIdParam[]> {
-  const products = await fetchProducts({ first: 5 });
+  const products = await fetchProducts({ first: 100 });
   return products.map((product) => ({ productId: product._id }));
 }
 

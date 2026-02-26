@@ -45,7 +45,7 @@ const PRODUCT_IDS_QUERY = `
   }
 `;
 
-async function fetchProduct(productId: string) {
+async function fetchProduct(productId?: string) {
   const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
   if (!portalApi) return null;
 
@@ -54,7 +54,10 @@ async function fetchProduct(productId: string) {
       portalApi,
       {
         query: PRODUCT_IDS_QUERY,
-        variables: { filter: { _id: productId }, first: 1 },
+        variables: {
+          ...(productId && { filter: { _id: productId } }),
+          first: 1,
+        },
       },
       {
         headers: { 'Content-Type': 'application/json' },
@@ -69,6 +72,10 @@ async function fetchProduct(productId: string) {
     console.error('Failed to fetch product for JSON-LD:', e);
     return null;
   }
+}
+
+export async function generateStaticParams(): Promise<ProductCoreDataFragment | null> {
+  return await fetchProduct();
 }
 
 export async function generateMetadata({

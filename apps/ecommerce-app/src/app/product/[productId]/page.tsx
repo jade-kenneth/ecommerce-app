@@ -1,4 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
+import { print } from 'graphql';
+import gql from 'graphql-tag';
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { ProductCoreDataFragment } from '~/graphql/generated';
@@ -23,9 +25,13 @@ type ProductQueryResponse = {
   errors?: Array<{ message?: string }>;
 };
 
-const PRODUCT_IDS_QUERY = `
-  query ProductStaticParams($first: Int, $after: Cursor) {
-    products(first: $first, after: $after) {
+const PRODUCTS_QUERY = gql`
+  query ProductsForProductPage(
+    $first: Int
+    $after: Cursor
+    $filter: ProductsFilterInput
+  ) {
+    products(first: $first, after: $after, filter: $filter) {
       pageInfo {
         hasNextPage
         endCursor
@@ -45,18 +51,25 @@ const PRODUCT_IDS_QUERY = `
   }
 `;
 
-async function fetchProduct(productId?: string) {
-  const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
-  if (!portalApi) return null;
+async function fetchProducts(options?: {
+  productId?: string;
+  first?: number;
+}): Promise<ProductCoreDataFragment[]> {
+  const portalApi = process.env.NEXT_PUBLIC_PORTAL_API!;
+  const { productId, first = 1 } = options ?? {};
 
   try {
     const { data }: AxiosResponse<ProductQueryResponse> = await axios.post(
       portalApi,
       {
-        query: PRODUCT_IDS_QUERY,
+        query: print(PRODUCTS_QUERY),
         variables: {
-          ...(productId && { filter: { _id: productId } }),
-          first: 1,
+          first,
+          ...(productId
+            ? {
+                filter: { _id: { equal: productId } },
+              }
+            : {}),
         },
       },
       {
@@ -65,17 +78,21 @@ async function fetchProduct(productId?: string) {
       },
     );
 
-    const product = data?.data?.products?.edges[0]?.node ?? null;
-
-    return product;
+    return data?.data?.products?.edges.map(({ node }) => node) ?? [];
   } catch (e) {
-    console.error('Failed to fetch product for JSON-LD:', e);
-    return null;
+    console.error('Failed to fetch products for product page metadata:', e);
+    return [];
   }
 }
 
-export async function generateStaticParams(): Promise<ProductCoreDataFragment | null> {
-  return await fetchProduct();
+async function fetchProduct(productId?: string) {
+  const [product] = await fetchProducts({ productId, first: 1 });
+  return product ?? null;
+}
+
+export async function generateStaticParams(): Promise<ProductIdParam[]> {
+  const products = await fetchProducts({ first: 5 });
+  return products.map((product) => ({ productId: product._id }));
 }
 
 export async function generateMetadata({
@@ -96,7 +113,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `https://yourdomain.com/products/${productId}`,
+      canonical: `/product/${productId}`,
     },
     openGraph: product?.thumbnail
       ? {
@@ -132,11 +149,11 @@ export default async function ProductDetailsPage({
         },
         offers: {
           '@type': 'Offer',
-          url: `https://yourdomain.com/products/${productId}`,
+          url: `/product/${productId}`,
           priceCurrency: 'PHP',
           price: String(product.price),
           availability:
-            product.pieces < 0
+            product.pieces <= 0
               ? 'https://schema.org/OutOfStock'
               : 'https://schema.org/InStock',
           itemCondition: 'https://schema.org/NewCondition',

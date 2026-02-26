@@ -90,11 +90,6 @@ async function fetchProduct(productId?: string) {
   return product ?? null;
 }
 
-export async function generateStaticParams(): Promise<ProductIdParam[]> {
-  const products = await fetchProducts({ first: 100 });
-  return products.map((product) => ({ productId: product._id }));
-}
-
 export async function generateMetadata({
   params,
 }: {

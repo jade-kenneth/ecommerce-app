@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     default: 'Amy Store',
     template: '%s | Amy Store',
   },
+  metadataBase: new URL('https://amy-store.site'),
   description:
     'Amy Store ecommerce app for shopping, checkout, and order tracking.',
   applicationName: 'Amy Store',

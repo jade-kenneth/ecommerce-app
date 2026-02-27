@@ -26,6 +26,19 @@ query Products($first: Int, $after: Cursor, $filter: ProductsFilterInput) {
   }
 }
 
+query ProductReviews($productId: ObjectID!) {
+  productReviews(productId: $productId) {
+    _id
+    productId
+    accountId
+    orderId
+    rating
+    message
+    createdAt
+    updatedAt
+  }
+}
+
 mutation CreateProduct($input: CreateProductInput!) {
   createProduct(input: $input)
 }

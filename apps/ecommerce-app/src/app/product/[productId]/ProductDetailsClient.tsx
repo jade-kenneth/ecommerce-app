@@ -1,6 +1,6 @@
 'use client';
 
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -10,10 +10,12 @@ import { Footer, Highlight } from '~/features/portal';
 import { useCartContext } from '~/features/portal/Cart/CartContext';
 import { Layout } from '~/features/portal/layout/Layout';
 import {
+  useProductReviewsQuery,
   useProductsQuery,
   useUpdateCartItemMutation,
 } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 
@@ -47,6 +49,13 @@ export default function ProductDetailsClient({
       },
     },
   });
+
+  const productReviewsQuery = useProductReviewsQuery({
+    variables: {
+      productId,
+    },
+  });
+  console.log(productReviewsQuery, 'reviews data');
 
   const product = data?.products.edges?.[0]?.node;
   const isProductLoading = loading;
@@ -111,6 +120,16 @@ export default function ProductDetailsClient({
 
   const relatedProducts =
     relatedProductsQuery.data?.products.edges.map((edge) => edge.node) ?? [];
+  const reviews = productReviewsQuery.data?.productReviews ?? [];
+
+  const sortedReviews = [...reviews].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : 0;
+  const roundedAverageRating = Math.round(averageRating);
 
   return (
     <>
@@ -275,6 +294,101 @@ export default function ProductDetailsClient({
               </div>
 
               <div className="flex flex-col gap-6">
+                <div className="rounded-3xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <p className="text-xl font-semibold text-gray-900">
+                      Customer Reviews
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {reviews.length} review{reviews.length === 1 ? '' : 's'}
+                    </p>
+                  </div>
+
+                  {productReviewsQuery.loading && (
+                    <div className="flex justify-center py-10">
+                      <Spinner className="h-10" />
+                    </div>
+                  )}
+
+                  {!productReviewsQuery.loading && reviews.length === 0 && (
+                    <div className="mt-4 rounded-2xl border border-gray-100 bg-gray-50 p-5 text-sm text-gray-500">
+                      No reviews yet for this product.
+                    </div>
+                  )}
+
+                  {!productReviewsQuery.loading && reviews.length > 0 && (
+                    <div className="mt-5 grid gap-4 lg:grid-cols-[220px_1fr]">
+                      <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                        <p className="text-3xl font-semibold text-gray-900">
+                          {averageRating.toFixed(1)}
+                        </p>
+                        <div className="mt-2 flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((value) => (
+                            <Star
+                              key={value}
+                              className={
+                                value <= roundedAverageRating
+                                  ? 'h-5 w-5 fill-cyan-400 text-cyan-400'
+                                  : 'h-5 w-5 text-gray-300'
+                              }
+                            />
+                          ))}
+                        </div>
+                        <p className="mt-2 text-xs text-gray-500">
+                          Based on {reviews.length} verified purchase review
+                          {reviews.length === 1 ? '' : 's'}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col gap-3">
+                        {sortedReviews.map((review) => {
+                          const message = review.message?.trim() ?? '';
+                          const formattedDate =
+                            formatDate(review.createdAt, 'MMM dd, yyyy') ||
+                            'Recent';
+
+                          return (
+                            <div
+                              key={review._id}
+                              className="rounded-2xl border border-gray-100 bg-white p-4"
+                            >
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-1">
+                                  {[1, 2, 3, 4, 5].map((value) => (
+                                    <Star
+                                      key={value}
+                                      className={
+                                        value <= review.rating
+                                          ? 'h-4 w-4 fill-cyan-400 text-cyan-400'
+                                          : 'h-4 w-4 text-gray-300'
+                                      }
+                                    />
+                                  ))}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  {review.orderId && (
+                                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                                      Verified purchase
+                                    </span>
+                                  )}
+                                  <span className="text-xs text-gray-400">
+                                    {formattedDate}
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="mt-2 text-sm text-gray-700">
+                                {message.length > 0
+                                  ? message
+                                  : 'No written feedback.'}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex items-center justify-between">
                   <p className="text-xl font-semibold text-gray-900">
                     Related Products

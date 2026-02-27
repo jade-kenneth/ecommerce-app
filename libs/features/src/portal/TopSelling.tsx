@@ -7,6 +7,8 @@ export const TopSelling = () => {
   const context = useLicenseContext();
   const { data } = useProductsQuery({
     skip: !context.isLicensed,
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   });
 
   return (

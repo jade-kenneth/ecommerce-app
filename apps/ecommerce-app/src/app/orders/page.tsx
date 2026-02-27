@@ -146,7 +146,7 @@ export default function OrdersPage() {
 
   const visibleOrders = useMemo(() => {
     if (activeTab === 'ALL') return orders;
-    return orders.filter((order) => order.status === activeTab);
+    return orders.filter((order) => order.status === activeTab).reverse();
   }, [activeTab, orders]);
 
   const activeTabLabel =
@@ -403,9 +403,9 @@ export default function OrdersPage() {
                         const itemRating = Number.isFinite(itemRatingRaw)
                           ? Math.min(5, Math.max(0, Math.round(itemRatingRaw)))
                           : 0;
-                        const hasItemRating = itemRating > 0;
+                        const hasOrderRating = itemRating > 0;
                         const hasLockedRating =
-                          itemFeedbackDraft.isSubmitted || hasItemRating;
+                          itemFeedbackDraft.isSubmitted || hasOrderRating;
                         const readonlyRating = itemFeedbackDraft.isSubmitted
                           ? itemFeedbackDraft.rating
                           : itemRating;
@@ -457,11 +457,7 @@ export default function OrdersPage() {
                                 </p>
                               </div>
 
-                              <Show
-                                when={
-                                  isCompleted && !hasLockedRating
-                                }
-                              >
+                              <Show when={isCompleted && !hasLockedRating}>
                                 <div className="sm:ml-auto">
                                   <Button
                                     variant="solid"
@@ -537,7 +533,9 @@ export default function OrdersPage() {
                                           })
                                         }
                                         maxLength={200}
-                                        disabled={itemFeedbackDraft.isSubmitting}
+                                        disabled={
+                                          itemFeedbackDraft.isSubmitting
+                                        }
                                       />
 
                                       <div className="mt-2 flex items-center justify-between gap-2">
@@ -554,10 +552,14 @@ export default function OrdersPage() {
                                               itemKey,
                                             })
                                           }
-                                          disabled={itemFeedbackDraft.isSubmitting}
+                                          disabled={
+                                            itemFeedbackDraft.isSubmitting
+                                          }
                                         >
                                           <Show
-                                            when={itemFeedbackDraft.isSubmitting}
+                                            when={
+                                              itemFeedbackDraft.isSubmitting
+                                            }
                                             fallback="Submit"
                                           >
                                             Submitting...
@@ -586,9 +588,7 @@ export default function OrdersPage() {
                                         );
                                       })}
                                     </div>
-                                    <Show
-                                      when={readonlyMessage.length > 0}
-                                    >
+                                    <Show when={readonlyMessage.length > 0}>
                                       <p className="mt-2 text-xs text-gray-600">
                                         {readonlyMessage}
                                       </p>

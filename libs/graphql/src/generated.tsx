@@ -591,6 +591,25 @@ export type ProductsQuery = {
   };
 };
 
+export type ProductReviewsQueryVariables = Exact<{
+  productId: Scalars['ObjectID']['input'];
+}>;
+
+export type ProductReviewsQuery = {
+  __typename: 'Query';
+  productReviews: Array<{
+    __typename: 'ProductReview';
+    _id: string;
+    productId: string;
+    accountId: string;
+    orderId?: string | null;
+    rating: number;
+    message?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+};
+
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
@@ -1695,6 +1714,104 @@ export type ProductsQueryResult = Apollo.QueryResult<
 >;
 export function refetchProductsQuery(variables?: ProductsQueryVariables) {
   return { query: ProductsDocument, variables: variables };
+}
+export const ProductReviewsDocument = /*#__PURE__*/ gql`
+  query ProductReviews($productId: ObjectID!) {
+    productReviews(productId: $productId) {
+      _id
+      productId
+      accountId
+      orderId
+      rating
+      message
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export function useProductReviewsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProductReviewsQuery,
+    ProductReviewsQueryVariables
+  > &
+    (
+      | { variables: ProductReviewsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ProductReviewsQuery, ProductReviewsQueryVariables>(
+    ProductReviewsDocument,
+    options,
+  );
+}
+export function useProductReviewsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProductReviewsQuery,
+    ProductReviewsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ProductReviewsQuery, ProductReviewsQueryVariables>(
+    ProductReviewsDocument,
+    options,
+  );
+}
+// @ts-ignore
+export function useProductReviewsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ProductReviewsQuery,
+        ProductReviewsQueryVariables
+      >,
+): Apollo.UseSuspenseQueryResult<
+  ProductReviewsQuery | undefined,
+  ProductReviewsQueryVariables
+>;
+export function useProductReviewsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProductReviewsQuery,
+    ProductReviewsQueryVariables
+  >,
+): Apollo.UseSuspenseQueryResult<
+  ProductReviewsQuery,
+  ProductReviewsQueryVariables
+>;
+export function useProductReviewsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ProductReviewsQuery,
+        ProductReviewsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<ProductReviewsQuery, ProductReviewsQueryVariables>(
+    ProductReviewsDocument,
+    options,
+  );
+}
+export type ProductReviewsQueryHookResult = ReturnType<
+  typeof useProductReviewsQuery
+>;
+export type ProductReviewsLazyQueryHookResult = ReturnType<
+  typeof useProductReviewsLazyQuery
+>;
+export type ProductReviewsSuspenseQueryHookResult = ReturnType<
+  typeof useProductReviewsSuspenseQuery
+>;
+export type ProductReviewsQueryResult = Apollo.QueryResult<
+  ProductReviewsQuery,
+  ProductReviewsQueryVariables
+>;
+export function refetchProductReviewsQuery(
+  variables: ProductReviewsQueryVariables,
+) {
+  return { query: ProductReviewsDocument, variables: variables };
 }
 export const CreateProductDocument = /*#__PURE__*/ gql`
   mutation CreateProduct($input: CreateProductInput!) {

@@ -11,10 +11,8 @@ export class ProductReviewsResolver {
   constructor(private readonly productReviewsService: ProductReviewsService) {}
 
   @Query('productReviews')
-  async productReviews(@Args('productId') productId: string) {
-    return this.productReviewsService.productReviewsByProductId(
-      new Types.ObjectId(productId),
-    );
+  async productReviews(@Args('productId') productId: Types.ObjectId) {
+    return this.productReviewsService.productReviewsByProductId(productId);
   }
 
   @Mutation('createProductReview')

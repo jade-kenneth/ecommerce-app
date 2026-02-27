@@ -157,6 +157,8 @@ export class CheckoutService {
       tax: calculatedSummary.tax,
       shippingFee: calculatedSummary.shippingFee,
       total: calculatedSummary.total,
+      message: '',
+      rating: 0,
       status: OrderStatus.PENDING,
       createdAt: now,
       updatedAt: now,

@@ -238,9 +238,8 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                   const res = await mutate({
                     variables: {
                       input: {
-                        amount: formatPaymentAmount(
-                          totalAmountWithShippingAndTax,
-                        ),
+                        amount:
+                          totalAmountWithShippingAndTax as unknown as string,
                         failureUrl:
                           Capacitor.getPlatform() === 'web'
                             ? failureUrl
@@ -254,11 +253,15 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                       },
                     },
                   });
-
+                  console.log('Redirecting to checkout URL:', res.data);
                   const checkoutUrl =
                     res.data?.createGcashPayment?.actions?.[0]?.value;
                   if (checkoutUrl) {
-                    await Browser.open({ url: checkoutUrl });
+                    if (Capacitor.getPlatform() === 'web') {
+                      window.location.href = checkoutUrl;
+                    } else {
+                      await Browser.open({ url: checkoutUrl });
+                    }
                   }
                 }
               }}

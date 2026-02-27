@@ -72,6 +72,9 @@ type Order {
   shippingFee: String!
   total: String!
 
+  message: String
+  rating: Int
+
   status: OrderStatus!
   createdAt: String!
 }
@@ -93,7 +96,9 @@ input RemoveFromCartInput {
 
 input UpdateOrderStatusInput {
   orderId: ObjectId!
-  status: OrderStatus!
+  status: OrderStatus
+  message: String
+  rating: Int
 }
 
 input UpdateShippingMethodStatusInput {

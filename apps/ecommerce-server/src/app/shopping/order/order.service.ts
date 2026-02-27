@@ -1,8 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { isNil } from 'es-toolkit/compat';
 import { Types } from 'mongoose';
 import { Tokens } from '../../../types/tokens';
-import { OrderStatus, PaymentMethodType } from '../../__generated/graphql-types';
+import {
+  OrderStatus,
+  PaymentMethodType,
+} from '../../__generated/graphql-types';
 import { PaymentsService } from '../../payments/payments.service';
 import { Order, OrdersRepository } from './repositories/orders.repository';
 
@@ -27,7 +31,9 @@ export class OrderService {
 
   public async updateOrderStatus(params: {
     orderId: Types.ObjectId;
-    status: OrderStatus;
+    status?: OrderStatus | null;
+    rating?: number | null;
+    message?: string | null;
   }): Promise<Order> {
     const order = await this.orders.find(params.orderId);
 
@@ -35,28 +41,62 @@ export class OrderService {
       throw new Error('Order not found');
     }
 
+    const hasStatusUpdate = !isNil(params.status);
+    const hasRatingUpdate = !isNil(params.rating);
+    const hasMessageUpdate = !isNil(params.message);
+
+    if (!hasStatusUpdate && !hasRatingUpdate && !hasMessageUpdate) {
+      throw new Error('No order update fields were provided');
+    }
+
+    const nextStatus = hasStatusUpdate ? params.status : order.status;
     const updatedAt = new Date();
     const shouldSendPurchaseEvent =
+      hasStatusUpdate &&
       ![OrderStatus.PAID, OrderStatus.COMPLETED].includes(order.status) &&
-      [OrderStatus.PAID, OrderStatus.COMPLETED].includes(params.status);
+      [OrderStatus.PAID, OrderStatus.COMPLETED].includes(nextStatus);
 
     const shouldVerifyPayment =
-      [OrderStatus.PAID, OrderStatus.COMPLETED].includes(params.status) &&
+      hasStatusUpdate &&
+      [OrderStatus.PAID, OrderStatus.COMPLETED].includes(nextStatus) &&
       order.paymentMethod?.type === PaymentMethodType.GCASH;
 
     if (shouldVerifyPayment) {
       await this.assertPaymentVerified(order);
     }
 
-    await this.orders.update(params.orderId, {
-      status: params.status,
+    let rating: number | undefined;
+    if (hasRatingUpdate) {
+      const value = Number(params.rating);
+      if (!Number.isFinite(value) || value < 0 || value > 5) {
+        throw new Error('Rating must be between 0 and 5');
+      }
+      rating = value;
+    }
+
+    const message = hasMessageUpdate ? params.message.trim() : undefined;
+
+    const updatePayload: Partial<Order> = {
       updatedAt,
+    };
+
+    if (hasStatusUpdate) {
+      updatePayload.status = nextStatus;
+    }
+    if (!isNil(rating)) {
+      updatePayload.rating = rating;
+    }
+    if (!isNil(message)) {
+      updatePayload.message = message;
+    }
+
+    await this.orders.update(params.orderId, {
+      ...updatePayload,
     });
 
     const updatedOrder = {
       ...order,
-      status: params.status,
-      updatedAt,
+      ...updatePayload,
     };
 
     if (shouldSendPurchaseEvent) {

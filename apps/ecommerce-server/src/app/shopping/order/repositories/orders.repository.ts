@@ -20,6 +20,8 @@ export type Order = {
   tax: string;
   shippingFee: string;
   total: string;
+  message?: string;
+  rating?: number;
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -55,6 +57,8 @@ export async function OrdersRepositoryFactory(
       tax: String,
       shippingFee: String,
       total: String,
+      message: String,
+      rating: Number,
       status: String,
       createdAt: Date,
       updatedAt: Date,

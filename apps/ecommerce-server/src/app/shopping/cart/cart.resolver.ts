@@ -11,6 +11,7 @@ import {
   RemoveFromCartInput,
   ShippingType,
   UpdateCartItemInput,
+  UpdateOrderStatusInput,
 } from '../../__generated/graphql-types';
 import { Claims } from '../../identity/types';
 import { CheckoutService } from '../checkout/checkout.service';
@@ -114,10 +115,7 @@ export class CartResolver {
   async updateOrderStatus(
     @Context('claims') claims: Claims,
     @Args('input')
-    input: {
-      orderId: string;
-      status: OrderStatus;
-    },
+    input: UpdateOrderStatusInput,
   ) {
     // TODO should be admin only, build admin panel later
     assert(claims.role === AccountType.Member, 'unauthorized');
@@ -125,6 +123,8 @@ export class CartResolver {
     await this.orderService.updateOrderStatus({
       orderId: new Types.ObjectId(input.orderId),
       status: input.status,
+      rating: input.rating,
+      message: input.message,
     });
   }
 

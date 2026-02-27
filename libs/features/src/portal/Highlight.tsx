@@ -7,8 +7,8 @@ import { PhoneIcon } from '~/icons/PhoneIcon';
 import { TruckIcon } from '~/icons/TruckIcon';
 import { LicenseTimer } from './LicenseTimer';
 
-const LazyRatingModal = dynamic(
-  () => import('./RatingModal').then((mod) => mod.RatingModal),
+const LazyDFeedbackRatingModal = dynamic(
+  () => import('./FeedbackRatingModal').then((mod) => mod.FeedbackRatingModal),
   {
     ssr: false,
   },
@@ -36,7 +36,7 @@ export const Highlight = React.memo<HighlightProps>(
               {storeName}
             </p>
             <LicenseTimer />
-            {isRatingModalOpen ? <LazyRatingModal /> : null}
+            {isRatingModalOpen ? <LazyDFeedbackRatingModal /> : null}
           </div>
 
           <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm sm:gap-0 sm:divide-x sm:divide-cyan-600">

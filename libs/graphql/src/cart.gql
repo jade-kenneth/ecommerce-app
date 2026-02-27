@@ -38,6 +38,8 @@ query MyOrders {
     tax
     shippingFee
     total
+    message
+    rating
     status
     createdAt
   }
@@ -106,6 +108,8 @@ mutation Checkout($input: CheckoutInput!) {
     tax
     shippingFee
     total
+    message
+    rating
     status
     createdAt
   }

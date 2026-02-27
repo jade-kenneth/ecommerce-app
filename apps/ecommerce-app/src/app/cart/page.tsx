@@ -28,7 +28,8 @@ export default function Index() {
     if (!publicKey) {
       console.error('Xendit public key is missing.');
       toaster.error({
-        description: 'Payment service is not configured. Please try again later.',
+        description:
+          'Payment service is not configured. Please try again later.',
       });
       return;
     }
@@ -38,17 +39,20 @@ export default function Index() {
     if (typeof window.Xendit?.setPublishableKey !== 'function') {
       console.error('Xendit script loaded but Xendit API is unavailable.');
       toaster.error({
-        description: 'Payment service failed to initialize. Please refresh and try again.',
+        description:
+          'Payment service failed to initialize. Please refresh and try again.',
       });
       return;
     }
 
     try {
       window.Xendit.setPublishableKey(publicKey);
+      console.log('Xendit initialized successfully with public key.');
     } catch (error) {
       console.error('Failed to initialize Xendit:', error);
       toaster.error({
-        description: 'Payment service failed to initialize. Please refresh and try again.',
+        description:
+          'Payment service failed to initialize. Please refresh and try again.',
       });
     }
   };
@@ -62,7 +66,8 @@ export default function Index() {
         onError={() => {
           console.error('Failed to load Xendit script.');
           toaster.error({
-            description: 'Unable to load payment service. Please check your connection and try again.',
+            description:
+              'Unable to load payment service. Please check your connection and try again.',
           });
         }}
       />

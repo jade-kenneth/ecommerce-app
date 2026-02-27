@@ -99,7 +99,9 @@ export interface RemoveFromCartInput {
 
 export interface UpdateOrderStatusInput {
     orderId: ObjectId;
-    status: OrderStatus;
+    status?: Nullable<OrderStatus>;
+    message?: Nullable<string>;
+    rating?: Nullable<number>;
 }
 
 export interface UpdateShippingMethodStatusInput {
@@ -187,6 +189,7 @@ export interface VoucherInput {
 }
 
 export interface CreateProductInput {
+    _id: ObjectId;
     thumbnail: string;
     name: string;
     price: number;
@@ -331,6 +334,8 @@ export interface Order {
     tax: string;
     shippingFee: string;
     total: string;
+    message?: Nullable<string>;
+    rating?: Nullable<number>;
     status: OrderStatus;
     createdAt: string;
 }

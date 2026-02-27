@@ -1,11 +1,12 @@
 'use client';
 
+import { Star } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
-import { Badge, Button, Spinner } from '~/components';
+import { Badge, Button, Show, Spinner, toaster } from '~/components';
 import { Sticky } from '~/components/Sticky';
 import { Tabs } from '~/components/Tabs';
 import { Footer, Highlight } from '~/features/portal';
@@ -14,6 +15,7 @@ import {
   OrderStatus,
   useMyOrdersQuery,
   useProductsQuery,
+  useUpdateOrderStatusMutation,
 } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { formatDate } from '~/utils';
@@ -63,6 +65,19 @@ const currencyFormatConfig = {
 } as const;
 
 type OrdersTabValue = 'ALL' | OrderStatus;
+type OrderFeedbackDraft = {
+  rating: number;
+  comment: string;
+  isSubmitting: boolean;
+  isSubmitted: boolean;
+};
+
+const DEFAULT_FEEDBACK_DRAFT: OrderFeedbackDraft = {
+  rating: 0,
+  comment: '',
+  isSubmitting: false,
+  isSubmitted: false,
+};
 
 export default function OrdersPage() {
   const router = useRouter();
@@ -74,8 +89,15 @@ export default function OrdersPage() {
   const ordersQuery = useMyOrdersQuery({
     skip: !isAuthenticated,
   });
+  const [updateOrderStatus] = useUpdateOrderStatusMutation();
   const orders = ordersQuery.data?.myOrders ?? [];
   const [activeTab, setActiveTab] = useState<OrdersTabValue>('ALL');
+  const [activeFeedbackOrderId, setActiveFeedbackOrderId] = useState<
+    string | null
+  >(null);
+  const [orderFeedback, setOrderFeedback] = useState<
+    Record<string, OrderFeedbackDraft>
+  >({});
 
   const statusTabs = useMemo(() => {
     const counts = orders.reduce(
@@ -158,6 +180,78 @@ export default function OrdersPage() {
       ]) ?? [],
     );
   }, [productsQuery.data]);
+
+  const getFeedbackDraft = (
+    orderId: string,
+    initial?: { rating?: number | null; message?: string | null },
+  ): OrderFeedbackDraft => {
+    if (orderFeedback[orderId]) return orderFeedback[orderId];
+
+    const initialRatingRaw = Number(initial?.rating ?? 0);
+    const initialRating = Number.isFinite(initialRatingRaw)
+      ? Math.min(5, Math.max(0, Math.round(initialRatingRaw)))
+      : 0;
+    const initialComment = (initial?.message ?? '').trim();
+
+    return {
+      rating: initialRating,
+      comment: initialComment,
+      isSubmitting: false,
+      isSubmitted: initialRating > 0 || initialComment.length > 0,
+    };
+  };
+
+  const updateFeedbackDraft = (
+    orderId: string,
+    patch: Partial<OrderFeedbackDraft>,
+  ) => {
+    setOrderFeedback((prev) => ({
+      ...prev,
+      [orderId]: {
+        ...(prev[orderId] ?? DEFAULT_FEEDBACK_DRAFT),
+        ...patch,
+      },
+    }));
+  };
+
+  const submitOrderFeedback = async (orderId: string) => {
+    const draft = getFeedbackDraft(orderId);
+
+    if (draft.rating < 1) {
+      toaster.error({ description: 'Please select a star rating first.' });
+      return;
+    }
+
+    updateFeedbackDraft(orderId, { isSubmitting: true });
+
+    try {
+      await updateOrderStatus({
+        variables: {
+          input: {
+            orderId,
+            rating: draft.rating,
+            message: draft.comment.trim(),
+          },
+        },
+      });
+      await ordersQuery.refetch();
+
+      updateFeedbackDraft(orderId, {
+        isSubmitting: false,
+        isSubmitted: true,
+      });
+      setActiveFeedbackOrderId((current) =>
+        current === orderId ? null : current,
+      );
+
+      toaster.success({ description: 'Order rating updated.' });
+    } catch (error) {
+      updateFeedbackDraft(orderId, { isSubmitting: false });
+      toaster.error({
+        description: 'Failed to submit your rating. Please try again.',
+      });
+    }
+  };
 
   return (
     <>
@@ -250,6 +344,20 @@ export default function OrdersPage() {
                   (total, item) => total + (item.quantity ?? 0),
                   0,
                 );
+                const feedbackDraft = getFeedbackDraft(order._id, {
+                  rating: order.rating,
+                  message: order.message,
+                });
+                const isCompleted = order.status === OrderStatus.Completed;
+                const isFeedbackOpen = activeFeedbackOrderId === order._id;
+                const orderRating = Number(order.rating ?? 0);
+                const hasPersistedRating =
+                  Number.isFinite(orderRating) && orderRating > 0;
+                const normalizedPersistedRating = Math.min(
+                  5,
+                  Math.max(0, Math.round(orderRating)),
+                );
+                const orderMessage = order.message?.trim() ?? '';
                 return (
                   <div
                     key={order._id}
@@ -399,6 +507,136 @@ export default function OrdersPage() {
                         </p>
                       </div>
                     </div>
+
+                    <Show when={isCompleted}>
+                      <div className="border-t border-gray-200 px-6 py-5">
+                        <Show
+                          when={hasPersistedRating}
+                          fallback={
+                            <>
+                              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900">
+                                    Rate this completed order
+                                  </p>
+                                  <p className="text-xs text-gray-500">
+                                    Share your experience to help us improve.
+                                  </p>
+                                </div>
+                                <Button
+                                  variant="solid"
+                                  className="rounded-[32px] px-5 py-2 text-cyan-700"
+                                  onClick={() =>
+                                    setActiveFeedbackOrderId((current) =>
+                                      current === order._id ? null : order._id,
+                                    )
+                                  }
+                                >
+                                  <Show when={isFeedbackOpen} fallback="Rate Order">
+                                    Hide Rating
+                                  </Show>
+                                </Button>
+                              </div>
+
+                              <Show when={isFeedbackOpen}>
+                                <div className="mt-4 rounded-2xl border border-gray-200 bg-white p-4">
+                                  <div className="flex items-center gap-2">
+                                    {[1, 2, 3, 4, 5].map((value) => {
+                                      const active =
+                                        value <= feedbackDraft.rating;
+                                      return (
+                                        <button
+                                          key={value}
+                                          type="button"
+                                          aria-label={`Rate ${value} star${
+                                            value > 1 ? 's' : ''
+                                          }`}
+                                          className="rounded-md p-1 transition hover:scale-105 disabled:cursor-not-allowed"
+                                          onClick={() =>
+                                            updateFeedbackDraft(order._id, {
+                                              rating: value,
+                                            })
+                                          }
+                                          disabled={feedbackDraft.isSubmitting}
+                                        >
+                                          <Star
+                                            className={
+                                              active
+                                                ? 'h-6 w-6 fill-cyan-400 text-cyan-400'
+                                                : 'h-6 w-6 text-gray-300'
+                                            }
+                                          />
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+
+                                  <textarea
+                                    className="mt-3 min-h-[90px] w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-100 disabled:cursor-not-allowed disabled:bg-gray-100"
+                                    placeholder="Tell us what went well (optional)"
+                                    value={feedbackDraft.comment}
+                                    onChange={(event) =>
+                                      updateFeedbackDraft(order._id, {
+                                        comment: event.target.value,
+                                      })
+                                    }
+                                    maxLength={240}
+                                    disabled={feedbackDraft.isSubmitting}
+                                  />
+
+                                  <div className="mt-3 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                    <p className="text-xs text-gray-500">
+                                      {feedbackDraft.comment.length}/240
+                                    </p>
+                                    <Button
+                                      className="rounded-[32px] px-5 py-2 text-white"
+                                      onClick={() =>
+                                        submitOrderFeedback(order._id)
+                                      }
+                                      disabled={feedbackDraft.isSubmitting}
+                                    >
+                                      <Show
+                                        when={feedbackDraft.isSubmitting}
+                                        fallback="Submit Rating"
+                                      >
+                                        Submitting...
+                                      </Show>
+                                    </Button>
+                                  </div>
+                                </div>
+                              </Show>
+                            </>
+                          }
+                        >
+                          <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                            <p className="text-sm font-semibold text-gray-900">
+                              Your rating
+                            </p>
+                            <div className="mt-2 flex items-center gap-2">
+                              {[1, 2, 3, 4, 5].map((value) => {
+                                const active =
+                                  value <= normalizedPersistedRating;
+                                return (
+                                  <Star
+                                    key={value}
+                                    className={
+                                      active
+                                        ? 'h-6 w-6 fill-cyan-400 text-cyan-400'
+                                        : 'h-6 w-6 text-gray-300'
+                                    }
+                                  />
+                                );
+                              })}
+                            </div>
+                            <Show when={orderMessage.length > 0}>
+                              <p className="mt-3 text-sm text-gray-600">
+                                {orderMessage}
+                              </p>
+                            </Show>
+                          </div>
+                        </Show>
+                      </div>
+                    </Show>
                   </div>
                 );
               })}

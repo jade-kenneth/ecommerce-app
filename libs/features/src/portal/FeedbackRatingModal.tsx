@@ -55,7 +55,7 @@ const DEFAULT_FORM_VALUES: RatingFormValues = {
   notify: true,
 };
 
-export const RatingModal = () => {
+export const FeedbackRatingModal = () => {
   const ratingStore = useGlobalStore((state) => state.rating);
   const userId = useGlobalStore((state) => state.authenticate.userId);
   const userEmail = useGlobalStore((state) => state.authenticate.email);

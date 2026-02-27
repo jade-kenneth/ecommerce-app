@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Tue, 24 Feb 2026 15:22:27 GMT
+// Last modified: Fri, 27 Feb 2026 15:26:06 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -217,8 +217,10 @@ export type UpdateConfigInput = {
 };
 
 export type UpdateOrderStatusInput = {
+  message?: InputMaybe<Scalars['String']['input']>;
   orderId: Scalars['ObjectID']['input'];
-  status: OrderStatus;
+  rating?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<OrderStatus>;
 };
 
 export type UpdatePaymentMethodStatusInput = {
@@ -330,6 +332,8 @@ export type MyOrdersQuery = {
     tax: string;
     shippingFee: string;
     total: string;
+    message?: string | null;
+    rating?: number | null;
     status: OrderStatus;
     createdAt: string;
     items: Array<{
@@ -418,6 +422,8 @@ export type CheckoutMutation = {
     tax: string;
     shippingFee: string;
     total: string;
+    message?: string | null;
+    rating?: number | null;
     status: OrderStatus;
     createdAt: string;
     items: Array<{
@@ -918,6 +924,8 @@ export const MyOrdersDocument = /*#__PURE__*/ gql`
       tax
       shippingFee
       total
+      message
+      rating
       status
       createdAt
     }
@@ -1294,6 +1302,8 @@ export const CheckoutDocument = /*#__PURE__*/ gql`
       tax
       shippingFee
       total
+      message
+      rating
       status
       createdAt
     }

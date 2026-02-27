@@ -10,7 +10,7 @@ export class PaymentsService {
   constructor(private readonly xendit: XenditService) {}
 
   async createGcashPayment(
-    input: CreateGcashPaymentInput
+    input: CreateGcashPaymentInput,
   ): Promise<PaymentRequestResponse> {
     try {
       return this.xendit.post('/v3/payment_requests', {
@@ -30,7 +30,9 @@ export class PaymentsService {
     } catch (error) {}
   }
 
-  async getPaymentRequest(paymentRequestId: string): Promise<PaymentRequestResponse> {
+  async getPaymentRequest(
+    paymentRequestId: string,
+  ): Promise<PaymentRequestResponse> {
     return this.xendit.get(`/v3/payment_requests/${paymentRequestId}`);
   }
 }

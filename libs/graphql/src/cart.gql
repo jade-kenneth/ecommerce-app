@@ -26,6 +26,8 @@ query MyOrders {
       quantity
       unitPrice
       totalPrice
+      rating
+      message
     }
     shippingOption {
       type
@@ -38,8 +40,6 @@ query MyOrders {
     tax
     shippingFee
     total
-    message
-    rating
     status
     createdAt
   }
@@ -93,6 +93,8 @@ mutation Checkout($input: CheckoutInput!) {
       quantity
       unitPrice
       totalPrice
+      rating
+      message
     }
     shippingOption {
       type
@@ -108,8 +110,6 @@ mutation Checkout($input: CheckoutInput!) {
     tax
     shippingFee
     total
-    message
-    rating
     status
     createdAt
   }
@@ -121,6 +121,19 @@ mutation RemoveFromCart($input: RemoveFromCartInput!) {
 
 mutation UpdateOrderStatus($input: UpdateOrderStatusInput!) {
   updateOrderStatus(input: $input)
+}
+
+mutation CreateProductReview($input: CreateProductReviewInput!) {
+  createProductReview(input: $input) {
+    _id
+    productId
+    accountId
+    orderId
+    rating
+    message
+    createdAt
+    updatedAt
+  }
 }
 
 mutation UpdateShippingMethodStatus($input: UpdateShippingMethodStatusInput!) {

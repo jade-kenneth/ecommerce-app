@@ -31,6 +31,15 @@ type CartItem {
   totalPrice: String
 }
 
+type OrderItem {
+  productId: ObjectId!
+  quantity: Int!
+  unitPrice: String
+  totalPrice: String
+  rating: Int
+  message: String
+}
+
 type PaymentMethod {
   _id: ObjectId!
   type: PaymentMethodType!
@@ -63,7 +72,7 @@ type Cart {
 
 type Order {
   _id: ObjectId!
-  items: [CartItem!]!
+  items: [OrderItem!]!
   shippingOption: ShippingOption!
   paymentMethod: PaymentMethod!
 
@@ -71,9 +80,6 @@ type Order {
   tax: String!
   shippingFee: String!
   total: String!
-
-  message: String
-  rating: Int
 
   status: OrderStatus!
   createdAt: String!
@@ -96,6 +102,7 @@ input RemoveFromCartInput {
 
 input UpdateOrderStatusInput {
   orderId: ObjectId!
+  productId: ObjectId
   status: OrderStatus
   message: String
   rating: Int

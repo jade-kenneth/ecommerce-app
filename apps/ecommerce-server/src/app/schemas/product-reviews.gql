@@ -1,0 +1,25 @@
+type ProductReview {
+  _id: ObjectId!
+  productId: ObjectId!
+  accountId: ObjectId!
+  orderId: ObjectId
+  rating: Int!
+  message: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreateProductReviewInput {
+  productId: ObjectId!
+  orderId: ObjectId
+  rating: Int! @constraint(min: 1, max: 5)
+  message: String
+}
+
+type Query {
+  productReviews(productId: ObjectId!): [ProductReview!]!
+}
+
+type Mutation {
+  createProductReview(input: CreateProductReviewInput!): ProductReview!
+}

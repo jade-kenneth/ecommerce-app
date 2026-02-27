@@ -1,6 +1,7 @@
 export const Tokens = {
   AsyncClient: Symbol('AsyncClient'),
   ProductRepositoryToken: Symbol('ProductRepositoryToken'),
+  ProductReviewsRepositoryToken: Symbol('ProductReviewsRepositoryToken'),
   ConfigOptions: Symbol('ConfigOptions'),
   SessionRepository: Symbol('SessionRepository'),
   AccountRepository: Symbol('AccountRepository'),

@@ -3,8 +3,8 @@ import { Connection, Schema, Types } from 'mongoose';
 import { MongooseRepository } from '../../../../libs/mongoose-repository';
 import { Repository } from '../../../../libs/repository';
 import {
-  CartItem,
   OrderStatus,
+  OrderItem,
   PaymentMethod,
   ShippingOption,
 } from '../../../__generated/graphql-types';
@@ -12,7 +12,7 @@ import {
 export type Order = {
   _id: Types.ObjectId;
   accountId: Types.ObjectId;
-  items: CartItem[];
+  items: OrderItem[];
   shippingOption: ShippingOption;
   paymentMethod: PaymentMethod;
   paymentRequestId?: string;
@@ -20,8 +20,6 @@ export type Order = {
   tax: string;
   shippingFee: string;
   total: string;
-  message?: string;
-  rating?: number;
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -33,6 +31,8 @@ const CartItemSchema = {
   quantity: Number,
   unitPrice: Number,
   totalPrice: Number,
+  rating: Number,
+  message: String,
 };
 
 const ShippingOptionSchema = Schema.Types.Mixed;
@@ -57,8 +57,6 @@ export async function OrdersRepositoryFactory(
       tax: String,
       shippingFee: String,
       total: String,
-      message: String,
-      rating: Number,
       status: String,
       createdAt: Date,
       updatedAt: Date,

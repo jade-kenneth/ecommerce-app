@@ -32,6 +32,7 @@ import { ConfigService } from './config/config.service';
 import { MailModule } from './mail/mail.module';
 import { PaymentsModule } from './payments/payment.module';
 import { ProductsModule } from './products/products.module';
+import { ProductReviewsModule } from './product-reviews/product-reviews.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { ShoppingModule } from './shopping/shopping.module';
@@ -104,6 +105,7 @@ import { SessionModule } from './identity/session/session.module';
     }),
     AccountModule,
     ProductsModule,
+    ProductReviewsModule,
     NodeResolver,
     UploadModule,
     ConfigModule,

@@ -112,6 +112,13 @@ export type CreateProductInput = {
   vouchers?: InputMaybe<Array<VoucherInput>>;
 };
 
+export type CreateProductReviewInput = {
+  message?: InputMaybe<Scalars['String']['input']>;
+  orderId?: InputMaybe<Scalars['ObjectID']['input']>;
+  productId: Scalars['ObjectID']['input'];
+  rating: Scalars['Int']['input'];
+};
+
 export type DeleteProductInput = {
   _id: Scalars['ObjectID']['input'];
 };
@@ -219,6 +226,7 @@ export type UpdateConfigInput = {
 export type UpdateOrderStatusInput = {
   message?: InputMaybe<Scalars['String']['input']>;
   orderId: Scalars['ObjectID']['input'];
+  productId?: InputMaybe<Scalars['ObjectID']['input']>;
   rating?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<OrderStatus>;
 };
@@ -332,16 +340,16 @@ export type MyOrdersQuery = {
     tax: string;
     shippingFee: string;
     total: string;
-    message?: string | null;
-    rating?: number | null;
     status: OrderStatus;
     createdAt: string;
     items: Array<{
-      __typename: 'CartItem';
+      __typename: 'OrderItem';
       productId: string;
       quantity: number;
       unitPrice?: string | null;
       totalPrice?: string | null;
+      rating?: number | null;
+      message?: string | null;
     }>;
     shippingOption: {
       __typename: 'ShippingOption';
@@ -422,16 +430,16 @@ export type CheckoutMutation = {
     tax: string;
     shippingFee: string;
     total: string;
-    message?: string | null;
-    rating?: number | null;
     status: OrderStatus;
     createdAt: string;
     items: Array<{
-      __typename: 'CartItem';
+      __typename: 'OrderItem';
       productId: string;
       quantity: number;
       unitPrice?: string | null;
       totalPrice?: string | null;
+      rating?: number | null;
+      message?: string | null;
     }>;
     shippingOption: {
       __typename: 'ShippingOption';
@@ -461,6 +469,25 @@ export type UpdateOrderStatusMutationVariables = Exact<{
 export type UpdateOrderStatusMutation = {
   __typename: 'Mutation';
   updateOrderStatus?: boolean | null;
+};
+
+export type CreateProductReviewMutationVariables = Exact<{
+  input: CreateProductReviewInput;
+}>;
+
+export type CreateProductReviewMutation = {
+  __typename: 'Mutation';
+  createProductReview: {
+    __typename: 'ProductReview';
+    _id: string;
+    productId: string;
+    accountId: string;
+    orderId?: string | null;
+    rating: number;
+    message?: string | null;
+    createdAt: string;
+    updatedAt: string;
+  };
 };
 
 export type UpdateShippingMethodStatusMutationVariables = Exact<{
@@ -912,6 +939,8 @@ export const MyOrdersDocument = /*#__PURE__*/ gql`
         quantity
         unitPrice
         totalPrice
+        rating
+        message
       }
       shippingOption {
         type
@@ -924,8 +953,6 @@ export const MyOrdersDocument = /*#__PURE__*/ gql`
       tax
       shippingFee
       total
-      message
-      rating
       status
       createdAt
     }
@@ -1287,6 +1314,8 @@ export const CheckoutDocument = /*#__PURE__*/ gql`
         quantity
         unitPrice
         totalPrice
+        rating
+        message
       }
       shippingOption {
         type
@@ -1302,8 +1331,6 @@ export const CheckoutDocument = /*#__PURE__*/ gql`
       tax
       shippingFee
       total
-      message
-      rating
       status
       createdAt
     }
@@ -1390,6 +1417,45 @@ export type UpdateOrderStatusMutationResult =
 export type UpdateOrderStatusMutationOptions = Apollo.BaseMutationOptions<
   UpdateOrderStatusMutation,
   UpdateOrderStatusMutationVariables
+>;
+export const CreateProductReviewDocument = /*#__PURE__*/ gql`
+  mutation CreateProductReview($input: CreateProductReviewInput!) {
+    createProductReview(input: $input) {
+      _id
+      productId
+      accountId
+      orderId
+      rating
+      message
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export type CreateProductReviewMutationFn = Apollo.MutationFunction<
+  CreateProductReviewMutation,
+  CreateProductReviewMutationVariables
+>;
+export function useCreateProductReviewMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateProductReviewMutation,
+    CreateProductReviewMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateProductReviewMutation,
+    CreateProductReviewMutationVariables
+  >(CreateProductReviewDocument, options);
+}
+export type CreateProductReviewMutationHookResult = ReturnType<
+  typeof useCreateProductReviewMutation
+>;
+export type CreateProductReviewMutationResult =
+  Apollo.MutationResult<CreateProductReviewMutation>;
+export type CreateProductReviewMutationOptions = Apollo.BaseMutationOptions<
+  CreateProductReviewMutation,
+  CreateProductReviewMutationVariables
 >;
 export const UpdateShippingMethodStatusDocument = /*#__PURE__*/ gql`
   mutation UpdateShippingMethodStatus(

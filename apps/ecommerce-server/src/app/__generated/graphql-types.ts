@@ -99,6 +99,7 @@ export interface RemoveFromCartInput {
 
 export interface UpdateOrderStatusInput {
     orderId: ObjectId;
+    productId?: Nullable<ObjectId>;
     status?: Nullable<OrderStatus>;
     message?: Nullable<string>;
     rating?: Nullable<number>;
@@ -145,6 +146,13 @@ export interface CreateGcashPaymentInput {
     successUrl: string;
     failureUrl: string;
     description?: Nullable<string>;
+}
+
+export interface CreateProductReviewInput {
+    productId: ObjectId;
+    orderId?: Nullable<ObjectId>;
+    rating: number;
+    message?: Nullable<string>;
 }
 
 export interface ProductsStatusFilterInput {
@@ -268,6 +276,7 @@ export interface IMutation {
     uploadFile(file: Upload): Nullable<string> | Promise<Nullable<string>>;
     createLicense(input: LicenseInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     createGcashPayment(input?: Nullable<CreateGcashPaymentInput>): Nullable<PaymentRequestResponse> | Promise<Nullable<PaymentRequestResponse>>;
+    createProductReview(input: CreateProductReviewInput): ProductReview | Promise<ProductReview>;
     createProduct(input: CreateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateProduct(input: UpdateProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     deleteProduct(input: DeleteProductInput): Nullable<boolean> | Promise<Nullable<boolean>>;
@@ -283,6 +292,7 @@ export interface IQuery {
     order(id: ObjectId): Nullable<Order> | Promise<Nullable<Order>>;
     productByIds(ids?: Nullable<ProductByIdsInput>): CartProductDetails | Promise<CartProductDetails>;
     config(): Config | Promise<Config>;
+    productReviews(productId: ObjectId): ProductReview[] | Promise<ProductReview[]>;
     products(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
     searchProductByName(search: string, first?: Nullable<number>, after?: Nullable<Cursor>): Nullable<Product[]> | Promise<Nullable<Product[]>>;
     highPointProducts(first?: Nullable<number>, after?: Nullable<Cursor>, filter?: Nullable<ProductsFilterInput>): Connection | Promise<Connection>;
@@ -293,6 +303,15 @@ export interface CartItem {
     quantity: number;
     unitPrice?: Nullable<string>;
     totalPrice?: Nullable<string>;
+}
+
+export interface OrderItem {
+    productId: ObjectId;
+    quantity: number;
+    unitPrice?: Nullable<string>;
+    totalPrice?: Nullable<string>;
+    rating?: Nullable<number>;
+    message?: Nullable<string>;
 }
 
 export interface PaymentMethod {
@@ -327,15 +346,13 @@ export interface Cart {
 
 export interface Order {
     _id: ObjectId;
-    items: CartItem[];
+    items: OrderItem[];
     shippingOption: ShippingOption;
     paymentMethod: PaymentMethod;
     subtotal: string;
     tax: string;
     shippingFee: string;
     total: string;
-    message?: Nullable<string>;
-    rating?: Nullable<number>;
     status: OrderStatus;
     createdAt: string;
 }
@@ -425,6 +442,17 @@ export interface PaymentRequestResponse {
     channel_properties?: Nullable<ChannelProperties>;
     type?: Nullable<string>;
     actions?: Nullable<Nullable<PaymentAction>[]>;
+}
+
+export interface ProductReview {
+    _id: ObjectId;
+    productId: ObjectId;
+    accountId: ObjectId;
+    orderId?: Nullable<ObjectId>;
+    rating: number;
+    message?: Nullable<string>;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface Product extends Node {

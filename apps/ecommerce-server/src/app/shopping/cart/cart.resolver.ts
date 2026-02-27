@@ -122,10 +122,13 @@ export class CartResolver {
 
     await this.orderService.updateOrderStatus({
       orderId: new Types.ObjectId(input.orderId),
+      productId: input.productId ? new Types.ObjectId(input.productId) : null,
       status: input.status,
       rating: input.rating,
       message: input.message,
     });
+
+    return true;
   }
 
   @Mutation('updateShippingMethodStatus')

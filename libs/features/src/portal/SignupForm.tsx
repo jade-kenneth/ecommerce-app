@@ -51,7 +51,10 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       label: 'Google',
     },
   ];
-  const globalStore = useGlobalStore((state) => state);
+  const setIsAuthenticated = useGlobalStore(
+    (state) => state.authenticate.setIsAuthenticated,
+  );
+  const setUser = useGlobalStore((state) => state.authenticate.setUser);
   const [state, setState] = useState<{
     showPassword: boolean;
     showConfirmPassword: boolean;
@@ -86,8 +89,8 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
 
       setTimeout(async () => {
         await create_session({ user: { _id, role: AccountType.Member } });
-        globalStore.authenticate.setIsAuthenticated(true);
-        globalStore.authenticate.setUser({
+        setIsAuthenticated(true);
+        setUser({
           email: data.emailAddress,
           userId: _id,
         });

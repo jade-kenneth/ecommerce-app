@@ -67,10 +67,12 @@ type OrdersTabValue = 'ALL' | OrderStatus;
 export default function OrdersPage() {
   const router = useRouter();
 
-  const globalStore = useGlobalStore((state) => state);
+  const isAuthenticated = useGlobalStore(
+    (state) => state.authenticate.isAuthenticated,
+  );
 
   const ordersQuery = useMyOrdersQuery({
-    skip: !globalStore.authenticate.isAuthenticated,
+    skip: !isAuthenticated,
   });
   const orders = ordersQuery.data?.myOrders ?? [];
   const [activeTab, setActiveTab] = useState<OrdersTabValue>('ALL');
@@ -201,7 +203,7 @@ export default function OrdersPage() {
             <div className="mt-8 flex flex-col gap-6">
               <Tabs.Root
                 value={activeTab}
-                onValueChange={(details) =>
+                onValueChange={(details: { value: string }) =>
                   setActiveTab(details.value as OrdersTabValue)
                 }
                 variant="enclosed"

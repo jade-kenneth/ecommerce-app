@@ -143,12 +143,14 @@ export const useCart = () => {
     itemsCount: 0,
   });
 
-  const globalStore = useGlobalStore((state) => state);
+  const isAuthenticated = useGlobalStore(
+    (state) => state.authenticate.isAuthenticated,
+  );
 
   const { itemsCount } = state;
 
   const { data: cartQuery } = useCartQuery({
-    skip: !globalStore.authenticate.isAuthenticated,
+    skip: !isAuthenticated,
   });
 
   const productIds = useMemo(
@@ -182,7 +184,7 @@ export const useCart = () => {
   );
 
   useEffect(() => {
-    if (!globalStore.authenticate.isAuthenticated) {
+    if (!isAuthenticated) {
       dispatch({ type: 'setCart', payload: initialCart });
       return;
     }
@@ -220,7 +222,7 @@ export const useCart = () => {
     };
 
     dispatch({ type: 'setCart', payload: nextCart });
-  }, [cartQuery, productsData]);
+  }, [cartQuery, isAuthenticated, productsData]);
 
   return {
     state,

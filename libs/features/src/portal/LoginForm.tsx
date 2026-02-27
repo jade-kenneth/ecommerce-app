@@ -37,7 +37,10 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
     resolver: zodResolver(definition),
   });
 
-  const globalStore = useGlobalStore((state) => state);
+  const setIsAuthenticated = useGlobalStore(
+    (state) => state.authenticate.setIsAuthenticated,
+  );
+  const setUser = useGlobalStore((state) => state.authenticate.setUser);
 
   const onSubmit = form.handleSubmit(async (data) => {
     try {
@@ -48,8 +51,8 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       });
 
       toaster.success({ description: 'Successfully logged in!' });
-      globalStore.authenticate.setIsAuthenticated(true);
-      globalStore.authenticate.setUser({ email: data.emailAddress });
+      setIsAuthenticated(true);
+      setUser({ email: data.emailAddress });
     } catch {
       toaster.error({ description: 'Failed to log in. Please try again.' });
     }

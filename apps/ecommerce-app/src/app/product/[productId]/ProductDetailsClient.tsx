@@ -29,7 +29,12 @@ export default function ProductDetailsClient({
 }) {
   const router = useRouter();
 
-  const globalStore = useGlobalStore((state) => state);
+  const isAuthenticated = useGlobalStore(
+    (state) => state.authenticate.isAuthenticated,
+  );
+  const setAuthDialogOpen = useGlobalStore(
+    (state) => state.authenticate.setAuthDialogOpen,
+  );
   const cartContext = useCartContext();
 
   const { data, loading } = useProductsQuery({
@@ -63,8 +68,8 @@ export default function ProductDetailsClient({
 
   const handleAddToCart = async () => {
     if (!product) return;
-    if (!globalStore.authenticate.isAuthenticated) {
-      globalStore.authenticate.setAuthDialogOpen(true);
+    if (!isAuthenticated) {
+      setAuthDialogOpen(true);
       return;
     }
 

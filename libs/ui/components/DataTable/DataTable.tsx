@@ -2,7 +2,12 @@
 import { DataTableProvider } from './DataTableContext';
 import TablePagination from './Pagination/Pagination';
 import { TableContent } from './TableContent';
-import { FilterEntries, useDataTable, UseDataTableProps } from './useDataTable';
+import {
+  FilterEntries,
+  useDataTable,
+  UseDataTableProps,
+  UseDataTableReturn,
+} from './useDataTable';
 
 type DatTableProps<T, F extends FilterEntries> = UseDataTableProps<T, F> & {
   id: string;
@@ -27,7 +32,7 @@ export function DataTable<T, F extends FilterEntries>({
   });
 
   return (
-    <DataTableProvider value={datatable}>
+    <DataTableProvider value={datatable as UseDataTableReturn}>
       <div className="w-full gap-4 relative border-[1px] border-[#F2F2F2] rounded-lg">
         <TableContent />
         <TablePagination />

@@ -5,12 +5,9 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useDebounceCallback } from 'usehooks-ts';
 
 import { useControllableState } from '~/hooks/useControllableState';
-import { Combobox } from '../ui/Combobox';
+import { Combobox, ComboboxItem } from '../ui/Combobox';
 
-interface Option {
-  value: string;
-  label: string;
-}
+type Option = ComboboxItem;
 interface MultiComboboxFieldProps {
   value?: string[];
   onChange?: (value: string[]) => void;

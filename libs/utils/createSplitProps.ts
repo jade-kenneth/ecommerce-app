@@ -1,16 +1,22 @@
-type Dict = Record<string, any>;
+type Dict = Record<string, unknown>;
 
-function splitProps<T extends Dict>(props: T, keys: (keyof T)[]) {
-  const rest: Dict = {};
-  const result: Dict = {};
+function splitProps<T extends Dict, K extends keyof T>(
+  props: T,
+  keys: readonly K[],
+): [Pick<T, K>, Omit<T, K>] {
+  const rest = {} as Omit<T, K>;
+  const result = {} as Pick<T, K>;
 
-  const keySet = new Set(keys);
+  const keySet = new Set<keyof T>(keys);
 
   for (const key in props) {
-    if (keySet.has(key)) {
-      result[key] = props[key];
+    const typedKey = key as keyof T;
+    const value = props[typedKey];
+
+    if (keySet.has(typedKey)) {
+      (result as Record<keyof T, unknown>)[typedKey] = value;
     } else {
-      rest[key] = props[key];
+      (rest as Record<keyof T, unknown>)[typedKey] = value;
     }
   }
 
@@ -19,6 +25,9 @@ function splitProps<T extends Dict>(props: T, keys: (keyof T)[]) {
 
 export function createSplitProps<T extends Dict>(keys: (keyof T)[]) {
   return function split<Props extends T>(props: Props) {
-    return splitProps(props, keys) as [T, Omit<Props, keyof T>];
+    return splitProps(props, keys as (keyof Props & keyof T)[]) as [
+      T,
+      Omit<Props, keyof T>,
+    ];
   };
 }

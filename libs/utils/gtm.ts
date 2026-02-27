@@ -13,14 +13,16 @@ function getDeviceType(): string | undefined {
   return 'desktop';
 }
 
-type event =
+type GtmEventName =
   | 'add_to_cart'
   | 'purchase'
   | 'begin_checkout'
   | 'view_item'
   | 'contact_admin';
 
-function gtmEvent(event: event, params?: Record<string, any>) {
+type GtmEventParams = Readonly<Record<string, unknown>>;
+
+function gtmEvent(event: GtmEventName, params?: GtmEventParams) {
   if (typeof window === 'undefined') return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({

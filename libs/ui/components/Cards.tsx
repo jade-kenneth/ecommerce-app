@@ -22,7 +22,12 @@ export const Cards = (props: CardsProps) => {
     (props.price * (props.discount / 100)).toFixed(2),
   );
   const [mutate] = useUpdateCartItemMutation();
-  const globalStore = useGlobalStore((state) => state);
+  const isAuthenticated = useGlobalStore(
+    (state) => state.authenticate.isAuthenticated,
+  );
+  const setAuthDialogOpen = useGlobalStore(
+    (state) => state.authenticate.setAuthDialogOpen,
+  );
 
   const context = useCartContext();
   return (
@@ -147,8 +152,8 @@ export const Cards = (props: CardsProps) => {
         <Button
           className="text-white items-center justify-center h-[40px] mt-3 flex gap-2 cursor-pointer text-sm sm:text-base"
           onClick={async () => {
-            if (!globalStore.authenticate.isAuthenticated) {
-              globalStore.authenticate.setAuthDialogOpen(true);
+            if (!isAuthenticated) {
+              setAuthDialogOpen(true);
               return;
             }
             try {

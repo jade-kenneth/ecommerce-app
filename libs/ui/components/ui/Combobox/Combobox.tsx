@@ -5,6 +5,12 @@ import { comboboxRecipe } from './ComboboxField.recipe';
 const { withProvider, withRootProvider, withContext } =
   createRecipeContext(comboboxRecipe);
 
+export type ComboboxItem = {
+  value: string;
+  label: string;
+  [key: string]: unknown;
+};
+
 /**
  * @example
  * ```tsx
@@ -37,8 +43,10 @@ const { withProvider, withRootProvider, withContext } =
  * </Combobox.Root>
  * ```
  */
-export const Root = withProvider(Combobox.Root<any>, 'root');
-export const RootProvider = withRootProvider(Combobox.RootProvider<any>);
+export const Root = withProvider(Combobox.Root<ComboboxItem>, 'root');
+export const RootProvider = withRootProvider(
+  Combobox.RootProvider<ComboboxItem>,
+);
 export const Label = withContext(Combobox.Label, 'label');
 export const Control = withContext(Combobox.Control, 'control');
 export const Input = withContext(Combobox.Input, 'input');
@@ -58,6 +66,6 @@ export const ItemIndicator = withContext(
   'itemIndicator'
 );
 export const List = withContext(Combobox.List, 'list');
-export const Context = Combobox.Context;
+export const Context = Combobox.Context<ComboboxItem>;
 export const ItemContext = Combobox.ItemContext;
-export const collection = createListCollection;
+export const collection = createListCollection<ComboboxItem>;

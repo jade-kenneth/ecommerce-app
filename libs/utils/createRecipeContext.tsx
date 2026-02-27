@@ -4,10 +4,12 @@ import { omit, pick } from 'es-toolkit';
 import * as React from 'react';
 import { VariantProps } from 'tailwind-variants';
 import { Simplify } from 'type-fest';
-import { createSplitProps } from './createSplitProps';
 
-type GenericProps = Record<string, any>;
-type GenericRecipeEntries = Record<string, (props: GenericProps) => string>;
+type GenericProps = Record<string, unknown>;
+type GenericRecipeEntries = Record<
+  string,
+  (props: GenericProps & { className?: string }) => string
+>;
 type GenericRecipe = {
   (props: GenericProps): GenericRecipeEntries;
   variantKeys: (string | number | never)[];
@@ -20,26 +22,29 @@ export function createRecipeContext<
   RecipeEntry = keyof RecipeEntries,
 >(recipe: Recipe) {
   const RecipeContext = React.createContext<GenericRecipeEntries | null>(null);
+  const variantKeys = recipe.variantKeys.filter(
+    (key): key is string => typeof key === 'string',
+  );
 
   function useContext() {
     const context = React.useContext(RecipeContext);
     return context;
   }
 
-  function withRootProvider<Props extends GenericProps>(
+  function withRootProvider<Props extends object>(
     Component: React.ComponentType<Props>,
     defaultProps: Partial<Props> = {},
   ) {
-    const StyledComponent = (props: Props) => {
+    const StyledComponent = (props: Assign<Props, RecipeProps>) => {
       const [recipeProps, localProps] = splitProps(
-        props,
-        recipe.variantKeys as string[],
+        props as Record<string, unknown>,
+        variantKeys,
       );
 
-      const context = recipe(recipeProps);
+      const context = recipe(recipeProps as GenericProps);
 
-      const mergedProps = mergeProps<GenericProps>(
-        defaultProps,
+      const mergedProps = mergeProps(
+        defaultProps as Record<string, unknown>,
         localProps,
       ) as Props;
 
@@ -50,21 +55,20 @@ export function createRecipeContext<
       );
     };
 
-    return StyledComponent as unknown as React.ComponentType<
-      Assign<Props, RecipeProps>
-    >;
+    return StyledComponent as React.ComponentType<Assign<Props, RecipeProps>>;
   }
 
-  function withProvider<Props extends GenericProps>(
+  function withProvider<Props extends object>(
     Component: React.ComponentType<Props>,
     slot: RecipeEntry,
   ) {
-    const StyledComponent = React.forwardRef((props, ref) => {
-      const [recipeProps, localProps] = createSplitProps(recipe.variantKeys)(
-        props,
+    const StyledComponent = React.forwardRef<unknown, Assign<Props, RecipeProps>>((props, ref) => {
+      const [recipeProps, localProps] = splitProps(
+        props as Record<string, unknown>,
+        variantKeys,
       );
 
-      const context = recipe(recipeProps);
+      const context = recipe(recipeProps as GenericProps);
 
       const slotName = slot as string;
       const getStyle = context[slotName];
@@ -77,13 +81,17 @@ export function createRecipeContext<
       const className = !getStyle
         ? userDefinedClassName
         : getStyle({
-            ...recipeProps,
+            ...(recipeProps as GenericProps),
             className: userDefinedClassName,
           });
 
+      const ComponentWithClassName = Component as React.ComponentType<
+        Props & { className?: string; ref?: React.Ref<unknown> }
+      >;
+
       return (
         <RecipeContext.Provider value={context}>
-          <Component
+          <ComponentWithClassName
             ref={ref}
             {...(localProps as Props)}
             className={className}
@@ -94,23 +102,24 @@ export function createRecipeContext<
 
     StyledComponent.displayName = Component.displayName || Component.name;
 
-    return StyledComponent as React.ComponentType<Assign<Props, RecipeProps>>;
+    return StyledComponent;
   }
 
-  function withContext<Props extends GenericProps>(
+  function withContext<Props extends object>(
     Component: React.ComponentType<Props>,
     slot: RecipeEntry,
   ) {
-    const StyledComponent = React.forwardRef((props, ref) => {
+    const StyledComponent = React.forwardRef<unknown, Assign<Props, RecipeProps>>((props, ref) => {
       const context = useContext();
 
-      const [recipeProps, localProps] = createSplitProps(recipe.variantKeys)(
-        props,
+      const [recipeProps, localProps] = splitProps(
+        props as Record<string, unknown>,
+        variantKeys,
       );
 
       const slotName = slot as string;
       const getStyle = !context
-        ? recipe(recipeProps)[slotName]
+        ? recipe(recipeProps as GenericProps)[slotName]
         : context[slotName];
 
       const userDefinedClassName =
@@ -121,18 +130,26 @@ export function createRecipeContext<
       const className = !getStyle
         ? userDefinedClassName
         : getStyle({
-            ...recipeProps,
+            ...(recipeProps as GenericProps),
             className: userDefinedClassName,
           });
 
+      const ComponentWithClassName = Component as React.ComponentType<
+        Props & { className?: string; ref?: React.Ref<unknown> }
+      >;
+
       return (
-        <Component ref={ref} {...(localProps as Props)} className={className} />
+        <ComponentWithClassName
+          ref={ref}
+          {...(localProps as Props)}
+          className={className}
+        />
       );
     });
 
     StyledComponent.displayName = Component.displayName || Component.name;
 
-    return StyledComponent as React.ComponentType<Assign<Props, RecipeProps>>;
+    return StyledComponent;
   }
 
   return {
@@ -142,9 +159,9 @@ export function createRecipeContext<
   };
 }
 
-export function splitProps<T extends Record<string, any>, K extends keyof T>(
+export function splitProps<T extends Record<string, unknown>, K extends keyof T>(
   props: T,
-  keys: K[],
+  keys: readonly K[],
 ): [Simplify<Pick<T, K>>, Simplify<Omit<T, K>>] {
   const a = pick(props, keys);
   const b = omit(props, keys);

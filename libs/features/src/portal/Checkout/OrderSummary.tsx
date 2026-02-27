@@ -41,6 +41,11 @@ const readGaClientIdFromCookie = (): string | undefined => {
   return clientIdParts.join('.');
 };
 
+const formatPaymentAmount = (amount: number): string => {
+  if (!Number.isFinite(amount)) return '0.00';
+  return amount.toFixed(2);
+};
+
 export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const context = useCartContext();
   const paymentMethodsQuery = usePaymentMethodsQuery();
@@ -233,7 +238,9 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                   const res = await mutate({
                     variables: {
                       input: {
-                        amount: totalAmountWithShippingAndTax as unknown as string,
+                        amount: formatPaymentAmount(
+                          totalAmountWithShippingAndTax,
+                        ),
                         failureUrl:
                           Capacitor.getPlatform() === 'web'
                             ? failureUrl

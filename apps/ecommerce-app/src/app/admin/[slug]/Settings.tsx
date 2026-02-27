@@ -2,6 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ObjectId } from 'bson';
 
 import {
+  CheckoutMethodSettingsDocument,
+  CheckoutMethodSettingsQuery,
+  CheckoutMethodSettingsQueryVariables,
   PaymentMethodType,
   ShippingType,
   useCheckoutMethodSettingsQuery,
@@ -23,6 +26,7 @@ import {
   Toggle,
   toaster,
 } from '~/components';
+import { apolloClient } from '~/config';
 
 const Definition = z.object({
   highPointsThreshold: z.string().min(0).default('0'),
@@ -240,12 +244,36 @@ export function Settings() {
                   aria-label={`Toggle ${method.label}`}
                   pressed={method.isActive}
                   disabled={methodsQuery.loading || isUpdatingMethod}
-                  onPressedChange={() => {
-                    void handleShippingMethodToggle({
-                      type: method.type,
-                      label: method.label,
-                      isActive: method.isActive,
-                    });
+                  onPressedChange={async () => {
+                    try {
+                      await handleShippingMethodToggle({
+                        type: method.type,
+                        label: method.label,
+                        isActive: method.isActive,
+                      });
+
+                      apolloClient.writeQuery<
+                        CheckoutMethodSettingsQuery,
+                        CheckoutMethodSettingsQueryVariables
+                      >({
+                        query: CheckoutMethodSettingsDocument,
+                        data: {
+                          __typename: 'Query',
+                          shippingOptions:
+                            methodsQuery.data?.shippingOptions.map((option) =>
+                              option._id === method._id
+                                ? { ...option, isActive: !option.isActive }
+                                : option,
+                            ) || [],
+                          paymentMethods:
+                            methodsQuery.data?.paymentMethods || [],
+                        },
+                      });
+                    } catch {
+                      toaster.error({
+                        description: 'Failed to update shipping method status.',
+                      });
+                    }
                   }}
                   className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors ${
                     method.isActive ? 'bg-cyan-600' : 'bg-gray-300'
@@ -294,12 +322,36 @@ export function Settings() {
                   aria-label={`Toggle ${method.label}`}
                   pressed={method.isActive}
                   disabled={methodsQuery.loading || isUpdatingMethod}
-                  onPressedChange={() => {
-                    void handlePaymentMethodToggle({
-                      type: method.type,
-                      label: method.label,
-                      isActive: method.isActive,
-                    });
+                  onPressedChange={async () => {
+                    try {
+                      await handlePaymentMethodToggle({
+                        type: method.type,
+                        label: method.label,
+                        isActive: method.isActive,
+                      });
+                      apolloClient.writeQuery<
+                        CheckoutMethodSettingsQuery,
+                        CheckoutMethodSettingsQueryVariables
+                      >({
+                        query: CheckoutMethodSettingsDocument,
+                        data: {
+                          __typename: 'Query',
+
+                          paymentMethods:
+                            methodsQuery.data?.paymentMethods.map((option) =>
+                              option._id === method._id
+                                ? { ...option, isActive: !option.isActive }
+                                : option,
+                            ) || [],
+                          shippingOptions:
+                            methodsQuery.data?.shippingOptions || [],
+                        },
+                      });
+                    } catch {
+                      toaster.error({
+                        description: 'Failed to update payment method status.',
+                      });
+                    }
                   }}
                   className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors ${
                     method.isActive ? 'bg-cyan-600' : 'bg-gray-300'

@@ -5,10 +5,12 @@ import { useControllableState } from '~/hooks/useControllableState';
 import { NumberInputField } from '../NumberInputField';
 import { Checkbox } from '../ui/Checkbox';
 
+type MemberLevelInputMap = Record<string, string | null | undefined>;
+
 type Value = {
   type?: 'per-level' | 'bet-amount';
-  perLevel?: Record<string, any>;
-  betAmount?: Record<string, any>;
+  perLevel?: MemberLevelInputMap;
+  betAmount?: MemberLevelInputMap;
 };
 interface MemberLevelFieldProps {
   valueProps?: Value;
@@ -33,8 +35,10 @@ export const MemberLevelField = ({
     <div className="flex flex-col gap-2">
       <Checkbox.Root
         checked={value.type === 'per-level'}
-        onCheckedChange={(details) => {
-          if (!details.checked) {
+        onCheckedChange={(
+          details: { checked: boolean | 'indeterminate' },
+        ) => {
+          if (details.checked !== true) {
             setValue((prev) => ({ ...prev, type: 'bet-amount' }));
           } else {
             setValue((prev) => ({ ...prev, type: 'per-level' }));
@@ -54,15 +58,15 @@ export const MemberLevelField = ({
       {value.type === 'bet-amount' && <NumberInputField />}
       {value.type === 'per-level' && (
         <>
-          {Object.entries(value.perLevel ?? {}).map(([key, value]) => {
+          {Object.entries(value.perLevel ?? {}).map(([key, levelValue]) => {
             return (
               <NumberInputField
                 key={key}
-                value={value}
+                value={levelValue ?? undefined}
                 onChange={(e) => {
                   setValue((prev) => ({
                     ...prev,
-                    perLevel: { ...prev.perLevel, [key]: e },
+                    perLevel: { ...(prev.perLevel ?? {}), [key]: e },
                   }));
                 }}
               />
@@ -73,10 +77,12 @@ export const MemberLevelField = ({
     </div>
   );
 };
-function hasAllDefinedValue(obj: any): boolean {
+function hasAllDefinedValue(obj: unknown): boolean {
   if (obj === undefined) return false;
   if (!isNull(obj) && isObject(obj)) {
-    return Object.values(obj).every((value) => hasAllDefinedValue(value));
+    return Object.values(obj as Record<string, unknown>).every((value) =>
+      hasAllDefinedValue(value),
+    );
   }
   return true;
 }

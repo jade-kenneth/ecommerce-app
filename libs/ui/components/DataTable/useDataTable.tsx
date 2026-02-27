@@ -90,6 +90,10 @@ export interface TableProps<T> {
   sorting?: SortingProps;
   onRowSelect?: (item: T) => void;
 }
+
+type FilterStateValue = string | number | NumberRange;
+type FilterState = Record<string, FilterStateValue>;
+
 export function useFilter<F extends FilterEntries>(props?: UseFilterProps<F>) {
   const [filterValue, setFilterValue] = React.useState<string>('');
   const [filterBy, setFilterBy] = React.useState<string>('');
@@ -119,7 +123,7 @@ export function useTable<T>({
 }: TableProps<T>) {
   const [sortBy, setSortBy] = React.useState<string | null>(null);
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
-  const [filters, setFilters] = React.useState<Record<string, any>>({});
+  const [filters] = React.useState<FilterState>({});
 
   const handleRowSelect = (item: T) => {
     onRowSelect?.(item);
@@ -138,7 +142,13 @@ export function useTable<T>({
   };
 }
 export interface UseDataTableReturn
-  extends ReturnType<typeof useDataTable<any, FilterEntries>> {}
+  <
+    T = unknown,
+    F extends FilterEntries = FilterEntries,
+  > {
+  table: ReturnType<typeof useTable<T>>;
+  filter: ReturnType<typeof useFilter<F>>;
+}
 
 export interface UseDataTableProps<T, F extends FilterEntries>
   extends TableProps<T> {
@@ -146,7 +156,7 @@ export interface UseDataTableProps<T, F extends FilterEntries>
 }
 export function useDataTable<T, F extends FilterEntries>(
   props: UseDataTableProps<T, F>
-) {
+): UseDataTableReturn<T, F> {
   const table = useTable(props);
   const filter = useFilter(props.filtering);
   return { table, filter };

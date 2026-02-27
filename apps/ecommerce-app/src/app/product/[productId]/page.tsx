@@ -1,84 +1,41 @@
-import axios, { type AxiosResponse } from 'axios';
-import { print } from 'graphql';
-import gql from 'graphql-tag';
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { ProductCoreDataFragment } from '~/graphql/generated';
+import { apolloClient } from '~/config/client';
+import {
+  ProductCoreDataFragment,
+  ProductsDocument,
+  ProductsQuery,
+  ProductsQueryVariables,
+} from '~/graphql/generated';
 import ProductDetailsClient from './ProductDetailsClient';
 
 type ProductIdParam = { productId: string };
-
-interface Paginated<T> {
-  pageInfo: {
-    hasNextPage: boolean;
-    endCursor: string | null;
-  };
-  edges: Array<{
-    node: T;
-  }>;
-}
-
-type ProductQueryResponse = {
-  data?: {
-    products?: Paginated<ProductCoreDataFragment> | null;
-  };
-  errors?: Array<{ message?: string }>;
-};
-
-const PRODUCTS_QUERY = gql`
-  query ProductsForProductPage(
-    $first: Int
-    $after: Cursor
-    $filter: ProductsFilterInput
-  ) {
-    products(first: $first, after: $after, filter: $filter) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      edges {
-        node {
-          ... on Product {
-            _id
-            name
-            thumbnail
-            price
-            pieces
-          }
-        }
-      }
-    }
-  }
-`;
 
 async function fetchProducts(options?: {
   productId?: string;
   first?: number;
 }): Promise<ProductCoreDataFragment[]> {
-  const portalApi = process.env.NEXT_PUBLIC_PORTAL_API!;
   const { productId, first = 1 } = options ?? {};
 
   try {
-    const { data }: AxiosResponse<ProductQueryResponse> = await axios.post(
-      portalApi,
-      {
-        query: print(PRODUCTS_QUERY),
-        variables: {
-          first,
-          ...(productId
-            ? {
-                filter: { _id: { equal: productId } },
-              }
-            : {}),
-        },
+    const result = await apolloClient.query<
+      ProductsQuery,
+      ProductsQueryVariables
+    >({
+      query: ProductsDocument,
+      variables: {
+        first,
+        ...(productId
+          ? {
+              filter: { _id: { equal: productId } },
+            }
+          : {}),
       },
-      {
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 8000,
-      },
-    );
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    });
 
-    return data?.data?.products?.edges.map(({ node }) => node) ?? [];
+    return result.data.products.edges.map(({ node }) => node);
   } catch (e) {
     console.error('Failed to fetch products for product page metadata:', e);
     return [];

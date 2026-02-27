@@ -13,6 +13,7 @@ import { apolloCache } from './cache';
 const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;
 
 const AUTH_LINK = setContext(async (_req, ctx) => {
+  if (typeof window === 'undefined') return ctx;
   const session = await getSession();
   if (session.status === 'authenticated') {
     return {
@@ -23,6 +24,7 @@ const AUTH_LINK = setContext(async (_req, ctx) => {
       },
     };
   }
+  return ctx;
 });
 
 invariant(portalApi, "'NEXT_PUBLIC_PORTAL_API' is missing");

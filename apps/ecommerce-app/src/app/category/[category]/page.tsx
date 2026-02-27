@@ -60,6 +60,11 @@ export async function generateMetadata({
     alternates: {
       canonical,
     },
+    icons: {
+      icon: '/Logo.png',
+      shortcut: '/Logo.png',
+      apple: '/Logo.png',
+    },
     openGraph: {
       title,
       description,

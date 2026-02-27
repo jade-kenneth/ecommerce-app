@@ -67,6 +67,11 @@ export async function generateMetadata({
     alternates: {
       canonical: `/product/${productId}`,
     },
+    icons: {
+      icon: '/Logo.png',
+      shortcut: '/Logo.png',
+      apple: '/Logo.png',
+    },
     openGraph: product?.thumbnail
       ? {
           title,

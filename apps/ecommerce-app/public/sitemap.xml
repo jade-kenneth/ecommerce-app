@@ -5,4 +5,73 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <url>
+    <loc>https://amy-store.site/category</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://amy-store.site/category/daily-dishes</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://amy-store.site/category/canned</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://amy-store.site/category/beverages</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amy-store.site/category/instant</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amy-store.site/category/personal-care</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amy-store.site/category/rice</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+   <url>
+    <loc>https://amy-store.site/category/snacks</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amy-store.site/category/sweets</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+   <url>
+    <loc>https://amy-store.site/category/household-items</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+   <url>
+    <loc>https://amy-store.site/category/health-wellness</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+   <url>
+    <loc>https://amy-store.site/category/essentials</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+    <url>
+    <loc>https://amy-store.site/category/essentials</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
 </urlset>

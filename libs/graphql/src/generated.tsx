@@ -1,7 +1,7 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Fri, 27 Feb 2026 15:26:06 GMT
+// Last modified: Sat, 28 Feb 2026 05:04:08 GMT
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -554,6 +554,7 @@ export type ProductCoreDataFragment = {
   discount: number;
   category?: Array<CategoryType> | null;
   thumbnail: string;
+  avgRating: number;
 };
 
 export type ProductsQueryVariables = Exact<{
@@ -586,6 +587,7 @@ export type ProductsQuery = {
         discount: number;
         category?: Array<CategoryType> | null;
         thumbnail: string;
+        avgRating: number;
       };
     }>;
   };
@@ -698,6 +700,7 @@ export type HighPointProductsQuery = {
         discount: number;
         category?: Array<CategoryType> | null;
         thumbnail: string;
+        avgRating: number;
       };
     }>;
   };
@@ -722,6 +725,7 @@ export type SearchProductByNameQuery = {
     discount: number;
     category?: Array<CategoryType> | null;
     thumbnail: string;
+    avgRating: number;
   }> | null;
 };
 
@@ -736,6 +740,7 @@ export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
     discount
     category
     thumbnail
+    avgRating
   }
 `;
 export const CreateMemberAccountDocument = /*#__PURE__*/ gql`
@@ -1759,17 +1764,6 @@ export function useProductReviewsLazyQuery(
 }
 // @ts-ignore
 export function useProductReviewsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProductReviewsQuery,
-        ProductReviewsQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  ProductReviewsQuery | undefined,
-  ProductReviewsQueryVariables
->;
-export function useProductReviewsSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     ProductReviewsQuery,
     ProductReviewsQueryVariables
@@ -1785,15 +1779,26 @@ export function useProductReviewsSuspenseQuery(
         ProductReviewsQuery,
         ProductReviewsQueryVariables
       >,
+): Apollo.UseSuspenseQueryResult<
+  ProductReviewsQuery | undefined,
+  ProductReviewsQueryVariables
+>;
+export function useProductReviewsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ProductReviewsQuery,
+        ProductReviewsQueryVariables
+      >,
 ) {
   const options =
     baseOptions === Apollo.skipToken
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<ProductReviewsQuery, ProductReviewsQueryVariables>(
-    ProductReviewsDocument,
-    options,
-  );
+  return Apollo.useSuspenseQuery<
+    ProductReviewsQuery,
+    ProductReviewsQueryVariables
+  >(ProductReviewsDocument, options);
 }
 export type ProductReviewsQueryHookResult = ReturnType<
   typeof useProductReviewsQuery

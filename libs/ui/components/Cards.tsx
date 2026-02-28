@@ -136,7 +136,7 @@ export const Cards = (props: CardsProps) => {
                   key={idx}
                   className="w-4 h-4"
                   style={{
-                    color: 3 >= idx + 1 ? '#FFA000' : '#D2D2D2',
+                    color: props.avgRating >= idx + 1 ? '#FFA000' : '#D2D2D2',
                   }}
                   fill="currentColor"
                   stroke="currentColor"

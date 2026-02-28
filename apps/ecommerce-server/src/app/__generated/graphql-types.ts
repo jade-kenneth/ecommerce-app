@@ -460,6 +460,7 @@ export interface Product extends Node {
     nodeType: string;
     thumbnail: string;
     name: string;
+    avgRating: number;
     price: number;
     status: StatusType;
     discount: number;

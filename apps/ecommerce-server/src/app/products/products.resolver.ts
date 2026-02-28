@@ -1,4 +1,5 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Inject } from '@nestjs/common';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Product } from '../../types/product';
 
 import { Filter } from '../../libs/repository';
@@ -8,6 +9,8 @@ import {
   ProductByIdsInput,
   UpdateProductInput,
 } from '../__generated/graphql-types';
+import { Tokens } from '../../types/tokens';
+import { ProductReviewsRepository } from '../product-reviews/repositories/product-reviews.repository';
 import { ProductsService } from './products.service';
 
 @Resolver('Products')
@@ -64,5 +67,31 @@ export class ProductResolver {
     @Args('filter') filter?: Filter<Product>,
   ) {
     return this.productService.searchProductByName({ search, first, filter });
+  }
+}
+
+@Resolver('Product')
+export class ProductFieldResolver {
+  constructor(
+    @Inject(Tokens.ProductReviewsRepositoryToken)
+    private readonly productReviews: ProductReviewsRepository,
+  ) {}
+
+  @ResolveField('avgRating')
+  async avgRating(@Parent() product: Product): Promise<number> {
+    const reviews = await this.productReviews
+      .list({ productId: product._id })
+      .collect();
+
+    if (reviews.length === 0) {
+      return 0;
+    }
+
+    const totalRating = reviews.reduce(
+      (sum, review) => sum + Number(review.rating ?? 0),
+      0,
+    );
+
+    return Number((totalRating / reviews.length).toFixed(2));
   }
 }

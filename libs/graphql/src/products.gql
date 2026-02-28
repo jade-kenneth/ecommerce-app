@@ -8,6 +8,7 @@ fragment ProductCoreData on Product {
   discount
   category
   thumbnail
+  avgRating
 }
 query Products($first: Int, $after: Cursor, $filter: ProductsFilterInput) {
   products(first: $first, after: $after, filter: $filter) {

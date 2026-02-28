@@ -29,6 +29,7 @@ export type Product = Node & {
   reservation?: ReservationType;
   flashSale?: boolean;
   variations?: KeyValuePair[];
+  avgRating?: number;
   sold?: number;
   vouchers?: Voucher[];
   dateAdded?: DateTime;
@@ -57,6 +58,7 @@ export async function ProductRepositoryFactory(
       description: String,
       reservation: String,
       flashSale: Boolean,
+      avgRating: Number,
       variations: [Buffer],
       sold: Number,
       vouchers: [Buffer],

@@ -411,6 +411,7 @@ export default function ProductDetailsClient({
                       name={item.name}
                       price={item.price}
                       discount={item.discount}
+                      avgRating={item.avgRating ?? 0}
                       thumbnail={item.thumbnail}
                       points={item.points}
                       category={item.category ?? []}

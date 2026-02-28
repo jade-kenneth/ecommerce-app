@@ -4,13 +4,13 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
-import { AccountType } from '~/graphql/generated';
-import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { authenticate } from '~/providers/AuthProvider';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { toaster } from '~/components/ToastContainer';
 import { Field } from '~/components/ui/Field';
+import { AccountType } from '~/graphql/generated';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { authenticate } from '~/providers/AuthProvider';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;

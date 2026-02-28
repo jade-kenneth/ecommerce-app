@@ -1,17 +1,15 @@
 /** trigger */
+
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
+import { Container } from '~/components/Container';
 import { CategoryType } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
-import { Container } from '~/components/Container';
 
 interface CategoriesProps {}
 
-const CATEGORY_ASSETS: Record<
-  CategoryType,
-  { src: string; size: number }
-> = {
+const CATEGORY_ASSETS: Record<CategoryType, { src: string; size: number }> = {
   [CategoryType.Beverages]: { src: '/beverages.png', size: 100 },
   [CategoryType.Canned]: { src: '/canned.png', size: 100 },
   [CategoryType.DailyDishes]: { src: '/dishes.png', size: 150 },
@@ -33,8 +31,9 @@ export const categoryTypeToSlug = (type: CategoryType) =>
 export const categorySlugToType = (slug: string) => {
   const normalizedSlug = slug.trim().toLowerCase();
   return (
-    CATEGORY_TYPES.find((type) => categoryTypeToSlug(type) === normalizedSlug) ??
-    null
+    CATEGORY_TYPES.find(
+      (type) => categoryTypeToSlug(type) === normalizedSlug,
+    ) ?? null
   );
 };
 

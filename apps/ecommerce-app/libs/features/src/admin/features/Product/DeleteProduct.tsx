@@ -1,10 +1,10 @@
 import { Portal } from '@ark-ui/react';
 import { Trash, XIcon } from 'lucide-react';
 import { Menu } from '~/components';
-import { useDeleteProductMutation } from '~/graphql/generated';
-import { useDisclosure } from '~/utils/useDisclosure';
 import { Dialog } from '~/components/Dialog';
 import { Spinner } from '~/components/Spinner';
+import { useDeleteProductMutation } from '~/graphql/generated';
+import { useDisclosure } from '~/utils/useDisclosure';
 import { useProductProviderContext } from './ProductContext';
 
 export const DeleteProduct = () => {

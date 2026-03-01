@@ -5,8 +5,8 @@ import { UploadCloud } from 'lucide-react';
 import Image from 'next/image';
 import { useCallback, useRef } from 'react';
 
-import { useControllableState } from 'libs/hooks/useControllableState';
-import { uploadFile } from 'libs/utils/uploadFile';
+import { useControllableState } from '~/hooks/useControllableState';
+import { uploadFile } from '~/utils/uploadFile';
 import { FileUpload } from './ui/FileUpload';
 interface UploadFileProps extends UseFileUploadProps {
   value?: string[];

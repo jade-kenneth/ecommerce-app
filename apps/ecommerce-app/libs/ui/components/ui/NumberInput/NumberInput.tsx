@@ -1,6 +1,6 @@
 import { NumberInput } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { numberInputRecipe } from './NumberInput.recipe';
 
 const { withContext, withProvider, withRootProvider } =

@@ -8,8 +8,8 @@ import {
   ShippingType,
   useCartQuery,
   useProductsQuery,
-} from 'libs/graphql/src/generated';
-import { useGlobalStore } from 'libs/hooks/useGlobalStore';
+} from '~/graphql/generated';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 export interface Item {

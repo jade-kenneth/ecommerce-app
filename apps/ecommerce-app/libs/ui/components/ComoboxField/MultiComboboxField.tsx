@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebounceCallback } from 'usehooks-ts';
 
-import { useControllableState } from 'libs/hooks/useControllableState';
+import { useControllableState } from '~/hooks/useControllableState';
 import { Combobox, ComboboxItem } from '../ui/Combobox';
 
 type Option = ComboboxItem;

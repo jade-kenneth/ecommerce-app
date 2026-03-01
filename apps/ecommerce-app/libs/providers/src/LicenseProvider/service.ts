@@ -1,6 +1,6 @@
-import { store } from 'libs/data-access/src/store/store';
+import { store } from '~/store';
 
-import { LicenseInput } from 'libs/graphql/src/generated';
+import { LicenseInput } from '~/graphql/generated';
 import * as service from './service.core';
 
 export type License = LicenseInput;

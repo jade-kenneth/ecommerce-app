@@ -1,4 +1,4 @@
-import { createContext } from 'libs/utils';
+import { createContext } from '~/utils';
 import { UseDataTableReturn } from './useDataTable';
 
 export const [DataTableProvider, useDataTableContext] =

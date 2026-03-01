@@ -1,5 +1,5 @@
 import { tabsAnatomy } from '@ark-ui/react/tabs';
-import { anatomyToRecipeSlots } from 'libs/utils/anatomyToRecipeSlots';
+import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 import { tv } from 'tailwind-variants';
 
 export const tabsRecipe = tv({

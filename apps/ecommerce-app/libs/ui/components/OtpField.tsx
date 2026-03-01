@@ -1,4 +1,4 @@
-import { useControllableState } from 'libs/hooks/useControllableState';
+import { useControllableState } from '~/hooks/useControllableState';
 import { PinInput } from './ui/PinInput';
 
 export interface OtpFieldProps {

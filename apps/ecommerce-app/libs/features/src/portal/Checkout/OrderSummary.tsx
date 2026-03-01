@@ -8,12 +8,12 @@ import {
   useCreateGcashPaymentMutation,
   usePaymentMethodsQuery,
   useShippingOptionsQuery,
-} from 'libs/graphql/src/generated';
-import { Show } from 'libs/ui/components/Show';
-import { gtm } from 'libs/utils';
-import { capitalize } from 'libs/utils/capitalize';
-import { APP_URL_SCHEME } from 'libs/utils/constant';
-import { numberFormatter } from 'libs/utils/numberFormatter';
+} from '~/graphql/generated';
+import { Show } from '~/components/Show';
+import { gtm } from '~/utils';
+import { capitalize } from '~/utils/capitalize';
+import { APP_URL_SCHEME } from '~/utils/constant';
+import { numberFormatter } from '~/utils/numberFormatter';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { useCartContext } from '../Cart/CartContext';

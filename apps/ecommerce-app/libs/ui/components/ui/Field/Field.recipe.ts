@@ -1,5 +1,5 @@
 import { fieldAnatomy } from '@ark-ui/react/field';
-import { anatomyToRecipeSlots } from 'libs/utils/anatomyToRecipeSlots';
+import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 import { tv } from 'tailwind-variants';
 
 export const fieldRecipe = tv({

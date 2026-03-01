@@ -3,7 +3,7 @@
 import {
   ShippingType,
   useShippingOptionsQuery,
-} from 'libs/graphql/src/generated';
+} from '~/graphql/generated';
 import { Truck } from 'lucide-react';
 import { useEffect } from 'react';
 import { useCartContext } from '../Cart/CartContext';

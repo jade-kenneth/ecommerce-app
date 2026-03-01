@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AccountType } from 'libs/graphql/src/generated';
+import { AccountType } from '~/graphql/generated';
 
 export interface Token {
   accessToken: string;

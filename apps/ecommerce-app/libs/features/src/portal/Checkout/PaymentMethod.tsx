@@ -3,7 +3,7 @@
 import {
   PaymentMethodType,
   usePaymentMethodsQuery,
-} from 'libs/graphql/src/generated';
+} from '~/graphql/generated';
 import { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useCartContext } from '../Cart/CartContext';

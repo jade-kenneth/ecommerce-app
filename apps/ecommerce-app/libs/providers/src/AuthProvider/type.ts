@@ -1,4 +1,4 @@
-import { AccountType } from 'libs/graphql/src/generated';
+import { AccountType } from '~/graphql/generated';
 import { Merge } from 'type-fest';
 
 export type Session__Authenticated = {

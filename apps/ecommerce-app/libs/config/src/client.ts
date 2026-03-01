@@ -7,7 +7,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import invariant from 'tiny-invariant';
 
-import { getSession } from 'libs/providers/src/AuthProvider/service';
+import { getSession } from '~/providers/AuthProvider/service';
 import { apolloCache } from './cache';
 
 const portalApi = process.env.NEXT_PUBLIC_PORTAL_API;

@@ -1,5 +1,5 @@
 import { Tabs } from '@ark-ui/react/tabs';
-import { createRecipeContext } from 'libs/utils/createRecipeContext';
+import { createRecipeContext } from '~/utils/createRecipeContext';
 import { tabsRecipe } from './Tabs.recipe';
 
 const { withProvider, withContext } = createRecipeContext(tabsRecipe);

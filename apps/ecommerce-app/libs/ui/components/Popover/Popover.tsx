@@ -1,5 +1,5 @@
 import { Popover } from '@ark-ui/react/popover';
-import { createRecipeContext } from 'libs/utils/createRecipeContext';
+import { createRecipeContext } from '~/utils/createRecipeContext';
 import { popoverRecipe } from './Popover.recipe';
 
 const { withRootProvider, withContext } = createRecipeContext(popoverRecipe);

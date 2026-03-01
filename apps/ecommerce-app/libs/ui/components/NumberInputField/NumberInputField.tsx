@@ -2,7 +2,7 @@ import { useNumberInput, UseNumberInputProps } from '@ark-ui/react';
 
 import { twMerge } from 'tailwind-merge';
 
-import { useControllableState } from 'libs/hooks/useControllableState';
+import { useControllableState } from '~/hooks/useControllableState';
 import { NumberInput } from '../ui/NumberInput';
 
 interface NumberInputFieldProps extends UseNumberInputProps {

@@ -1,6 +1,6 @@
 import { Menu } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { menuRecipe } from './Menu.recipe';
 
 const { withRootProvider, withContext } = createRecipeContext(menuRecipe);

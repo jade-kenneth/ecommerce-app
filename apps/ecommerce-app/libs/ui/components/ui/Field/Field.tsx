@@ -1,6 +1,6 @@
 import { Field } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { fieldRecipe } from './Field.recipe';
 
 const { withProvider, withContext, withRootProvider } =

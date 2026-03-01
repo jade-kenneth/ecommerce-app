@@ -1,6 +1,6 @@
 import { ark, Toast } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { toastRecipe } from './Toast.recipe';
 

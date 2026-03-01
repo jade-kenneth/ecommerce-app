@@ -2,11 +2,11 @@
 import { X } from 'lucide-react';
 import { useState } from 'react';
 
-import { useGlobalStore } from 'libs/hooks/useGlobalStore';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
 
-import { Dialog } from '../../../ui/components/Dialog';
+import { Dialog } from '~/components/Dialog';
 
 export function AuthForm() {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');

@@ -1,7 +1,7 @@
 'use client';
 
-import { useGlobalStore } from 'libs/hooks/useGlobalStore';
-import { logout } from 'libs/providers/src/AuthProvider';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { logout } from '~/providers/AuthProvider';
 import { Home, LogOut, Package, Settings, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';

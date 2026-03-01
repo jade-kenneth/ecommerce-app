@@ -1,5 +1,5 @@
 import { dialogAnatomy } from '@ark-ui/react/dialog';
-import { anatomyToRecipeSlots } from 'libs/utils/anatomyToRecipeSlots';
+import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 import { tv } from 'tailwind-variants';
 
 const anatomy = dialogAnatomy.extendWith('header', 'body', 'footer');

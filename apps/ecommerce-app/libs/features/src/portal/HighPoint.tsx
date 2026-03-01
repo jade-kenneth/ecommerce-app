@@ -1,8 +1,8 @@
-import { useHighPointProductsQuery } from 'libs/graphql/src/generated';
-import { useLicenseContext } from 'libs/providers/src/LicenseProvider/LicenseContext';
+import { useHighPointProductsQuery } from '~/graphql/generated';
+import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { FunctionComponent } from 'react';
-import { Cards } from '../../../ui/components/Cards';
-import { Container } from '../../../ui/components/Container';
+import { Cards } from '~/components/Cards';
+import { Container } from '~/components/Container';
 
 interface HighPointProps {}
 

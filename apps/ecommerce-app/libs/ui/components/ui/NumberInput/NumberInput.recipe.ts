@@ -1,6 +1,6 @@
 import { numberInputAnatomy } from '@ark-ui/anatomy';
 
-import { anatomyToRecipeSlots } from 'libs/utils';
+import { anatomyToRecipeSlots } from '~/utils';
 import { tv } from 'tailwind-variants';
 
 export const numberInputRecipe = tv({

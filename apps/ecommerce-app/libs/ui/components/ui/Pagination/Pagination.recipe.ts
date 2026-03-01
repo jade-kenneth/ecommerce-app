@@ -1,5 +1,5 @@
 import { paginationAnatomy } from '@ark-ui/anatomy';
-import { anatomyToRecipeSlots } from 'libs/utils';
+import { anatomyToRecipeSlots } from '~/utils';
 import { tv } from 'tailwind-variants';
 
 export const paginationRecipe = tv({

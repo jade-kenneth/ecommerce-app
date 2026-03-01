@@ -1,12 +1,12 @@
 'use client';
 
-import { Show } from 'libs/ui/components/Show';
+import { Show } from '~/components/Show';
 import { Minus, Package, Plus, Tag } from 'lucide-react';
 import Image from 'next/image';
 
-import { useUpdateCartItemMutation } from 'libs/graphql/src/generated';
-import { capitalize } from 'libs/utils/capitalize';
-import { numberFormatter } from 'libs/utils/numberFormatter';
+import { useUpdateCartItemMutation } from '~/graphql/generated';
+import { capitalize } from '~/utils/capitalize';
+import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from './CartContext';
 import { EmptyCart } from './EmptyCart';
 import { RemoveItem } from './RemoveItem';

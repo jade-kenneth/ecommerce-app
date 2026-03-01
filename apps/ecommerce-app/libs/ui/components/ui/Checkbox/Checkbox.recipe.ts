@@ -1,6 +1,6 @@
 import { checkboxAnatomy } from '@ark-ui/react';
 
-import { anatomyToRecipeSlots } from 'libs/utils';
+import { anatomyToRecipeSlots } from '~/utils';
 import { tv } from 'tailwind-variants';
 
 export const checkboxRecipe = tv({

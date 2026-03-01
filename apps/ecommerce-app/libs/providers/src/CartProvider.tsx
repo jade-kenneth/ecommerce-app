@@ -1,6 +1,6 @@
 'use client';
 
-import { CartProvider } from 'libs/features/src/portal';
+import { CartProvider } from '~/features/portal';
 import { PropsWithChildren } from 'react';
 
 export const ClientCartProvider = (props: PropsWithChildren) => {

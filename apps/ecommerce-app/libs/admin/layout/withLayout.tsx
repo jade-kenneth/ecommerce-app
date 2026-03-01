@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import type { ComponentType, ReactNode } from 'react';
 import { useEffect } from 'react';
 
-import { Layout as AdminLayout } from 'libs/features/src/admin/features/Layout';
-import { AccountType } from 'libs/graphql/src/generated';
-import { LazySession, useSession } from 'libs/providers/src/AuthProvider';
+import { Layout as AdminLayout } from '~/features/admin/features/Layout';
+import { AccountType } from '~/graphql/generated';
+import { LazySession, useSession } from '~/providers/AuthProvider';
 import { DefaultLoading } from './DefaultLoading';
 import { DefaultUnauthorized } from './DefaultUnauthorized';
 

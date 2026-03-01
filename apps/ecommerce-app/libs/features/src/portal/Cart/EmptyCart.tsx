@@ -1,4 +1,4 @@
-import { CartIcon } from 'libs/ui/icons/CartIcon';
+import { CartIcon } from '~/icons/CartIcon';
 import { useRouter } from 'next/navigation';
 export const EmptyCart = () => {
   const router = useRouter();

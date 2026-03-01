@@ -1,8 +1,8 @@
 'use client';
-import { useGlobalStore } from 'libs/hooks/useGlobalStore';
-import { MedalIcon } from 'libs/ui/icons/MedalIcon';
-import { PhoneIcon } from 'libs/ui/icons/PhoneIcon';
-import { TruckIcon } from 'libs/ui/icons/TruckIcon';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { MedalIcon } from '~/icons/MedalIcon';
+import { PhoneIcon } from '~/icons/PhoneIcon';
+import { TruckIcon } from '~/icons/TruckIcon';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { LicenseTimer } from './LicenseTimer';

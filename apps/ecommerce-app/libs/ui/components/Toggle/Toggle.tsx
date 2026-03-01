@@ -1,5 +1,5 @@
 import { Toggle } from '@ark-ui/react/toggle';
-import { createRecipeContext } from 'libs/utils/createRecipeContext';
+import { createRecipeContext } from '~/utils/createRecipeContext';
 import { toggleRecipe } from './Toggle.recipe';
 
 const { withProvider, withContext } = createRecipeContext(toggleRecipe);

@@ -1,5 +1,5 @@
-import { ProductCoreDataFragment } from 'libs/graphql/src/generated';
-import { createContext } from 'libs/utils/createContext';
+import { ProductCoreDataFragment } from '~/graphql/generated';
+import { createContext } from '~/utils/createContext';
 
 export const [ProductProvider, useProductProviderContext] =
   createContext<ProductCoreDataFragment>();

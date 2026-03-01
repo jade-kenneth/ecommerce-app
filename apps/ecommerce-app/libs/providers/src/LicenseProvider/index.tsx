@@ -4,7 +4,7 @@ import {
   Categories,
   Highlight,
   Navbar,
-} from 'libs/features/src/portal';
+} from '~/features/portal';
 import React from 'react';
 
 import { LicenseContext } from './LicenseContext';

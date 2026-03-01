@@ -1,6 +1,6 @@
 import { Pagination } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { paginationRecipe } from './Pagination.recipe';
 
 const { withContext, withProvider } = createRecipeContext(paginationRecipe);

@@ -1,6 +1,6 @@
 import { Combobox, createListCollection } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { comboboxRecipe } from './ComboboxField.recipe';
 const { withProvider, withRootProvider, withContext } =
   createRecipeContext(comboboxRecipe);

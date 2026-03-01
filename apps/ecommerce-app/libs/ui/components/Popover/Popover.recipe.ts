@@ -1,5 +1,5 @@
 import { popoverAnatomy } from '@ark-ui/react/popover';
-import { anatomyToRecipeSlots } from 'libs/utils/anatomyToRecipeSlots';
+import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 import { tv } from 'tailwind-variants';
 
 export const popoverRecipe = tv({

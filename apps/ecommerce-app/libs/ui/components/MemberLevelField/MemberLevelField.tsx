@@ -1,7 +1,7 @@
 import { isNull, isObject } from 'lodash';
 import { CheckCircle2 } from 'lucide-react';
 
-import { useControllableState } from 'libs/hooks/useControllableState';
+import { useControllableState } from '~/hooks/useControllableState';
 import { NumberInputField } from '../NumberInputField';
 import { Checkbox } from '../ui/Checkbox';
 

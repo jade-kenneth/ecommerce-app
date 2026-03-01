@@ -1,5 +1,5 @@
 import { pinInputAnatomy } from '@ark-ui/react/pin-input';
-import { anatomyToRecipeSlots } from 'libs/utils/anatomyToRecipeSlots';
+import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 import { tv } from 'tailwind-variants';
 
 export const pinInputRecipe = tv({

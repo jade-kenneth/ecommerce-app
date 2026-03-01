@@ -1,6 +1,6 @@
 'use client';
 import { ark } from '@ark-ui/react';
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { badgeRecipe } from './Badge.recipe';
 const { withProvider, withContext } = createRecipeContext(badgeRecipe);
 

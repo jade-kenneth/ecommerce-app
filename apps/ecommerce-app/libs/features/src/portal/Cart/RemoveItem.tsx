@@ -1,9 +1,9 @@
 'use client';
 
 import { Portal } from '@ark-ui/react';
-import { useRemoveFromCartMutation } from 'libs/graphql/src/generated';
-import { AlertDialog } from 'libs/ui/components/ui/AlertDialog';
-import { useDisclosure } from 'libs/utils/useDisclosure';
+import { useRemoveFromCartMutation } from '~/graphql/generated';
+import { AlertDialog } from '~/components/ui/AlertDialog';
+import { useDisclosure } from '~/utils/useDisclosure';
 import { Trash } from 'lucide-react';
 import Image from 'next/image';
 import { useCartContext } from './CartContext';

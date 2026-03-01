@@ -1,4 +1,4 @@
-import { callIfFn } from 'libs/utils/callIfFn';
+import { callIfFn } from '~/utils/callIfFn';
 import { chunk } from 'lodash';
 
 interface Config {

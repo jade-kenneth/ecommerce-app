@@ -1,4 +1,4 @@
-import { createContext } from 'libs/utils/createContext';
+import { createContext } from '~/utils/createContext';
 import { useLicense } from './useLicense';
 
 export const [LicenseContext, useLicenseContext] =

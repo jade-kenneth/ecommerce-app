@@ -1,8 +1,8 @@
 'use client';
 
 import { differenceInSeconds, intervalToDuration } from 'date-fns';
-import { useGlobalStore } from 'libs/hooks/useGlobalStore';
-import { LICENSE_CODE_LOCAL_STORAGE_KEY } from 'libs/utils/constant';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { LICENSE_CODE_LOCAL_STORAGE_KEY } from '~/utils/constant';
 import { useEffect, useState } from 'react';
 
 type LicenseStoragePayload = {

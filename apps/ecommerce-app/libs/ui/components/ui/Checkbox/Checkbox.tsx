@@ -1,6 +1,6 @@
 import { Checkbox } from '@ark-ui/react';
 
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { checkboxRecipe } from './Checkbox.recipe';
 
 const { withProvider, withContext } = createRecipeContext(checkboxRecipe);

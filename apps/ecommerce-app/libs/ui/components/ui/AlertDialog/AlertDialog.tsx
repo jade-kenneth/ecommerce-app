@@ -1,6 +1,6 @@
 import { Dialog } from '@ark-ui/react/dialog';
 import { ark } from '@ark-ui/react/factory';
-import { createRecipeContext } from 'libs/utils/createRecipeContext';
+import { createRecipeContext } from '~/utils/createRecipeContext';
 import { alertDialogRecipe } from './AlertDialog.recipe';
 
 const { withRootProvider, withContext } =

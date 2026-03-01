@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useDebounceCallback } from 'usehooks-ts';
 
-import { useControllableState } from 'libs/hooks/useControllableState';
+import { useControllableState } from '~/hooks/useControllableState';
 import { Field } from '../ui/Field';
 
 interface InputProps extends UseFieldProps {

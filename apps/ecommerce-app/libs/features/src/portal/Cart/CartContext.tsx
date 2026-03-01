@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext } from 'libs/utils/createContext';
+import { createContext } from '~/utils/createContext';
 import { ReactNode } from 'react';
 import { useCart } from './useCart';
 

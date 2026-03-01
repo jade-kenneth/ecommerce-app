@@ -1,4 +1,4 @@
-import { callIfFn } from 'libs/utils/callIfFn';
+import { callIfFn } from '~/utils/callIfFn';
 import { ReactNode } from 'react';
 
 export interface ShowProps {

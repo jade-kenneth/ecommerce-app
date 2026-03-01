@@ -1,5 +1,5 @@
 import { ark } from '@ark-ui/react';
-import { createRecipeContext } from 'libs/utils';
+import { createRecipeContext } from '~/utils';
 import { ComponentPropsWithoutRef, forwardRef } from 'react';
 import { buttonRecipe } from './Button.recipe';
 

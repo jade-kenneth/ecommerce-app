@@ -1,5 +1,5 @@
 import { PinInput } from '@ark-ui/react/pin-input';
-import { createRecipeContext } from 'libs/utils/createRecipeContext';
+import { createRecipeContext } from '~/utils/createRecipeContext';
 import { pinInputRecipe } from './PinInput.recipe';
 
 const { withContext, withProvider } = createRecipeContext(pinInputRecipe);

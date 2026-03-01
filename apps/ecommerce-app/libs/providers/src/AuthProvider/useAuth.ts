@@ -1,6 +1,6 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 
-import { useGlobalStore } from 'libs/hooks/useGlobalStore';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { getSession } from './service';
 import { LazySession } from './type';
 

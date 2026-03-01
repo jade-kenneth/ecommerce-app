@@ -1,4 +1,4 @@
-import { store } from 'libs/data-access/src/store/store';
+import { store } from '~/store';
 import * as services from './service.core';
 import { AuthenticateInput } from './service.core';
 

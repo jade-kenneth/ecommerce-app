@@ -23,7 +23,7 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
     height: 'clamp(220px, 45vw, 490px)',
     borderRadius: 'clamp(16px, 2.5vw, 26px)',
   },
-  items = ['./dishes.png', './buldak.png', './attire.png'],
+  items = ['./dishes.webp', './buldak.webp', './attire.webp'],
 }) => {
   const heroImageSizes =
     '(min-width: 1280px) 900px, (min-width: 1024px) calc(100vw - 370px), 100vw';

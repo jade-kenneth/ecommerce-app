@@ -23,7 +23,7 @@
       "~/admin/*": ["libs/admin/*"],
       "~/components": ["libs/ui/components/index.ts"],
       "~/components/*": ["libs/ui/components/*"],
-      "~/constants": ["libs/utils/src/constant.ts"],
+      "~/constants": ["libs/utils/constant.ts"],
       "~/config": ["libs/config/src/index.ts"],
       "~/config/*": ["libs/config/src/*"],
       "~/providers": ["libs/providers/src/index.ts"],

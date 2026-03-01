@@ -178,37 +178,25 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                       placeholder: 'Enter your password',
                     }}
                     rightAddon={
-                      state.showPassword ? (
-                        <EyeClosed
-                          cursor={'pointer'}
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              showPassword: !state.showPassword,
-                            })
-                          }
-                          style={{
-                            height: '20px',
-                            width: '20px',
-                          }}
-                          aria-label="Hide password"
-                        />
-                      ) : (
-                        <Eye
-                          cursor={'pointer'}
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              showPassword: !state.showPassword,
-                            })
-                          }
-                          style={{
-                            height: '20px',
-                            width: '20px',
-                          }}
-                          aria-label="Show password"
-                        />
-                      )
+                      <button
+                        type="button"
+                        aria-label={
+                          state.showPassword ? 'Hide password' : 'Show password'
+                        }
+                        className="inline-flex items-center justify-center rounded-full p-1 text-carbon-400 transition-colors hover:text-carbon-100"
+                        onClick={() =>
+                          setState({
+                            ...state,
+                            showPassword: !state.showPassword,
+                          })
+                        }
+                      >
+                        {state.showPassword ? (
+                          <EyeClosed className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
                     }
                     {...field}
                   />
@@ -236,37 +224,27 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                     placeholder: 'Confirm your password',
                   }}
                   rightAddon={
-                    state.showConfirmPassword ? (
-                      <EyeClosed
-                        cursor={'pointer'}
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            showConfirmPassword: !state.showConfirmPassword,
-                          })
-                        }
-                        style={{
-                          height: '20px',
-                          width: '20px',
-                        }}
-                        aria-label="Hide password"
-                      />
-                    ) : (
-                      <Eye
-                        cursor={'pointer'}
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            showConfirmPassword: !state.showConfirmPassword,
-                          })
-                        }
-                        style={{
-                          height: '20px',
-                          width: '20px',
-                        }}
-                        aria-label="Show password"
-                      />
-                    )
+                    <button
+                      type="button"
+                      aria-label={
+                        state.showConfirmPassword
+                          ? 'Hide confirm password'
+                          : 'Show confirm password'
+                      }
+                      className="inline-flex items-center justify-center rounded-full p-1 text-carbon-400 transition-colors hover:text-carbon-100"
+                      onClick={() =>
+                        setState({
+                          ...state,
+                          showConfirmPassword: !state.showConfirmPassword,
+                        })
+                      }
+                    >
+                      {state.showConfirmPassword ? (
+                        <EyeClosed className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
                   }
                   {...field}
                 />

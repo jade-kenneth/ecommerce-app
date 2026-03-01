@@ -128,7 +128,7 @@ export const Navbar: FunctionComponent<NavbarProps> = React.memo(
                   setSearchQuery(val);
                   setIsSearchOpen(val.trim().length > 0);
                 }}
-                className="rounded-[32px] h-11 sm:h-12 w-full lg:w-[35.0625rem] bg-primary-25 text-primary-500"
+                className="h-11 w-full rounded-[32px] border-primary-100 bg-primary-25 text-primary-700 sm:h-12 lg:w-[35.0625rem]"
                 rightAddon={
                   <Button
                     size="sm"

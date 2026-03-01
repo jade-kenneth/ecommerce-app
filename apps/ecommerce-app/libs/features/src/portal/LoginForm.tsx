@@ -36,6 +36,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const form = useForm({
     resolver: zodResolver(definition),
   });
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const setIsAuthenticated = useGlobalStore(
     (state) => state.authenticate.setIsAuthenticated,
@@ -91,37 +92,33 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           name="password"
           render={({ field, fieldState }) => (
             <Field.Root invalid={!!fieldState.invalid}>
-              {(() => {
-                const [showPassword, setShowPassword] = React.useState(false);
-                return (
-                  <>
-                    <Input
-                      className="rounded-[32px]"
-                      inputProps={{
-                        type: showPassword ? 'text' : 'password',
-                        placeholder: 'Enter your password',
-                      }}
-                      rightAddon={
-                        showPassword ? (
-                          <EyeClosed
-                            className="w-5 h-5 cursor-pointer"
-                            onClick={() => setShowPassword(!showPassword)}
-                          />
-                        ) : (
-                          <Eye
-                            className="w-5 h-5 cursor-pointer"
-                            onClick={() => setShowPassword(!showPassword)}
-                          />
-                        )
+              <>
+                <Input
+                  className="rounded-[32px]"
+                  inputProps={{
+                    type: showPassword ? 'text' : 'password',
+                    placeholder: 'Enter your password',
+                  }}
+                  rightAddon={
+                    <button
+                      type="button"
+                      aria-label={
+                        showPassword ? 'Hide password' : 'Show password'
                       }
-                      {...field}
-                    />
-                    <Field.ErrorText>
-                      {fieldState.error?.message}
-                    </Field.ErrorText>
-                  </>
-                );
-              })()}
+                      className="inline-flex items-center justify-center rounded-full p-1 text-carbon-400 transition-colors hover:text-carbon-100"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {showPassword ? (
+                        <EyeClosed className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  }
+                  {...field}
+                />
+                <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
+              </>
             </Field.Root>
           )}
         />

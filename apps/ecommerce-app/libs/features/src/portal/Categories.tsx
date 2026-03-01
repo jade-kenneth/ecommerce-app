@@ -55,7 +55,10 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
         {items.map(({ type, slug, name, src, size }) => {
           return (
             <div key={type} className="flex items-center">
-              <Link href={`/category/${slug}`} className="w-full h-full">
+              <Link
+                href={`/category/${slug}`}
+                className="h-full w-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+              >
                 <Card name={name} imgSrc={src} size={size} />
               </Link>
             </div>
@@ -74,7 +77,7 @@ interface CardProps {
 
 export const Card = ({ imgSrc, name, size }: CardProps) => {
   return (
-    <div className="w-full h-full min-h-[160px] sm:min-h-[200px] flex flex-col items-center justify-between gap-3 rounded-2xl border border-carbon-950 bg-white shadow-md p-4 sm:p-5 transform-gpu transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none motion-reduce:transform-none hover:scale-[1.03]">
+    <div className="h-full min-h-[160px] w-full transform-gpu rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out will-change-transform hover:scale-[1.03] hover:border-primary-100 hover:shadow-md motion-reduce:transform-none motion-reduce:transition-none sm:min-h-[200px] sm:p-5">
       <div className="flex-1 w-full flex items-center justify-center">
         <Image
           src={imgSrc as string}

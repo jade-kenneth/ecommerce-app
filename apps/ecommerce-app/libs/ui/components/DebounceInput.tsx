@@ -26,6 +26,7 @@ interface IInputProps
   value?: string;
   onChange?: (value: string) => void;
   placeholder?: string;
+  inputProps?: React.ComponentProps<typeof Field.Input>;
 }
 
 export const DebounceInput = ({
@@ -54,6 +55,7 @@ export const DebounceInput = ({
       )}
     >
       <Field.Input
+        {...props.inputProps}
         value={internalValue}
         className="border-none"
         placeholder={props.placeholder}

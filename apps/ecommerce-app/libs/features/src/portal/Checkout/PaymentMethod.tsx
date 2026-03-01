@@ -1,11 +1,8 @@
 'use client';
 
-import {
-  PaymentMethodType,
-  usePaymentMethodsQuery,
-} from '~/graphql/generated';
 import { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { PaymentMethodType, usePaymentMethodsQuery } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';
 
 type PaymentOptionCardProps = {
@@ -31,7 +28,7 @@ export function PaymentOptionCard({
         'text-left w-full rounded-xl p-5 border transition',
         selected
           ? 'bg-cyan-50 border-cyan-300 shadow-sm'
-          : 'border-carbon-200 hover:border-cyan-400',
+          : 'border-carbon-800 hover:border-cyan-400',
       )}
     >
       <div className="flex items-start gap-3">
@@ -207,12 +204,9 @@ export default function PaymentMethod() {
         ))}
       </div>
 
-      <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-        <p className="text-blue-800 text-sm">
-          <span className="font-semibold">Secure Payment:</span> All
-          transactions are encrypted and secure. Your payment information is
-          protected.
-        </p>
+      <div className="rounded-xl border border-cyan-100 bg-cyan-50/70 p-3 text-xs text-cyan-900">
+        <span className="font-semibold">Secure Payment:</span> All transactions
+        are encrypted and secure. Your payment information is protected.
       </div>
     </div>
   );

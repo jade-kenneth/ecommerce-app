@@ -1,6 +1,6 @@
 import { fieldAnatomy } from '@ark-ui/react/field';
-import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 import { tv } from 'tailwind-variants';
+import { anatomyToRecipeSlots } from '~/utils/anatomyToRecipeSlots';
 
 export const fieldRecipe = tv({
   slots: anatomyToRecipeSlots(fieldAnatomy, {
@@ -66,7 +66,7 @@ export const fieldRecipe = tv({
     helperText: 'mt-1.5 text-sm leading-none opacity-60',
     requiredIndicator: 'text-sm text-[#CECFD2]',
     errorText:
-      'mt-1.5 text-sm leading-none text-fg-error-primary-600 light:text-[#D92D20]',
+      'mt-1.5 text-sm leading-none text-error-600 light:text-[#D92D20]',
   }),
   variants: {
     size: {

@@ -1,0 +1,112 @@
+name: Lighthouse CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Lighthouse
+        id: lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            http://127.0.0.1:4201/
+          runs: 1
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          startServerCommand: npm run app
+          startServerReadyTimeout: 180000
+
+      - name: Publish Lighthouse Summary
+        if: always()
+        env:
+          LH_MANIFEST: ${{ steps.lighthouse.outputs.manifest }}
+          LH_LINKS: ${{ steps.lighthouse.outputs.links }}
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+
+          const candidates = [
+            process.env.LH_MANIFEST,
+            '.lighthouseci/manifest.json',
+            './lhci_reports/manifest.json',
+          ].filter(Boolean);
+
+          let manifest = null;
+          for (const candidate of candidates) {
+            if (!fs.existsSync(candidate)) continue;
+            try {
+              manifest = JSON.parse(fs.readFileSync(candidate, 'utf8'));
+              break;
+            } catch (_) {
+              // Ignore malformed files and try the next path.
+            }
+          }
+
+          const toPercent = (value) =>
+            typeof value === 'number' ? `${Math.round(value * 100)}` : '-';
+
+          let summary = '## Lighthouse Results\n\n';
+
+          if (Array.isArray(manifest) && manifest.length > 0) {
+            summary +=
+              '| URL | Performance | Accessibility | Best Practices | SEO |\n' +
+              '|---|---:|---:|---:|---:|\n';
+
+            for (const result of manifest) {
+              const scores = result.summary ?? {};
+              summary += `| ${result.url} | ${toPercent(scores.performance)} | ${toPercent(scores.accessibility)} | ${toPercent(scores['best-practices'])} | ${toPercent(scores.seo)} |\n`;
+            }
+          } else {
+            summary += 'No Lighthouse manifest found.\n';
+          }
+
+          const linksRaw = process.env.LH_LINKS;
+          if (linksRaw) {
+            try {
+              const links = JSON.parse(linksRaw);
+              if (Array.isArray(links) && links.length > 0) {
+                summary += '\n### Public Report Links\n';
+                for (const link of links) {
+                  if (typeof link === 'string') {
+                    summary += `- ${link}\n`;
+                  } else if (link?.url) {
+                    summary += `- ${link.url}\n`;
+                  }
+                }
+              } else if (typeof links === 'string' && links.length > 0) {
+                summary += `\n### Public Report Link\n- ${links}\n`;
+              }
+            } catch (_) {
+              summary += `\n### Public Report Link\n- ${linksRaw}\n`;
+            }
+          }
+
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+          console.log(summary);
+          NODE

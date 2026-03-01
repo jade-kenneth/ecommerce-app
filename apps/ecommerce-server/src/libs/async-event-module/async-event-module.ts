@@ -45,14 +45,14 @@ export class AsyncEventModule {
                 initialRetryTime: 300,
                 retries: 10,
               },
-              // ssl: {}, // required on redpanda cloud remove when using local dev
-              // sasl: {
-              //   // required on redpanda cloud remove when using local dev
-              //   // remove sasl when using local dev
-              //   mechanism: 'scram-sha-256',
-              //   username: process.env.KAFKA_USERNAME,
-              //   password: process.env.KAFKA_PASSWORD,
-              // },
+              ssl: {}, // required on redpanda cloud remove when using local dev
+              sasl: {
+                // required on redpanda cloud remove when using local dev
+                // remove sasl when using local dev
+                mechanism: 'scram-sha-256',
+                username: process.env.KAFKA_USERNAME,
+                password: process.env.KAFKA_PASSWORD,
+              },
             }),
           inject: [AsyncEventTokens.Options],
         },

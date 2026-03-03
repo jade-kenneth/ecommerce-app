@@ -1,6 +1,7 @@
 'use client';
 
 import { Star } from 'lucide-react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -11,12 +12,9 @@ import { Sticky } from '~/components/Sticky';
 import { Tabs } from '~/components/Tabs';
 import { Footer, Highlight } from '~/features/portal';
 import { Layout } from '~/features/portal/layout/Layout';
-import {
-  OrderStatus,
-  useMyOrdersQuery,
-  useProductsQuery,
-  useUpdateOrderStatusMutation,
-} from '~/graphql/generated';
+import { MY_ORDERS_QUERY, UPDATE_ORDER_STATUS_MUTATION } from '~/graphql/Cart';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
+import { OrderStatus } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
@@ -86,10 +84,10 @@ export default function OrdersPage() {
     (state) => state.authenticate.isAuthenticated,
   );
 
-  const ordersQuery = useMyOrdersQuery({
+  const ordersQuery = useQuery(MY_ORDERS_QUERY, {
     skip: !isAuthenticated,
   });
-  const [updateOrderStatus] = useUpdateOrderStatusMutation();
+  const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS_MUTATION);
   const orders = ordersQuery.data?.myOrders ?? [];
   const [activeTab, setActiveTab] = useState<OrdersTabValue>('ALL');
   const [activeFeedbackItemKey, setActiveFeedbackItemKey] = useState<
@@ -160,7 +158,7 @@ export default function OrdersPage() {
     return Array.from(new Set(ids));
   }, [visibleOrders]);
 
-  const productsQuery = useProductsQuery({
+  const productsQuery = useQuery(PRODUCTS_QUERY, {
     variables: {
       first: productIds.length,
       filter: {

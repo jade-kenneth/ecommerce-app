@@ -1,5 +1,6 @@
 'use client';
 
+import { useMutation } from '@apollo/client/react';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
@@ -9,7 +10,8 @@ import { Sticky } from '~/components/Sticky';
 import { Footer } from '~/features/portal';
 import { Highlight } from '~/features/portal/Highlight';
 import { Layout } from '~/features/portal/layout/Layout';
-import { OrderStatus, useUpdateOrderStatusMutation } from '~/graphql/generated';
+import { UPDATE_ORDER_STATUS_MUTATION } from '~/graphql/Cart';
+import { OrderStatus } from '~/graphql/generated';
 
 const ClientOnlyNavbar = dynamic(
   () => import('~/features/portal').then((mod) => mod.Navbar),
@@ -22,7 +24,7 @@ function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
-  const [updateOrderStatus] = useUpdateOrderStatusMutation();
+  const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS_MUTATION);
   const [state, setState] = useState<PageState>('loading');
   const [message, setMessage] = useState('Confirming your payment...');
   const submittedRef = useRef(false);

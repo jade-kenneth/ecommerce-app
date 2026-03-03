@@ -1,9 +1,11 @@
 'use client';
 
+import { useQuery } from '@apollo/client/react';
 import { CircleCheckBig, LoaderCircle, Truck } from 'lucide-react';
 import { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { ShippingType, useShippingOptionsQuery } from '~/graphql/generated';
+import { SHIPPING_OPTIONS_QUERY } from '~/graphql/Cart';
+import { ShippingType } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';
 
 type ShippingOption = {
@@ -113,7 +115,7 @@ function ShippingOptionCard({
 
 export const ShippingOptions = () => {
   const context = useCartContext();
-  const query = useShippingOptionsQuery();
+  const query = useQuery(SHIPPING_OPTIONS_QUERY);
 
   const shippingMethods: ShippingOption[] = (
     query.data?.shippingOptions ?? []

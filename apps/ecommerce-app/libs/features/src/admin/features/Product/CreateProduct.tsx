@@ -1,16 +1,17 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@apollo/client/react';
 import { ObjectId } from 'bson';
 
 import { CheckCircle2, PlusCircle, XIcon } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
+import { CREATE_PRODUCT_MUTATION } from '~/graphql/Product';
 import {
   CategoryType,
   ProductCoreDataFragment,
   StatusType,
-  useCreateProductMutation,
 } from '~/graphql/generated';
 import { capitalize } from '~/utils';
 import { useDisclosure } from '~/utils/useDisclosure';
@@ -47,7 +48,7 @@ export const CreateProduct = (props: AddProductButtonProps) => {
     },
     resolver: zodResolver(SchemaDefinition),
   });
-  const [createProduct, { loading }] = useCreateProductMutation();
+  const [createProduct, { loading }] = useMutation(CREATE_PRODUCT_MUTATION);
 
   const price = parseFloat(form.watch('price') || '0');
 

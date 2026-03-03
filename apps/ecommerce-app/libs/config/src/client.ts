@@ -1,12 +1,8 @@
-import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  UriFunction,
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, HttpLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import invariant from 'tiny-invariant';
 
+import { BaseHttpLink } from '@apollo/client/link/http';
 import { getSession } from '~/providers/AuthProvider/service';
 import { apolloCache } from './cache';
 
@@ -52,12 +48,14 @@ export const apolloClient = new ApolloClient({
   },
 });
 
-function createUrl(url: string): UriFunction {
+function createUrl(url: string): BaseHttpLink.UriFunction {
   invariant(URL.canParse(url));
 
   return (operation) => {
     const u = new URL(url);
-    u.searchParams.set('_q', operation.operationName);
+    if (operation.operationName) {
+      u.searchParams.set('_q', operation.operationName);
+    }
     return u.toString();
   };
 }

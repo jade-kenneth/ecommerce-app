@@ -1,5 +1,6 @@
 'use client';
 
+import { useQuery } from '@apollo/client/react';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
@@ -9,7 +10,7 @@ import { Sticky } from '~/components/Sticky';
 import { Footer } from '~/features/portal';
 import { Highlight } from '~/features/portal/Highlight';
 import { Layout } from '~/features/portal/layout/Layout';
-import { useMyOrdersQuery } from '~/graphql/generated';
+import { MY_ORDERS_QUERY } from '~/graphql/Cart';
 import { numberFormatter } from '~/utils/numberFormatter';
 
 const ClientOnlyNavbar = dynamic(
@@ -21,7 +22,7 @@ function CashOnDeliverySuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
-  const ordersQuery = useMyOrdersQuery({ fetchPolicy: 'network-only' });
+  const ordersQuery = useQuery(MY_ORDERS_QUERY, { fetchPolicy: 'network-only' });
   const order = ordersQuery.data?.myOrders.find((item) => item._id === orderId);
 
   const shippingFee =

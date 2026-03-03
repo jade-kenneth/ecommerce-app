@@ -1,4 +1,5 @@
-import { useHighPointProductsQuery } from '~/graphql/generated';
+import { useQuery } from '@apollo/client/react';
+import { HIGH_POINT_PRODUCTS_QUERY } from '~/graphql/Product';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { FunctionComponent } from 'react';
 import { Cards } from '~/components/Cards';
@@ -8,7 +9,7 @@ interface HighPointProps {}
 
 export const HighPoint: FunctionComponent<HighPointProps> = () => {
   const context = useLicenseContext();
-  const { data } = useHighPointProductsQuery({
+  const { data } = useQuery(HIGH_POINT_PRODUCTS_QUERY, {
     skip: !context.isLicensed,
   });
   return (

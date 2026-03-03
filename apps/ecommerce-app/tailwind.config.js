@@ -5,8 +5,10 @@ module.exports = {
   darkMode: 'class',
   content: [
     join(__dirname, 'src/**/*.{js,jsx,ts,tsx}'),
-    join(__dirname, '/**/*.{js,jsx,ts,tsx}'),
+    join(__dirname, 'libs/**/*.{js,jsx,ts,tsx}'),
     join(__dirname, '../../libs/**/*.{js,jsx,ts,tsx}'),
+    `!${join(__dirname, 'libs/graphql/**/*.{js,jsx,ts,tsx}')}`,
+    `!${join(__dirname, '../../libs/graphql/**/*.{js,jsx,ts,tsx}')}`,
   ],
   theme: {
     fontFamily: {

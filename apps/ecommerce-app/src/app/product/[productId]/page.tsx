@@ -35,7 +35,9 @@ async function fetchProducts(options?: {
       errorPolicy: 'all',
     });
 
-    return result.data.products.edges.map(({ node }) => node);
+    const edges = result.data?.products?.edges;
+    if (!edges) return [];
+    return edges.map(({ node }) => node);
   } catch (e) {
     console.error('Failed to fetch products for product page metadata:', e);
     return [];

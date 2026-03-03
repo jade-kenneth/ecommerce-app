@@ -1,12 +1,11 @@
 import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { useMutation } from '@apollo/client/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { useCartContext } from '~/features/portal';
-import {
-  ProductCoreDataFragment,
-  useUpdateCartItemMutation,
-} from '~/graphql/generated';
+import { UPDATE_CART_ITEM_MUTATION } from '~/graphql/Cart';
+import { ProductCoreDataFragment } from '~/graphql/generated';
 
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { gtm } from '~/utils';
@@ -21,7 +20,7 @@ export const Cards = (props: CardsProps) => {
   const discount = parseFloat(
     (props.price * (props.discount / 100)).toFixed(2),
   );
-  const [mutate] = useUpdateCartItemMutation();
+  const [mutate] = useMutation(UPDATE_CART_ITEM_MUTATION);
   const isAuthenticated = useGlobalStore(
     (state) => state.authenticate.isAuthenticated,
   );

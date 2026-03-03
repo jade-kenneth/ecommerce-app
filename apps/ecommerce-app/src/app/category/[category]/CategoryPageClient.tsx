@@ -1,11 +1,13 @@
 'use client';
 
+import { useQuery } from '@apollo/client/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, Cards, Spinner } from '~/components';
 import { categoryItems } from '~/features/portal/Categories';
-import { CategoryType, useProductsQuery } from '~/graphql/generated';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
+import { CategoryType } from '~/graphql/generated';
 
 interface CategoryPageClientProps {
   categoryType: CategoryType;
@@ -18,7 +20,7 @@ export default function CategoryPageClient({
 }: CategoryPageClientProps) {
   const router = useRouter();
   const categoryMeta = categoryItems.find((item) => item.type === categoryType);
-  const query = useProductsQuery({
+  const query = useQuery(PRODUCTS_QUERY, {
     variables: {
       first: 100,
       filter: {

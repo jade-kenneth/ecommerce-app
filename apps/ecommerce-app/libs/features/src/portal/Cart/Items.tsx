@@ -1,10 +1,11 @@
 'use client';
 
+import { useMutation } from '@apollo/client/react';
 import { Show } from '~/components/Show';
 import { Minus, Package, Plus, Tag } from 'lucide-react';
 import Image from 'next/image';
 
-import { useUpdateCartItemMutation } from '~/graphql/generated';
+import { UPDATE_CART_ITEM_MUTATION } from '~/graphql/Cart';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useCartContext } from './CartContext';
@@ -16,7 +17,7 @@ interface ItemsProps {
 }
 export const Items = ({ isCheckout = false }: ItemsProps) => {
   const context = useCartContext();
-  const [mutate] = useUpdateCartItemMutation();
+  const [mutate] = useMutation(UPDATE_CART_ITEM_MUTATION);
   return (
     <div className="flex flex-col gap-6 mt-4 sm:mt-6">
       {!context.state.cart.items.length && <EmptyCart />}

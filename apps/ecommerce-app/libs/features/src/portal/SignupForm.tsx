@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@apollo/client/react';
 import { ObjectId } from 'bson';
-import {
-  AccountType,
-  useCreateMemberAccountMutation,
-} from '~/graphql/generated';
+import { CREATE_MEMBER_ACCOUNT_MUTATION } from '~/graphql/Account';
+import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { create_session } from '~/providers/AuthProvider';
 import { Eye, EyeClosed } from 'lucide-react';
@@ -71,7 +70,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       confirmPassword: '',
     },
   });
-  const [mutate, { loading }] = useCreateMemberAccountMutation();
+  const [mutate, { loading }] = useMutation(CREATE_MEMBER_ACCOUNT_MUTATION);
 
   const onSubmit = form.handleSubmit(async (data) => {
     const _id = new ObjectId().toHexString();

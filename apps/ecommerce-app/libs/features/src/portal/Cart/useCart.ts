@@ -1,16 +1,17 @@
 'use client';
 
+import { useQuery } from '@apollo/client/react';
 import { omit } from 'es-toolkit';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { CART_QUERY } from '~/graphql/Cart';
 import {
   CartStatus,
   CategoryType,
   PaymentMethodType,
   ShippingType,
-  useCartQuery,
-  useProductsQuery,
 } from '~/graphql/generated';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 export interface Item {
   thumbnail: string;
@@ -149,7 +150,7 @@ export const useCart = () => {
 
   const { itemsCount } = state;
 
-  const { data: cartQuery } = useCartQuery({
+  const { data: cartQuery } = useQuery(CART_QUERY, {
     skip: !isAuthenticated,
   });
 
@@ -158,7 +159,7 @@ export const useCart = () => {
     [cartQuery],
   );
 
-  const { data: productsData } = useProductsQuery({
+  const { data: productsData } = useQuery(PRODUCTS_QUERY, {
     variables: {
       filter: {
         _id: { in: productIds },

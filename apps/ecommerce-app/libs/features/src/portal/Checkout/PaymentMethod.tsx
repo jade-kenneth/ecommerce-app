@@ -1,8 +1,10 @@
 'use client';
 
+import { useQuery } from '@apollo/client/react';
 import { useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { PaymentMethodType, usePaymentMethodsQuery } from '~/graphql/generated';
+import { PAYMENT_METHODS_QUERY } from '~/graphql/Cart';
+import { PaymentMethodType } from '~/graphql/generated';
 import { useCartContext } from '../Cart/CartContext';
 
 type PaymentOptionCardProps = {
@@ -134,7 +136,7 @@ const paymentMethodIconByType: Record<PaymentMethodType, React.ReactNode> = {
 
 export default function PaymentMethod() {
   const context = useCartContext();
-  const query = usePaymentMethodsQuery();
+  const query = useQuery(PAYMENT_METHODS_QUERY);
 
   const paymentMethods: PaymentOption[] = (
     query.data?.paymentMethods ?? []

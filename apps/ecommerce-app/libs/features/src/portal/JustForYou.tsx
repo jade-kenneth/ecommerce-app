@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react';
-import { useProductsQuery } from '~/graphql/generated';
+import { useQuery } from '@apollo/client/react';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { Cards } from '~/components/Cards';
 import { Container } from '~/components/Container';
@@ -8,7 +9,7 @@ interface JustForYouProps {}
 
 export const JustForYou: FunctionComponent<JustForYouProps> = () => {
   const context = useLicenseContext();
-  const { data } = useProductsQuery({
+  const { data } = useQuery(PRODUCTS_QUERY, {
     skip: !context.isLicensed,
   });
   return (

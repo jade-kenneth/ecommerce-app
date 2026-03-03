@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@apollo/client/react';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -13,11 +14,9 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-import {
-  useMyOrdersQuery,
-  useSearchProductByNameQuery,
-  useSelfQuery,
-} from '~/graphql/generated';
+import { MY_ORDERS_QUERY } from '~/graphql/Cart';
+import { SELF_QUERY } from '~/graphql/Account';
+import { SEARCH_PRODUCT_BY_NAME_QUERY } from '~/graphql/Product';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { UserIcon } from '~/icons/UserIcon';
 import { logout } from '~/providers/AuthProvider';
@@ -53,7 +52,7 @@ export const Navbar: FunctionComponent<NavbarProps> = React.memo(
     const menuDisclosure = useDisclosure();
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const { data } = useSelfQuery({
+    const { data } = useQuery(SELF_QUERY, {
       skip: !isAuthenticated || !licenseContext.isLicensed,
     });
     const router = useRouter();
@@ -68,7 +67,7 @@ export const Navbar: FunctionComponent<NavbarProps> = React.memo(
     );
     const normalizedSearch = searchQuery.trim();
     const shouldSearch = normalizedSearch.length > 0;
-    const productsQuery = useSearchProductByNameQuery({
+    const productsQuery = useQuery(SEARCH_PRODUCT_BY_NAME_QUERY, {
       variables: {
         search: normalizedSearch,
         first: 6,
@@ -78,7 +77,7 @@ export const Navbar: FunctionComponent<NavbarProps> = React.memo(
     });
     const searchResults = productsQuery.data?.searchProductByName ?? [];
 
-    const ordersQuery = useMyOrdersQuery({
+    const ordersQuery = useQuery(MY_ORDERS_QUERY, {
       skip: !isAuthenticated || !licenseContext.isLicensed,
     });
 

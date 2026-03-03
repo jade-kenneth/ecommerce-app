@@ -1,7 +1,8 @@
 'use client';
 
 import { Portal } from '@ark-ui/react';
-import { useRemoveFromCartMutation } from '~/graphql/generated';
+import { useMutation } from '@apollo/client/react';
+import { REMOVE_FROM_CART_MUTATION } from '~/graphql/Cart';
 import { AlertDialog } from '~/components/ui/AlertDialog';
 import { useDisclosure } from '~/utils/useDisclosure';
 import { Trash } from 'lucide-react';
@@ -24,7 +25,7 @@ export const RemoveItem = ({
 
   const discounted = item.price * item.quantity * discountPercentage;
   const priceAfterDiscount = item.price - item.price * discountPercentage;
-  const [removeFromCart] = useRemoveFromCartMutation();
+  const [removeFromCart] = useMutation(REMOVE_FROM_CART_MUTATION);
   const disclosure = useDisclosure();
   return (
     <AlertDialog.Root open={disclosure.open} onOpenChange={disclosure.onToggle}>

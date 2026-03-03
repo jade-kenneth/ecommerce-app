@@ -1,6 +1,7 @@
 'use client';
 
 import { createListCollection, Portal } from '@ark-ui/react';
+import { useQuery } from '@apollo/client/react';
 
 import { MoreVertical } from 'lucide-react';
 import Image from 'next/image';
@@ -17,12 +18,11 @@ import {
   UpdateProduct,
 } from '~/features/admin';
 import {
-  ProductsDocument,
   ProductsQuery,
   ProductsQueryVariables,
   StatusType,
-  useProductsQuery,
 } from '~/graphql/generated';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { usePaginated } from '~/hooks/usePaginated';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
@@ -39,7 +39,7 @@ export const ManageInventory = () => {
     }),
     { page: 1, pageSize: 10 },
   );
-  const query = useProductsQuery({
+  const query = useQuery(PRODUCTS_QUERY, {
     fetchPolicy: 'network-only',
     variables: {
       first: state.pageSize,
@@ -91,7 +91,7 @@ export const ManageInventory = () => {
             ProductsQuery,
             ProductsQueryVariables
           >({
-            query: ProductsDocument,
+            query: PRODUCTS_QUERY,
             variables: query.variables,
           });
 
@@ -101,10 +101,9 @@ export const ManageInventory = () => {
           }
 
           apolloClient.writeQuery<ProductsQuery, ProductsQueryVariables>({
-            query: ProductsDocument,
+            query: PRODUCTS_QUERY,
             variables: query.variables,
             data: {
-              __typename: 'Query',
               products: {
                 ...cacheResponse.products,
                 totalCount: (cacheResponse.products.totalCount ?? 0) + 1,
@@ -280,7 +279,7 @@ export const ManageInventory = () => {
                                 ProductsQuery,
                                 ProductsQueryVariables
                               >({
-                                query: ProductsDocument,
+                                query: PRODUCTS_QUERY,
                                 variables: query.variables,
                               });
 
@@ -300,14 +299,13 @@ export const ManageInventory = () => {
                                 ProductsQuery,
                                 ProductsQueryVariables
                               >({
-                                query: ProductsDocument,
+                                query: PRODUCTS_QUERY,
                                 variables: query.variables,
                                 data: {
                                   products: {
                                     ...res.products,
                                     edges,
                                   },
-                                  __typename: 'Query',
                                 },
                               });
                             }}

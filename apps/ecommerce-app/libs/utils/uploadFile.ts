@@ -1,4 +1,4 @@
-import { UploadFileMutationResult } from '~/graphql/generated';
+import type { UploadFileMutation } from '~/graphql/generated';
 
 export async function uploadFile(file: File): Promise<string | undefined> {
   const operations = JSON.stringify({
@@ -25,6 +25,8 @@ export async function uploadFile(file: File): Promise<string | undefined> {
     },
   });
 
-  const data = (await res.json()) as UploadFileMutationResult;
+  const data = (await res.json()) as {
+    data?: UploadFileMutation | null;
+  };
   return data.data?.uploadFile ?? undefined;
 }

@@ -1,9 +1,8 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Sat, 28 Feb 2026 05:04:08 GMT
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+// Last modified: Tue, 03 Mar 2026 08:03:38 GMT
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -24,7 +23,6 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
     };
-const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -273,24 +271,19 @@ export type CreateMemberAccountMutationVariables = Exact<{
 }>;
 
 export type CreateMemberAccountMutation = {
-  __typename: 'Mutation';
-  createMemberAccount?: boolean | null;
+  createMemberAccount: boolean | null;
 };
 
 export type CreateAdminAccountMutationVariables = Exact<{
   input: CreateAccountInput;
 }>;
 
-export type CreateAdminAccountMutation = {
-  __typename: 'Mutation';
-  createAdminAccount?: boolean | null;
-};
+export type CreateAdminAccountMutation = { createAdminAccount: boolean | null };
 
 export type SelfQueryVariables = Exact<{ [key: string]: never }>;
 
 export type SelfQuery = {
-  __typename: 'Query';
-  self?: {
+  self: {
     __typename: 'Account';
     _id: string;
     emailAddress: string;
@@ -302,20 +295,16 @@ export type UpdateCartItemMutationVariables = Exact<{
   input: UpdateCartItemInput;
 }>;
 
-export type UpdateCartItemMutation = {
-  __typename: 'Mutation';
-  updateCartItem?: boolean | null;
-};
+export type UpdateCartItemMutation = { updateCartItem: boolean | null };
 
 export type CartQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CartQuery = {
-  __typename: 'Query';
   cart: {
     __typename: 'Cart';
     _id: string;
-    subtotal?: string | null;
-    tax?: string | null;
+    subtotal: string | null;
+    tax: string | null;
     status: CartStatus;
     createdAt: string;
     updatedAt: string;
@@ -323,8 +312,8 @@ export type CartQuery = {
       __typename: 'CartItem';
       productId: string;
       quantity: number;
-      unitPrice?: string | null;
-      totalPrice?: string | null;
+      unitPrice: string | null;
+      totalPrice: string | null;
     }>;
   };
 };
@@ -332,7 +321,6 @@ export type CartQuery = {
 export type MyOrdersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MyOrdersQuery = {
-  __typename: 'Query';
   myOrders: Array<{
     __typename: 'Order';
     _id: string;
@@ -346,17 +334,17 @@ export type MyOrdersQuery = {
       __typename: 'OrderItem';
       productId: string;
       quantity: number;
-      unitPrice?: string | null;
-      totalPrice?: string | null;
-      rating?: number | null;
-      message?: string | null;
+      unitPrice: string | null;
+      totalPrice: string | null;
+      rating: number | null;
+      message: string | null;
     }>;
     shippingOption: {
       __typename: 'ShippingOption';
       type: ShippingType;
       label: string;
-      description?: string | null;
-      estimatedDays?: string | null;
+      description: string | null;
+      estimatedDays: string | null;
       fee: string;
     };
   }>;
@@ -365,28 +353,26 @@ export type MyOrdersQuery = {
 export type ShippingOptionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ShippingOptionsQuery = {
-  __typename: 'Query';
   shippingOptions: Array<{
     __typename: 'ShippingOption';
     _id: string;
     type: ShippingType;
     label: string;
-    description?: string | null;
+    description: string | null;
     fee: string;
-    estimatedDays?: string | null;
+    estimatedDays: string | null;
   }>;
 };
 
 export type PaymentMethodsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type PaymentMethodsQuery = {
-  __typename: 'Query';
   paymentMethods: Array<{
     __typename: 'PaymentMethod';
     _id: string;
     type: PaymentMethodType;
     label: string;
-    description?: string | null;
+    description: string | null;
     isActive: boolean;
   }>;
 };
@@ -396,15 +382,14 @@ export type CheckoutMethodSettingsQueryVariables = Exact<{
 }>;
 
 export type CheckoutMethodSettingsQuery = {
-  __typename: 'Query';
   shippingOptions: Array<{
     __typename: 'ShippingOption';
     _id: string;
     type: ShippingType;
     label: string;
-    description?: string | null;
+    description: string | null;
     fee: string;
-    estimatedDays?: string | null;
+    estimatedDays: string | null;
     isActive: boolean;
   }>;
   paymentMethods: Array<{
@@ -412,7 +397,7 @@ export type CheckoutMethodSettingsQuery = {
     _id: string;
     type: PaymentMethodType;
     label: string;
-    description?: string | null;
+    description: string | null;
     isActive: boolean;
   }>;
 };
@@ -422,7 +407,6 @@ export type CheckoutMutationVariables = Exact<{
 }>;
 
 export type CheckoutMutation = {
-  __typename: 'Mutation';
   checkout: {
     __typename: 'Order';
     _id: string;
@@ -436,17 +420,17 @@ export type CheckoutMutation = {
       __typename: 'OrderItem';
       productId: string;
       quantity: number;
-      unitPrice?: string | null;
-      totalPrice?: string | null;
-      rating?: number | null;
-      message?: string | null;
+      unitPrice: string | null;
+      totalPrice: string | null;
+      rating: number | null;
+      message: string | null;
     }>;
     shippingOption: {
       __typename: 'ShippingOption';
       type: ShippingType;
       label: string;
-      description?: string | null;
-      estimatedDays?: string | null;
+      description: string | null;
+      estimatedDays: string | null;
       fee: string;
     };
     paymentMethod: { __typename: 'PaymentMethod'; type: PaymentMethodType };
@@ -457,34 +441,27 @@ export type RemoveFromCartMutationVariables = Exact<{
   input: RemoveFromCartInput;
 }>;
 
-export type RemoveFromCartMutation = {
-  __typename: 'Mutation';
-  removeFromCart: boolean;
-};
+export type RemoveFromCartMutation = { removeFromCart: boolean };
 
 export type UpdateOrderStatusMutationVariables = Exact<{
   input: UpdateOrderStatusInput;
 }>;
 
-export type UpdateOrderStatusMutation = {
-  __typename: 'Mutation';
-  updateOrderStatus?: boolean | null;
-};
+export type UpdateOrderStatusMutation = { updateOrderStatus: boolean | null };
 
 export type CreateProductReviewMutationVariables = Exact<{
   input: CreateProductReviewInput;
 }>;
 
 export type CreateProductReviewMutation = {
-  __typename: 'Mutation';
   createProductReview: {
     __typename: 'ProductReview';
     _id: string;
     productId: string;
     accountId: string;
-    orderId?: string | null;
+    orderId: string | null;
     rating: number;
-    message?: string | null;
+    message: string | null;
     createdAt: string;
     updatedAt: string;
   };
@@ -495,7 +472,6 @@ export type UpdateShippingMethodStatusMutationVariables = Exact<{
 }>;
 
 export type UpdateShippingMethodStatusMutation = {
-  __typename: 'Mutation';
   updateShippingMethodStatus: boolean;
 };
 
@@ -504,7 +480,6 @@ export type UpdatePaymentMethodStatusMutationVariables = Exact<{
 }>;
 
 export type UpdatePaymentMethodStatusMutation = {
-  __typename: 'Mutation';
   updatePaymentMethodStatus: boolean;
 };
 
@@ -512,33 +487,26 @@ export type UploadFileMutationVariables = Exact<{
   file: Scalars['Upload']['input'];
 }>;
 
-export type UploadFileMutation = {
-  __typename: 'Mutation';
-  uploadFile?: string | null;
-};
+export type UploadFileMutation = { uploadFile: string | null };
 
 export type LicenseMutationVariables = Exact<{
   input: LicenseInput;
 }>;
 
-export type LicenseMutation = {
-  __typename: 'Mutation';
-  createLicense?: boolean | null;
-};
+export type LicenseMutation = { createLicense: boolean | null };
 
 export type CreateGcashPaymentMutationVariables = Exact<{
   input?: InputMaybe<CreateGcashPaymentInput>;
 }>;
 
 export type CreateGcashPaymentMutation = {
-  __typename: 'Mutation';
-  createGcashPayment?: {
+  createGcashPayment: {
     __typename: 'PaymentRequestResponse';
-    reference_id?: string | null;
-    payment_request_id?: string | null;
-    actions?: Array<{
+    reference_id: string | null;
+    payment_request_id: string | null;
+    actions: Array<{
       __typename: 'PaymentAction';
-      value?: string | null;
+      value: string | null;
     } | null> | null;
   } | null;
 };
@@ -552,7 +520,7 @@ export type ProductCoreDataFragment = {
   pieces: number;
   status: StatusType;
   discount: number;
-  category?: Array<CategoryType> | null;
+  category: Array<CategoryType> | null;
   thumbnail: string;
   avgRating: number;
 };
@@ -564,14 +532,13 @@ export type ProductsQueryVariables = Exact<{
 }>;
 
 export type ProductsQuery = {
-  __typename: 'Query';
   products: {
     __typename: 'Connection';
     totalCount: number;
     pageInfo: {
       __typename: 'PageInfo';
       hasNextPage: boolean;
-      endCursor?: string | null;
+      endCursor: string | null;
     };
     edges: Array<{
       __typename: 'Edge';
@@ -585,7 +552,7 @@ export type ProductsQuery = {
         pieces: number;
         status: StatusType;
         discount: number;
-        category?: Array<CategoryType> | null;
+        category: Array<CategoryType> | null;
         thumbnail: string;
         avgRating: number;
       };
@@ -598,15 +565,14 @@ export type ProductReviewsQueryVariables = Exact<{
 }>;
 
 export type ProductReviewsQuery = {
-  __typename: 'Query';
   productReviews: Array<{
     __typename: 'ProductReview';
     _id: string;
     productId: string;
     accountId: string;
-    orderId?: string | null;
+    orderId: string | null;
     rating: number;
-    message?: string | null;
+    message: string | null;
     createdAt: string;
     updatedAt: string;
   }>;
@@ -616,38 +582,28 @@ export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
 
-export type CreateProductMutation = {
-  __typename: 'Mutation';
-  createProduct?: boolean | null;
-};
+export type CreateProductMutation = { createProduct: boolean | null };
 
 export type UpdateProductMutationVariables = Exact<{
   input: UpdateProductInput;
 }>;
 
-export type UpdateProductMutation = {
-  __typename: 'Mutation';
-  updateProduct?: boolean | null;
-};
+export type UpdateProductMutation = { updateProduct: boolean | null };
 
 export type DeleteProductMutationVariables = Exact<{
   input: DeleteProductInput;
 }>;
 
-export type DeleteProductMutation = {
-  __typename: 'Mutation';
-  deleteProduct?: boolean | null;
-};
+export type DeleteProductMutation = { deleteProduct: boolean | null };
 
 export type ConfigQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ConfigQuery = {
-  __typename: 'Query';
   config: {
     __typename: 'Config';
     _id: string;
-    highPointsThreshold?: number | null;
-    topSoldThreshold?: number | null;
+    highPointsThreshold: number | null;
+    topSoldThreshold: number | null;
     carouselItems: Array<string>;
   };
 };
@@ -656,19 +612,13 @@ export type CreateConfigMutationVariables = Exact<{
   input: CreateConfigInput;
 }>;
 
-export type CreateConfigMutation = {
-  __typename: 'Mutation';
-  createConfig?: boolean | null;
-};
+export type CreateConfigMutation = { createConfig: boolean | null };
 
 export type UpdateConfigMutationVariables = Exact<{
   input: UpdateConfigInput;
 }>;
 
-export type UpdateConfigMutation = {
-  __typename: 'Mutation';
-  updateConfig?: boolean | null;
-};
+export type UpdateConfigMutation = { updateConfig: boolean | null };
 
 export type HighPointProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -677,14 +627,13 @@ export type HighPointProductsQueryVariables = Exact<{
 }>;
 
 export type HighPointProductsQuery = {
-  __typename: 'Query';
   highPointProducts: {
     __typename: 'Connection';
     totalCount: number;
     pageInfo: {
       __typename: 'PageInfo';
       hasNextPage: boolean;
-      endCursor?: string | null;
+      endCursor: string | null;
     };
     edges: Array<{
       __typename: 'Edge';
@@ -698,7 +647,7 @@ export type HighPointProductsQuery = {
         pieces: number;
         status: StatusType;
         discount: number;
-        category?: Array<CategoryType> | null;
+        category: Array<CategoryType> | null;
         thumbnail: string;
         avgRating: number;
       };
@@ -713,8 +662,7 @@ export type SearchProductByNameQueryVariables = Exact<{
 }>;
 
 export type SearchProductByNameQuery = {
-  __typename: 'Query';
-  searchProductByName?: Array<{
+  searchProductByName: Array<{
     __typename: 'Product';
     _id: string;
     name: string;
@@ -723,1508 +671,1750 @@ export type SearchProductByNameQuery = {
     pieces: number;
     status: StatusType;
     discount: number;
-    category?: Array<CategoryType> | null;
+    category: Array<CategoryType> | null;
     thumbnail: string;
     avgRating: number;
   }> | null;
 };
 
-export const ProductCoreDataFragmentDoc = /*#__PURE__*/ gql`
-  fragment ProductCoreData on Product {
-    _id
-    name
-    price
-    points
-    pieces
-    status
-    discount
-    category
-    thumbnail
-    avgRating
-  }
-`;
-export const CreateMemberAccountDocument = /*#__PURE__*/ gql`
-  mutation CreateMemberAccount($input: CreateAccountInput!) {
-    createMemberAccount(input: $input)
-  }
-`;
-export type CreateMemberAccountMutationFn = Apollo.MutationFunction<
+export const ProductCoreDataFragmentDoc = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProductCoreData' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Product' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'points' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'pieces' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discount' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'category' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'thumbnail' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'avgRating' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProductCoreDataFragment, unknown>;
+export const CreateMemberAccountDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateMemberAccount' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateAccountInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createMemberAccount' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CreateMemberAccountMutation,
   CreateMemberAccountMutationVariables
 >;
-export function useCreateMemberAccountMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateMemberAccountMutation,
-    CreateMemberAccountMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateMemberAccountMutation,
-    CreateMemberAccountMutationVariables
-  >(CreateMemberAccountDocument, options);
-}
-export type CreateMemberAccountMutationHookResult = ReturnType<
-  typeof useCreateMemberAccountMutation
->;
-export type CreateMemberAccountMutationResult =
-  Apollo.MutationResult<CreateMemberAccountMutation>;
-export type CreateMemberAccountMutationOptions = Apollo.BaseMutationOptions<
-  CreateMemberAccountMutation,
-  CreateMemberAccountMutationVariables
->;
-export const CreateAdminAccountDocument = /*#__PURE__*/ gql`
-  mutation CreateAdminAccount($input: CreateAccountInput!) {
-    createAdminAccount(input: $input)
-  }
-`;
-export type CreateAdminAccountMutationFn = Apollo.MutationFunction<
+export const CreateAdminAccountDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateAdminAccount' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateAccountInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createAdminAccount' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CreateAdminAccountMutation,
   CreateAdminAccountMutationVariables
 >;
-export function useCreateAdminAccountMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateAdminAccountMutation,
-    CreateAdminAccountMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateAdminAccountMutation,
-    CreateAdminAccountMutationVariables
-  >(CreateAdminAccountDocument, options);
-}
-export type CreateAdminAccountMutationHookResult = ReturnType<
-  typeof useCreateAdminAccountMutation
->;
-export type CreateAdminAccountMutationResult =
-  Apollo.MutationResult<CreateAdminAccountMutation>;
-export type CreateAdminAccountMutationOptions = Apollo.BaseMutationOptions<
-  CreateAdminAccountMutation,
-  CreateAdminAccountMutationVariables
->;
-export const SelfDocument = /*#__PURE__*/ gql`
-  query Self {
-    self {
-      _id
-      emailAddress
-      role
-    }
-  }
-`;
-export function useSelfQuery(
-  baseOptions?: Apollo.QueryHookOptions<SelfQuery, SelfQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SelfQuery, SelfQueryVariables>(SelfDocument, options);
-}
-export function useSelfLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SelfQuery, SelfQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SelfQuery, SelfQueryVariables>(
-    SelfDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function useSelfSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>,
-): Apollo.UseSuspenseQueryResult<SelfQuery, SelfQueryVariables>;
-export function useSelfSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>,
-): Apollo.UseSuspenseQueryResult<SelfQuery | undefined, SelfQueryVariables>;
-export function useSelfSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<SelfQuery, SelfQueryVariables>,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<SelfQuery, SelfQueryVariables>(
-    SelfDocument,
-    options,
-  );
-}
-export type SelfQueryHookResult = ReturnType<typeof useSelfQuery>;
-export type SelfLazyQueryHookResult = ReturnType<typeof useSelfLazyQuery>;
-export type SelfSuspenseQueryHookResult = ReturnType<
-  typeof useSelfSuspenseQuery
->;
-export type SelfQueryResult = Apollo.QueryResult<SelfQuery, SelfQueryVariables>;
-export function refetchSelfQuery(variables?: SelfQueryVariables) {
-  return { query: SelfDocument, variables: variables };
-}
-export const UpdateCartItemDocument = /*#__PURE__*/ gql`
-  mutation UpdateCartItem($input: UpdateCartItemInput!) {
-    updateCartItem(input: $input)
-  }
-`;
-export type UpdateCartItemMutationFn = Apollo.MutationFunction<
+export const SelfDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'Self' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'self' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'emailAddress' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'role' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SelfQuery, SelfQueryVariables>;
+export const UpdateCartItemDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateCartItem' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateCartItemInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateCartItem' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   UpdateCartItemMutation,
   UpdateCartItemMutationVariables
 >;
-export function useUpdateCartItemMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateCartItemMutation,
-    UpdateCartItemMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateCartItemMutation,
-    UpdateCartItemMutationVariables
-  >(UpdateCartItemDocument, options);
-}
-export type UpdateCartItemMutationHookResult = ReturnType<
-  typeof useUpdateCartItemMutation
->;
-export type UpdateCartItemMutationResult =
-  Apollo.MutationResult<UpdateCartItemMutation>;
-export type UpdateCartItemMutationOptions = Apollo.BaseMutationOptions<
-  UpdateCartItemMutation,
-  UpdateCartItemMutationVariables
->;
-export const CartDocument = /*#__PURE__*/ gql`
-  query Cart {
-    cart {
-      _id
-      items {
-        productId
-        quantity
-        unitPrice
-        totalPrice
-      }
-      subtotal
-      tax
-      status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export function useCartQuery(
-  baseOptions?: Apollo.QueryHookOptions<CartQuery, CartQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CartQuery, CartQueryVariables>(CartDocument, options);
-}
-export function useCartLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<CartQuery, CartQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<CartQuery, CartQueryVariables>(
-    CartDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function useCartSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>,
-): Apollo.UseSuspenseQueryResult<CartQuery, CartQueryVariables>;
-export function useCartSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>,
-): Apollo.UseSuspenseQueryResult<CartQuery | undefined, CartQueryVariables>;
-export function useCartSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<CartQuery, CartQueryVariables>,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<CartQuery, CartQueryVariables>(
-    CartDocument,
-    options,
-  );
-}
-export type CartQueryHookResult = ReturnType<typeof useCartQuery>;
-export type CartLazyQueryHookResult = ReturnType<typeof useCartLazyQuery>;
-export type CartSuspenseQueryHookResult = ReturnType<
-  typeof useCartSuspenseQuery
->;
-export type CartQueryResult = Apollo.QueryResult<CartQuery, CartQueryVariables>;
-export function refetchCartQuery(variables?: CartQueryVariables) {
-  return { query: CartDocument, variables: variables };
-}
-export const MyOrdersDocument = /*#__PURE__*/ gql`
-  query MyOrders {
-    myOrders {
-      _id
-      items {
-        productId
-        quantity
-        unitPrice
-        totalPrice
-        rating
-        message
-      }
-      shippingOption {
-        type
-        label
-        description
-        estimatedDays
-        fee
-      }
-      subtotal
-      tax
-      shippingFee
-      total
-      status
-      createdAt
-    }
-  }
-`;
-export function useMyOrdersQuery(
-  baseOptions?: Apollo.QueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<MyOrdersQuery, MyOrdersQueryVariables>(
-    MyOrdersDocument,
-    options,
-  );
-}
-export function useMyOrdersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    MyOrdersQuery,
-    MyOrdersQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<MyOrdersQuery, MyOrdersQueryVariables>(
-    MyOrdersDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function useMyOrdersSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    MyOrdersQuery,
-    MyOrdersQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<MyOrdersQuery, MyOrdersQueryVariables>;
-export function useMyOrdersSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>,
-): Apollo.UseSuspenseQueryResult<
-  MyOrdersQuery | undefined,
-  MyOrdersQueryVariables
->;
-export function useMyOrdersSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<MyOrdersQuery, MyOrdersQueryVariables>(
-    MyOrdersDocument,
-    options,
-  );
-}
-export type MyOrdersQueryHookResult = ReturnType<typeof useMyOrdersQuery>;
-export type MyOrdersLazyQueryHookResult = ReturnType<
-  typeof useMyOrdersLazyQuery
->;
-export type MyOrdersSuspenseQueryHookResult = ReturnType<
-  typeof useMyOrdersSuspenseQuery
->;
-export type MyOrdersQueryResult = Apollo.QueryResult<
-  MyOrdersQuery,
-  MyOrdersQueryVariables
->;
-export function refetchMyOrdersQuery(variables?: MyOrdersQueryVariables) {
-  return { query: MyOrdersDocument, variables: variables };
-}
-export const ShippingOptionsDocument = /*#__PURE__*/ gql`
-  query ShippingOptions {
-    shippingOptions {
-      _id
-      type
-      label
-      description
-      fee
-      estimatedDays
-    }
-  }
-`;
-export function useShippingOptionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ShippingOptionsQuery,
-    ShippingOptionsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ShippingOptionsQuery, ShippingOptionsQueryVariables>(
-    ShippingOptionsDocument,
-    options,
-  );
-}
-export function useShippingOptionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ShippingOptionsQuery,
-    ShippingOptionsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ShippingOptionsQuery,
-    ShippingOptionsQueryVariables
-  >(ShippingOptionsDocument, options);
-}
-// @ts-ignore
-export function useShippingOptionsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    ShippingOptionsQuery,
-    ShippingOptionsQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<
+export const CartDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'Cart' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'cart' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'quantity' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'unitPrice' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalPrice' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'tax' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CartQuery, CartQueryVariables>;
+export const MyOrdersDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'MyOrders' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myOrders' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'quantity' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'unitPrice' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalPrice' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'rating' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'message' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'shippingOption' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'label' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'estimatedDays' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'fee' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'tax' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'shippingFee' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyOrdersQuery, MyOrdersQueryVariables>;
+export const ShippingOptionsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'ShippingOptions' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'shippingOptions' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'label' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fee' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'estimatedDays' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   ShippingOptionsQuery,
   ShippingOptionsQueryVariables
 >;
-export function useShippingOptionsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ShippingOptionsQuery,
-        ShippingOptionsQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  ShippingOptionsQuery | undefined,
-  ShippingOptionsQueryVariables
->;
-export function useShippingOptionsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ShippingOptionsQuery,
-        ShippingOptionsQueryVariables
-      >,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    ShippingOptionsQuery,
-    ShippingOptionsQueryVariables
-  >(ShippingOptionsDocument, options);
-}
-export type ShippingOptionsQueryHookResult = ReturnType<
-  typeof useShippingOptionsQuery
->;
-export type ShippingOptionsLazyQueryHookResult = ReturnType<
-  typeof useShippingOptionsLazyQuery
->;
-export type ShippingOptionsSuspenseQueryHookResult = ReturnType<
-  typeof useShippingOptionsSuspenseQuery
->;
-export type ShippingOptionsQueryResult = Apollo.QueryResult<
-  ShippingOptionsQuery,
-  ShippingOptionsQueryVariables
->;
-export function refetchShippingOptionsQuery(
-  variables?: ShippingOptionsQueryVariables,
-) {
-  return { query: ShippingOptionsDocument, variables: variables };
-}
-export const PaymentMethodsDocument = /*#__PURE__*/ gql`
-  query PaymentMethods {
-    paymentMethods {
-      _id
-      type
-      label
-      description
-      isActive
-    }
-  }
-`;
-export function usePaymentMethodsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    PaymentMethodsQuery,
-    PaymentMethodsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PaymentMethodsQuery, PaymentMethodsQueryVariables>(
-    PaymentMethodsDocument,
-    options,
-  );
-}
-export function usePaymentMethodsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PaymentMethodsQuery,
-    PaymentMethodsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PaymentMethodsQuery, PaymentMethodsQueryVariables>(
-    PaymentMethodsDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function usePaymentMethodsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    PaymentMethodsQuery,
-    PaymentMethodsQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<
-  PaymentMethodsQuery,
-  PaymentMethodsQueryVariables
->;
-export function usePaymentMethodsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        PaymentMethodsQuery,
-        PaymentMethodsQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  PaymentMethodsQuery | undefined,
-  PaymentMethodsQueryVariables
->;
-export function usePaymentMethodsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        PaymentMethodsQuery,
-        PaymentMethodsQueryVariables
-      >,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    PaymentMethodsQuery,
-    PaymentMethodsQueryVariables
-  >(PaymentMethodsDocument, options);
-}
-export type PaymentMethodsQueryHookResult = ReturnType<
-  typeof usePaymentMethodsQuery
->;
-export type PaymentMethodsLazyQueryHookResult = ReturnType<
-  typeof usePaymentMethodsLazyQuery
->;
-export type PaymentMethodsSuspenseQueryHookResult = ReturnType<
-  typeof usePaymentMethodsSuspenseQuery
->;
-export type PaymentMethodsQueryResult = Apollo.QueryResult<
-  PaymentMethodsQuery,
-  PaymentMethodsQueryVariables
->;
-export function refetchPaymentMethodsQuery(
-  variables?: PaymentMethodsQueryVariables,
-) {
-  return { query: PaymentMethodsDocument, variables: variables };
-}
-export const CheckoutMethodSettingsDocument = /*#__PURE__*/ gql`
-  query CheckoutMethodSettings {
-    shippingOptions(includeInactive: true) {
-      _id
-      type
-      label
-      description
-      fee
-      estimatedDays
-      isActive
-    }
-    paymentMethods(includeInactive: true) {
-      _id
-      type
-      label
-      description
-      isActive
-    }
-  }
-`;
-export function useCheckoutMethodSettingsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    CheckoutMethodSettingsQuery,
-    CheckoutMethodSettingsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    CheckoutMethodSettingsQuery,
-    CheckoutMethodSettingsQueryVariables
-  >(CheckoutMethodSettingsDocument, options);
-}
-export function useCheckoutMethodSettingsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CheckoutMethodSettingsQuery,
-    CheckoutMethodSettingsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    CheckoutMethodSettingsQuery,
-    CheckoutMethodSettingsQueryVariables
-  >(CheckoutMethodSettingsDocument, options);
-}
-// @ts-ignore
-export function useCheckoutMethodSettingsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    CheckoutMethodSettingsQuery,
-    CheckoutMethodSettingsQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<
+export const PaymentMethodsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'PaymentMethods' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'paymentMethods' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'label' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PaymentMethodsQuery, PaymentMethodsQueryVariables>;
+export const CheckoutMethodSettingsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'CheckoutMethodSettings' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'shippingOptions' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'includeInactive' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'label' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fee' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'estimatedDays' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'paymentMethods' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'includeInactive' },
+                value: { kind: 'BooleanValue', value: true },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'label' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CheckoutMethodSettingsQuery,
   CheckoutMethodSettingsQueryVariables
 >;
-export function useCheckoutMethodSettingsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        CheckoutMethodSettingsQuery,
-        CheckoutMethodSettingsQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  CheckoutMethodSettingsQuery | undefined,
-  CheckoutMethodSettingsQueryVariables
->;
-export function useCheckoutMethodSettingsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        CheckoutMethodSettingsQuery,
-        CheckoutMethodSettingsQueryVariables
-      >,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    CheckoutMethodSettingsQuery,
-    CheckoutMethodSettingsQueryVariables
-  >(CheckoutMethodSettingsDocument, options);
-}
-export type CheckoutMethodSettingsQueryHookResult = ReturnType<
-  typeof useCheckoutMethodSettingsQuery
->;
-export type CheckoutMethodSettingsLazyQueryHookResult = ReturnType<
-  typeof useCheckoutMethodSettingsLazyQuery
->;
-export type CheckoutMethodSettingsSuspenseQueryHookResult = ReturnType<
-  typeof useCheckoutMethodSettingsSuspenseQuery
->;
-export type CheckoutMethodSettingsQueryResult = Apollo.QueryResult<
-  CheckoutMethodSettingsQuery,
-  CheckoutMethodSettingsQueryVariables
->;
-export function refetchCheckoutMethodSettingsQuery(
-  variables?: CheckoutMethodSettingsQueryVariables,
-) {
-  return { query: CheckoutMethodSettingsDocument, variables: variables };
-}
-export const CheckoutDocument = /*#__PURE__*/ gql`
-  mutation Checkout($input: CheckoutInput!) {
-    checkout(input: $input) {
-      _id
-      items {
-        productId
-        quantity
-        unitPrice
-        totalPrice
-        rating
-        message
-      }
-      shippingOption {
-        type
-        label
-        description
-        estimatedDays
-        fee
-      }
-      paymentMethod {
-        type
-      }
-      subtotal
-      tax
-      shippingFee
-      total
-      status
-      createdAt
-    }
-  }
-`;
-export type CheckoutMutationFn = Apollo.MutationFunction<
-  CheckoutMutation,
-  CheckoutMutationVariables
->;
-export function useCheckoutMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CheckoutMutation,
-    CheckoutMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CheckoutMutation, CheckoutMutationVariables>(
-    CheckoutDocument,
-    options,
-  );
-}
-export type CheckoutMutationHookResult = ReturnType<typeof useCheckoutMutation>;
-export type CheckoutMutationResult = Apollo.MutationResult<CheckoutMutation>;
-export type CheckoutMutationOptions = Apollo.BaseMutationOptions<
-  CheckoutMutation,
-  CheckoutMutationVariables
->;
-export const RemoveFromCartDocument = /*#__PURE__*/ gql`
-  mutation RemoveFromCart($input: RemoveFromCartInput!) {
-    removeFromCart(input: $input)
-  }
-`;
-export type RemoveFromCartMutationFn = Apollo.MutationFunction<
+export const CheckoutDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'Checkout' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CheckoutInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'checkout' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'items' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'productId' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'quantity' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'unitPrice' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'totalPrice' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'rating' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'message' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'shippingOption' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'label' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'description' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'estimatedDays' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'fee' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'paymentMethod' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'tax' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'shippingFee' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CheckoutMutation, CheckoutMutationVariables>;
+export const RemoveFromCartDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'RemoveFromCart' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'RemoveFromCartInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'removeFromCart' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   RemoveFromCartMutation,
   RemoveFromCartMutationVariables
 >;
-export function useRemoveFromCartMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveFromCartMutation,
-    RemoveFromCartMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    RemoveFromCartMutation,
-    RemoveFromCartMutationVariables
-  >(RemoveFromCartDocument, options);
-}
-export type RemoveFromCartMutationHookResult = ReturnType<
-  typeof useRemoveFromCartMutation
->;
-export type RemoveFromCartMutationResult =
-  Apollo.MutationResult<RemoveFromCartMutation>;
-export type RemoveFromCartMutationOptions = Apollo.BaseMutationOptions<
-  RemoveFromCartMutation,
-  RemoveFromCartMutationVariables
->;
-export const UpdateOrderStatusDocument = /*#__PURE__*/ gql`
-  mutation UpdateOrderStatus($input: UpdateOrderStatusInput!) {
-    updateOrderStatus(input: $input)
-  }
-`;
-export type UpdateOrderStatusMutationFn = Apollo.MutationFunction<
+export const UpdateOrderStatusDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateOrderStatus' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateOrderStatusInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateOrderStatus' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   UpdateOrderStatusMutation,
   UpdateOrderStatusMutationVariables
 >;
-export function useUpdateOrderStatusMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateOrderStatusMutation,
-    UpdateOrderStatusMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateOrderStatusMutation,
-    UpdateOrderStatusMutationVariables
-  >(UpdateOrderStatusDocument, options);
-}
-export type UpdateOrderStatusMutationHookResult = ReturnType<
-  typeof useUpdateOrderStatusMutation
->;
-export type UpdateOrderStatusMutationResult =
-  Apollo.MutationResult<UpdateOrderStatusMutation>;
-export type UpdateOrderStatusMutationOptions = Apollo.BaseMutationOptions<
-  UpdateOrderStatusMutation,
-  UpdateOrderStatusMutationVariables
->;
-export const CreateProductReviewDocument = /*#__PURE__*/ gql`
-  mutation CreateProductReview($input: CreateProductReviewInput!) {
-    createProductReview(input: $input) {
-      _id
-      productId
-      accountId
-      orderId
-      rating
-      message
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export type CreateProductReviewMutationFn = Apollo.MutationFunction<
+export const CreateProductReviewDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateProductReview' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateProductReviewInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createProductReview' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'productId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'accountId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'orderId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'rating' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CreateProductReviewMutation,
   CreateProductReviewMutationVariables
 >;
-export function useCreateProductReviewMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateProductReviewMutation,
-    CreateProductReviewMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateProductReviewMutation,
-    CreateProductReviewMutationVariables
-  >(CreateProductReviewDocument, options);
-}
-export type CreateProductReviewMutationHookResult = ReturnType<
-  typeof useCreateProductReviewMutation
->;
-export type CreateProductReviewMutationResult =
-  Apollo.MutationResult<CreateProductReviewMutation>;
-export type CreateProductReviewMutationOptions = Apollo.BaseMutationOptions<
-  CreateProductReviewMutation,
-  CreateProductReviewMutationVariables
->;
-export const UpdateShippingMethodStatusDocument = /*#__PURE__*/ gql`
-  mutation UpdateShippingMethodStatus(
-    $input: UpdateShippingMethodStatusInput!
-  ) {
-    updateShippingMethodStatus(input: $input)
-  }
-`;
-export type UpdateShippingMethodStatusMutationFn = Apollo.MutationFunction<
+export const UpdateShippingMethodStatusDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateShippingMethodStatus' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateShippingMethodStatusInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateShippingMethodStatus' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   UpdateShippingMethodStatusMutation,
   UpdateShippingMethodStatusMutationVariables
 >;
-export function useUpdateShippingMethodStatusMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateShippingMethodStatusMutation,
-    UpdateShippingMethodStatusMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateShippingMethodStatusMutation,
-    UpdateShippingMethodStatusMutationVariables
-  >(UpdateShippingMethodStatusDocument, options);
-}
-export type UpdateShippingMethodStatusMutationHookResult = ReturnType<
-  typeof useUpdateShippingMethodStatusMutation
->;
-export type UpdateShippingMethodStatusMutationResult =
-  Apollo.MutationResult<UpdateShippingMethodStatusMutation>;
-export type UpdateShippingMethodStatusMutationOptions =
-  Apollo.BaseMutationOptions<
-    UpdateShippingMethodStatusMutation,
-    UpdateShippingMethodStatusMutationVariables
-  >;
-export const UpdatePaymentMethodStatusDocument = /*#__PURE__*/ gql`
-  mutation UpdatePaymentMethodStatus($input: UpdatePaymentMethodStatusInput!) {
-    updatePaymentMethodStatus(input: $input)
-  }
-`;
-export type UpdatePaymentMethodStatusMutationFn = Apollo.MutationFunction<
+export const UpdatePaymentMethodStatusDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdatePaymentMethodStatus' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdatePaymentMethodStatusInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updatePaymentMethodStatus' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   UpdatePaymentMethodStatusMutation,
   UpdatePaymentMethodStatusMutationVariables
 >;
-export function useUpdatePaymentMethodStatusMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdatePaymentMethodStatusMutation,
-    UpdatePaymentMethodStatusMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdatePaymentMethodStatusMutation,
-    UpdatePaymentMethodStatusMutationVariables
-  >(UpdatePaymentMethodStatusDocument, options);
-}
-export type UpdatePaymentMethodStatusMutationHookResult = ReturnType<
-  typeof useUpdatePaymentMethodStatusMutation
->;
-export type UpdatePaymentMethodStatusMutationResult =
-  Apollo.MutationResult<UpdatePaymentMethodStatusMutation>;
-export type UpdatePaymentMethodStatusMutationOptions =
-  Apollo.BaseMutationOptions<
-    UpdatePaymentMethodStatusMutation,
-    UpdatePaymentMethodStatusMutationVariables
-  >;
-export const UploadFileDocument = /*#__PURE__*/ gql`
-  mutation UploadFile($file: Upload!) {
-    uploadFile(file: $file)
-  }
-`;
-export type UploadFileMutationFn = Apollo.MutationFunction<
-  UploadFileMutation,
-  UploadFileMutationVariables
->;
-export function useUploadFileMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UploadFileMutation,
-    UploadFileMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UploadFileMutation, UploadFileMutationVariables>(
-    UploadFileDocument,
-    options,
-  );
-}
-export type UploadFileMutationHookResult = ReturnType<
-  typeof useUploadFileMutation
->;
-export type UploadFileMutationResult =
-  Apollo.MutationResult<UploadFileMutation>;
-export type UploadFileMutationOptions = Apollo.BaseMutationOptions<
-  UploadFileMutation,
-  UploadFileMutationVariables
->;
-export const LicenseDocument = /*#__PURE__*/ gql`
-  mutation License($input: LicenseInput!) {
-    createLicense(input: $input)
-  }
-`;
-export type LicenseMutationFn = Apollo.MutationFunction<
-  LicenseMutation,
-  LicenseMutationVariables
->;
-export function useLicenseMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LicenseMutation,
-    LicenseMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<LicenseMutation, LicenseMutationVariables>(
-    LicenseDocument,
-    options,
-  );
-}
-export type LicenseMutationHookResult = ReturnType<typeof useLicenseMutation>;
-export type LicenseMutationResult = Apollo.MutationResult<LicenseMutation>;
-export type LicenseMutationOptions = Apollo.BaseMutationOptions<
-  LicenseMutation,
-  LicenseMutationVariables
->;
-export const CreateGcashPaymentDocument = /*#__PURE__*/ gql`
-  mutation CreateGcashPayment($input: CreateGcashPaymentInput) {
-    createGcashPayment(input: $input) {
-      reference_id
-      actions {
-        value
-      }
-      payment_request_id
-    }
-  }
-`;
-export type CreateGcashPaymentMutationFn = Apollo.MutationFunction<
+export const UploadFileDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UploadFile' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'file' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'Upload' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'uploadFile' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'file' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'file' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UploadFileMutation, UploadFileMutationVariables>;
+export const LicenseDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'License' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'LicenseInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createLicense' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<LicenseMutation, LicenseMutationVariables>;
+export const CreateGcashPaymentDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateGcashPayment' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'CreateGcashPaymentInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createGcashPayment' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'reference_id' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'actions' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'value' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'payment_request_id' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CreateGcashPaymentMutation,
   CreateGcashPaymentMutationVariables
 >;
-export function useCreateGcashPaymentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateGcashPaymentMutation,
-    CreateGcashPaymentMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateGcashPaymentMutation,
-    CreateGcashPaymentMutationVariables
-  >(CreateGcashPaymentDocument, options);
-}
-export type CreateGcashPaymentMutationHookResult = ReturnType<
-  typeof useCreateGcashPaymentMutation
->;
-export type CreateGcashPaymentMutationResult =
-  Apollo.MutationResult<CreateGcashPaymentMutation>;
-export type CreateGcashPaymentMutationOptions = Apollo.BaseMutationOptions<
-  CreateGcashPaymentMutation,
-  CreateGcashPaymentMutationVariables
->;
-export const ProductsDocument = /*#__PURE__*/ gql`
-  query Products($first: Int, $after: Cursor, $filter: ProductsFilterInput) {
-    products(first: $first, after: $after, filter: $filter) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      edges {
-        cursor
-        node {
-          ...ProductCoreData
-        }
-      }
-      totalCount
-    }
-  }
-  ${ProductCoreDataFragmentDoc}
-`;
-export function useProductsQuery(
-  baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(
-    ProductsDocument,
-    options,
-  );
-}
-export function useProductsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProductsQuery,
-    ProductsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(
-    ProductsDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function useProductsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    ProductsQuery,
-    ProductsQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<ProductsQuery, ProductsQueryVariables>;
-export function useProductsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>,
-): Apollo.UseSuspenseQueryResult<
-  ProductsQuery | undefined,
-  ProductsQueryVariables
->;
-export function useProductsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<ProductsQuery, ProductsQueryVariables>(
-    ProductsDocument,
-    options,
-  );
-}
-export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
-export type ProductsLazyQueryHookResult = ReturnType<
-  typeof useProductsLazyQuery
->;
-export type ProductsSuspenseQueryHookResult = ReturnType<
-  typeof useProductsSuspenseQuery
->;
-export type ProductsQueryResult = Apollo.QueryResult<
-  ProductsQuery,
-  ProductsQueryVariables
->;
-export function refetchProductsQuery(variables?: ProductsQueryVariables) {
-  return { query: ProductsDocument, variables: variables };
-}
-export const ProductReviewsDocument = /*#__PURE__*/ gql`
-  query ProductReviews($productId: ObjectID!) {
-    productReviews(productId: $productId) {
-      _id
-      productId
-      accountId
-      orderId
-      rating
-      message
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export function useProductReviewsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ProductReviewsQuery,
-    ProductReviewsQueryVariables
-  > &
-    (
-      | { variables: ProductReviewsQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    ),
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ProductReviewsQuery, ProductReviewsQueryVariables>(
-    ProductReviewsDocument,
-    options,
-  );
-}
-export function useProductReviewsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ProductReviewsQuery,
-    ProductReviewsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ProductReviewsQuery, ProductReviewsQueryVariables>(
-    ProductReviewsDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function useProductReviewsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    ProductReviewsQuery,
-    ProductReviewsQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<
-  ProductReviewsQuery,
-  ProductReviewsQueryVariables
->;
-export function useProductReviewsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProductReviewsQuery,
-        ProductReviewsQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  ProductReviewsQuery | undefined,
-  ProductReviewsQueryVariables
->;
-export function useProductReviewsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProductReviewsQuery,
-        ProductReviewsQueryVariables
-      >,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    ProductReviewsQuery,
-    ProductReviewsQueryVariables
-  >(ProductReviewsDocument, options);
-}
-export type ProductReviewsQueryHookResult = ReturnType<
-  typeof useProductReviewsQuery
->;
-export type ProductReviewsLazyQueryHookResult = ReturnType<
-  typeof useProductReviewsLazyQuery
->;
-export type ProductReviewsSuspenseQueryHookResult = ReturnType<
-  typeof useProductReviewsSuspenseQuery
->;
-export type ProductReviewsQueryResult = Apollo.QueryResult<
-  ProductReviewsQuery,
-  ProductReviewsQueryVariables
->;
-export function refetchProductReviewsQuery(
-  variables: ProductReviewsQueryVariables,
-) {
-  return { query: ProductReviewsDocument, variables: variables };
-}
-export const CreateProductDocument = /*#__PURE__*/ gql`
-  mutation CreateProduct($input: CreateProductInput!) {
-    createProduct(input: $input)
-  }
-`;
-export type CreateProductMutationFn = Apollo.MutationFunction<
+export const ProductsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'Products' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'after' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Cursor' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'filter' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductsFilterInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'products' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'first' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'after' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'after' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'filter' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'filter' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'endCursor' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cursor' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: { kind: 'Name', value: 'ProductCoreData' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'totalCount' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProductCoreData' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Product' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'points' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'pieces' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discount' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'category' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'thumbnail' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'avgRating' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProductsQuery, ProductsQueryVariables>;
+export const ProductReviewsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'ProductReviews' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'productId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'ObjectID' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'productReviews' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'productId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'productId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'productId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'accountId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'orderId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'rating' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ProductReviewsQuery, ProductReviewsQueryVariables>;
+export const CreateProductDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateProduct' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateProductInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createProduct' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CreateProductMutation,
   CreateProductMutationVariables
 >;
-export function useCreateProductMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateProductMutation,
-    CreateProductMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateProductMutation,
-    CreateProductMutationVariables
-  >(CreateProductDocument, options);
-}
-export type CreateProductMutationHookResult = ReturnType<
-  typeof useCreateProductMutation
->;
-export type CreateProductMutationResult =
-  Apollo.MutationResult<CreateProductMutation>;
-export type CreateProductMutationOptions = Apollo.BaseMutationOptions<
-  CreateProductMutation,
-  CreateProductMutationVariables
->;
-export const UpdateProductDocument = /*#__PURE__*/ gql`
-  mutation UpdateProduct($input: UpdateProductInput!) {
-    updateProduct(input: $input)
-  }
-`;
-export type UpdateProductMutationFn = Apollo.MutationFunction<
+export const UpdateProductDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateProduct' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateProductInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateProduct' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   UpdateProductMutation,
   UpdateProductMutationVariables
 >;
-export function useUpdateProductMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateProductMutation,
-    UpdateProductMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateProductMutation,
-    UpdateProductMutationVariables
-  >(UpdateProductDocument, options);
-}
-export type UpdateProductMutationHookResult = ReturnType<
-  typeof useUpdateProductMutation
->;
-export type UpdateProductMutationResult =
-  Apollo.MutationResult<UpdateProductMutation>;
-export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<
-  UpdateProductMutation,
-  UpdateProductMutationVariables
->;
-export const DeleteProductDocument = /*#__PURE__*/ gql`
-  mutation DeleteProduct($input: DeleteProductInput!) {
-    deleteProduct(input: $input)
-  }
-`;
-export type DeleteProductMutationFn = Apollo.MutationFunction<
+export const DeleteProductDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'DeleteProduct' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'DeleteProductInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'deleteProduct' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   DeleteProductMutation,
   DeleteProductMutationVariables
 >;
-export function useDeleteProductMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteProductMutation,
-    DeleteProductMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteProductMutation,
-    DeleteProductMutationVariables
-  >(DeleteProductDocument, options);
-}
-export type DeleteProductMutationHookResult = ReturnType<
-  typeof useDeleteProductMutation
->;
-export type DeleteProductMutationResult =
-  Apollo.MutationResult<DeleteProductMutation>;
-export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<
-  DeleteProductMutation,
-  DeleteProductMutationVariables
->;
-export const ConfigDocument = /*#__PURE__*/ gql`
-  query Config {
-    config {
-      _id
-      highPointsThreshold
-      topSoldThreshold
-      carouselItems
-    }
-  }
-`;
-export function useConfigQuery(
-  baseOptions?: Apollo.QueryHookOptions<ConfigQuery, ConfigQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ConfigQuery, ConfigQueryVariables>(
-    ConfigDocument,
-    options,
-  );
-}
-export function useConfigLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ConfigQuery, ConfigQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ConfigQuery, ConfigQueryVariables>(
-    ConfigDocument,
-    options,
-  );
-}
-// @ts-ignore
-export function useConfigSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    ConfigQuery,
-    ConfigQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<ConfigQuery, ConfigQueryVariables>;
-export function useConfigSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>,
-): Apollo.UseSuspenseQueryResult<ConfigQuery | undefined, ConfigQueryVariables>;
-export function useConfigSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ConfigQuery, ConfigQueryVariables>,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<ConfigQuery, ConfigQueryVariables>(
-    ConfigDocument,
-    options,
-  );
-}
-export type ConfigQueryHookResult = ReturnType<typeof useConfigQuery>;
-export type ConfigLazyQueryHookResult = ReturnType<typeof useConfigLazyQuery>;
-export type ConfigSuspenseQueryHookResult = ReturnType<
-  typeof useConfigSuspenseQuery
->;
-export type ConfigQueryResult = Apollo.QueryResult<
-  ConfigQuery,
-  ConfigQueryVariables
->;
-export function refetchConfigQuery(variables?: ConfigQueryVariables) {
-  return { query: ConfigDocument, variables: variables };
-}
-export const CreateConfigDocument = /*#__PURE__*/ gql`
-  mutation CreateConfig($input: CreateConfigInput!) {
-    createConfig(input: $input)
-  }
-`;
-export type CreateConfigMutationFn = Apollo.MutationFunction<
+export const ConfigDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'Config' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'config' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'highPointsThreshold' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'topSoldThreshold' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'carouselItems' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ConfigQuery, ConfigQueryVariables>;
+export const CreateConfigDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateConfig' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateConfigInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createConfig' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   CreateConfigMutation,
   CreateConfigMutationVariables
 >;
-export function useCreateConfigMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateConfigMutation,
-    CreateConfigMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateConfigMutation,
-    CreateConfigMutationVariables
-  >(CreateConfigDocument, options);
-}
-export type CreateConfigMutationHookResult = ReturnType<
-  typeof useCreateConfigMutation
->;
-export type CreateConfigMutationResult =
-  Apollo.MutationResult<CreateConfigMutation>;
-export type CreateConfigMutationOptions = Apollo.BaseMutationOptions<
-  CreateConfigMutation,
-  CreateConfigMutationVariables
->;
-export const UpdateConfigDocument = /*#__PURE__*/ gql`
-  mutation UpdateConfig($input: UpdateConfigInput!) {
-    updateConfig(input: $input)
-  }
-`;
-export type UpdateConfigMutationFn = Apollo.MutationFunction<
+export const UpdateConfigDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UpdateConfig' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'UpdateConfigInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'updateConfig' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   UpdateConfigMutation,
   UpdateConfigMutationVariables
 >;
-export function useUpdateConfigMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateConfigMutation,
-    UpdateConfigMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateConfigMutation,
-    UpdateConfigMutationVariables
-  >(UpdateConfigDocument, options);
-}
-export type UpdateConfigMutationHookResult = ReturnType<
-  typeof useUpdateConfigMutation
->;
-export type UpdateConfigMutationResult =
-  Apollo.MutationResult<UpdateConfigMutation>;
-export type UpdateConfigMutationOptions = Apollo.BaseMutationOptions<
-  UpdateConfigMutation,
-  UpdateConfigMutationVariables
->;
-export const HighPointProductsDocument = /*#__PURE__*/ gql`
-  query HighPointProducts(
-    $first: Int
-    $after: Cursor
-    $filter: ProductsFilterInput
-  ) {
-    highPointProducts(first: $first, after: $after, filter: $filter) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      edges {
-        cursor
-        node {
-          ...ProductCoreData
-        }
-      }
-      totalCount
-    }
-  }
-  ${ProductCoreDataFragmentDoc}
-`;
-export function useHighPointProductsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    HighPointProductsQuery,
-    HighPointProductsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    HighPointProductsQuery,
-    HighPointProductsQueryVariables
-  >(HighPointProductsDocument, options);
-}
-export function useHighPointProductsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    HighPointProductsQuery,
-    HighPointProductsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    HighPointProductsQuery,
-    HighPointProductsQueryVariables
-  >(HighPointProductsDocument, options);
-}
-// @ts-ignore
-export function useHighPointProductsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    HighPointProductsQuery,
-    HighPointProductsQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<
+export const HighPointProductsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'HighPointProducts' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'after' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Cursor' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'filter' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductsFilterInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'highPointProducts' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'first' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'after' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'after' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'filter' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'filter' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'pageInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'hasNextPage' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'endCursor' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'edges' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'cursor' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'node' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: { kind: 'Name', value: 'ProductCoreData' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'totalCount' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProductCoreData' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Product' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'points' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'pieces' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discount' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'category' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'thumbnail' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'avgRating' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   HighPointProductsQuery,
   HighPointProductsQueryVariables
 >;
-export function useHighPointProductsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        HighPointProductsQuery,
-        HighPointProductsQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  HighPointProductsQuery | undefined,
-  HighPointProductsQueryVariables
->;
-export function useHighPointProductsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        HighPointProductsQuery,
-        HighPointProductsQueryVariables
-      >,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    HighPointProductsQuery,
-    HighPointProductsQueryVariables
-  >(HighPointProductsDocument, options);
-}
-export type HighPointProductsQueryHookResult = ReturnType<
-  typeof useHighPointProductsQuery
->;
-export type HighPointProductsLazyQueryHookResult = ReturnType<
-  typeof useHighPointProductsLazyQuery
->;
-export type HighPointProductsSuspenseQueryHookResult = ReturnType<
-  typeof useHighPointProductsSuspenseQuery
->;
-export type HighPointProductsQueryResult = Apollo.QueryResult<
-  HighPointProductsQuery,
-  HighPointProductsQueryVariables
->;
-export function refetchHighPointProductsQuery(
-  variables?: HighPointProductsQueryVariables,
-) {
-  return { query: HighPointProductsDocument, variables: variables };
-}
-export const SearchProductByNameDocument = /*#__PURE__*/ gql`
-  query SearchProductByName($search: String!, $first: Int, $after: Cursor) {
-    searchProductByName(search: $search, first: $first, after: $after) {
-      ...ProductCoreData
-    }
-  }
-  ${ProductCoreDataFragmentDoc}
-`;
-export function useSearchProductByNameQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    SearchProductByNameQuery,
-    SearchProductByNameQueryVariables
-  > &
-    (
-      | { variables: SearchProductByNameQueryVariables; skip?: boolean }
-      | { skip: boolean }
-    ),
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    SearchProductByNameQuery,
-    SearchProductByNameQueryVariables
-  >(SearchProductByNameDocument, options);
-}
-export function useSearchProductByNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SearchProductByNameQuery,
-    SearchProductByNameQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    SearchProductByNameQuery,
-    SearchProductByNameQueryVariables
-  >(SearchProductByNameDocument, options);
-}
-// @ts-ignore
-export function useSearchProductByNameSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    SearchProductByNameQuery,
-    SearchProductByNameQueryVariables
-  >,
-): Apollo.UseSuspenseQueryResult<
+export const SearchProductByNameDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SearchProductByName' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'after' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Cursor' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'searchProductByName' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'search' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'search' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'first' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'after' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'after' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'ProductCoreData' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ProductCoreData' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Product' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '_id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'price' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'points' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'pieces' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'discount' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'category' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'thumbnail' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'avgRating' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
   SearchProductByNameQuery,
   SearchProductByNameQueryVariables
 >;
-export function useSearchProductByNameSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        SearchProductByNameQuery,
-        SearchProductByNameQueryVariables
-      >,
-): Apollo.UseSuspenseQueryResult<
-  SearchProductByNameQuery | undefined,
-  SearchProductByNameQueryVariables
->;
-export function useSearchProductByNameSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        SearchProductByNameQuery,
-        SearchProductByNameQueryVariables
-      >,
-) {
-  const options =
-    baseOptions === Apollo.skipToken
-      ? baseOptions
-      : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<
-    SearchProductByNameQuery,
-    SearchProductByNameQueryVariables
-  >(SearchProductByNameDocument, options);
-}
-export type SearchProductByNameQueryHookResult = ReturnType<
-  typeof useSearchProductByNameQuery
->;
-export type SearchProductByNameLazyQueryHookResult = ReturnType<
-  typeof useSearchProductByNameLazyQuery
->;
-export type SearchProductByNameSuspenseQueryHookResult = ReturnType<
-  typeof useSearchProductByNameSuspenseQuery
->;
-export type SearchProductByNameQueryResult = Apollo.QueryResult<
-  SearchProductByNameQuery,
-  SearchProductByNameQueryVariables
->;
-export function refetchSearchProductByNameQuery(
-  variables: SearchProductByNameQueryVariables,
-) {
-  return { query: SearchProductByNameDocument, variables: variables };
-}

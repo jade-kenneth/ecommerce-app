@@ -1,19 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { ObjectId } from 'bson';
 
 import {
-  CheckoutMethodSettingsDocument,
   CheckoutMethodSettingsQuery,
   CheckoutMethodSettingsQueryVariables,
   PaymentMethodType,
   ShippingType,
-  useCheckoutMethodSettingsQuery,
-  useConfigQuery,
-  useCreateConfigMutation,
-  useUpdateConfigMutation,
-  useUpdatePaymentMethodStatusMutation,
-  useUpdateShippingMethodStatusMutation,
 } from '~/graphql/generated';
+import {
+  CHECKOUT_METHOD_SETTINGS_QUERY,
+  UPDATE_PAYMENT_METHOD_STATUS_MUTATION,
+  UPDATE_SHIPPING_METHOD_STATUS_MUTATION,
+} from '~/graphql/Cart';
+import { CONFIG_QUERY, CREATE_CONFIG_MUTATION, UPDATE_CONFIG_MUTATION } from '~/graphql/Product';
 
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -35,22 +35,24 @@ const Definition = z.object({
 });
 
 export function Settings() {
-  const { data } = useConfigQuery();
+  const { data } = useQuery(CONFIG_QUERY);
   const config = data?.config;
 
   const form = useForm({
     resolver: zodResolver(Definition),
   });
 
-  const [update] = useUpdateConfigMutation();
-  const [create] = useCreateConfigMutation();
-  const methodsQuery = useCheckoutMethodSettingsQuery({
+  const [update] = useMutation(UPDATE_CONFIG_MUTATION);
+  const [create] = useMutation(CREATE_CONFIG_MUTATION);
+  const methodsQuery = useQuery(CHECKOUT_METHOD_SETTINGS_QUERY, {
     fetchPolicy: 'network-only',
   });
-  const [updateShippingMethodStatus, shippingMethodMutation] =
-    useUpdateShippingMethodStatusMutation();
-  const [updatePaymentMethodStatus, paymentMethodMutation] =
-    useUpdatePaymentMethodStatusMutation();
+  const [updateShippingMethodStatus, shippingMethodMutation] = useMutation(
+    UPDATE_SHIPPING_METHOD_STATUS_MUTATION,
+  );
+  const [updatePaymentMethodStatus, paymentMethodMutation] = useMutation(
+    UPDATE_PAYMENT_METHOD_STATUS_MUTATION,
+  );
 
   useEffect(() => {
     form.reset({
@@ -256,9 +258,8 @@ export function Settings() {
                         CheckoutMethodSettingsQuery,
                         CheckoutMethodSettingsQueryVariables
                       >({
-                        query: CheckoutMethodSettingsDocument,
+                        query: CHECKOUT_METHOD_SETTINGS_QUERY,
                         data: {
-                          __typename: 'Query',
                           shippingOptions:
                             methodsQuery.data?.shippingOptions.map((option) =>
                               option._id === method._id
@@ -333,10 +334,8 @@ export function Settings() {
                         CheckoutMethodSettingsQuery,
                         CheckoutMethodSettingsQueryVariables
                       >({
-                        query: CheckoutMethodSettingsDocument,
+                        query: CHECKOUT_METHOD_SETTINGS_QUERY,
                         data: {
-                          __typename: 'Query',
-
                           paymentMethods:
                             methodsQuery.data?.paymentMethods.map((option) =>
                               option._id === method._id

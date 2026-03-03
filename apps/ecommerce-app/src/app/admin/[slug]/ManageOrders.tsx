@@ -1,6 +1,7 @@
 'use client';
 
 import { createListCollection, Portal } from '@ark-ui/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   CheckCircle2,
   ClipboardList,
@@ -15,13 +16,10 @@ import { Reducer, useMemo, useReducer, useState } from 'react';
 import { Badge, Button, DataTable, Menu, toaster } from '~/components';
 import { Dialog } from '~/components/Dialog';
 
+import { MY_ORDERS_QUERY, UPDATE_ORDER_STATUS_MUTATION } from '~/graphql/Cart';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
 import type { MyOrdersQuery } from '~/graphql/generated';
-import {
-  OrderStatus,
-  useMyOrdersQuery,
-  useProductsQuery,
-  useUpdateOrderStatusMutation,
-} from '~/graphql/generated';
+import { OrderStatus } from '~/graphql/generated';
 import { usePaginated } from '~/hooks/usePaginated';
 import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
@@ -63,7 +61,7 @@ export const ManageOrders = () => {
     { page: 1, pageSize: 10 },
   );
 
-  const query = useMyOrdersQuery({
+  const query = useQuery(MY_ORDERS_QUERY, {
     fetchPolicy: 'network-only',
   });
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -72,7 +70,7 @@ export const ManageOrders = () => {
     MyOrdersQuery['myOrders'][number] | null
   >(null);
 
-  const [updateOrderStatus] = useUpdateOrderStatusMutation();
+  const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS_MUTATION);
 
   const orders = query.data?.myOrders ?? [];
   const productIds = useMemo(() => {
@@ -83,7 +81,7 @@ export const ManageOrders = () => {
     return Array.from(new Set(ids));
   }, [orders]);
 
-  const productsQuery = useProductsQuery({
+  const productsQuery = useQuery(PRODUCTS_QUERY, {
     variables: {
       first: productIds.length,
       filter: {

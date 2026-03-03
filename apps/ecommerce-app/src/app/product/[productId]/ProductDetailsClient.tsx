@@ -4,16 +4,14 @@ import { ShoppingCart, Star } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { Badge, Button, Cards, Spinner, toaster } from '~/components';
 import { Sticky } from '~/components/Sticky';
 import { Footer, Highlight } from '~/features/portal';
 import { useCartContext } from '~/features/portal/Cart/CartContext';
 import { Layout } from '~/features/portal/layout/Layout';
-import {
-  useProductReviewsQuery,
-  useProductsQuery,
-  useUpdateCartItemMutation,
-} from '~/graphql/generated';
+import { UPDATE_CART_ITEM_MUTATION } from '~/graphql/Cart';
+import { PRODUCT_REVIEWS_QUERY, PRODUCTS_QUERY } from '~/graphql/Product';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
@@ -39,7 +37,7 @@ export default function ProductDetailsClient({
   );
   const cartContext = useCartContext();
 
-  const { data, loading } = useProductsQuery({
+  const { data, loading } = useQuery(PRODUCTS_QUERY, {
     variables: {
       first: 1,
       filter: {
@@ -50,7 +48,7 @@ export default function ProductDetailsClient({
     },
   });
 
-  const productReviewsQuery = useProductReviewsQuery({
+  const productReviewsQuery = useQuery(PRODUCT_REVIEWS_QUERY, {
     variables: {
       productId,
     },
@@ -59,7 +57,7 @@ export default function ProductDetailsClient({
 
   const product = data?.products.edges?.[0]?.node;
   const isProductLoading = loading;
-  const relatedProductsQuery = useProductsQuery({
+  const relatedProductsQuery = useQuery(PRODUCTS_QUERY, {
     variables: {
       first: 5,
       filter: {
@@ -73,7 +71,9 @@ export default function ProductDetailsClient({
     },
     skip: !product?.category?.length,
   });
-  const [updateCartItem, { loading: adding }] = useUpdateCartItemMutation();
+  const [updateCartItem, { loading: adding }] = useMutation(
+    UPDATE_CART_ITEM_MUTATION,
+  );
 
   const handleAddToCart = async () => {
     if (!product) return;

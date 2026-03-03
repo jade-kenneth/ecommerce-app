@@ -2,13 +2,14 @@
 
 import { Browser } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
-  PaymentMethodType,
-  useCheckoutMutation,
-  useCreateGcashPaymentMutation,
-  usePaymentMethodsQuery,
-  useShippingOptionsQuery,
-} from '~/graphql/generated';
+  CHECKOUT_MUTATION,
+  PAYMENT_METHODS_QUERY,
+  SHIPPING_OPTIONS_QUERY,
+} from '~/graphql/Cart';
+import { CREATE_GCASH_PAYMENT_MUTATION } from '~/graphql/Payment';
+import { PaymentMethodType } from '~/graphql/generated';
 import { Show } from '~/components/Show';
 import { gtm } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
@@ -48,8 +49,8 @@ const formatPaymentAmount = (amount: number): string => {
 
 export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
   const context = useCartContext();
-  const paymentMethodsQuery = usePaymentMethodsQuery();
-  const shippingOptionsQuery = useShippingOptionsQuery();
+  const paymentMethodsQuery = useQuery(PAYMENT_METHODS_QUERY);
+  const shippingOptionsQuery = useQuery(SHIPPING_OPTIONS_QUERY);
 
   const totalAmount = context.state.cart.items.reduce((total, item) => {
     return total + Number(item.price) * (item.quantity || 1);
@@ -60,8 +61,8 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
     Number(context.state.cart.shipping?.fee || 0) +
     totalAmount * 0.12; // Assuming 12% VAT
 
-  const [mutate] = useCreateGcashPaymentMutation();
-  const [order] = useCheckoutMutation();
+  const [mutate] = useMutation(CREATE_GCASH_PAYMENT_MUTATION);
+  const [order] = useMutation(CHECKOUT_MUTATION);
   return (
     <div>
       <div

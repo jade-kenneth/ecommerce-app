@@ -1,5 +1,6 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@apollo/client/react';
 import { Dialog } from '~/components/Dialog';
 
 import { Portal } from '@ark-ui/react';
@@ -8,11 +9,11 @@ import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
 import { Menu } from '~/components';
+import { UPDATE_PRODUCT_MUTATION } from '~/graphql/Product';
 import {
   CategoryType,
   ProductCoreDataFragment,
   StatusType,
-  useUpdateProductMutation,
 } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
 import { useDisclosure } from '~/utils/useDisclosure';
@@ -59,7 +60,7 @@ export const UpdateProduct = (props: AddProductButtonProps) => {
     form.reset(getDefaultValues());
   }, [context._id]);
 
-  const [updateProduct, { loading }] = useUpdateProductMutation();
+  const [updateProduct, { loading }] = useMutation(UPDATE_PRODUCT_MUTATION);
 
   const price = parseFloat(form.watch('price') || '0');
 

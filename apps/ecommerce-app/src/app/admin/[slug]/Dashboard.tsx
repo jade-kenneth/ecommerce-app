@@ -1,24 +1,23 @@
 'use client';
 
+import { useQuery } from '@apollo/client/react';
 import { Package, ShoppingCart, TrendingUp } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import {
-  OrderStatus,
-  useMyOrdersQuery,
-  useProductsQuery,
-} from '~/graphql/generated';
+import { MY_ORDERS_QUERY } from '~/graphql/Cart';
+import { PRODUCTS_QUERY } from '~/graphql/Product';
+import { OrderStatus } from '~/graphql/generated';
 import { formatDate } from '~/utils';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { safeParseFloat } from '~/utils/safeParseFloat';
 
 export const Dashboard = () => {
-  const productsQuery = useProductsQuery({
+  const productsQuery = useQuery(PRODUCTS_QUERY, {
     fetchPolicy: 'network-only',
     variables: { first: 1 },
   });
-  const ordersQuery = useMyOrdersQuery({
+  const ordersQuery = useQuery(MY_ORDERS_QUERY, {
     fetchPolicy: 'network-only',
   });
   const router = useRouter();

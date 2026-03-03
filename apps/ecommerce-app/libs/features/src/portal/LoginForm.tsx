@@ -78,7 +78,8 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
                   placeholder: 'Enter your email address',
                 }}
                 className="rounded-[32px]"
-                {...field}
+                value={field.value || ''}
+                onChange={(e) => field.onChange(e)}
               />
               <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
             </Field.Root>
@@ -115,7 +116,8 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
                       )}
                     </button>
                   }
-                  {...field}
+                  value={field.value || ''}
+                  onChange={(e) => field.onChange(e)}
                 />
                 <Field.ErrorText>{fieldState.error?.message}</Field.ErrorText>
               </>

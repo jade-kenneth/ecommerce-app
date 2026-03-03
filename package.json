@@ -4,6 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build:app": "NX_ISOLATE_PLUGINS=false NX_NATIVE_COMMAND_RUNNER=false NX_PSEUDO_TERMINAL=false npx nx run ecommerce-app:build",
+    "test": "vitest",
+    "test:app": "npm test -- --run --project ecommerce-app",
+    "test:server": "npm test -- --run --project ecommerce-server",
     "build:server": "npx nx run ecommerce-server:build",
     "server": "JWT_SECRET_KEY=be586b6fd25efdc6cdb924467b0cbd6c HIGHPOINT_THRESHOLD=2 nx serve ecommerce-server",
     "app": "nx run ecommerce-app:dev --port=4201 ",
@@ -174,6 +177,7 @@
     "tslib": "^2.3.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.13.0",
+    "vitest": "^4.0.18",
     "webpack-cli": "^5.1.4"
   },
   "workspaces": [

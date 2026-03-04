@@ -1,4 +1,5 @@
 /** build 1x */
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
@@ -9,8 +10,8 @@ import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
 import { FeatureFlagProvider } from '~/providers/FeatureFlagProvider';
 import { LicenseProvider } from '~/providers/LicenseProvider';
 import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
-import { SupportChatWidget } from './SupportChatWidget';
 import './globals.css';
+import { SupportChatWidget } from './SupportChatWidget';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -84,6 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </LicenseProvider>
                 <ToastContainer />
                 <SupportChatWidget />
+                <Analytics />
               </ClientCartProvider>
             </AuthProvider>
           </ClientApolloProvider>

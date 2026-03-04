@@ -55,7 +55,7 @@ export class EmailHandler {
       </div>
 
       <!-- CTA -->
-      <a href="https://amy-store.vercel.app"
+      <a href="https://amy-store.site"
         style="
           display: inline-block;
           background-color: #06b6d4;

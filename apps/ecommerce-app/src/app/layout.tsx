@@ -28,10 +28,29 @@ export const metadata: Metadata = {
     'Amy Store ecommerce app for shopping, checkout, and order tracking.',
   applicationName: 'Amy Store',
   icons: {
-    icon: '/Logo.png',
-    shortcut: '/Logo.png',
-    apple: '/Logo.png',
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
+  openGraph: {
+    type: 'website',
+    siteName: 'Amy Store',
+    title: 'Amy Store',
+    description:
+      'Amy Store ecommerce app for shopping, checkout, and order tracking.',
+    images: [
+      {
+        url: '/Logo.png',
+        width: 424,
+        height: 348,
+        alt: 'Amy Store logo',
+      },
+    ],
+  },
+
   verification: {
     google: 'jojN1BJdPqWwW9QxYEXfV3CXAZ6zGju9yGUO9FX67As',
   },
@@ -45,7 +64,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" />
         <Script id="gtm-base" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

@@ -86,10 +86,7 @@ export function FeatureFlagProvider({ children }: PropsWithChildren) {
     [hydrated, isFutureEnabled],
   );
 
-  const shouldShowToggle =
-    process.env.NEXT_PUBLIC_SHOW_FLAG_TOGGLE === 'true' ||
-    process.env.NODE_ENV !== 'production';
-
+  const shouldShowToggle = process.env.NEXT_PUBLIC_SHOW_FLAG_TOGGLE === 'true';
   return (
     <FeatureFlagContext value={context}>
       {children}

@@ -1,3 +1,4 @@
+/** build 1x */
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';

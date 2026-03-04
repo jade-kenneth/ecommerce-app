@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import {
   PropsWithChildren,
+  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -24,7 +25,7 @@ export const [FeatureFlagContext, useFeatureFlagContext] =
     providerName: 'FeatureFlagProvider',
   });
 
-export const FeatureFlagProvider = ({ children }: PropsWithChildren) => {
+export const FeatureFlag = ({ children }: PropsWithChildren) => {
   const searchParams = useSearchParams();
   const [isFutureEnabled, setIsFutureEnabled] = useState(false);
 
@@ -89,3 +90,10 @@ export const FeatureFlagProvider = ({ children }: PropsWithChildren) => {
     </FeatureFlagContext>
   );
 };
+export function FeatureFlagProvider({ children }: PropsWithChildren) {
+  return (
+    <Suspense fallback={<div className="py-10" />}>
+      <FeatureFlag>{children}</FeatureFlag>
+    </Suspense>
+  );
+}

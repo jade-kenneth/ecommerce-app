@@ -15,8 +15,8 @@ export const JustForYou: FunctionComponent<JustForYouProps> = () => {
   return (
     <Container title="Just For You">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(194px,1fr))] gap-4 sm:gap-5">
-        {data?.products.edges.map((d, idx) => {
-          return <Cards key={idx} {...d.node} />;
+        {data?.products.edges.map((d) => {
+          return <Cards key={d.node._id} {...d.node} />;
         })}
       </div>
 

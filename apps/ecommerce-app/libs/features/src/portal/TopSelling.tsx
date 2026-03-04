@@ -15,8 +15,8 @@ export const TopSelling = () => {
   return (
     <Container title="Top Selling Products">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(194px,1fr))] gap-4 sm:gap-5">
-        {data?.products.edges.map((d, idx) => {
-          return <Cards key={idx} {...d.node} isTopSold />;
+        {data?.products.edges.map((d) => {
+          return <Cards key={d.node._id} {...d.node} isTopSold />;
         })}
       </div>
     </Container>

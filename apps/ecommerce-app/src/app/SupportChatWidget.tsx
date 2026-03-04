@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { FormEvent, useRef, useState } from 'react';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { useFeatureFlagContext } from '~/providers';
 import { getSession } from '~/providers/AuthProvider/service';
 
 type ChatMessage = {
@@ -28,7 +30,7 @@ export function SupportChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const listRef = useRef<HTMLDivElement | null>(null);
-
+  const future = useFeatureFlagContext();
   const appendMessage = (message: ChatMessage) => {
     setMessages((prev) => {
       const next = [...prev, message];
@@ -112,7 +114,8 @@ export function SupportChatWidget() {
       setIsLoading(false);
     }
   };
-
+  const auth = useGlobalStore((state) => state.authenticate);
+  if (!future.enabled) return null;
   return (
     <div className="fixed bottom-4 right-4 z-[1100] flex flex-col items-end">
       {isOpen ? (
@@ -185,7 +188,10 @@ export function SupportChatWidget() {
         <button
           aria-label="Open support chat"
           className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-transparent shadow-lg hover:shadow-xl"
-          onClick={() => setIsOpen((value) => !value)}
+          onClick={() => {
+            if (auth.isAuthenticated) setIsOpen((value) => !value);
+            else auth.setAuthDialogOpen(true);
+          }}
           type="button"
         >
           <Image

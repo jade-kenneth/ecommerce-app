@@ -5,6 +5,7 @@ import { ToastContainer } from '~/components/ToastContainer';
 import { AuthProvider } from '~/providers/AuthProvider';
 import { ClientCartProvider } from '~/providers/CartProvider';
 import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
+import { FeatureFlagProvider } from '~/providers/FeatureFlagProvider';
 import { LicenseProvider } from '~/providers/LicenseProvider';
 import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
 import { SupportChatWidget } from './SupportChatWidget';
@@ -73,17 +74,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <CapacitorDeepLinkBridge />
-        <ClientApolloProvider>
-          <AuthProvider>
-            <ClientCartProvider>
-              <LicenseProvider excludePaths={['/admin']}>
-                {children}
-              </LicenseProvider>
-              <ToastContainer />
-              <SupportChatWidget />
-            </ClientCartProvider>
-          </AuthProvider>
-        </ClientApolloProvider>
+        <FeatureFlagProvider>
+          <ClientApolloProvider>
+            <AuthProvider>
+              <ClientCartProvider>
+                <LicenseProvider excludePaths={['/admin']}>
+                  {children}
+                </LicenseProvider>
+                <ToastContainer />
+                <SupportChatWidget />
+              </ClientCartProvider>
+            </AuthProvider>
+          </ClientApolloProvider>
+        </FeatureFlagProvider>
       </body>
     </html>
   );

@@ -65,18 +65,18 @@ export const LicenseDialog = (props: PropsWithChildren) => {
               </Button>
             </div>
             <div className="text-center mb-6 sm:mb-8">
-              <p className="text-gray-600 text-sm sm:text-base">
-                Don&apos;t have a license?{' '}
-                <a
-                  href="https://www.facebook.com/jeidosenpaitsx/"
-                  target="_blank"
+              <p className="text-gray-600 font-bold text-sm sm:text-base">
+                LIMITED LICENSE FOR TESTING PURPOSE:{' '}
+                <span
+                  // href="https://www.facebook.com/jeidosenpaitsx/"
+                  // target="_blank"
                   className="text-cyan-600 hover:text-cyan-700 font-medium"
                   onClick={() => {
                     gtm.gtmEvent('contact_admin');
                   }}
                 >
-                  Contact admin
-                </a>
+                  {process.env.NEXT_PUBLIC_TEST_LICENSE_KEY}
+                </span>
               </p>
             </div>
           </div>

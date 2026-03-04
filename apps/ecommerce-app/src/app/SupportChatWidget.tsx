@@ -31,6 +31,7 @@ export function SupportChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const listRef = useRef<HTMLDivElement | null>(null);
   const future = useFeatureFlagContext();
+  const auth = useGlobalStore((state) => state.authenticate);
   const appendMessage = (message: ChatMessage) => {
     setMessages((prev) => {
       const next = [...prev, message];
@@ -114,8 +115,7 @@ export function SupportChatWidget() {
       setIsLoading(false);
     }
   };
-  const auth = useGlobalStore((state) => state.authenticate);
-  if (!future.enabled) return null;
+  if (!future.hydrated || !future.enabled) return null;
   return (
     <div className="fixed bottom-4 right-4 z-[1100] flex flex-col items-end">
       {isOpen ? (

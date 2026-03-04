@@ -27,5 +27,15 @@ type Edge {
   cursor: Cursor!
   node: Node!
 }
+input IntFilterInput {
+  equal: Int
+  notEqual: Int
+  in: [Int!]
+  notIn: [Int!]
+  lesserThan: Int
+  lesserThanOrEqual: Int
+  greaterThan: Int
+  greaterThanOrEqual: Int
+}
 
 directive @authorizationRequired(roles: [AccountType!]!) on FIELD_DEFINITION

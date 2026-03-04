@@ -76,6 +76,7 @@ input ProductsFilterInput {
   category: ProductsCategoryFilterInput
   _id: IdFilterInput
   name: IdFilterInput
+  points: IntFilterInput
 }
 type Query {
   products(first: Int, after: Cursor, filter: ProductsFilterInput): Connection!

@@ -119,6 +119,17 @@ export interface ProductByIdsInput {
     ids: ObjectId[];
 }
 
+export interface IntFilterInput {
+    equal?: Nullable<number>;
+    notEqual?: Nullable<number>;
+    in?: Nullable<number[]>;
+    notIn?: Nullable<number[]>;
+    lesserThan?: Nullable<number>;
+    lesserThanOrEqual?: Nullable<number>;
+    greaterThan?: Nullable<number>;
+    greaterThanOrEqual?: Nullable<number>;
+}
+
 export interface CreateConfigInput {
     _id: ObjectId;
     highPointsThreshold: number;
@@ -181,6 +192,7 @@ export interface ProductsFilterInput {
     category?: Nullable<ProductsCategoryFilterInput>;
     _id?: Nullable<IdFilterInput>;
     name?: Nullable<IdFilterInput>;
+    avgRating?: Nullable<IntFilterInput>;
 }
 
 export interface KeyValuePairInput {

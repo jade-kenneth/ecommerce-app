@@ -7,6 +7,7 @@ import { ClientCartProvider } from '~/providers/CartProvider';
 import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
 import { LicenseProvider } from '~/providers/LicenseProvider';
 import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
+import { SupportChatWidget } from './SupportChatWidget';
 import './globals.css';
 
 const inter = Inter({
@@ -79,6 +80,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 {children}
               </LicenseProvider>
               <ToastContainer />
+              <SupportChatWidget />
             </ClientCartProvider>
           </AuthProvider>
         </ClientApolloProvider>

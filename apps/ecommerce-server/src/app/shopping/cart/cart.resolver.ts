@@ -6,16 +6,13 @@ import { Types } from 'mongoose';
 import { AccountType } from '../../../types/common';
 import {
   CheckoutInput,
-  OrderStatus,
   PaymentMethodType,
   RemoveFromCartInput,
   ShippingType,
   UpdateCartItemInput,
-  UpdateOrderStatusInput,
 } from '../../__generated/graphql-types';
 import { Claims } from '../../identity/types';
 import { CheckoutService } from '../checkout/checkout.service';
-import { OrderService } from '../order/order.service';
 import { CartService } from './cart.service';
 
 @Resolver('Cart')
@@ -23,7 +20,6 @@ export class CartResolver {
   constructor(
     private readonly cartService: CartService,
     private readonly checkoutService: CheckoutService,
-    private readonly orderService: OrderService,
   ) {}
 
   @Query('cart')
@@ -84,23 +80,6 @@ export class CartResolver {
     });
   }
 
-  @Query('myOrders')
-  async myOrders(@Context('claims') claims: Claims) {
-    assert(claims.role === AccountType.Member, 'unauthorized');
-
-    return this.orderService.myOrders(new Types.ObjectId(claims.sub));
-  }
-
-  @Query('order')
-  async order(@Context('claims') claims: Claims, @Args('id') id: string) {
-    assert(claims.role === AccountType.Member, 'unauthorized');
-
-    return this.orderService.findOrder(
-      new Types.ObjectId(claims.sub),
-      new Types.ObjectId(id),
-    );
-  }
-
   @Mutation('checkout')
   async checkout(
     @Context('claims') claims: Claims,
@@ -109,26 +88,6 @@ export class CartResolver {
     assert(claims.role === AccountType.Member, 'unauthorized');
 
     return this.checkoutService.checkout({ accountId: claims.sub, input });
-  }
-
-  @Mutation('updateOrderStatus')
-  async updateOrderStatus(
-    @Context('claims') claims: Claims,
-    @Args('input')
-    input: UpdateOrderStatusInput,
-  ) {
-    // TODO should be admin only, build admin panel later
-    assert(claims.role === AccountType.Member, 'unauthorized');
-
-    await this.orderService.updateOrderStatus({
-      orderId: new Types.ObjectId(input.orderId),
-      productId: input.productId ? new Types.ObjectId(input.productId) : null,
-      status: input.status,
-      rating: input.rating,
-      message: input.message,
-    });
-
-    return true;
   }
 
   @Mutation('updateShippingMethodStatus')

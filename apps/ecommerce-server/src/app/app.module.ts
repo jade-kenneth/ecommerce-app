@@ -36,6 +36,7 @@ import { ProductReviewsModule } from './product-reviews/product-reviews.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { ShoppingModule } from './shopping/shopping.module';
+import { SupportModule } from './support/support.module';
 import { UploadModule } from './upload/upload/upload.module';
 import { AccountModule } from './identity/account/account.module';
 import { JwtModule } from './identity/jwt/jwt.module';
@@ -115,6 +116,7 @@ import { SessionModule } from './identity/session/session.module';
     LicenseModule,
     MailModule,
     RatingsModule,
+    SupportModule,
     AsyncEventModule.forRootAsync({
       useFactory: () => {
         return {

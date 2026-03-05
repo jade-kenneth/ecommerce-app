@@ -1,11 +1,12 @@
 'use client';
 
 import { useQuery } from '@apollo/client/react';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button, Cards, Spinner } from '~/components';
-import { categoryItems } from '~/features/portal/Categories';
+import { Button, Spinner } from '~/components';
+import { Cards, categoryItems } from '~/features/portal';
 import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { CategoryType } from '~/graphql/generated';
 

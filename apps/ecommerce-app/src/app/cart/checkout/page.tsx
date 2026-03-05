@@ -2,9 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { Sticky } from '~/components/Sticky';
 
-import { Navbar } from '~/features/portal';
+import { Highlight, Navbar } from '~/features/portal';
 import { Checkout } from '~/features/portal/Checkout/Checkout';
-import { Highlight } from '~/features/portal/Highlight';
 export default function Index() {
   const router = useRouter();
   return (

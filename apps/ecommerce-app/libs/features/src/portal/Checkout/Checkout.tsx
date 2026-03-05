@@ -1,7 +1,7 @@
 'use client';
 
 import { Items } from '../Cart/Items';
-import { Footer } from '../Footer';
+import { Footer } from '../Marketing/Footer';
 import { OrderSummary } from './OrderSummary';
 import PaymentMethod from './PaymentMethod';
 import { ShippingAddress } from './ShippingAddress';

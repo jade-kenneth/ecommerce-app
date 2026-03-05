@@ -1,14 +1,14 @@
 'use client';
 
-import { createListCollection, Portal } from '@ark-ui/react';
 import { useQuery } from '@apollo/client/react';
+import { createListCollection, Portal } from '@ark-ui/react';
 
 import { MoreVertical } from 'lucide-react';
 import Image from 'next/image';
 import { Reducer, useReducer } from 'react';
 import { DataTable } from '~/components/DataTable/DataTable';
-import { Badge } from '~/components/ui/Badge';
-import { Menu } from '~/components/ui/Menu';
+import { Badge } from '~/components/Primitives/Badge';
+import { Menu } from '~/components/Primitives/Menu';
 
 import { apolloClient } from '~/config/client';
 import {

@@ -1,12 +1,12 @@
 'use client';
 
-import { Portal } from '@ark-ui/react';
 import { useMutation } from '@apollo/client/react';
-import { REMOVE_FROM_CART_MUTATION } from '~/graphql/Cart';
-import { AlertDialog } from '~/components/ui/AlertDialog';
-import { useDisclosure } from '~/utils/useDisclosure';
+import { Portal } from '@ark-ui/react';
 import { Trash } from 'lucide-react';
 import Image from 'next/image';
+import { AlertDialog } from '~/components/Primitives/AlertDialog';
+import { REMOVE_FROM_CART_MUTATION } from '~/graphql/Cart';
+import { useDisclosure } from '~/utils/useDisclosure';
 import { useCartContext } from './CartContext';
 import { Item } from './useCart';
 

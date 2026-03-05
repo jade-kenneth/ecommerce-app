@@ -7,9 +7,8 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 
 import { Button } from '~/components';
 import { Sticky } from '~/components/Sticky';
-import { Footer } from '~/features/portal';
-import { Highlight } from '~/features/portal/Highlight';
-import { Layout } from '~/features/portal/layout/Layout';
+import { Footer, Highlight } from '~/features/portal';
+import { Layout } from '~/features/portal/Layout/Layout';
 import { UPDATE_ORDER_STATUS_MUTATION } from '~/graphql/Cart';
 import { OrderStatus } from '~/graphql/generated';
 

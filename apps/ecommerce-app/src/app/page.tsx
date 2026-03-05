@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import { Sticky } from '~/components/Sticky';
-import { Navbar } from '~/features/portal';
-import { Carousel } from '~/features/portal/Carousel';
-import { Categories } from '~/features/portal/Categories';
-import { Footer } from '~/features/portal/Footer';
-import { FrequentlySearched } from '~/features/portal/FrequentlySearch';
-import { Highlight } from '~/features/portal/Highlight';
-import { Layout } from '~/features/portal/layout/Layout';
+import {
+  Carousel,
+  Categories,
+  Footer,
+  FrequentlySearched,
+  Highlight,
+  Navbar,
+} from '~/features/portal';
+import { Layout } from '~/features/portal/Layout/Layout';
 import { HomeProductSections } from './HomeProductSections';
 
 export const metadata: Metadata = {

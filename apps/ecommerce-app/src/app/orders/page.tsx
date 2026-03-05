@@ -1,17 +1,17 @@
 'use client';
 
-import { Star } from 'lucide-react';
 import { useMutation, useQuery } from '@apollo/client/react';
+import { Star } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-
 import { Badge, Button, Show, Spinner, toaster } from '~/components';
+
+import { Tabs } from '~/components/Primitives/Tabs';
 import { Sticky } from '~/components/Sticky';
-import { Tabs } from '~/components/Tabs';
 import { Footer, Highlight } from '~/features/portal';
-import { Layout } from '~/features/portal/layout/Layout';
+import { Layout } from '~/features/portal/Layout/Layout';
 import { MY_ORDERS_QUERY, UPDATE_ORDER_STATUS_MUTATION } from '~/graphql/Cart';
 import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { OrderStatus } from '~/graphql/generated';

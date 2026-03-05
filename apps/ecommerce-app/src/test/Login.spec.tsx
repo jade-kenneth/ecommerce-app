@@ -2,7 +2,7 @@
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { LoginForm } from '~/features/portal/LoginForm';
+import { LoginForm } from '~/features/portal/Auth/LoginForm';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 

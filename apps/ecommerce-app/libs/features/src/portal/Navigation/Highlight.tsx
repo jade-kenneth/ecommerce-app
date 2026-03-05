@@ -1,0 +1,75 @@
+'use client';
+import dynamic from 'next/dynamic';
+import React from 'react';
+import { MedalIcon } from '~/components/icons/MedalIcon';
+import { PhoneIcon } from '~/components/icons/PhoneIcon';
+import { TruckIcon } from '~/components/icons/TruckIcon';
+import { useGlobalStore } from '~/hooks/useGlobalStore';
+import { LicenseTimer } from '../Feedback/LicenseTimer';
+
+const LazyDFeedbackRatingModal = dynamic(
+  () =>
+    import('../Feedback/FeedbackRatingModal').then(
+      (mod) => mod.FeedbackRatingModal,
+    ),
+  {
+    ssr: false,
+  },
+);
+
+interface HighlightProps {
+  storeName?: string;
+  contact?: string;
+  disabled?: boolean;
+}
+
+export const Highlight = React.memo<HighlightProps>(
+  ({
+    contact = '09123453476',
+    storeName = 'Welcome to AmyStore',
+    disabled = false,
+  }) => {
+    const isRatingModalOpen = useGlobalStore((state) => state.rating.isOpen);
+
+    return (
+      <div className="w-full bg-cyan-700 text-cyan-950">
+        <div className="max-w-screen flex flex-col gap-2 py-2 sm:flex-row sm:items-center sm:justify-between sm:py-3">
+          <div className="flex gap-2 items-center">
+            <p className="text-xs sm:text-sm text-white font-bold">
+              {storeName}
+            </p>
+            <LicenseTimer />
+            {isRatingModalOpen ? <LazyDFeedbackRatingModal /> : null}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm sm:gap-0 sm:divide-x sm:divide-cyan-600">
+            <div className="flex items-center gap-2 sm:px-4">
+              <MedalIcon
+                className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]"
+                pathProps={{ fill: '#FDE68A', stroke: '#FDE68A' }}
+              />
+              <p className="text-white font-medium">
+                Earn Points with Every Purchase
+              </p>
+            </div>
+            <div className="flex items-center gap-2 sm:px-4">
+              <TruckIcon
+                className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]"
+                pathProps={{ fill: '#86EFAC', stroke: '#86EFAC' }}
+              />
+              <p className="font-medium text-white">We Also Deliver</p>
+            </div>
+            <div className="flex items-center gap-2 sm:px-4">
+              <PhoneIcon
+                className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]"
+                pathProps={{ fill: '#93C5FD', stroke: '#93C5FD' }}
+              />
+              <p className="font-medium text-white">Contact Us at {contact}</p>
+            </div>
+          </div>
+        </div>
+        {/* {false && <ColorModeButton />} */}
+      </div>
+    );
+  },
+);

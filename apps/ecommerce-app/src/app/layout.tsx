@@ -1,7 +1,6 @@
 /** build 1x */
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import { ToastContainer } from '~/components/ToastContainer';
 import { AuthProvider } from '~/providers/AuthProvider';
@@ -12,11 +11,6 @@ import { LicenseProvider } from '~/providers/LicenseProvider';
 import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
 import './globals.css';
 import { SupportChatWidget } from './SupportChatWidget';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: {
@@ -84,7 +78,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
       </head>
-      <body className={`${inter.className} w-full`}>
+      <body className="w-full">
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-TPVR9TRQ"

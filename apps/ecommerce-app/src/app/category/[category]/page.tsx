@@ -4,7 +4,7 @@ import {
   categoryItems,
   categorySlugToType,
   categoryTypeToSlug,
-} from '~/features/portal/Categories';
+} from '~/features/portal/Catalog/Categories';
 import { CategoryType } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
 import CategoryPageClient from './CategoryPageClient';

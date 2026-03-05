@@ -19,10 +19,10 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "~/admin": ["libs/admin/index.ts"],
-      "~/admin/*": ["libs/admin/*"],
-      "~/components": ["libs/ui/components/index.ts"],
-      "~/components/*": ["libs/ui/components/*"],
+      "~/admin": ["libs/features/src/admin/index.ts"],
+      "~/admin/*": ["libs/features/src/admin/*"],
+      "~/components": ["libs/components/index.ts"],
+      "~/components/*": ["libs/components/*"],
       "~/constants": ["libs/utils/constant.ts"],
       "~/config": ["libs/config/src/index.ts"],
       "~/config/*": ["libs/config/src/*"],
@@ -34,8 +34,8 @@
       "~/theme/*": ["libs/theme/src/*"],
       "~/utils": ["libs/utils/index.ts"],
       "~/utils/*": ["libs/utils/*"],
-      "~/icons": ["libs/ui/icons/index.ts"],
-      "~/icons/*": ["libs/ui/icons/*"],
+      "~/icons": ["libs/components/icons/index.ts"],
+      "~/icons/*": ["libs/components/icons/*"],
       "~/hooks/*": ["libs/hooks/*"],
       "~/store": ["libs/data-access/src/store/store.ts"]
     }

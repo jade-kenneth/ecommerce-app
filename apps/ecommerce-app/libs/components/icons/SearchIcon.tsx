@@ -1,0 +1,30 @@
+import { SVGProps } from 'react';
+
+interface SearchIconProps extends SVGProps<SVGSVGElement> {
+  size?: number;
+  color?: string;
+}
+
+export const SearchIcon = ({
+  size = 20,
+  color = 'white',
+  ...props
+}: SearchIconProps) => {
+  return (
+    <svg
+      width={size * 1.05}
+      height={size}
+      viewBox="0 0 21 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M18.2376 18.4748L18.3791 18.6162L18.5205 18.4748L19.1504 17.8449L19.2918 17.7034L19.1504 17.562L13.56 11.9716C14.4669 10.863 15.0153 9.44834 15.0153 7.90319C15.0153 4.34839 12.1336 1.46666 8.57881 1.46666C5.02401 1.46666 2.14229 4.34839 2.14229 7.90319C2.14229 11.458 5.02401 14.3397 8.57881 14.3397C10.124 14.3397 11.5386 13.7913 12.6472 12.8843L18.2376 18.4748ZM8.57881 2.7576C11.416 2.7576 13.7244 5.066 13.7244 7.90319C13.7244 10.7404 11.416 13.0488 8.57881 13.0488C5.74162 13.0488 3.43322 10.7404 3.43322 7.90319C3.43322 5.066 5.74162 2.7576 8.57881 2.7576Z"
+        fill={color}
+        stroke={color}
+        strokeWidth="0.4"
+      />
+    </svg>
+  );
+};

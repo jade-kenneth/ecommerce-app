@@ -5,11 +5,11 @@ import { ShoppingCart, Star } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Badge, Button, Cards, toaster } from '~/components';
+import { Badge, Button, toaster } from '~/components';
 import { Sticky } from '~/components/Sticky';
-import { Footer, Highlight } from '~/features/portal';
+import { Cards, Footer, Highlight } from '~/features/portal';
 import { useCartContext } from '~/features/portal/Cart/CartContext';
-import { Layout } from '~/features/portal/layout/Layout';
+import { Layout } from '~/features/portal/Layout/Layout';
 import { UPDATE_CART_ITEM_MUTATION } from '~/graphql/Cart';
 import {
   ProductCoreDataFragment,

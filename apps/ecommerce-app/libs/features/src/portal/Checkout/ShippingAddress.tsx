@@ -8,7 +8,7 @@ import z from 'zod';
 import { DebounceInput } from '~/components';
 import { Input } from '~/components/Input';
 import { Popover } from '~/components/Popover';
-import { Field } from '~/components/ui/Field';
+import { Field } from '~/components/Primitives/Field';
 
 const shippingAddressSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),

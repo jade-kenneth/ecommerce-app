@@ -1,10 +1,11 @@
 'use client';
 
 import { useMutation } from '@apollo/client/react';
-import { Show } from '~/components/Show';
+
 import { Minus, Package, Plus, Tag } from 'lucide-react';
 import Image from 'next/image';
 
+import { Show } from '~/components';
 import { UPDATE_CART_ITEM_MUTATION } from '~/graphql/Cart';
 import { capitalize } from '~/utils/capitalize';
 import { numberFormatter } from '~/utils/numberFormatter';

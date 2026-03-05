@@ -13,19 +13,22 @@ export default defineConfig({
     alias: [
       {
         find: /^~\/admin$/,
-        replacement: fromRoot('./apps/ecommerce-app/libs/admin/index.ts'),
-      },
-      { find: /^~\/admin\/(.*)$/, replacement: `${appLibsRoot}/admin/$1` },
-
-      {
-        find: /^~\/components$/,
         replacement: fromRoot(
-          './apps/ecommerce-app/libs/ui/components/index.ts',
+          './apps/ecommerce-app/libs/features/src/admin/index.ts',
         ),
       },
       {
+        find: /^~\/admin\/(.*)$/,
+        replacement: `${appLibsRoot}/features/src/admin/$1`,
+      },
+
+      {
+        find: /^~\/components$/,
+        replacement: fromRoot('./apps/ecommerce-app/libs/components/index.ts'),
+      },
+      {
         find: /^~\/components\/(.*)$/,
-        replacement: `${appLibsRoot}/ui/components/$1`,
+        replacement: `${appLibsRoot}/components/$1`,
       },
 
       {
@@ -76,9 +79,11 @@ export default defineConfig({
 
       {
         find: /^~\/icons$/,
-        replacement: fromRoot('./apps/ecommerce-app/libs/ui/icons/index.ts'),
+        replacement: fromRoot(
+          './apps/ecommerce-app/libs/components/icons/index.ts',
+        ),
       },
-      { find: /^~\/icons\/(.*)$/, replacement: `${appLibsRoot}/ui/icons/$1` },
+      { find: /^~\/icons\/(.*)$/, replacement: `${appLibsRoot}/components/icons/$1` },
 
       { find: /^~\/hooks\/(.*)$/, replacement: `${appLibsRoot}/hooks/$1` },
 

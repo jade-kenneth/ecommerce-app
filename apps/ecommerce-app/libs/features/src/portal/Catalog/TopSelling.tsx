@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client/react';
+import { Container } from '~/components';
 import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { Cards } from './components/Cards';
-import { Container } from '~/components/Container';
 
 export const TopSelling = () => {
   const context = useLicenseContext();

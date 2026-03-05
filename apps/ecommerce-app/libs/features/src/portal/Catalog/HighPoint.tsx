@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client/react';
+import { FunctionComponent } from 'react';
+import { Container } from '~/components';
 import { HIGH_POINT_PRODUCTS_QUERY } from '~/graphql/Product';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
-import { FunctionComponent } from 'react';
 import { Cards } from './components/Cards';
-import { Container } from '~/components/Container';
 
 interface HighPointProps {}
 

@@ -1,7 +1,12 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@apollo/client/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ObjectId } from 'bson';
 
+import {
+  CHECKOUT_METHOD_SETTINGS_QUERY,
+  UPDATE_PAYMENT_METHOD_STATUS_MUTATION,
+  UPDATE_SHIPPING_METHOD_STATUS_MUTATION,
+} from '~/graphql/Cart';
 import {
   CheckoutMethodSettingsQuery,
   CheckoutMethodSettingsQueryVariables,
@@ -9,11 +14,10 @@ import {
   ShippingType,
 } from '~/graphql/generated';
 import {
-  CHECKOUT_METHOD_SETTINGS_QUERY,
-  UPDATE_PAYMENT_METHOD_STATUS_MUTATION,
-  UPDATE_SHIPPING_METHOD_STATUS_MUTATION,
-} from '~/graphql/Cart';
-import { CONFIG_QUERY, CREATE_CONFIG_MUTATION, UPDATE_CONFIG_MUTATION } from '~/graphql/Product';
+  CONFIG_QUERY,
+  CREATE_CONFIG_MUTATION,
+  UPDATE_CONFIG_MUTATION,
+} from '~/graphql/Product';
 
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';

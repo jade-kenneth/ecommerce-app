@@ -3,7 +3,8 @@
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
-import { Container } from '~/components/Container';
+import { Container } from '~/components';
+
 import { CategoryType } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
 

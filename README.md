@@ -1,6 +1,6 @@
 # EcommerceApp
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+<a alt="Amy Store logo" href="https://amy-store.site" target="_blank" rel="noreferrer"><img src="apps/ecommerce-app/src/app/icon.png" width="45"></a>
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
 

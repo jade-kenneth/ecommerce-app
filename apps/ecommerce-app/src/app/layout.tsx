@@ -41,11 +41,12 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Amy Store',
     title: 'Amy Store',
+
     description:
       'Amy Store ecommerce app for shopping, checkout, and order tracking.',
     images: [
       {
-        url: '/Logo.png',
+        url: '/favicon.ico',
         width: 424,
         height: 348,
         alt: 'Amy Store logo',
@@ -81,7 +82,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               '@type': 'Organization',
               name: 'Amy Store',
               url: 'https://amy-store.site',
-              logo: 'https://amy-store.site/Logo.png',
+              logo: 'https://amy-store.site/favicon.ico',
             }),
           }}
         />

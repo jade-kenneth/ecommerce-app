@@ -9,6 +9,16 @@ const nextConfig = {
   // Use this to set Nx-specific options
   // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.amy-store.site' }],
+        destination: 'https://amy-store.site/:path*',
+        permanent: true,
+      },
+    ];
+  },
   experimental: {
     externalDir: true,
   },

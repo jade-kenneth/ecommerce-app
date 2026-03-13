@@ -15,12 +15,13 @@ import * as R from 'ramda';
 import randomBytes from 'randombytes';
 
 import { RefreshJwtGuard } from '../../auth/guards/refresh-jwt.guard';
-import { AccountService } from '../account/account.service';
-import { JwtService } from '../jwt/jwt.service';
-import { AuthRequest, TokenType } from '../types';
+import type { AccountService } from '../account/account.service';
+import type { JwtService } from '../jwt/jwt.service';
+import type { AuthRequest } from '../types';
+import { TokenType } from '../types';
 
-import { Session } from './repositories/session.repository';
-import { SessionService } from './session.service';
+import type { Session } from './repositories/session.repository';
+import type { SessionService } from './session.service';
 
 export type ValidateSessionResult = {
   ok: boolean;

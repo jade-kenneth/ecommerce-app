@@ -2,14 +2,14 @@
 
 import { useQuery } from '@apollo/client/react';
 import { createListCollection, Portal } from '@ark-ui/react';
-
 import { MoreVertical } from 'lucide-react';
 import Image from 'next/image';
-import { Reducer, useReducer } from 'react';
+import type { Reducer } from 'react';
+import { useReducer } from 'react';
+
 import { DataTable } from '~/components/DataTable/DataTable';
 import { Badge } from '~/components/Primitives/Badge';
 import { Menu } from '~/components/Primitives/Menu';
-
 import { apolloClient } from '~/config/client';
 import {
   CreateProduct,
@@ -17,11 +17,11 @@ import {
   ProductProvider,
   UpdateProduct,
 } from '~/features/admin';
-import {
+import type {
   ProductsQuery,
   ProductsQueryVariables,
-  StatusType,
 } from '~/graphql/generated';
+import { StatusType } from '~/graphql/generated';
 import { PRODUCTS_QUERY } from '~/graphql/Product';
 import { usePaginated } from '~/hooks/usePaginated';
 import { capitalize } from '~/utils/capitalize';
@@ -104,6 +104,7 @@ export const ManageInventory = () => {
             query: PRODUCTS_QUERY,
             variables: query.variables,
             data: {
+              __typename: 'Query',
               products: {
                 ...cacheResponse.products,
                 totalCount: (cacheResponse.products.totalCount ?? 0) + 1,
@@ -302,6 +303,7 @@ export const ManageInventory = () => {
                                 query: PRODUCTS_QUERY,
                                 variables: query.variables,
                                 data: {
+                                  __typename: 'Query',
                                   products: {
                                     ...res.products,
                                     edges,

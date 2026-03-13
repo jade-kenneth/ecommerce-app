@@ -1,13 +1,25 @@
 import { useMutation, useQuery } from '@apollo/client/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ObjectId } from 'bson';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
+import {
+  Button,
+  CarouselFileUpload,
+  Field,
+  FieldInput,
+  Toggle,
+  toaster,
+} from '~/components';
+import { apolloClient } from '~/config';
 import {
   CHECKOUT_METHOD_SETTINGS_QUERY,
   UPDATE_PAYMENT_METHOD_STATUS_MUTATION,
   UPDATE_SHIPPING_METHOD_STATUS_MUTATION,
 } from '~/graphql/Cart';
-import {
+import type {
   CheckoutMethodSettingsQuery,
   CheckoutMethodSettingsQueryVariables,
   PaymentMethodType,
@@ -18,19 +30,6 @@ import {
   CREATE_CONFIG_MUTATION,
   UPDATE_CONFIG_MUTATION,
 } from '~/graphql/Product';
-
-import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import {
-  Button,
-  CarouselFileUpload,
-  Field,
-  FieldInput,
-  Toggle,
-  toaster,
-} from '~/components';
-import { apolloClient } from '~/config';
 
 const Definition = z.object({
   highPointsThreshold: z.string().min(0).default('0'),
@@ -264,6 +263,7 @@ export function Settings() {
                       >({
                         query: CHECKOUT_METHOD_SETTINGS_QUERY,
                         data: {
+                          __typename: 'Query',
                           shippingOptions:
                             methodsQuery.data?.shippingOptions.map((option) =>
                               option._id === method._id
@@ -340,6 +340,7 @@ export function Settings() {
                       >({
                         query: CHECKOUT_METHOD_SETTINGS_QUERY,
                         data: {
+                          __typename: 'Query',
                           paymentMethods:
                             methodsQuery.data?.paymentMethods.map((option) =>
                               option._id === method._id

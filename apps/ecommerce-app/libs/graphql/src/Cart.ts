@@ -1,6 +1,7 @@
-import { TypedDocumentNode } from '@apollo/client/core';
+import type { TypedDocumentNode } from '@apollo/client/core';
 import gql from 'graphql-tag';
-import {
+
+import type {
   CartQuery,
   CartQueryVariables,
   CheckoutMethodSettingsQuery,

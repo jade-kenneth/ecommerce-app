@@ -58,12 +58,7 @@ export class SessionService {
   }
 
   async findSession(filter: Types.ObjectId | Filter<Session>) {
-    const sessionId = this.extractSessionId(filter);
-    if (sessionId) {
-      return this.sessionRepository.find(sessionId);
-    }
-
-    return null;
+    return this.sessionRepository.find(filter);
   }
 
   async updateSession(

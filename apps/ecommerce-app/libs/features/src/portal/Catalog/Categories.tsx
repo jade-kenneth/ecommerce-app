@@ -1,14 +1,13 @@
 /** trigger */
 
-import Image, { StaticImageData } from 'next/image';
+import type { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
-import { Container } from '~/components';
 
+import { Container } from '~/components';
 import { CategoryType } from '~/graphql/generated';
 import { capitalize } from '~/utils/capitalize';
-
-interface CategoriesProps {}
 
 const CATEGORY_ASSETS: Record<CategoryType, { src: string; size: number }> = {
   [CategoryType.Beverages]: { src: '/beverages.png', size: 100 },
@@ -47,7 +46,7 @@ export const categoryItems = CATEGORY_TYPES.map((type) => ({
   ...CATEGORY_ASSETS[type],
 }));
 
-export const Categories: FunctionComponent<CategoriesProps> = () => {
+export const Categories: FunctionComponent = () => {
   const items = categoryItems;
 
   return (
@@ -55,7 +54,7 @@ export const Categories: FunctionComponent<CategoriesProps> = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
         {items.map(({ type, slug, name, src, size }) => {
           return (
-            <div key={type} className="flex items-center">
+            <div key={type} className="flex items-center ">
               <Link
                 href={`/category/${slug}`}
                 className="h-full w-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
@@ -78,18 +77,18 @@ interface CardProps {
 
 export const Card = ({ imgSrc, name, size }: CardProps) => {
   return (
-    <div className="h-full min-h-[160px] w-full transform-gpu rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out will-change-transform hover:scale-[1.03] hover:border-primary-100 hover:shadow-md motion-reduce:transform-none motion-reduce:transition-none sm:min-h-[200px] sm:p-5">
+    <div className="h-full min-h-[130px] w-full transform-gpu rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out will-change-transform hover:scale-[1.03] hover:border-primary-100 hover:shadow-md motion-reduce:transform-none motion-reduce:transition-none sm:min-h-[200px] sm:p-5">
       <div className="flex-1 w-full flex items-center justify-center">
         <Image
           src={imgSrc as string}
           alt={`${name} category`}
           width={size}
           height={size}
-          className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain"
+          className="w-16 h-16 sm:w-20 sm:h-20 lg:w-32 lg:h-32 object-contain"
         />
       </div>
 
-      <span className="text-sm sm:text-base lg:text-lg text-carbon-100 text-center font-medium">
+      <span className="text-sm sm:text-base lg:text-lg flex w-full items-center justify-center text-carbon-100 text-center font-medium">
         {name}
       </span>
     </div>

@@ -8,16 +8,40 @@ input CreateAccountInput {
   password: String!
   mobileNumber: String
 }
+
+type GoogleDetails {
+  id: String!
+  emailAddress: String
+  displayName: String
+  avatarUrl: String
+  linkedAt: DateTime!
+}
+
+input LinkGoogleAccountInput {
+  id: String!
+  emailAddress: String
+  displayName: String
+  avatarUrl: String
+}
+
 type Account {
   _id: ObjectId
   emailAddress: String!
   role: String!
+  googleDetails: GoogleDetails
 }
 type Mutation {
   createAdminAccount(input: CreateAccountInput!): Boolean
 }
 type Mutation {
   createMemberAccount(input: CreateAccountInput!): Boolean
+}
+type Mutation {
+  linkGoogleAccount(input: LinkGoogleAccountInput!): Boolean
+    @authorizationRequired(roles: [MEMBER])
+}
+type Mutation {
+  unlinkGoogleAccount: Boolean @authorizationRequired(roles: [MEMBER])
 }
 type Query {
   memberAccounts: [Account!]!

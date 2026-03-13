@@ -2,15 +2,17 @@
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import Script from 'next/script';
+
+import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
+import { SupportChatWidget } from './SupportChatWidget';
+
 import { ToastContainer } from '~/components/ToastContainer';
 import { AuthProvider } from '~/providers/AuthProvider';
 import { ClientCartProvider } from '~/providers/CartProvider';
 import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
 import { FeatureFlagProvider } from '~/providers/FeatureFlagProvider';
 import { LicenseProvider } from '~/providers/LicenseProvider';
-import { CapacitorDeepLinkBridge } from './CapacitorDeepLinkBridge';
 import './globals.css';
-import { SupportChatWidget } from './SupportChatWidget';
 
 export const metadata: Metadata = {
   title: {

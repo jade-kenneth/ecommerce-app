@@ -6,16 +6,21 @@ import { LoginForm } from '~/features/portal/Auth/LoginForm';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 
-const { authenticateMock, toasterSuccessMock, toasterErrorMock } = vi.hoisted(
-  () => ({
-    authenticateMock: vi.fn(),
-    toasterSuccessMock: vi.fn(),
-    toasterErrorMock: vi.fn(),
-  }),
-);
+const {
+  authenticateMock,
+  loginWithGoogleMock,
+  toasterSuccessMock,
+  toasterErrorMock,
+} = vi.hoisted(() => ({
+  authenticateMock: vi.fn(),
+  loginWithGoogleMock: vi.fn(),
+  toasterSuccessMock: vi.fn(),
+  toasterErrorMock: vi.fn(),
+}));
 
 vi.mock('~/providers/AuthProvider', () => ({
   authenticate: authenticateMock,
+  loginWithGoogle: loginWithGoogleMock,
 }));
 
 vi.mock('~/components/ToastContainer', () => ({

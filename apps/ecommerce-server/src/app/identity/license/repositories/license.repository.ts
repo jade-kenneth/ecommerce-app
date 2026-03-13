@@ -1,5 +1,7 @@
-import { Connection, Types } from 'mongoose';
-import { LicenseVariant } from 'src/app/__generated/graphql-types';
+import type { Connection } from 'mongoose';
+import { Types } from 'mongoose';
+import type { LicenseVariant } from 'src/app/__generated/graphql-types';
+
 import { MongooseRepository } from '~/mongoose-repository';
 import { Repository } from '~/repository';
 import { Node } from '~/types/common';

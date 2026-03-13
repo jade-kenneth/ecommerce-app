@@ -1,16 +1,19 @@
-import dotenv from 'dotenv';
 import assert from 'node:assert';
 import path from 'node:path';
 
+import dotenv from 'dotenv';
+
 dotenv.config({
-  debug: true,
-  path: path.join(__dirname, '.env.local'),
+  path: path.join(__dirname, 'apps/ecommerce-app/.env.local'),
   encoding: 'utf8',
 });
 
 const NEXT_PUBLIC_PORTAL_API = process.env.NEXT_PUBLIC_PORTAL_API;
 
-assert(NEXT_PUBLIC_PORTAL_API);
+assert(
+  NEXT_PUBLIC_PORTAL_API,
+  'NEXT_PUBLIC_PORTAL_API is required to run GraphQL codegen',
+);
 
 const scalars = {
   DateTime: {
@@ -24,7 +27,7 @@ const scalars = {
   Upload: 'File',
 };
 
-function createAdminConfig(
+function createApolloV4CodegenConfig(
   schema: string | string[],
   documents: string | string[],
   outputPath: string,
@@ -34,10 +37,8 @@ function createAdminConfig(
     documents,
     extensions: {
       codegen: {
-        debug: true,
-        concurrency: 1,
         overwrite: true,
-        ignoreNoDocuments: true,
+        ignoreNoDocuments: false,
         hooks: {
           afterAllFileWrite: ['prettier --write'],
         },
@@ -50,13 +51,12 @@ function createAdminConfig(
                     '/* eslint-disable */',
                     '// @ts-nocheck',
                     '// Generated file',
-                    '// Last modified: ' + new Date().toUTCString(),
                   ],
                 },
               },
               'typescript',
               'typescript-operations',
-              'typescript-react-apollo',
+              'typed-document-node',
             ],
             config: {
               scalars,
@@ -65,10 +65,8 @@ function createAdminConfig(
               dedupeFragments: true,
               pureMagicComment: true,
               disableDescriptions: true,
-              skipDocumentsValidation: true,
-              onlyOperationTypes: true,
-              withRefetchFn: true,
               nonOptionalTypename: true,
+              documentMode: 'documentNode',
             },
           },
         },
@@ -78,9 +76,9 @@ function createAdminConfig(
 }
 
 const projects = {
-  'ecommerce-app.admin': createAdminConfig(
+  'ecommerce-app.admin': createApolloV4CodegenConfig(
     NEXT_PUBLIC_PORTAL_API,
-    './apps/ecommerce-app/libs/graphql/src/**/*.gql',
+    './apps/ecommerce-app/libs/graphql/src/**/*.{ts,tsx,gql,graphql}',
     './apps/ecommerce-app/libs/graphql/src/generated.tsx',
   ),
 };

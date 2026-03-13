@@ -1,8 +1,10 @@
-import { store } from '~/store';
-import * as services from './service.core';
-import { AuthenticateInput } from './service.core';
+import z from 'zod';
 
+import type { AuthenticateInput, LoginWithGoogleInput } from './service.core';
+import * as services from './service.core';
 import { Session } from './type';
+
+import { store } from '~/store';
 
 export async function getSession(): Promise<Session> {
   const { accessToken, refreshToken, role } = await store.get();
@@ -88,6 +90,17 @@ export async function authenticate(input: AuthenticateInput) {
   });
 }
 
+export async function loginWithGoogle(input: LoginWithGoogleInput) {
+  const { accessToken, refreshToken, role } =
+    await services.__loginWithGoogle(input);
+
+  await store.set({
+    accessToken,
+    refreshToken,
+    role,
+  });
+}
+
 export async function logout() {
   try {
     const { refreshToken } = await store.get();
@@ -99,4 +112,44 @@ export async function logout() {
   } finally {
     await store.clearSession();
   }
+}
+
+const GoogleUserInfoSchema = z.object({
+  sub: z.string(),
+  email: z.string().optional(),
+  name: z.string().optional(),
+  picture: z.string().optional(),
+});
+
+export type GoogleUserInfo = z.infer<typeof GoogleUserInfoSchema>;
+
+export async function fetchGoogleUserInfo(
+  accessToken: string,
+): Promise<GoogleUserInfo> {
+  if (!accessToken.trim()) {
+    throw new Error('missing Google access token');
+  }
+
+  const userInfoResponse = await fetch(
+    'https://www.googleapis.com/oauth2/v3/userinfo',
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  if (!userInfoResponse.ok) {
+    throw new Error('failed to fetch Google account profile');
+  }
+
+  const responseData: unknown = await userInfoResponse.json();
+
+  const parsed = GoogleUserInfoSchema.safeParse(responseData);
+
+  if (!parsed.success) {
+    throw new Error('invalid Google account profile response');
+  }
+
+  return parsed.data;
 }

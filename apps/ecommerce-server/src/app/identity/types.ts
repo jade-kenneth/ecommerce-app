@@ -1,8 +1,10 @@
-import { Request } from 'express';
-import { ObjectId } from '../../libs/object-id';
-import { AccountType } from '../../types/common';
-import { Account } from './account/repositories/account.repository';
-import { Session } from './session/repositories/session.repository';
+import type { Request } from 'express';
+
+import type { ObjectId } from '../../libs/object-id';
+import type { AccountType } from '../../types/common';
+
+import type { Account } from './account/repositories/account.repository';
+import type { Session } from './session/repositories/session.repository';
 
 export type AuthRequest = Request & {
   user: Account;

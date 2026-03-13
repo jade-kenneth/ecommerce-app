@@ -1,21 +1,31 @@
 import { Inject } from '@nestjs/common';
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Product } from '../../types/product';
-
-import { Filter } from '../../libs/repository';
 import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
+
+import type { Filter } from '../../libs/repository';
+import type { Product } from '../../types/product';
+import { Tokens } from '../../types/tokens';
+import type {
   CreateProductInput,
   DeleteProductInput,
   ProductByIdsInput,
   UpdateProductInput,
 } from '../__generated/graphql-types';
-import { Tokens } from '../../types/tokens';
 import { ProductReviewsRepository } from '../product-reviews/repositories/product-reviews.repository';
+
 import { ProductsService } from './products.service';
 
 @Resolver('Products')
 export class ProductResolver {
-  constructor(private readonly productService: ProductsService) {}
+  constructor(
+    @Inject(ProductsService) private readonly productService: ProductsService,
+  ) {}
 
   @Query('products')
   async products(

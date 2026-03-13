@@ -82,6 +82,13 @@ export interface CreateAccountInput {
     mobileNumber?: Nullable<string>;
 }
 
+export interface LinkGoogleAccountInput {
+    id: string;
+    emailAddress?: Nullable<string>;
+    displayName?: Nullable<string>;
+    avatarUrl?: Nullable<string>;
+}
+
 export interface UpdateCartItemInput {
     productId: ObjectId;
     quantity: number;
@@ -192,7 +199,7 @@ export interface ProductsFilterInput {
     category?: Nullable<ProductsCategoryFilterInput>;
     _id?: Nullable<IdFilterInput>;
     name?: Nullable<IdFilterInput>;
-    avgRating?: Nullable<IntFilterInput>;
+    points?: Nullable<IntFilterInput>;
 }
 
 export interface KeyValuePairInput {
@@ -267,15 +274,26 @@ export interface Voucher {
     value?: Nullable<number>;
 }
 
+export interface GoogleDetails {
+    id: string;
+    emailAddress?: Nullable<string>;
+    displayName?: Nullable<string>;
+    avatarUrl?: Nullable<string>;
+    linkedAt: DateTime;
+}
+
 export interface Account {
     _id: ObjectId;
     emailAddress: string;
     role: string;
+    googleDetails?: Nullable<GoogleDetails>;
 }
 
 export interface IMutation {
     createAdminAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     createMemberAccount(input: CreateAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    linkGoogleAccount(input: LinkGoogleAccountInput): Nullable<boolean> | Promise<Nullable<boolean>>;
+    unlinkGoogleAccount(): Nullable<boolean> | Promise<Nullable<boolean>>;
     updateCartItem(input: UpdateCartItemInput): Nullable<boolean> | Promise<Nullable<boolean>>;
     removeFromCart(input: RemoveFromCartInput): boolean | Promise<boolean>;
     clearCart(): Cart | Promise<Cart>;

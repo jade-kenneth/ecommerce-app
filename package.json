@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:app": "NODE_ENV=production NX_DAEMON=false NX_ISOLATE_PLUGINS=false NX_NATIVE_COMMAND_RUNNER=false NX_PSEUDO_TERMINAL=false npx nx run ecommerce-app:build",
+    "build:app": "NODE_ENV=production npx nx run ecommerce-app:build",
     "test": "vitest",
     "test:app": "npm test -- --run --project ecommerce-app",
     "test:server": "npm test -- --run --project ecommerce-server",

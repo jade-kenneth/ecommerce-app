@@ -7,17 +7,18 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import ms from 'ms';
-import { AuthRequest, TokenType } from '../types';
-
 import bcrypt from 'bcrypt';
 import { DateTime } from 'luxon';
 import { Types } from 'mongoose';
+import ms from 'ms';
 import * as R from 'ramda';
 import randomBytes from 'randombytes';
+
 import { RefreshJwtGuard } from '../../auth/guards/refresh-jwt.guard';
 import { AccountService } from '../account/account.service';
 import { JwtService } from '../jwt/jwt.service';
+import { AuthRequest, TokenType } from '../types';
+
 import { Session } from './repositories/session.repository';
 import { SessionService } from './session.service';
 
@@ -235,7 +236,7 @@ export class SessionController {
     try {
       await this.session.deleteSession({ _id: request.session._id });
       return { success: true };
-    } catch (error) {
+    } catch {
       throw new InternalServerErrorException();
     }
   }
@@ -243,10 +244,6 @@ export class SessionController {
   @Post('session/authenticate')
   async authenticate(@Request() request: AuthRequest) {
     const timestamp = new Date();
-    const ttl = Math.min(
-      Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
-      604800,
-    );
 
     const password = <string>request.body['password'];
 
@@ -268,6 +265,95 @@ export class SessionController {
           message: 'Invalid credentials provided.',
         },
       });
+    }
+
+    try {
+      await this.session.deleteSession({
+        account: account._id,
+      });
+    } catch {
+      throw new InternalServerErrorException(
+        'Unable to reset previous sessions.',
+      );
+    }
+
+    const session: Session = {
+      _id: new Types.ObjectId(),
+      account: account._id,
+      jti: randomBytes(12),
+      dateTimeCreated: timestamp,
+      dateTimeLastRefreshed: timestamp,
+    };
+
+    const claims = {
+      sub: account._id.toString(),
+      jti: session.jti.toString('hex'),
+      role: account.role,
+      iap: DateTime.fromJSDate(timestamp)
+        .minus({
+          second: 30,
+        })
+        .toISO(),
+    };
+
+    await this.session.createSession(session);
+
+    const accessToken = this.jwt.sign(
+      {
+        ...claims,
+        type: TokenType.Access,
+      },
+      {
+        ttl: '5m',
+      },
+    );
+    const refreshToken = this.jwt.sign(
+      {
+        ...claims,
+        type: TokenType.Refresh,
+      },
+      {
+        ttl: '24h',
+      },
+    );
+    return {
+      accessToken,
+      refreshToken,
+      role: account.role,
+    };
+  }
+
+  @Post('session/authenticate/google')
+  async authenticateWithGoogle(@Request() request: AuthRequest) {
+    const timestamp = new Date();
+    const { id: googleId } = request.body;
+
+    if (!googleId.trim()) {
+      throw new UnauthorizedException({
+        error: {
+          type: 'INVALID_CREDENTIALS',
+          message: 'Invalid credentials provided.',
+        },
+      });
+    }
+
+    let account: Awaited<ReturnType<AccountService['loginWithGoogle']>>;
+
+    try {
+      account = await this.account.loginWithGoogle(googleId);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new UnauthorizedException({
+          error: {
+            type: 'INVALID_CREDENTIALS',
+            message: 'Invalid credentials provided.',
+          },
+        });
+      }
+
+      throw new InternalServerErrorException(
+        'Unable to authenticate google account.',
+      );
     }
 
     try {

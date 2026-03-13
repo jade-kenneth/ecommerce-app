@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
+
 import { Tokens } from '../../../../types/tokens';
-import { AccountService } from '../account.service';
+
 import { AccountRepositoryFactory } from './account.repository';
 
 @Module({
@@ -11,7 +12,6 @@ import { AccountRepositoryFactory } from './account.repository';
       useFactory: AccountRepositoryFactory,
       inject: [getConnectionToken()],
     },
-    AccountService,
   ],
   exports: [Tokens.AccountRepository],
 })

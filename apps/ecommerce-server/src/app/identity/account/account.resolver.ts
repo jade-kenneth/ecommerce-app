@@ -1,14 +1,19 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-
 import assert from 'assert';
+
+import { Inject } from '@nestjs/common';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Types } from 'mongoose';
 import * as R from 'ramda';
-import { CreateAccountInput } from '../../__generated/graphql-types';
-import { Claims } from '../types';
+
+import { AccountType } from '../../../types/common';
+import type { CreateAccountInput, LinkGoogleAccountInput } from '../../__generated/graphql-types';
+import type { Claims } from '../types';
+
 import { AccountService } from './account.service';
+
 @Resolver('Accounts')
 export class AccountResolver {
-  constructor(private readonly account: AccountService) {}
+  constructor(@Inject(AccountService) private readonly account: AccountService) {}
 
   @Mutation('createMemberAccount')
   async createMemberAccount(@Args('input') input: CreateAccountInput) {
@@ -24,6 +29,22 @@ export class AccountResolver {
     };
     return this.account.createAdminAccount(data);
   }
+
+  @Mutation('linkGoogleAccount')
+  async linkGoogleAccount(
+    @Context('claims') claims: Claims,
+    @Args('input') input: LinkGoogleAccountInput,
+  ) {
+    assert(claims?.sub && claims?.role === AccountType.Member, 'unauthorized');
+    return this.account.linkGoogleAccount(new Types.ObjectId(claims.sub), input);
+  }
+
+  @Mutation('unlinkGoogleAccount')
+  async unlinkGoogleAccount(@Context('claims') claims: Claims) {
+    assert(claims?.sub && claims?.role === AccountType.Member, 'unauthorized');
+    return this.account.unlinkGoogleAccount(new Types.ObjectId(claims.sub));
+  }
+
   @Query('memberAccounts')
   async memberAccounts() {
     return await this.account.memberAccounts();

@@ -27,6 +27,12 @@ export interface AuthenticateInput {
   password: string;
   role: AccountType;
 }
+export interface LoginWithGoogleInput {
+  id: string;
+  emailAddress?: string;
+  displayName?: string;
+  avatarUrl?: string;
+}
 
 export async function refreshSession(
   input: RefreshSession,
@@ -129,6 +135,23 @@ export async function __authenticate(input: AuthenticateInput) {
     return response.data;
   } catch (error) {
     console.error('Error authenticating session:', error);
+    throw error;
+  }
+}
+
+export async function __loginWithGoogle(input: LoginWithGoogleInput) {
+  try {
+    const response = await axios.post<Token & { role: AccountType }>(
+      '/session/authenticate/google',
+      input,
+      {
+        baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error authenticating google session:', error);
     throw error;
   }
 }

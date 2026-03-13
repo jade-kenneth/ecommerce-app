@@ -1,7 +1,17 @@
-import { Connection, Types } from 'mongoose';
+import type { Connection } from 'mongoose';
+import { Schema, Types } from 'mongoose';
+
 import { MongooseRepository } from '~/mongoose-repository';
 import { Repository } from '~/repository';
 import { AccountType } from '~/types/common';
+
+export type GoogleDetails = {
+  id: string;
+  emailAddress?: string;
+  displayName?: string;
+  avatarUrl?: string;
+  linkedAt: Date;
+};
 
 export type Account = {
   _id: Types.ObjectId;
@@ -13,6 +23,7 @@ export type Account = {
   // dateTimeCreated: Date;
   emailAddress?: string;
   mobileNumber?: string;
+
   // twoFADetails?: TwoFADetails;
 } & (
   | {
@@ -24,7 +35,7 @@ export type Account = {
       // secretAnswer?: string;
       // mobileNumber?: string;
       // facebookDetails?: FacebookDetails;
-      // googleDetails?: GoogleDetails;
+      googleDetails?: GoogleDetails;
 
       // verified?: boolean;
     }
@@ -33,7 +44,7 @@ export type Account = {
 export type AccountRepository = Repository<Account>;
 
 export function AccountRepositoryFactory(
-  connection: Connection
+  connection: Connection,
 ): AccountRepository {
   return new MongooseRepository<Account>(
     connection,
@@ -52,7 +63,7 @@ export function AccountRepositoryFactory(
       mobileNumber: String,
       // permissions: [String],
       // facebookDetails: Schema.Types.Mixed,
-      // googleDetails: Schema.Types.Mixed,
+      googleDetails: Schema.Types.Mixed,
       emailAddress: String,
       password: String,
       role: String,
@@ -60,27 +71,15 @@ export function AccountRepositoryFactory(
       // parent: Buffer,
       // twoFADetails: Schema.Types.Mixed,
       // ssoPartnerDetails: Schema.Types.Mixed,
-    }
-    // [
-    //   /** Used for finding SuperAdmin accounts. */
-    //   [
-    //     {
-    //       name: 1,
-    //       status: 1,
-    //       role: 1,
-    //     },
-    //     // {
-    //     //   partialFilterExpression: {
-    //     //     status: AccountStatus.Active,
-    //     //     role: AccountType.SuperAdmin,
-    //     //   },
-    //     // },
-    //   ],
-    //   // [{ platform: 1, role: 1, name: 1 }],
-    //   // [{ platform: 1, role: 1, mobileNumber: 1 }],
-    //   // [{ 'facebookDetails.id': 1 }],
-    //   // [{ 'googleDetails.id': 1 }],
-    //   // [{ platform: 1, 'ssoPartnerDetails.cinepop.user.id': 1 }],
-    // ]
+    },
+    [
+      [
+        { 'googleDetails.id': 1 },
+        {
+          unique: true,
+          sparse: true,
+        },
+      ],
+    ],
   );
 }

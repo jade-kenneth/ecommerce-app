@@ -1,7 +1,6 @@
 /* eslint-disable */
 // @ts-nocheck
 // Generated file
-// Last modified: Tue, 03 Mar 2026 08:03:38 GMT
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -38,10 +37,47 @@ export type Scalars = {
   Upload: { input: File; output: File };
 };
 
+export type Account = {
+  __typename: 'Account';
+  _id: Scalars['ObjectID']['output'];
+  emailAddress: Scalars['String']['output'];
+  googleDetails?: Maybe<GoogleDetails>;
+  role: Scalars['String']['output'];
+};
+
 export enum AccountType {
   Admin = 'ADMIN',
   Member = 'MEMBER',
 }
+
+export type Cart = {
+  __typename: 'Cart';
+  _id: Scalars['ObjectID']['output'];
+  createdAt: Scalars['String']['output'];
+  items: Array<CartItem>;
+  shippingFee?: Maybe<Scalars['String']['output']>;
+  status: CartStatus;
+  subtotal?: Maybe<Scalars['String']['output']>;
+  tax?: Maybe<Scalars['String']['output']>;
+  total?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
+};
+
+export type CartItem = {
+  __typename: 'CartItem';
+  productId: Scalars['ObjectID']['output'];
+  quantity: Scalars['Int']['output'];
+  totalPrice?: Maybe<Scalars['String']['output']>;
+  unitPrice?: Maybe<Scalars['String']['output']>;
+};
+
+export type CartProductDetails = {
+  __typename: 'CartProductDetails';
+  name: Scalars['String']['output'];
+  price: Scalars['Decimal']['output'];
+  productId: Scalars['ObjectID']['output'];
+  thumbnail: Scalars['String']['output'];
+};
 
 export enum CartStatus {
   Active = 'ACTIVE',
@@ -62,10 +98,36 @@ export enum CategoryType {
   Sweets = 'SWEETS',
 }
 
+export type ChannelProperties = {
+  __typename: 'ChannelProperties';
+  failure_return_url?: Maybe<Scalars['String']['output']>;
+  success_return_url?: Maybe<Scalars['String']['output']>;
+};
+
 export type CheckoutInput = {
   clientId?: InputMaybe<Scalars['String']['input']>;
   paymentMethodId?: InputMaybe<Scalars['ObjectID']['input']>;
   shippingOptionId?: InputMaybe<Scalars['ObjectID']['input']>;
+};
+
+export type CheckoutUrl = {
+  __typename: 'CheckoutUrl';
+  checkout_url?: Maybe<Scalars['String']['output']>;
+};
+
+export type Config = {
+  __typename: 'Config';
+  _id: Scalars['ObjectID']['output'];
+  carouselItems: Array<Scalars['String']['output']>;
+  highPointsThreshold?: Maybe<Scalars['Int']['output']>;
+  topSoldThreshold?: Maybe<Scalars['Int']['output']>;
+};
+
+export type Connection = {
+  __typename: 'Connection';
+  edges: Array<Edge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type CreateAccountInput = {
@@ -121,6 +183,40 @@ export type DeleteProductInput = {
   _id: Scalars['ObjectID']['input'];
 };
 
+export type Edge = {
+  __typename: 'Edge';
+  cursor: Scalars['Cursor']['output'];
+  node: Node;
+};
+
+export type Error = {
+  message: Scalars['String']['output'];
+};
+
+export type FileFormatNotSupportedError = Error & {
+  __typename: 'FileFormatNotSupportedError';
+  message: Scalars['String']['output'];
+};
+
+export type FileNameTooLongError = Error & {
+  __typename: 'FileNameTooLongError';
+  message: Scalars['String']['output'];
+};
+
+export type FileSizeTooBigError = Error & {
+  __typename: 'FileSizeTooBigError';
+  message: Scalars['String']['output'];
+};
+
+export type GoogleDetails = {
+  __typename: 'GoogleDetails';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  displayName?: Maybe<Scalars['String']['output']>;
+  emailAddress?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  linkedAt: Scalars['DateTime']['output'];
+};
+
 export type IdFilterInput = {
   equal?: InputMaybe<Scalars['String']['input']>;
   in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -128,9 +224,34 @@ export type IdFilterInput = {
   notIn?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+export type IntFilterInput = {
+  equal?: InputMaybe<Scalars['Int']['input']>;
+  greaterThan?: InputMaybe<Scalars['Int']['input']>;
+  greaterThanOrEqual?: InputMaybe<Scalars['Int']['input']>;
+  in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  lesserThan?: InputMaybe<Scalars['Int']['input']>;
+  lesserThanOrEqual?: InputMaybe<Scalars['Int']['input']>;
+  notEqual?: InputMaybe<Scalars['Int']['input']>;
+  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type KeyValuePair = {
+  __typename: 'KeyValuePair';
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
 export type KeyValuePairInput = {
   key: Scalars['String']['input'];
   value: Scalars['String']['input'];
+};
+
+export type License = {
+  __typename: 'License';
+  _id: Scalars['ObjectID']['output'];
+  code: Scalars['String']['output'];
+  expirationDate?: Maybe<Scalars['String']['output']>;
+  variant: LicenseVariant;
 };
 
 export type LicenseInput = {
@@ -147,6 +268,137 @@ export enum LicenseVariant {
   TenMinuteTrial = 'TEN_MINUTE_TRIAL',
 }
 
+export type LinkGoogleAccountInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>;
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  emailAddress?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+};
+
+export type Mutation = {
+  __typename: 'Mutation';
+  checkout: Order;
+  clearCart: Cart;
+  createAdminAccount?: Maybe<Scalars['Boolean']['output']>;
+  createConfig?: Maybe<Scalars['Boolean']['output']>;
+  createGcashPayment?: Maybe<PaymentRequestResponse>;
+  createLicense?: Maybe<Scalars['Boolean']['output']>;
+  createMemberAccount?: Maybe<Scalars['Boolean']['output']>;
+  createProduct?: Maybe<Scalars['Boolean']['output']>;
+  createProductReview: ProductReview;
+  deleteProduct?: Maybe<Scalars['Boolean']['output']>;
+  linkGoogleAccount?: Maybe<Scalars['Boolean']['output']>;
+  removeFromCart: Scalars['Boolean']['output'];
+  unlinkGoogleAccount?: Maybe<Scalars['Boolean']['output']>;
+  updateCartItem?: Maybe<Scalars['Boolean']['output']>;
+  updateConfig?: Maybe<Scalars['Boolean']['output']>;
+  updateOrderStatus?: Maybe<Scalars['Boolean']['output']>;
+  updatePaymentMethodStatus: Scalars['Boolean']['output'];
+  updateProduct?: Maybe<Scalars['Boolean']['output']>;
+  updateShippingMethodStatus: Scalars['Boolean']['output'];
+  uploadFile?: Maybe<Scalars['String']['output']>;
+};
+
+export type MutationCheckoutArgs = {
+  input: CheckoutInput;
+};
+
+export type MutationCreateAdminAccountArgs = {
+  input: CreateAccountInput;
+};
+
+export type MutationCreateConfigArgs = {
+  input: CreateConfigInput;
+};
+
+export type MutationCreateGcashPaymentArgs = {
+  input?: InputMaybe<CreateGcashPaymentInput>;
+};
+
+export type MutationCreateLicenseArgs = {
+  input: LicenseInput;
+};
+
+export type MutationCreateMemberAccountArgs = {
+  input: CreateAccountInput;
+};
+
+export type MutationCreateProductArgs = {
+  input: CreateProductInput;
+};
+
+export type MutationCreateProductReviewArgs = {
+  input: CreateProductReviewInput;
+};
+
+export type MutationDeleteProductArgs = {
+  input: DeleteProductInput;
+};
+
+export type MutationLinkGoogleAccountArgs = {
+  input: LinkGoogleAccountInput;
+};
+
+export type MutationRemoveFromCartArgs = {
+  input: RemoveFromCartInput;
+};
+
+export type MutationUpdateCartItemArgs = {
+  input: UpdateCartItemInput;
+};
+
+export type MutationUpdateConfigArgs = {
+  input: UpdateConfigInput;
+};
+
+export type MutationUpdateOrderStatusArgs = {
+  input: UpdateOrderStatusInput;
+};
+
+export type MutationUpdatePaymentMethodStatusArgs = {
+  input: UpdatePaymentMethodStatusInput;
+};
+
+export type MutationUpdateProductArgs = {
+  input: UpdateProductInput;
+};
+
+export type MutationUpdateShippingMethodStatusArgs = {
+  input: UpdateShippingMethodStatusInput;
+};
+
+export type MutationUploadFileArgs = {
+  file: Scalars['Upload']['input'];
+};
+
+export type Node = {
+  _id: Scalars['ObjectID']['output'];
+};
+
+export type Order = {
+  __typename: 'Order';
+  _id: Scalars['ObjectID']['output'];
+  createdAt: Scalars['String']['output'];
+  items: Array<OrderItem>;
+  paymentMethod: PaymentMethod;
+  shippingFee: Scalars['String']['output'];
+  shippingOption: ShippingOption;
+  status: OrderStatus;
+  subtotal: Scalars['String']['output'];
+  tax: Scalars['String']['output'];
+  total: Scalars['String']['output'];
+};
+
+export type OrderItem = {
+  __typename: 'OrderItem';
+  message?: Maybe<Scalars['String']['output']>;
+  productId: Scalars['ObjectID']['output'];
+  quantity: Scalars['Int']['output'];
+  rating?: Maybe<Scalars['Int']['output']>;
+  totalPrice?: Maybe<Scalars['String']['output']>;
+  unitPrice?: Maybe<Scalars['String']['output']>;
+};
+
 export enum OrderStatus {
   Cancelled = 'CANCELLED',
   Completed = 'COMPLETED',
@@ -155,6 +407,28 @@ export enum OrderStatus {
   Shipped = 'SHIPPED',
 }
 
+export type PageInfo = {
+  __typename: 'PageInfo';
+  endCursor?: Maybe<Scalars['Cursor']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
+};
+
+export type PaymentAction = {
+  __typename: 'PaymentAction';
+  descriptor?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
+};
+
+export type PaymentMethod = {
+  __typename: 'PaymentMethod';
+  _id: Scalars['ObjectID']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  isActive: Scalars['Boolean']['output'];
+  label: Scalars['String']['output'];
+  type: PaymentMethodType;
+};
+
 export enum PaymentMethodType {
   BankTransfer = 'BANK_TRANSFER',
   Card = 'CARD',
@@ -162,8 +436,62 @@ export enum PaymentMethodType {
   Gcash = 'GCASH',
 }
 
+export type PaymentRequestResponse = {
+  __typename: 'PaymentRequestResponse';
+  actions?: Maybe<Array<Maybe<PaymentAction>>>;
+  business_id?: Maybe<Scalars['String']['output']>;
+  capture_method?: Maybe<Scalars['String']['output']>;
+  channel_code?: Maybe<Scalars['String']['output']>;
+  channel_properties?: Maybe<ChannelProperties>;
+  country?: Maybe<Scalars['String']['output']>;
+  created?: Maybe<Scalars['String']['output']>;
+  currency?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  payment_request_id?: Maybe<Scalars['String']['output']>;
+  reference_id?: Maybe<Scalars['String']['output']>;
+  request_amount?: Maybe<Scalars['Decimal']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  updated?: Maybe<Scalars['String']['output']>;
+};
+
+export type Product = Node & {
+  __typename: 'Product';
+  _id: Scalars['ObjectID']['output'];
+  avgRating: Scalars['Float']['output'];
+  category?: Maybe<Array<CategoryType>>;
+  dateAdded?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  discount: Scalars['Int']['output'];
+  flashSale?: Maybe<Scalars['Boolean']['output']>;
+  name: Scalars['String']['output'];
+  nodeType: Scalars['String']['output'];
+  pieces: Scalars['Int']['output'];
+  points: Scalars['Decimal']['output'];
+  price: Scalars['Int']['output'];
+  reservation?: Maybe<ReservationType>;
+  sold?: Maybe<Scalars['Int']['output']>;
+  status: StatusType;
+  thumbnail: Scalars['String']['output'];
+  type?: Maybe<CategoryType>;
+  variations?: Maybe<Array<KeyValuePair>>;
+  vouchers?: Maybe<Array<Voucher>>;
+};
+
 export type ProductByIdsInput = {
   ids: Array<Scalars['ObjectID']['input']>;
+};
+
+export type ProductReview = {
+  __typename: 'ProductReview';
+  _id: Scalars['ObjectID']['output'];
+  accountId: Scalars['ObjectID']['output'];
+  createdAt: Scalars['String']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  orderId?: Maybe<Scalars['ObjectID']['output']>;
+  productId: Scalars['ObjectID']['output'];
+  rating: Scalars['Int']['output'];
+  updatedAt: Scalars['String']['output'];
 };
 
 export type ProductsCategoryFilterInput = {
@@ -177,6 +505,7 @@ export type ProductsFilterInput = {
   _id?: InputMaybe<IdFilterInput>;
   category?: InputMaybe<ProductsCategoryFilterInput>;
   name?: InputMaybe<IdFilterInput>;
+  points?: InputMaybe<IntFilterInput>;
   status?: InputMaybe<ProductsStatusFilterInput>;
 };
 
@@ -187,6 +516,61 @@ export type ProductsStatusFilterInput = {
   notIn?: InputMaybe<Array<StatusType>>;
 };
 
+export type Query = {
+  __typename: 'Query';
+  cart: Cart;
+  config: Config;
+  highPointProducts: Connection;
+  memberAccounts: Array<Account>;
+  myOrders: Array<Order>;
+  order?: Maybe<Order>;
+  paymentMethods: Array<PaymentMethod>;
+  productByIds: CartProductDetails;
+  productReviews: Array<ProductReview>;
+  products: Connection;
+  searchProductByName?: Maybe<Array<Product>>;
+  self?: Maybe<Account>;
+  shippingOptions: Array<ShippingOption>;
+};
+
+export type QueryHighPointProductsArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<ProductsFilterInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryOrderArgs = {
+  id: Scalars['ObjectID']['input'];
+};
+
+export type QueryPaymentMethodsArgs = {
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type QueryProductByIdsArgs = {
+  ids?: InputMaybe<ProductByIdsInput>;
+};
+
+export type QueryProductReviewsArgs = {
+  productId: Scalars['ObjectID']['input'];
+};
+
+export type QueryProductsArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  filter?: InputMaybe<ProductsFilterInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QuerySearchProductByNameArgs = {
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  search: Scalars['String']['input'];
+};
+
+export type QueryShippingOptionsArgs = {
+  includeInactive?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type RemoveFromCartInput = {
   productId: Scalars['ObjectID']['input'];
 };
@@ -195,6 +579,17 @@ export enum ReservationType {
   Available = 'AVAILABLE',
   Unavailable = 'UNAVAILABLE',
 }
+
+export type ShippingOption = {
+  __typename: 'ShippingOption';
+  _id: Scalars['ObjectID']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  estimatedDays?: Maybe<Scalars['String']['output']>;
+  fee: Scalars['String']['output'];
+  isActive: Scalars['Boolean']['output'];
+  label: Scalars['String']['output'];
+  type: ShippingType;
+};
 
 export enum ShippingType {
   Express = 'EXPRESS',
@@ -258,6 +653,14 @@ export type UpdateShippingMethodStatusInput = {
   type: ShippingType;
 };
 
+export type Voucher = {
+  code?: Maybe<Scalars['String']['output']>;
+  date?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['Int']['output']>;
+};
+
 export type VoucherInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
@@ -271,40 +674,68 @@ export type CreateMemberAccountMutationVariables = Exact<{
 }>;
 
 export type CreateMemberAccountMutation = {
-  createMemberAccount: boolean | null;
+  __typename: 'Mutation';
+  createMemberAccount?: boolean | null;
 };
 
 export type CreateAdminAccountMutationVariables = Exact<{
   input: CreateAccountInput;
 }>;
 
-export type CreateAdminAccountMutation = { createAdminAccount: boolean | null };
+export type CreateAdminAccountMutation = {
+  __typename: 'Mutation';
+  createAdminAccount?: boolean | null;
+};
 
 export type SelfQueryVariables = Exact<{ [key: string]: never }>;
 
 export type SelfQuery = {
-  self: {
+  __typename: 'Query';
+  self?: {
     __typename: 'Account';
     _id: string;
     emailAddress: string;
     role: string;
+    googleDetails?: { __typename: 'GoogleDetails'; id: string } | null;
   } | null;
+};
+
+export type LinkGoogleAccountMutationVariables = Exact<{
+  input: LinkGoogleAccountInput;
+}>;
+
+export type LinkGoogleAccountMutation = {
+  __typename: 'Mutation';
+  linkGoogleAccount?: boolean | null;
+};
+
+export type UnlinkGoogleAccountMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type UnlinkGoogleAccountMutation = {
+  __typename: 'Mutation';
+  unlinkGoogleAccount?: boolean | null;
 };
 
 export type UpdateCartItemMutationVariables = Exact<{
   input: UpdateCartItemInput;
 }>;
 
-export type UpdateCartItemMutation = { updateCartItem: boolean | null };
+export type UpdateCartItemMutation = {
+  __typename: 'Mutation';
+  updateCartItem?: boolean | null;
+};
 
 export type CartQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CartQuery = {
+  __typename: 'Query';
   cart: {
     __typename: 'Cart';
     _id: string;
-    subtotal: string | null;
-    tax: string | null;
+    subtotal?: string | null;
+    tax?: string | null;
     status: CartStatus;
     createdAt: string;
     updatedAt: string;
@@ -312,8 +743,8 @@ export type CartQuery = {
       __typename: 'CartItem';
       productId: string;
       quantity: number;
-      unitPrice: string | null;
-      totalPrice: string | null;
+      unitPrice?: string | null;
+      totalPrice?: string | null;
     }>;
   };
 };
@@ -321,6 +752,7 @@ export type CartQuery = {
 export type MyOrdersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MyOrdersQuery = {
+  __typename: 'Query';
   myOrders: Array<{
     __typename: 'Order';
     _id: string;
@@ -334,17 +766,17 @@ export type MyOrdersQuery = {
       __typename: 'OrderItem';
       productId: string;
       quantity: number;
-      unitPrice: string | null;
-      totalPrice: string | null;
-      rating: number | null;
-      message: string | null;
+      unitPrice?: string | null;
+      totalPrice?: string | null;
+      rating?: number | null;
+      message?: string | null;
     }>;
     shippingOption: {
       __typename: 'ShippingOption';
       type: ShippingType;
       label: string;
-      description: string | null;
-      estimatedDays: string | null;
+      description?: string | null;
+      estimatedDays?: string | null;
       fee: string;
     };
   }>;
@@ -353,26 +785,28 @@ export type MyOrdersQuery = {
 export type ShippingOptionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ShippingOptionsQuery = {
+  __typename: 'Query';
   shippingOptions: Array<{
     __typename: 'ShippingOption';
     _id: string;
     type: ShippingType;
     label: string;
-    description: string | null;
+    description?: string | null;
     fee: string;
-    estimatedDays: string | null;
+    estimatedDays?: string | null;
   }>;
 };
 
 export type PaymentMethodsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type PaymentMethodsQuery = {
+  __typename: 'Query';
   paymentMethods: Array<{
     __typename: 'PaymentMethod';
     _id: string;
     type: PaymentMethodType;
     label: string;
-    description: string | null;
+    description?: string | null;
     isActive: boolean;
   }>;
 };
@@ -382,14 +816,15 @@ export type CheckoutMethodSettingsQueryVariables = Exact<{
 }>;
 
 export type CheckoutMethodSettingsQuery = {
+  __typename: 'Query';
   shippingOptions: Array<{
     __typename: 'ShippingOption';
     _id: string;
     type: ShippingType;
     label: string;
-    description: string | null;
+    description?: string | null;
     fee: string;
-    estimatedDays: string | null;
+    estimatedDays?: string | null;
     isActive: boolean;
   }>;
   paymentMethods: Array<{
@@ -397,7 +832,7 @@ export type CheckoutMethodSettingsQuery = {
     _id: string;
     type: PaymentMethodType;
     label: string;
-    description: string | null;
+    description?: string | null;
     isActive: boolean;
   }>;
 };
@@ -407,6 +842,7 @@ export type CheckoutMutationVariables = Exact<{
 }>;
 
 export type CheckoutMutation = {
+  __typename: 'Mutation';
   checkout: {
     __typename: 'Order';
     _id: string;
@@ -420,17 +856,17 @@ export type CheckoutMutation = {
       __typename: 'OrderItem';
       productId: string;
       quantity: number;
-      unitPrice: string | null;
-      totalPrice: string | null;
-      rating: number | null;
-      message: string | null;
+      unitPrice?: string | null;
+      totalPrice?: string | null;
+      rating?: number | null;
+      message?: string | null;
     }>;
     shippingOption: {
       __typename: 'ShippingOption';
       type: ShippingType;
       label: string;
-      description: string | null;
-      estimatedDays: string | null;
+      description?: string | null;
+      estimatedDays?: string | null;
       fee: string;
     };
     paymentMethod: { __typename: 'PaymentMethod'; type: PaymentMethodType };
@@ -441,27 +877,34 @@ export type RemoveFromCartMutationVariables = Exact<{
   input: RemoveFromCartInput;
 }>;
 
-export type RemoveFromCartMutation = { removeFromCart: boolean };
+export type RemoveFromCartMutation = {
+  __typename: 'Mutation';
+  removeFromCart: boolean;
+};
 
 export type UpdateOrderStatusMutationVariables = Exact<{
   input: UpdateOrderStatusInput;
 }>;
 
-export type UpdateOrderStatusMutation = { updateOrderStatus: boolean | null };
+export type UpdateOrderStatusMutation = {
+  __typename: 'Mutation';
+  updateOrderStatus?: boolean | null;
+};
 
 export type CreateProductReviewMutationVariables = Exact<{
   input: CreateProductReviewInput;
 }>;
 
 export type CreateProductReviewMutation = {
+  __typename: 'Mutation';
   createProductReview: {
     __typename: 'ProductReview';
     _id: string;
     productId: string;
     accountId: string;
-    orderId: string | null;
+    orderId?: string | null;
     rating: number;
-    message: string | null;
+    message?: string | null;
     createdAt: string;
     updatedAt: string;
   };
@@ -472,6 +915,7 @@ export type UpdateShippingMethodStatusMutationVariables = Exact<{
 }>;
 
 export type UpdateShippingMethodStatusMutation = {
+  __typename: 'Mutation';
   updateShippingMethodStatus: boolean;
 };
 
@@ -480,6 +924,7 @@ export type UpdatePaymentMethodStatusMutationVariables = Exact<{
 }>;
 
 export type UpdatePaymentMethodStatusMutation = {
+  __typename: 'Mutation';
   updatePaymentMethodStatus: boolean;
 };
 
@@ -487,26 +932,33 @@ export type UploadFileMutationVariables = Exact<{
   file: Scalars['Upload']['input'];
 }>;
 
-export type UploadFileMutation = { uploadFile: string | null };
+export type UploadFileMutation = {
+  __typename: 'Mutation';
+  uploadFile?: string | null;
+};
 
 export type LicenseMutationVariables = Exact<{
   input: LicenseInput;
 }>;
 
-export type LicenseMutation = { createLicense: boolean | null };
+export type LicenseMutation = {
+  __typename: 'Mutation';
+  createLicense?: boolean | null;
+};
 
 export type CreateGcashPaymentMutationVariables = Exact<{
   input?: InputMaybe<CreateGcashPaymentInput>;
 }>;
 
 export type CreateGcashPaymentMutation = {
-  createGcashPayment: {
+  __typename: 'Mutation';
+  createGcashPayment?: {
     __typename: 'PaymentRequestResponse';
-    reference_id: string | null;
-    payment_request_id: string | null;
-    actions: Array<{
+    reference_id?: string | null;
+    payment_request_id?: string | null;
+    actions?: Array<{
       __typename: 'PaymentAction';
-      value: string | null;
+      value?: string | null;
     } | null> | null;
   } | null;
 };
@@ -520,7 +972,7 @@ export type ProductCoreDataFragment = {
   pieces: number;
   status: StatusType;
   discount: number;
-  category: Array<CategoryType> | null;
+  category?: Array<CategoryType> | null;
   thumbnail: string;
   avgRating: number;
 };
@@ -532,13 +984,14 @@ export type ProductsQueryVariables = Exact<{
 }>;
 
 export type ProductsQuery = {
+  __typename: 'Query';
   products: {
     __typename: 'Connection';
     totalCount: number;
     pageInfo: {
       __typename: 'PageInfo';
       hasNextPage: boolean;
-      endCursor: string | null;
+      endCursor?: string | null;
     };
     edges: Array<{
       __typename: 'Edge';
@@ -552,7 +1005,7 @@ export type ProductsQuery = {
         pieces: number;
         status: StatusType;
         discount: number;
-        category: Array<CategoryType> | null;
+        category?: Array<CategoryType> | null;
         thumbnail: string;
         avgRating: number;
       };
@@ -565,14 +1018,15 @@ export type ProductReviewsQueryVariables = Exact<{
 }>;
 
 export type ProductReviewsQuery = {
+  __typename: 'Query';
   productReviews: Array<{
     __typename: 'ProductReview';
     _id: string;
     productId: string;
     accountId: string;
-    orderId: string | null;
+    orderId?: string | null;
     rating: number;
-    message: string | null;
+    message?: string | null;
     createdAt: string;
     updatedAt: string;
   }>;
@@ -582,28 +1036,38 @@ export type CreateProductMutationVariables = Exact<{
   input: CreateProductInput;
 }>;
 
-export type CreateProductMutation = { createProduct: boolean | null };
+export type CreateProductMutation = {
+  __typename: 'Mutation';
+  createProduct?: boolean | null;
+};
 
 export type UpdateProductMutationVariables = Exact<{
   input: UpdateProductInput;
 }>;
 
-export type UpdateProductMutation = { updateProduct: boolean | null };
+export type UpdateProductMutation = {
+  __typename: 'Mutation';
+  updateProduct?: boolean | null;
+};
 
 export type DeleteProductMutationVariables = Exact<{
   input: DeleteProductInput;
 }>;
 
-export type DeleteProductMutation = { deleteProduct: boolean | null };
+export type DeleteProductMutation = {
+  __typename: 'Mutation';
+  deleteProduct?: boolean | null;
+};
 
 export type ConfigQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ConfigQuery = {
+  __typename: 'Query';
   config: {
     __typename: 'Config';
     _id: string;
-    highPointsThreshold: number | null;
-    topSoldThreshold: number | null;
+    highPointsThreshold?: number | null;
+    topSoldThreshold?: number | null;
     carouselItems: Array<string>;
   };
 };
@@ -612,13 +1076,19 @@ export type CreateConfigMutationVariables = Exact<{
   input: CreateConfigInput;
 }>;
 
-export type CreateConfigMutation = { createConfig: boolean | null };
+export type CreateConfigMutation = {
+  __typename: 'Mutation';
+  createConfig?: boolean | null;
+};
 
 export type UpdateConfigMutationVariables = Exact<{
   input: UpdateConfigInput;
 }>;
 
-export type UpdateConfigMutation = { updateConfig: boolean | null };
+export type UpdateConfigMutation = {
+  __typename: 'Mutation';
+  updateConfig?: boolean | null;
+};
 
 export type HighPointProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -627,13 +1097,14 @@ export type HighPointProductsQueryVariables = Exact<{
 }>;
 
 export type HighPointProductsQuery = {
+  __typename: 'Query';
   highPointProducts: {
     __typename: 'Connection';
     totalCount: number;
     pageInfo: {
       __typename: 'PageInfo';
       hasNextPage: boolean;
-      endCursor: string | null;
+      endCursor?: string | null;
     };
     edges: Array<{
       __typename: 'Edge';
@@ -647,7 +1118,7 @@ export type HighPointProductsQuery = {
         pieces: number;
         status: StatusType;
         discount: number;
-        category: Array<CategoryType> | null;
+        category?: Array<CategoryType> | null;
         thumbnail: string;
         avgRating: number;
       };
@@ -662,7 +1133,8 @@ export type SearchProductByNameQueryVariables = Exact<{
 }>;
 
 export type SearchProductByNameQuery = {
-  searchProductByName: Array<{
+  __typename: 'Query';
+  searchProductByName?: Array<{
     __typename: 'Product';
     _id: string;
     name: string;
@@ -671,7 +1143,7 @@ export type SearchProductByNameQuery = {
     pieces: number;
     status: StatusType;
     discount: number;
-    category: Array<CategoryType> | null;
+    category?: Array<CategoryType> | null;
     thumbnail: string;
     avgRating: number;
   }> | null;
@@ -823,6 +1295,16 @@ export const SelfDocument = /*#__PURE__*/ {
                   name: { kind: 'Name', value: 'emailAddress' },
                 },
                 { kind: 'Field', name: { kind: 'Name', value: 'role' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'googleDetails' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -831,6 +1313,76 @@ export const SelfDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<SelfQuery, SelfQueryVariables>;
+export const LinkGoogleAccountDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'LinkGoogleAccount' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'LinkGoogleAccountInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'linkGoogleAccount' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  LinkGoogleAccountMutation,
+  LinkGoogleAccountMutationVariables
+>;
+export const UnlinkGoogleAccountDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'UnlinkGoogleAccount' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'unlinkGoogleAccount' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UnlinkGoogleAccountMutation,
+  UnlinkGoogleAccountMutationVariables
+>;
 export const UpdateCartItemDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [

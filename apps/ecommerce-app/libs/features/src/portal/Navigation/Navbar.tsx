@@ -1,13 +1,4 @@
 import { useQuery } from '@apollo/client/react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
-
-import { Button } from '~/components/Button';
-import { DebounceInput } from '~/components/DebounceInput';
-import { UserIcon } from '~/components/icons/UserIcon';
-import { Show } from '~/components/Show';
 import {
   Menu as MenuIcon,
   Search,
@@ -16,11 +7,23 @@ import {
   ShoppingCart,
   X,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+
+import { AuthForm } from '../Auth/AuthForm';
+import { useCartContext } from '../Cart/CartContext';
+import { categoryItems } from '../Catalog/Categories';
+
+import { Button } from '~/components/Button';
+import { DebounceInput } from '~/components/DebounceInput';
+import { UserIcon } from '~/components/icons/UserIcon';
 import { Menu } from '~/components/Primitives';
 import { Dialog } from '~/components/Primitives/Dialog';
 import { Popover } from '~/components/Primitives/Popover';
+import { Show } from '~/components/Show';
 import { SELF_QUERY } from '~/graphql/Account';
 import { MY_ORDERS_QUERY } from '~/graphql/Cart';
 import { SEARCH_PRODUCT_BY_NAME_QUERY } from '~/graphql/Product';
@@ -29,9 +32,6 @@ import { logout } from '~/providers/AuthProvider';
 import { useLicenseContext } from '~/providers/LicenseProvider/LicenseContext';
 import { numberFormatter } from '~/utils/numberFormatter';
 import { useDisclosure } from '~/utils/useDisclosure';
-import { AuthForm } from '../Auth/AuthForm';
-import { useCartContext } from '../Cart/CartContext';
-import { categoryItems } from '../Catalog/Categories';
 
 interface NavbarProps {
   logoSrc?: string;
@@ -252,6 +252,14 @@ export const Navbar: FunctionComponent<NavbarProps> = React.memo(
                   <Menu.Content>
                     <Menu.ItemGroup>
                       <Menu.Item
+                        value="profile"
+                        onClick={() => {
+                          router.push('/profile');
+                        }}
+                      >
+                        Profile
+                      </Menu.Item>
+                      <Menu.Item
                         value="logout"
                         onClick={async () => {
                           await logout();
@@ -322,6 +330,15 @@ export const Navbar: FunctionComponent<NavbarProps> = React.memo(
                         }}
                       >
                         Cart
+                      </button>
+                      <button
+                        className="w-full text-left text-base font-semibold text-carbon-25"
+                        onClick={() => {
+                          router.push('/profile');
+                          menuDisclosure.onClose();
+                        }}
+                      >
+                        Profile
                       </button>
                       <button
                         className="w-full text-left text-base font-semibold text-carbon-25"

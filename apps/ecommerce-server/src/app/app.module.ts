@@ -1,32 +1,29 @@
 /**
  * build 5x
  */
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import path from 'path';
+
+import type { ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloDriver } from '@nestjs/apollo';
+import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module, RequestMethod } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
+import type { GraphQLSchema } from 'graphql';
 import { constraintDirectiveTypeDefs } from 'graphql-constraint-directive/apollo4';
 import {
   DateTimeResolver,
   JSONResolver,
   ObjectIDResolver,
 } from 'graphql-scalars';
-
-import { GraphQLSchema } from 'graphql';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
-import path from 'path';
 import { authorizationRequiredDirectiveSchemaTransformer } from 'src/util/authorization-required-directive';
-import { AsyncEventModule } from '~/async-event-module/async-event-module';
+
 import { safeParseFloat } from '../util/safe-parse-float';
+
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
-
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { AccountModule } from './identity/account/account.module';
@@ -44,6 +41,8 @@ import { NodeResolver } from './resolver/node.resolver';
 import { ShoppingModule } from './shopping/shopping.module';
 import { SupportModule } from './support/support.module';
 import { UploadModule } from './upload/upload/upload.module';
+
+import { AsyncEventModule } from '~/async-event-module/async-event-module';
 @Module({
   imports: [
     ConfigModule.forRoot(),

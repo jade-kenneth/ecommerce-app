@@ -1,12 +1,17 @@
-import { TypedDocumentNode } from '@apollo/client/core';
+import type { TypedDocumentNode } from '@apollo/client/core';
 import gql from 'graphql-tag';
-import {
+
+import type {
   CreateAdminAccountMutation,
   CreateAdminAccountMutationVariables,
   CreateMemberAccountMutation,
   CreateMemberAccountMutationVariables,
+  LinkGoogleAccountMutation,
+  LinkGoogleAccountMutationVariables,
   SelfQuery,
   SelfQueryVariables,
+  UnlinkGoogleAccountMutation,
+  UnlinkGoogleAccountMutationVariables,
 } from './generated';
 
 export const CREATE_MEMBER_ACCOUNT_MUTATION: TypedDocumentNode<
@@ -33,6 +38,27 @@ export const SELF_QUERY: TypedDocumentNode<SelfQuery, SelfQueryVariables> = gql`
       _id
       emailAddress
       role
+      googleDetails {
+        id
+      }
     }
+  }
+`;
+
+export const LINK_GOOGLE_ACCOUNT_MUTATION: TypedDocumentNode<
+  LinkGoogleAccountMutation,
+  LinkGoogleAccountMutationVariables
+> = gql`
+  mutation LinkGoogleAccount($input: LinkGoogleAccountInput!) {
+    linkGoogleAccount(input: $input)
+  }
+`;
+
+export const UNLINK_GOOGLE_ACCOUNT_MUTATION: TypedDocumentNode<
+  UnlinkGoogleAccountMutation,
+  UnlinkGoogleAccountMutationVariables
+> = gql`
+  mutation UnlinkGoogleAccount {
+    unlinkGoogleAccount
   }
 `;

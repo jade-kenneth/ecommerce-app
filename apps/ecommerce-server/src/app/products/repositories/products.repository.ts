@@ -1,11 +1,12 @@
-import { Connection, Types } from 'mongoose';
-
-import Decimal from 'decimal.js';
+import type Decimal from 'decimal.js';
 import { Decimal128 } from 'mongodb';
+import type { Connection } from 'mongoose';
+import { Types } from 'mongoose';
+
 import { MongooseRepository } from '../../../libs/mongoose-repository';
-import { Repository } from '../../../libs/repository';
-import { Node } from '../../../types/common';
-import {
+import type { Repository } from '../../../libs/repository';
+import type { Node } from '../../../types/common';
+import type {
   CategoryType,
   DateTime,
   KeyValuePair,
@@ -37,9 +38,7 @@ export type Product = Node & {
 };
 
 export type ProductRepository = Repository<Product>;
-export async function ProductRepositoryFactory(
-  connection: Connection,
-): Promise<ProductRepository> {
+export async function ProductRepositoryFactory(connection: Connection): Promise<ProductRepository> {
   return new MongooseRepository<Product>(
     connection,
     'Products',

@@ -1,16 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '~/components/Button';
-import { Input } from '~/components/Input';
-import { toaster } from '~/components/ToastContainer';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { Eye, EyeClosed } from 'lucide-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 import z from 'zod';
+
+import { Button } from '~/components/Button';
+import { Input } from '~/components/Input';
 import { Field } from '~/components/Primitives/Field';
+import { toaster } from '~/components/ToastContainer';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
-import { authenticate } from '~/providers/AuthProvider';
+import {
+  authenticate,
+  fetchGoogleUserInfo,
+  loginWithGoogle,
+} from '~/providers/AuthProvider';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;
@@ -21,22 +27,57 @@ const definition = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
+type GoogleSignInButtonProps = {
+  disabled: boolean;
+  onAccessToken: (accessToken: string) => Promise<void>;
+};
+
+const GoogleSignInButton = ({
+  disabled,
+  onAccessToken,
+}: GoogleSignInButtonProps) => {
+  const loginGoogle = useGoogleLogin({
+    flow: 'implicit',
+    scope: 'openid email profile',
+    onSuccess: ({ access_token: accessToken }) => {
+      if (!accessToken) {
+        toaster.error({
+          description: 'Google sign-in did not return an access token.',
+        });
+        return;
+      }
+
+      onAccessToken(accessToken);
+    },
+    onError: () => {
+      toaster.error({
+        description: 'Google sign-in was canceled or failed.',
+      });
+    },
+  });
+
+  return (
+    <button
+      type="button"
+      onClick={() => loginGoogle()}
+      disabled={disabled}
+      className="flex h-[40px] w-full items-center justify-center gap-3 rounded-[32px] border border-solid border-carbon-800 bg-white-25 px-3.5 py-2.5 text-sm font-semibold text-carbon-400 shadow-xs disabled:cursor-not-allowed disabled:opacity-60"
+      aria-label="Sign in with Google"
+    >
+      <FaGoogle className="relative h-5 w-5" />
+      <span>{disabled ? 'Signing in...' : 'Sign in with Google'}</span>
+    </button>
+  );
+};
+
 export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
-  const socialButtons = [
-    {
-      icon: <FaFacebook className="relative w-5 h-5" />,
-      label: 'Facebook',
-    },
-    {
-      icon: <FaGoogle className="relative w-5 h-5" />,
-      label: 'Google',
-    },
-  ];
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID;
 
   const form = useForm({
     resolver: zodResolver(definition),
   });
   const [showPassword, setShowPassword] = React.useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
 
   const setIsAuthenticated = useGlobalStore(
     (state) => state.authenticate.setIsAuthenticated,
@@ -58,6 +99,35 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       toaster.error({ description: 'Failed to log in. Please try again.' });
     }
   });
+
+  const onGoogleLogin = React.useCallback(
+    async (accessToken: string) => {
+      setIsGoogleLoading(true);
+      try {
+        const payload = await fetchGoogleUserInfo(accessToken);
+
+        await loginWithGoogle({
+          id: payload.sub,
+          emailAddress: payload.email,
+          displayName: payload.name,
+          avatarUrl: payload.picture,
+        });
+
+        setIsAuthenticated(true);
+        setUser({ email: payload.email });
+        toaster.success({ description: 'Successfully logged in!' });
+      } catch {
+        toaster.error({
+          duration: 3000,
+          description:
+            'Google account is already linked to another account or not linked at all.',
+        });
+      } finally {
+        setIsGoogleLoading(false);
+      }
+    },
+    [setIsAuthenticated, setUser],
+  );
 
   return (
     <form onSubmit={onSubmit} className="p-1 sm:p-2">
@@ -143,7 +213,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         Sign in
       </Button>
 
-      <p className="w-full font-normal mx-auto mt-3 sm:mt-4 text-sm">
+      <p className="w-full text-center font-normal mx-auto mt-3 sm:mt-4 text-sm">
         No account yet?{' '}
         {/* <a
           className="text-cyan-700 text-paragraph-sm font-semibold cursor-pointer"
@@ -160,24 +230,20 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           Register here
         </span>
       </p>
-      {/* <p className="mx-auto w-fit mt-3 sm:mt-4">Or sign in using</p>
-      <div className="flex w-full max-w-[296px] mx-auto mt-3 sm:mt-4 items-start gap-3 relative">
-        {socialButtons.map((button, index) => (
-          <button
-            key={index}
-            type="button"
-            className="flex gap-3 items-center justify-center px-3.5 py-2.5 relative flex-1 grow bg-white-25 rounded-[32px] overflow-hidden border border-solid border-carbon-800 shadow-xs cursor-pointer"
-            aria-label={`Sign up with ${button.label}`}
-          >
-            {button.icon}
-            <span className="inline-flex items-center justify-center px-2 py-0 relative flex-[0_0_auto]">
-              <span className="relative w-fit font-semibold text-carbon-400 text-sm whitespace-nowrap">
-                {button.label}
-              </span>
-            </span>
-          </button>
-        ))}
-      </div> */}
+
+      {googleClientId ? (
+        <>
+          <p className="mx-auto mt-3 w-fit text-sm sm:mt-4">Or sign in using</p>
+          <div className="mx-auto mt-3 w-full max-w-[296px] sm:mt-4">
+            <GoogleOAuthProvider clientId={googleClientId}>
+              <GoogleSignInButton
+                disabled={isGoogleLoading}
+                onAccessToken={onGoogleLogin}
+              />
+            </GoogleOAuthProvider>
+          </div>
+        </>
+      ) : null}
     </form>
   );
 };

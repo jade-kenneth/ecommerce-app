@@ -198,7 +198,9 @@ export const OrderSummary = ({ isCheckout }: OrderSummaryProps) => {
                 const orderId = orderRes.data?.checkout._id;
                 const baseUrl =
                   (process.env.NEXT_PUBLIC_BASE_URL ?? '').replace(/\/$/, '') ||
-                  window.location.origin;
+                  (typeof window !== 'undefined'
+                    ? window.location.origin
+                    : '');
 
                 const isCashOnDelivery =
                   selectedPaymentType === PaymentMethodType.CashOnDelivery;

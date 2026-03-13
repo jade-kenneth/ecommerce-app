@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import type { Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 import type { Filter } from '../../../libs/repository';
 import { Tokens } from '../../../types/tokens';
@@ -18,9 +18,35 @@ export class SessionService {
   async createSession(session: Session) {
     await this.sessionRepository.create(session);
   }
+  private extractSessionId(
+    filter: Types.ObjectId | Filter<Session>,
+  ): Types.ObjectId | null {
+    if (filter instanceof Types.ObjectId) {
+      return filter;
+    }
 
+    if (!filter || typeof filter !== 'object') {
+      return null;
+    }
+
+    const id = (filter as Filter<Session>)._id;
+
+    if (id instanceof Types.ObjectId) {
+      return id;
+    }
+
+    if (typeof id === 'string' && Types.ObjectId.isValid(id)) {
+      return new Types.ObjectId(id);
+    }
+
+    return null;
+  }
   async deleteSession(filter: Types.ObjectId | Filter<Session>) {
-    await this.sessionRepository.delete(filter);
+    const sessionId = this.extractSessionId(filter);
+    if (sessionId) {
+      await this.sessionRepository.delete(sessionId);
+      return;
+    }
 
     const sessions = await this.sessionRepository
       .list(filter as Filter<Session>)
@@ -32,7 +58,12 @@ export class SessionService {
   }
 
   async findSession(filter: Types.ObjectId | Filter<Session>) {
-    return this.sessionRepository.find(filter);
+    const sessionId = this.extractSessionId(filter);
+    if (sessionId) {
+      return this.sessionRepository.find(sessionId);
+    }
+
+    return null;
   }
 
   async updateSession(

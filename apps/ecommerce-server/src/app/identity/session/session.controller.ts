@@ -68,9 +68,7 @@ export class SessionController {
     };
 
     try {
-      await this.session.deleteSession({
-        account: accountId,
-      });
+      await this.session.deleteSession(accountId);
 
       await this.session.createSession(session);
 

@@ -1,18 +1,21 @@
 import { useMutation } from '@apollo/client/react';
 import { Portal } from '@ark-ui/react';
-import { Menu } from '~/components';
-import { Spinner } from '~/components/Spinner';
 import { Trash, XIcon } from 'lucide-react';
+
+import { useProductProviderContext } from './ProductContext';
+
+import { Menu } from '~/components';
 import { Dialog } from '~/components/Primitives/Dialog';
+import { Spinner } from '~/components/Spinner';
 import { DELETE_PRODUCT_MUTATION } from '~/graphql/Product';
 import { useDisclosure } from '~/utils/useDisclosure';
-import { useProductProviderContext } from './ProductContext';
 
 export const DeleteProduct = () => {
   const disclosure = useDisclosure();
   const context = useProductProviderContext();
   const [deleteProduct, { loading }] = useMutation(DELETE_PRODUCT_MUTATION, {
     optimisticResponse: {
+      __typename: 'Mutation',
       deleteProduct: true,
     },
     update(cache) {

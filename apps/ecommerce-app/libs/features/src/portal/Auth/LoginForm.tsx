@@ -120,7 +120,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         toaster.error({
           duration: 3000,
           description:
-            'Google account is already linked to another account or not linked at all.',
+            'Google login failed. Please ensure your Google account is linked to an existing account.',
         });
       } finally {
         setIsGoogleLoading(false);

@@ -16,25 +16,9 @@ type DataLayerEntry = {
   [key: string]: unknown;
 };
 
-type TurnstileRenderOptions = {
-  action?: string;
-  callback?: (token: string) => void;
-  'error-callback'?: () => void;
-  'expired-callback'?: () => void;
-  sitekey: string;
-  theme?: 'auto' | 'light' | 'dark';
-};
-
-type TurnstileApi = {
-  remove?: (widgetId: string) => void;
-  render: (container: HTMLElement, options: TurnstileRenderOptions) => string;
-  reset: (widgetId: string) => void;
-};
-
 declare global {
   interface Window {
     dataLayer: DataLayerEntry[];
     gtag: (...args: GtagArgs) => void;
-    turnstile?: TurnstileApi;
   }
 }

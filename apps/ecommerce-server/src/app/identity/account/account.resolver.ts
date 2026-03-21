@@ -2,33 +2,21 @@ import assert from 'assert';
 
 import { Inject } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import type { Request } from 'express';
 import { Types } from 'mongoose';
 import * as R from 'ramda';
 
 import { AccountType } from '../../../types/common';
 import type { CreateAccountInput, LinkGoogleAccountInput } from '../../__generated/graphql-types';
-import { TurnstileService } from '../../turnstile/turnstile.service';
 import type { Claims } from '../types';
 
 import { AccountService } from './account.service';
 
 @Resolver('Accounts')
 export class AccountResolver {
-  constructor(
-    @Inject(AccountService) private readonly account: AccountService,
-    private readonly turnstile: TurnstileService,
-  ) {}
+  constructor(@Inject(AccountService) private readonly account: AccountService) {}
 
   @Mutation('createMemberAccount')
-  async createMemberAccount(
-    @Args('input') input: CreateAccountInput,
-    @Context('req') request: Request,
-  ) {
-    await this.turnstile.assertVerified(request, {
-      action: 'signup',
-    });
-
+  async createMemberAccount(@Args('input') input: CreateAccountInput) {
     const data = {
       ...R.pick(['emailAddress', 'password', '_id'], input),
     };

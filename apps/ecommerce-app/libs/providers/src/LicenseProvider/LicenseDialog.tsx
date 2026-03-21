@@ -1,33 +1,21 @@
 import { Key, ShieldCheck } from 'lucide-react';
-import { PropsWithChildren, useRef, useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Dialog } from '~/components/Dialog';
 import { OtpField } from '~/components/OtpField';
-import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { gtm } from '~/utils/gtm';
 import { useLicenseContext } from './LicenseContext';
 import { getLicense } from './service';
 export const LicenseDialog = (props: PropsWithChildren) => {
   const context = useLicenseContext();
   const [error, setError] = useState<string | null>(null);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const turnstileRef = useRef<TurnstileHandle>(null);
 
   const handleActivate = async (value: string) => {
-    if (!turnstileToken) {
-      setError('Complete the security check first');
-      return;
-    }
-
-    setError(null);
-
     try {
-      const res = await getLicense(value, turnstileToken);
+      const res = await getLicense(value);
       if (res) context.setLicense({ isLicensed: true });
-    } catch {
+    } catch (err) {
       setError('License activation failed');
-    } finally {
-      turnstileRef.current?.reset();
     }
   };
 
@@ -40,7 +28,11 @@ export const LicenseDialog = (props: PropsWithChildren) => {
           <div className="rounded-3xl text-center shadow-lg px-4 h-full sm:px-12 py-4 sm:py-6 w-full">
             <div className="flex flex-col items-center mb-6 sm:mb-8">
               <div className="w-14 h-14 sm:w-20 sm:h-20 bg-cyan-100 rounded-full flex items-center justify-center mb-4 sm:mb-6">
-                <ShieldCheck size={28} className="text-cyan-600" strokeWidth={1.5} />
+                <ShieldCheck
+                  size={28}
+                  className="text-cyan-600"
+                  strokeWidth={1.5}
+                />
               </div>
               <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
                 License Required
@@ -59,11 +51,12 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                     }
                   }}
                 />
-
-                <p className="text-error-600 text-sm sm:text-base font-semibold mt-2">{error}</p>
+                <p className="text-error-600 text-sm sm:text-base font-semibold mt-2">
+                  {error}
+                </p>
               </div>
               <Button
-                disabled={context.loading || !turnstileToken}
+                disabled={context.loading}
                 className="w-full text-white font-semibold py-3 sm:py-4 px-5 sm:px-6 rounded-2xl flex items-center justify-center gap-3 transition-colors text-base sm:text-lg"
               >
                 <Key size={20} className="sm:hidden" />
@@ -86,11 +79,6 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                 </span>
               </p>
             </div>
-            <Turnstile
-              ref={turnstileRef}
-              action="license"
-              onTokenChange={setTurnstileToken}
-            />
           </div>
         </Dialog.Content>
       </Dialog.Positioner>

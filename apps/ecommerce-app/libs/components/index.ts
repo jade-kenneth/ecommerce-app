@@ -21,4 +21,3 @@ export * from './Primitives/Toggle';
 export * from './Show';
 export * from './Spinner';
 export * from './ToastContainer';
-export * from './Turnstile';

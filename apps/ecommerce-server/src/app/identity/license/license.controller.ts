@@ -5,19 +5,32 @@ import {
   HttpException,
   InternalServerErrorException,
   Post,
+  Request,
 } from '@nestjs/common';
 import { addMinutes, isAfter } from 'date-fns';
 import { isNil } from 'es-toolkit/compat';
 import { LicenseVariant } from 'src/app/__generated/graphql-types';
+import { TurnstileService } from '../../turnstile/turnstile.service';
+import { AuthRequest } from '../types';
 import { LicenseService } from './license.service';
 import { License } from './repositories/license.repository';
 @Controller()
 export class LicenseController {
-  constructor(private readonly license: LicenseService) {}
+  constructor(
+    private readonly license: LicenseService,
+    private readonly turnstile: TurnstileService,
+  ) {}
 
   @Post('validate/license')
-  async validateLicense(@Body() request: { code: string }): Promise<License> {
+  async validateLicense(
+    @Body() request: { code: string },
+    @Request() authRequest: AuthRequest,
+  ): Promise<License> {
     try {
+      await this.turnstile.assertVerified(authRequest, {
+        action: 'license',
+      });
+
       const data = await this.license.findLicense({ code: request.code });
 
       if (!data) {

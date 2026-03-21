@@ -9,14 +9,11 @@ import z from 'zod';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Field } from '~/components/Primitives/Field';
+import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { toaster } from '~/components/ToastContainer';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
-import {
-  authenticate,
-  fetchGoogleUserInfo,
-  loginWithGoogle,
-} from '~/providers/AuthProvider';
+import { authenticate, fetchGoogleUserInfo, loginWithGoogle } from '~/providers/AuthProvider';
 
 interface LoginFormProps {
   onToggleToSignup?: () => void;
@@ -32,10 +29,7 @@ type GoogleSignInButtonProps = {
   onAccessToken: (accessToken: string) => Promise<void>;
 };
 
-const GoogleSignInButton = ({
-  disabled,
-  onAccessToken,
-}: GoogleSignInButtonProps) => {
+const GoogleSignInButton = ({ disabled, onAccessToken }: GoogleSignInButtonProps) => {
   const loginGoogle = useGoogleLogin({
     flow: 'implicit',
     scope: 'openid email profile',
@@ -78,18 +72,28 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   });
   const [showPassword, setShowPassword] = React.useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
-
-  const setIsAuthenticated = useGlobalStore(
-    (state) => state.authenticate.setIsAuthenticated,
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(
+    null,
   );
+  const turnstileRef = React.useRef<TurnstileHandle>(null);
+
+  const setIsAuthenticated = useGlobalStore((state) => state.authenticate.setIsAuthenticated);
   const setUser = useGlobalStore((state) => state.authenticate.setUser);
 
   const onSubmit = form.handleSubmit(async (data) => {
+    if (!turnstileToken) {
+      toaster.error({
+        description: 'Complete the security check before signing in.',
+      });
+      return;
+    }
+
     try {
       await authenticate({
         emailAddress: data.emailAddress,
         password: data.password,
         role: AccountType.Member,
+        turnstileToken,
       });
 
       toaster.success({ description: 'Successfully logged in!' });
@@ -97,11 +101,20 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       setUser({ email: data.emailAddress });
     } catch {
       toaster.error({ description: 'Failed to log in. Please try again.' });
+    } finally {
+      turnstileRef.current?.reset();
     }
   });
 
   const onGoogleLogin = React.useCallback(
     async (accessToken: string) => {
+      if (!turnstileToken) {
+        toaster.error({
+          description: 'Complete the security check before signing in.',
+        });
+        return;
+      }
+
       setIsGoogleLoading(true);
       try {
         const payload = await fetchGoogleUserInfo(accessToken);
@@ -111,6 +124,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           emailAddress: payload.email,
           displayName: payload.name,
           avatarUrl: payload.picture,
+          turnstileToken,
         });
 
         setIsAuthenticated(true);
@@ -124,18 +138,17 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         });
       } finally {
         setIsGoogleLoading(false);
+        turnstileRef.current?.reset();
       }
     },
-    [setIsAuthenticated, setUser],
+    [setIsAuthenticated, setUser, turnstileToken],
   );
 
   return (
     <form onSubmit={onSubmit} className="p-1 sm:p-2">
       <Field.Root>
         <Field.Label>
-          <span className="text-sm font-bold text-carbon-100">
-            Email Address
-          </span>
+          <span className="text-sm font-bold text-carbon-100">Email Address</span>
         </Field.Label>
         <Controller
           control={form.control}
@@ -173,9 +186,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
                   rightAddon={
                     <button
                       type="button"
-                      aria-label={
-                        showPassword ? 'Hide password' : 'Show password'
-                      }
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
                       className="inline-flex items-center justify-center rounded-full p-1 text-carbon-400 transition-colors hover:text-carbon-100"
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
@@ -207,6 +218,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       </div> */}
 
       <Button
+        disabled={form.formState.isSubmitting || !turnstileToken}
         type="submit"
         className="w-full rounded-[50px] text-white mt-5 sm:mt-6 h-[40px]"
       >
@@ -237,13 +249,20 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           <div className="mx-auto mt-3 w-full max-w-[296px] sm:mt-4">
             <GoogleOAuthProvider clientId={googleClientId}>
               <GoogleSignInButton
-                disabled={isGoogleLoading}
+                disabled={isGoogleLoading || !turnstileToken}
                 onAccessToken={onGoogleLogin}
               />
             </GoogleOAuthProvider>
           </div>
         </>
       ) : null}
+
+      <Turnstile
+        ref={turnstileRef}
+        action="login"
+        className="mt-4"
+        onTokenChange={setTurnstileToken}
+      />
     </form>
   );
 };

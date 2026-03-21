@@ -15,6 +15,7 @@ import * as R from 'ramda';
 import randomBytes from 'randombytes';
 
 import { RefreshJwtGuard } from '../../auth/guards/refresh-jwt.guard';
+import { TurnstileService } from '../../turnstile/turnstile.service';
 import { AccountService } from '../account/account.service';
 import { JwtService } from '../jwt/jwt.service';
 import type { AuthRequest } from '../types';
@@ -34,16 +35,14 @@ export class SessionController {
     private readonly session: SessionService,
     private readonly jwt: JwtService,
     private readonly account: AccountService,
+    private readonly turnstile: TurnstileService,
   ) {}
   @Post('sessions')
   async createSession(@Request() request: AuthRequest) {
     const timestamp = new Date();
 
     // Time to live in seconds, max 7 days
-    const ttl = Math.min(
-      Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
-      604800,
-    );
+    const ttl = Math.min(Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001), 604800);
 
     const { user } = request.body;
     const accountId = new Types.ObjectId(user._id);
@@ -113,10 +112,7 @@ export class SessionController {
   @UseGuards(RefreshJwtGuard) // this validates if refresh token is valid and sends request.claims
   async refreshSession(@Request() request: AuthRequest) {
     // Time to live in seconds, max 7 days
-    const ttl = Math.min(
-      Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001),
-      604800,
-    );
+    const ttl = Math.min(Math.floor(ms(<string>(request.query.ttl ?? '10m')) * 0.001), 604800);
 
     const timestamp = new Date();
 
@@ -177,9 +173,7 @@ export class SessionController {
   }
 
   @Post('session/validate')
-  async validateSession(
-    @Request() request: AuthRequest,
-  ): Promise<ValidateSessionResult> {
+  async validateSession(@Request() request: AuthRequest): Promise<ValidateSessionResult> {
     try {
       if (!request.claims || !request.session) {
         throw new UnauthorizedException({
@@ -242,6 +236,10 @@ export class SessionController {
 
   @Post('session/authenticate')
   async authenticate(@Request() request: AuthRequest) {
+    await this.turnstile.assertVerified(request, {
+      action: 'login',
+    });
+
     const timestamp = new Date();
 
     const password = <string>request.body['password'];
@@ -271,9 +269,7 @@ export class SessionController {
         account: account._id,
       });
     } catch {
-      throw new InternalServerErrorException(
-        'Unable to reset previous sessions.',
-      );
+      throw new InternalServerErrorException('Unable to reset previous sessions.');
     }
 
     const session: Session = {
@@ -324,6 +320,10 @@ export class SessionController {
 
   @Post('session/authenticate/google')
   async authenticateWithGoogle(@Request() request: AuthRequest) {
+    await this.turnstile.assertVerified(request, {
+      action: 'login',
+    });
+
     const timestamp = new Date();
     const { id: googleId } = request.body;
 
@@ -350,9 +350,7 @@ export class SessionController {
         });
       }
 
-      throw new InternalServerErrorException(
-        'Unable to authenticate google account.',
-      );
+      throw new InternalServerErrorException('Unable to authenticate google account.');
     }
 
     try {
@@ -360,9 +358,7 @@ export class SessionController {
         account: account._id,
       });
     } catch {
-      throw new InternalServerErrorException(
-        'Unable to reset previous sessions.',
-      );
+      throw new InternalServerErrorException('Unable to reset previous sessions.');
     }
 
     const session: Session = {

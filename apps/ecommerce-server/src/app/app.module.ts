@@ -40,6 +40,7 @@ import { RatingsModule } from './ratings/ratings.module';
 import { NodeResolver } from './resolver/node.resolver';
 import { ShoppingModule } from './shopping/shopping.module';
 import { SupportModule } from './support/support.module';
+import { TurnstileModule } from './turnstile/turnstile.module';
 import { UploadModule } from './upload/upload/upload.module';
 
 import { AsyncEventModule } from '~/async-event-module/async-event-module';
@@ -71,8 +72,8 @@ import { AsyncEventModule } from '~/async-event-module/async-event-module';
           },
           typeDefs: [constraintDirectiveTypeDefs],
 
-          // destructure context to get req object from middleware
-          context: ({ req }) => ({ claims: req.claims }),
+          // expose the raw request so public mutations can validate Turnstile.
+          context: ({ req }) => ({ claims: req.claims, req }),
 
           // apply authorizationRequired directive
           transformSchema: async (schema: GraphQLSchema) => {
@@ -116,6 +117,7 @@ import { AsyncEventModule } from '~/async-event-module/async-event-module';
     MailModule,
     RatingsModule,
     SupportModule,
+    TurnstileModule,
     AsyncEventModule.forRootAsync({
       useFactory: () => {
         return {

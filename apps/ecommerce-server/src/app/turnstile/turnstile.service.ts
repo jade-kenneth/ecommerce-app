@@ -11,6 +11,7 @@ import { ConfigService } from '../config/config.service';
 
 const TURNSTILE_SITEVERIFY_URL =
   'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
 export const TURNSTILE_TOKEN_HEADER = 'x-turnstile-token';
 const TURNSTILE_FALLBACK_HEADER = 'cf-turnstile-response';
 
@@ -57,6 +58,7 @@ export class TurnstileService {
     );
 
     if (!verification.success) {
+      console.log('Turnstile verification failed:', token);
       throw new ForbiddenException({
         error: {
           type: 'TURNSTILE_VERIFICATION_FAILED',
@@ -67,6 +69,7 @@ export class TurnstileService {
     }
 
     if (verification.action !== options.action) {
+      console.log('Turnstile action mismatch:', token);
       throw new ForbiddenException({
         error: {
           type: 'TURNSTILE_ACTION_MISMATCH',

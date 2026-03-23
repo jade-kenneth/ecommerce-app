@@ -1,5 +1,5 @@
 /**
- * build 6x
+ * build 7x
  */
 import path from 'path';
 

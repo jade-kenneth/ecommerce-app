@@ -40,7 +40,11 @@ export const LicenseDialog = (props: PropsWithChildren) => {
           <div className="rounded-3xl text-center shadow-lg px-4 h-full sm:px-12 py-4 sm:py-6 w-full">
             <div className="flex flex-col items-center mb-6 sm:mb-8">
               <div className="w-14 h-14 sm:w-20 sm:h-20 bg-cyan-100 rounded-full flex items-center justify-center mb-4 sm:mb-6">
-                <ShieldCheck size={28} className="text-cyan-600" strokeWidth={1.5} />
+                <ShieldCheck
+                  size={28}
+                  className="text-cyan-600"
+                  strokeWidth={1.5}
+                />
               </div>
               <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
                 License Required
@@ -60,7 +64,9 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                   }}
                 />
 
-                <p className="text-error-600 text-sm sm:text-base font-semibold mt-2">{error}</p>
+                <p className="text-error-600 text-sm sm:text-base font-semibold mt-2">
+                  {error}
+                </p>
               </div>
               <Button
                 disabled={context.loading || !turnstileToken}
@@ -89,6 +95,7 @@ export const LicenseDialog = (props: PropsWithChildren) => {
             <Turnstile
               ref={turnstileRef}
               action="license"
+              className="flex justify-center items-center"
               onTokenChange={setTurnstileToken}
             />
           </div>

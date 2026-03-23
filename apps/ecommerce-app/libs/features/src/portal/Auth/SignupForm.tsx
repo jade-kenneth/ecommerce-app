@@ -9,8 +9,8 @@ import z from 'zod';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Field } from '~/components/Primitives/Field';
-import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { toaster } from '~/components/ToastContainer';
+import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { CREATE_MEMBER_ACCOUNT_MUTATION } from '~/graphql/Account';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
@@ -26,7 +26,9 @@ const schema = z
     emailAddress: z.string().email({ message: 'Invalid email address' }),
     mobileNumber: z.string(),
     // .min(10, { message: 'Mobile number must be at least 10 digits' }),
-    password: z.string().min(8, { message: 'Password must be at least 8 characters long' }),
+    password: z
+      .string()
+      .min(8, { message: 'Password must be at least 8 characters long' }),
     confirmPassword: z.string(),
   })
   .superRefine((data, ctx) => {
@@ -50,7 +52,9 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
       label: 'Google',
     },
   ];
-  const setIsAuthenticated = useGlobalStore((state) => state.authenticate.setIsAuthenticated);
+  const setIsAuthenticated = useGlobalStore(
+    (state) => state.authenticate.setIsAuthenticated,
+  );
   const setUser = useGlobalStore((state) => state.authenticate.setUser);
   const [state, setState] = useState<{
     showPassword: boolean;
@@ -117,7 +121,10 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
 
   return (
     <div className="flex items-center gap-2.5 relative bg-white-25 rounded-xl">
-      <form onSubmit={onSubmit} className="flex-col items-start gap-6 flex relative w-full">
+      <form
+        onSubmit={onSubmit}
+        className="flex-col items-start gap-6 flex relative w-full"
+      >
         <div className="flex flex-col gap-6 relative  w-full">
           <Field.Root invalid={!!form.formState.errors.emailAddress}>
             <Field.Label>
@@ -137,9 +144,12 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                 />
               )}
             />
-            <Field.ErrorText>{form.formState.errors.emailAddress?.message}</Field.ErrorText>
+            <Field.ErrorText>
+              {form.formState.errors.emailAddress?.message}
+            </Field.ErrorText>
             <p className="text-[10px] mt-1 italic text-carbon-400">
-              Please use a valid and active working email address to fully utilize all features.
+              Please use a valid and active working email address to fully
+              utilize all features.
             </p>
           </Field.Root>
           {/* <Field.Root invalid={!!form.formState.errors.mobileNumber}>
@@ -169,7 +179,9 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
 
           <Field.Root invalid={!!form.formState.errors.password}>
             <Field.Label>
-              <span className="text-sm font-bold text-carbon-100">Password</span>
+              <span className="text-sm font-bold text-carbon-100">
+                Password
+              </span>
             </Field.Label>
             <Controller
               control={form.control}
@@ -185,7 +197,9 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                     rightAddon={
                       <button
                         type="button"
-                        aria-label={state.showPassword ? 'Hide password' : 'Show password'}
+                        aria-label={
+                          state.showPassword ? 'Hide password' : 'Show password'
+                        }
                         className="inline-flex items-center justify-center rounded-full p-1 text-carbon-400 transition-colors hover:text-carbon-100"
                         onClick={() =>
                           setState({
@@ -206,11 +220,15 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                 );
               }}
             />
-            <Field.ErrorText>{form.formState.errors.password?.message}</Field.ErrorText>
+            <Field.ErrorText>
+              {form.formState.errors.password?.message}
+            </Field.ErrorText>
           </Field.Root>
           <Field.Root invalid={!!form.formState.errors.confirmPassword}>
             <Field.Label>
-              <span className="text-sm font-bold text-carbon-100">Confirm Password</span>
+              <span className="text-sm font-bold text-carbon-100">
+                Confirm Password
+              </span>
             </Field.Label>
             <Controller
               control={form.control}
@@ -249,7 +267,9 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
                 />
               )}
             />
-            <Field.ErrorText>{form.formState.errors.confirmPassword?.message}</Field.ErrorText>
+            <Field.ErrorText>
+              {form.formState.errors.confirmPassword?.message}
+            </Field.ErrorText>
           </Field.Root>
         </div>
         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
@@ -299,6 +319,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
         <Turnstile
           ref={turnstileRef}
           action="signup"
+          className=" w-full flex justify-center items-center"
           onTokenChange={setTurnstileToken}
         />
       </form>

@@ -1,8 +1,6 @@
 'use client';
-import { isAfter } from 'date-fns';
 import { store } from '~/store';
 import { useEffect, useReducer, useRef } from 'react';
-import { getLicense } from './service';
 interface UseLicenseOptions {
   excludePaths?: string[];
 }
@@ -30,21 +28,13 @@ export const useLicense = (options: UseLicenseOptions) => {
 
     try {
       const { licenseCode } = await store.get();
-      const data = await getLicense(licenseCode || '');
       if (!isMountedRef.current) return;
 
-      if (isAfter(new Date(data.expirationDate ?? ''), new Date())) {
-        setState({
-          isLicensed: true,
-          loading: false,
-        });
-      } else {
-        setState({
-          isLicensed: false,
-          loading: false,
-        });
-      }
-    } catch (err) {
+      setState({
+        isLicensed: Boolean(licenseCode),
+        loading: false,
+      });
+    } catch {
       if (!isMountedRef.current) return;
       setState({
         isLicensed: false,

@@ -1,19 +1,21 @@
 import { useMutation } from '@apollo/client/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ObjectId } from 'bson';
-import { Button } from '~/components/Button';
-import { Input } from '~/components/Input';
-import { toaster } from '~/components/ToastContainer';
 import { Eye, EyeClosed } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
+import { Button } from '~/components/Button';
+import { Input } from '~/components/Input';
 import { Field } from '~/components/Primitives/Field';
+import { toaster } from '~/components/ToastContainer';
+import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { CREATE_MEMBER_ACCOUNT_MUTATION } from '~/graphql/Account';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import { create_session } from '~/providers/AuthProvider';
+import { TURNSTILE_TOKEN_HEADER } from '~/utils/turnstile';
 
 interface SignupFormProps {
   onToggleToLogin?: () => void;
@@ -61,6 +63,8 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
     showPassword: false,
     showConfirmPassword: false,
   });
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -74,8 +78,20 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
 
   const onSubmit = form.handleSubmit(async (data) => {
     const _id = new ObjectId().toHexString();
+    if (!turnstileToken) {
+      toaster.error({
+        description: 'Complete the security check before creating an account.',
+      });
+      return;
+    }
+
     try {
       await mutate({
+        context: {
+          headers: {
+            [TURNSTILE_TOKEN_HEADER]: turnstileToken,
+          },
+        },
         variables: {
           input: {
             _id,
@@ -96,8 +112,10 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
         form.reset();
         toaster.success({ description: 'Account created successfully' });
       }, 3000);
-    } catch (error) {
+    } catch {
       toaster.error({ description: 'Failed to create account' });
+    } finally {
+      turnstileRef.current?.reset();
     }
   });
 
@@ -256,7 +274,7 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
         </div>
         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
           <Button
-            disabled={loading}
+            disabled={loading || !turnstileToken}
             className="w-full bg-cyan-700 rounded-[50px] h-[40px] "
             type="submit"
           >
@@ -298,6 +316,12 @@ export const SignupForm = ({ onToggleToLogin }: SignupFormProps) => {
             ))}
           </div> */}
         </div>
+        <Turnstile
+          ref={turnstileRef}
+          action="signup"
+          className=" w-full flex justify-center items-center"
+          onTokenChange={setTurnstileToken}
+        />
       </form>
     </div>
   );

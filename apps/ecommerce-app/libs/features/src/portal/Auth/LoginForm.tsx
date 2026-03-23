@@ -10,6 +10,7 @@ import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Field } from '~/components/Primitives/Field';
 import { toaster } from '~/components/ToastContainer';
+import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { AccountType } from '~/graphql/generated';
 import { useGlobalStore } from '~/hooks/useGlobalStore';
 import {
@@ -78,6 +79,10 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   });
   const [showPassword, setShowPassword] = React.useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
+  const [turnstileToken, setTurnstileToken] = React.useState<string | null>(
+    null,
+  );
+  const turnstileRef = React.useRef<TurnstileHandle>(null);
 
   const setIsAuthenticated = useGlobalStore(
     (state) => state.authenticate.setIsAuthenticated,
@@ -85,11 +90,19 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
   const setUser = useGlobalStore((state) => state.authenticate.setUser);
 
   const onSubmit = form.handleSubmit(async (data) => {
+    if (!turnstileToken) {
+      toaster.error({
+        description: 'Complete the security check before signing in.',
+      });
+      return;
+    }
+
     try {
       await authenticate({
         emailAddress: data.emailAddress,
         password: data.password,
         role: AccountType.Member,
+        turnstileToken,
       });
 
       toaster.success({ description: 'Successfully logged in!' });
@@ -97,11 +110,20 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       setUser({ email: data.emailAddress });
     } catch {
       toaster.error({ description: 'Failed to log in. Please try again.' });
+    } finally {
+      turnstileRef.current?.reset();
     }
   });
 
   const onGoogleLogin = React.useCallback(
     async (accessToken: string) => {
+      if (!turnstileToken) {
+        toaster.error({
+          description: 'Complete the security check before signing in.',
+        });
+        return;
+      }
+
       setIsGoogleLoading(true);
       try {
         const payload = await fetchGoogleUserInfo(accessToken);
@@ -111,6 +133,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           emailAddress: payload.email,
           displayName: payload.name,
           avatarUrl: payload.picture,
+          turnstileToken,
         });
 
         setIsAuthenticated(true);
@@ -124,9 +147,10 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
         });
       } finally {
         setIsGoogleLoading(false);
+        turnstileRef.current?.reset();
       }
     },
-    [setIsAuthenticated, setUser],
+    [setIsAuthenticated, setUser, turnstileToken],
   );
 
   return (
@@ -207,6 +231,7 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
       </div> */}
 
       <Button
+        disabled={form.formState.isSubmitting || !turnstileToken}
         type="submit"
         className="w-full rounded-[50px] text-white mt-5 sm:mt-6 h-[40px]"
       >
@@ -237,13 +262,20 @@ export const LoginForm = ({ onToggleToSignup }: LoginFormProps) => {
           <div className="mx-auto mt-3 w-full max-w-[296px] sm:mt-4">
             <GoogleOAuthProvider clientId={googleClientId}>
               <GoogleSignInButton
-                disabled={isGoogleLoading}
+                disabled={isGoogleLoading || !turnstileToken}
                 onAccessToken={onGoogleLogin}
               />
             </GoogleOAuthProvider>
           </div>
         </>
       ) : null}
+
+      <Turnstile
+        ref={turnstileRef}
+        action="login"
+        className="mt-4 flex justify-center items-center "
+        onTokenChange={setTurnstileToken}
+      />
     </form>
   );
 };

@@ -1,21 +1,33 @@
 import { Key, ShieldCheck } from 'lucide-react';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useRef, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Dialog } from '~/components/Dialog';
 import { OtpField } from '~/components/OtpField';
+import { Turnstile, type TurnstileHandle } from '~/components/Turnstile';
 import { gtm } from '~/utils/gtm';
 import { useLicenseContext } from './LicenseContext';
 import { getLicense } from './service';
 export const LicenseDialog = (props: PropsWithChildren) => {
   const context = useLicenseContext();
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
 
   const handleActivate = async (value: string) => {
+    if (!turnstileToken) {
+      setError('Complete the security check first');
+      return;
+    }
+
+    setError(null);
+
     try {
-      const res = await getLicense(value);
+      const res = await getLicense(value, turnstileToken);
       if (res) context.setLicense({ isLicensed: true });
-    } catch (err) {
+    } catch {
       setError('License activation failed');
+    } finally {
+      turnstileRef.current?.reset();
     }
   };
 
@@ -51,12 +63,13 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                     }
                   }}
                 />
+
                 <p className="text-error-600 text-sm sm:text-base font-semibold mt-2">
                   {error}
                 </p>
               </div>
               <Button
-                disabled={context.loading}
+                disabled={context.loading || !turnstileToken}
                 className="w-full text-white font-semibold py-3 sm:py-4 px-5 sm:px-6 rounded-2xl flex items-center justify-center gap-3 transition-colors text-base sm:text-lg"
               >
                 <Key size={20} className="sm:hidden" />
@@ -79,6 +92,12 @@ export const LicenseDialog = (props: PropsWithChildren) => {
                 </span>
               </p>
             </div>
+            <Turnstile
+              ref={turnstileRef}
+              action="license"
+              className="flex justify-center items-center"
+              onTokenChange={setTurnstileToken}
+            />
           </div>
         </Dialog.Content>
       </Dialog.Positioner>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AccountType } from '~/graphql/generated';
+import { TURNSTILE_TOKEN_HEADER } from '~/utils/turnstile';
 
 export interface Token {
   accessToken: string;
@@ -26,12 +27,14 @@ export interface AuthenticateInput {
   emailAddress: string;
   password: string;
   role: AccountType;
+  turnstileToken: string;
 }
 export interface LoginWithGoogleInput {
   id: string;
   emailAddress?: string;
   displayName?: string;
   avatarUrl?: string;
+  turnstileToken: string;
 }
 
 export async function refreshSession(
@@ -128,6 +131,7 @@ export async function __authenticate(input: AuthenticateInput) {
         baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
         headers: {
           Role: input.role,
+          [TURNSTILE_TOKEN_HEADER]: input.turnstileToken,
         },
       },
     );
@@ -146,6 +150,9 @@ export async function __loginWithGoogle(input: LoginWithGoogleInput) {
       input,
       {
         baseURL: process.env.NEXT_PUBLIC_BASE_URL_PORTAL_API,
+        headers: {
+          [TURNSTILE_TOKEN_HEADER]: input.turnstileToken,
+        },
       },
     );
 

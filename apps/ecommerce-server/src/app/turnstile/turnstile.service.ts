@@ -59,6 +59,7 @@ export class TurnstileService {
 
     if (!verification.success) {
       console.log('Turnstile verification failed:', token);
+      console.log('secret key1', secretKey);
       throw new ForbiddenException({
         error: {
           type: 'TURNSTILE_VERIFICATION_FAILED',
@@ -70,6 +71,7 @@ export class TurnstileService {
 
     if (verification.action !== options.action) {
       console.log('Turnstile action mismatch:', token);
+      console.log('secret key2', secretKey);
       throw new ForbiddenException({
         error: {
           type: 'TURNSTILE_ACTION_MISMATCH',

@@ -40,7 +40,7 @@ export class TurnstileService {
     const secretKey = this.getSecretKey();
 
     const token = this.getToken(request);
-    console.log('Turnstile token:', token); // Debug log for token retrieval
+
     if (!token) {
       throw new BadRequestException({
         error: {

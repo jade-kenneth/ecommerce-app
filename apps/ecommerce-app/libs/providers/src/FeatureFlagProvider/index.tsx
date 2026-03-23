@@ -97,7 +97,7 @@ export function FeatureFlagProvider({ children }: PropsWithChildren) {
         <div className="pointer-events-none fixed inset-x-0 bottom-4 z-[1090] flex justify-center">
           <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/95 px-3 py-2 shadow-lg backdrop-blur">
             <span className="text-xs font-medium text-gray-700">
-              Future Flag
+              Feature Flag
             </span>
             <button
               aria-label="Toggle future feature flag"

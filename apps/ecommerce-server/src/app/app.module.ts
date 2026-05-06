@@ -20,6 +20,8 @@ import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { authorizationRequiredDirectiveSchemaTransformer } from 'src/util/authorization-required-directive';
 
+import { safeParseFloat } from 'src/util/safe-parse-float';
+import { AsyncEventModule } from '~/async-event-module/async-event-module';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './auth/auth-middleware';
 import { ConfigModule } from './config/config.module';
@@ -115,22 +117,22 @@ import { UploadModule } from './upload/upload/upload.module';
     RatingsModule,
     SupportModule,
     TurnstileModule,
-    // AsyncEventModule.forRootAsync({
-    //   useFactory: () => {
-    //     return {
-    //       context: 'ecommerce',
-    //       kafka: {
-    //         brokers: [process.env.KAFKA_URL],
-    //       },
-    //       redis: {
-    //         host: process.env.REDISHOST,
-    //         port: safeParseFloat(process.env.REDISPORT, 0),
-    //         password: process.env.REDISPASSWORD,
-    //       },
-    //       concurrency: 8,
-    //     };
-    //   },
-    // }),
+    AsyncEventModule.forRootAsync({
+      useFactory: () => {
+        return {
+          context: 'ecommerce',
+          kafka: {
+            brokers: [process.env.KAFKA_URL],
+          },
+          redis: {
+            host: process.env.REDISHOST,
+            port: safeParseFloat(process.env.REDISPORT, 0),
+            password: process.env.REDISPASSWORD,
+          },
+          concurrency: 8,
+        };
+      },
+    }),
   ],
 
   providers: [AppService],

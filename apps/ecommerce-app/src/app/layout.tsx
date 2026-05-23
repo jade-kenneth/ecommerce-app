@@ -11,7 +11,6 @@ import { AuthProvider } from '~/providers/AuthProvider';
 import { ClientCartProvider } from '~/providers/CartProvider';
 import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
 import { FeatureFlagProvider } from '~/providers/FeatureFlagProvider';
-import { LicenseProvider } from '~/providers/LicenseProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -101,7 +100,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <ClientApolloProvider>
             <AuthProvider>
               <ClientCartProvider>
-                <LicenseProvider excludePaths={['/admin']}>{children}</LicenseProvider>
+                {/* <LicenseProvider excludePaths={['/admin']}>{children}</LicenseProvider> */}
+                {children}
                 <ToastContainer />
                 <SupportChatWidget />
                 <Analytics />

@@ -11,6 +11,7 @@ import { AuthProvider } from '~/providers/AuthProvider';
 import { ClientCartProvider } from '~/providers/CartProvider';
 import { ClientApolloProvider } from '~/providers/ClientLayoutProvider';
 import { FeatureFlagProvider } from '~/providers/FeatureFlagProvider';
+import { LicenseProvider } from '~/providers/LicenseProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -19,7 +20,8 @@ export const metadata: Metadata = {
     template: '%s | Amy Store',
   },
   metadataBase: new URL('https://amy-store.site'),
-  description: 'Amy Store ecommerce app for shopping, checkout, and order tracking.',
+  description:
+    'Amy Store ecommerce app for shopping, checkout, and order tracking.',
   applicationName: 'Amy Store',
   manifest: '/site.webmanifest',
   icons: {
@@ -42,7 +44,8 @@ export const metadata: Metadata = {
     siteName: 'Amy Store',
     title: 'Amy Store',
 
-    description: 'Amy Store ecommerce app for shopping, checkout, and order tracking.',
+    description:
+      'Amy Store ecommerce app for shopping, checkout, and order tracking.',
     images: [
       {
         url: '/favicon.ico',
@@ -58,7 +61,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -100,8 +107,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <ClientApolloProvider>
             <AuthProvider>
               <ClientCartProvider>
-                {/* <LicenseProvider excludePaths={['/admin']}>{children}</LicenseProvider> */}
-                {children}
+                <LicenseProvider excludePaths={['/admin']}>
+                  {children}
+                </LicenseProvider>
+
                 <ToastContainer />
                 <SupportChatWidget />
                 <Analytics />

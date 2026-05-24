@@ -46,10 +46,9 @@ export const Cards = (props: CardsProps) => {
       >
         <Image
           src={props.thumbnail}
-          alt={props.name}
-          fill
-          sizes="(min-width: 1280px) 194px, (min-width: 768px) calc(50vw - 2rem), calc(50vw - 1.5rem)"
-          className="object-cover"
+          alt="item"
+          className="max-w-full aspect-[1/1] object-cover"
+          layout="fill"
         />
 
         <div className="flex flex-col gap-[5px] absolute top-2 left-2 sm:top-3 sm:left-3">

@@ -52,7 +52,8 @@ export const Carousel: FunctionComponent<CarouselProps> = ({
                 height={1000}
                 priority={isLikelyLcpSlide}
                 sizes={heroImageSizes}
-                className="h-full w-full object-cover object-left"
+                className="h-full w-full object-cover"
+                objectPosition="start"
               />
             </SwiperSlide>
           );
